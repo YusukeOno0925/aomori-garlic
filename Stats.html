@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャリア共有プラットフォーム | インノーマル - 転職成功事例とキャリアパス共有</title>
+    <meta name="description" content="インノーマルは、転職経験や成功事例を共有し、次世代のキャリア形成を支援するキャリア共有プラットフォームです。あなたのキャリアストーリーを共有し、他のプロフェッショナルと共に成長しましょう。">
+    <meta name="keywords" content="キャリア共有, キャリア支援, 転職経験, キャリアパス, 人生ストーリー, キャリア教育, 若年層支援, メンターシップ, キャリアマッピング, 成功事例, キャリアアドバイス, キャリアプラットフォーム, キャリアストーリー, Imnormal, インノーマル, 転職, キャリアチェンジ">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/career_path.css">
+    <link rel="canonical" href="https://www.imnormal.jp/">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="images/company-logo.jpg" alt="Company Logo" class="logo-image">
+            <h1 class="logo">インノーマル</h1>
+            <p class="lead-text long">〜キャリアの未来を共に創る〜</p>
+            <div class="login-button-container">
+                <a href="Login.html" id="login-button" class="login-button" style="display: none;">ログイン</a>
+                <a href="#" id="logout-button" class="login-button" style="display: none;">ログアウト</a>
+            </div>
+            <div class="hamburger-menu">☰</div>
+        </div>
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="Home.html">ホーム<span class="icon"></span></a></li>
+                <li class="career-story">
+                    <a href="#">キャリアストーリー<span class="icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="Career_overview.html">概要<span class="icon"></span></a></li>
+                        <li><a href="Career_detail.html">詳細<span class="icon"></span></a></li>
+                    </ul>
+                </li>
+                <li><a href="Career_path.html">キャリアパス<span class="icon"></span></a></li>
+                <li><a href="Stats.html">統計とグラフ<span class="icon"></span></a></li>
+                <li><a href="Mypage.html">マイページ<span class="icon"></span></a></li>
+                <li><a href="Contact.html">お問い合わせ<span class="icon"></span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>統計とグラフ</h1>
+
+        <section id="age-income-chart">
+            <h2>年齢と年収の関係</h2>
+            <canvas id="ageIncomeChart"></canvas>
+        </section>
+
+        <section id="company-income-chart">
+            <h2>経験会社数と年収の関係</h2>
+            <canvas id="companyIncomeChart"></canvas>
+        </section>
+
+    </main>
+    <footer>
+        <p>&copy; 2024 Imnormal</p>
+    </footer>
+
+    <script src="js/hamburgermenu.js"></script>
+    <script src="js/ageIncome.js"></script>
+    <script src="js/companyIncome.js"></script>
+    <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
+
+</body>
+</html>

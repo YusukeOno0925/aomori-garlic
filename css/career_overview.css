@@ -1,0 +1,82 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    padding: 1rem;
+}
+
+input#search, select#filter-industry {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+ul#career-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.career-path-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible; /* SVGの内容が見切れないようにする */
+    margin-top: 1rem;
+}
+
+li.career-card {
+    background-color: #fff;
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row; /* 横並び */
+    align-items: flex-start; /* 左寄せ */
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.career-info {
+    flex: 1;
+}
+
+.career-path {
+    flex: 2;
+}
+
+li.career-card.selected {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+li.career-card:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.02);
+}
+
+li.career-card h2, li.career-card p {
+    margin: 0;
+}
+
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    li.career-card {
+        flex-direction: column; /* グラフが下に来るように縦並びにする */
+    }
+    
+    .career-info, .career-path {
+        width: 100%; /* 幅を100%に */
+    }
+    
+    .career-path {
+        margin-top: 1rem; /* グラフとテキストの間に余白を追加 */
+    }
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録 | インノーマル</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="images/company-logo.jpg" alt="Company Logo" class="logo-image">
+            <h1 class="logo">インノーマル</h1>
+        </div>
+    </header>
+    <main>
+        <h2>新規登録</h2>
+        <form id="register-form" method="post">
+            <input type="text" name="username" placeholder="ユーザ名" required>
+            <input type="email" name="email" placeholder="Emailアドレス" required>
+            <textarea name="profile" placeholder="プロフィール"></textarea>
+            <input type="password" name="password" placeholder="パスワード" required>
+            <button type="submit">登録</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Imnormal</p>
+    </footer>
+
+    <script src="js/register.js"></script>
+</body>
+</html>

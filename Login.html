@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン | インノーマル</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="images/company-logo.jpg" alt="Company Logo" class="logo-image">
+            <h1 class="logo">インノーマル</h1>
+        </div>
+    </header>
+    <main>
+        <h2>ログイン</h2>
+        <form id="login-form">
+            <input type="text" name="username" placeholder="ユーザ名" required>
+            <input type="password" name="password" placeholder="パスワード" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message" style="color: red; display: none;">ログインに失敗しました。ユーザー名またはパスワードが正しくありません。</p>
+        <p>アカウントをお持ちでないですか？ <a href="Register.html">新規登録はこちら</a></p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Imnormal</p>
+    </footer>
+    <script src="js/login.js"></script>
+</body>
+</html>

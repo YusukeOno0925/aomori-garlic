@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャリア共有プラットフォーム | インノーマル - 転職成功事例とキャリアパス共有</title>
+    <meta name="description" content="インノーマルは、転職経験や成功事例を共有し、次世代のキャリア形成を支援するキャリア共有プラットフォームです。あなたのキャリアストーリーを共有し、他のプロフェッショナルと共に成長しましょう。">
+    <meta name="keywords" content="キャリア共有, キャリア支援, 転職経験, キャリアパス, 人生ストーリー, キャリア教育, 若年層支援, メンターシップ, キャリアマッピング, 成功事例, キャリアアドバイス, キャリアプラットフォーム, キャリアストーリー, Imnormal, インノーマル, 転職, キャリアチェンジ">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="canonical" href="https://www.imnormal.jp/">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="images/company-logo.jpg" alt="Company Logo" class="logo-image">
+            <h1 class="logo">インノーマル</h1>
+            <p class="lead-text long">〜キャリアの未来を共に創る〜</p>
+            <div class="login-button-container">
+                <a href="Login.html" id="login-button" class="login-button" style="display: none;">ログイン</a>
+                <a href="#" id="logout-button" class="login-button" style="display: none;">ログアウト</a>
+            </div>
+            <div class="hamburger-menu">☰</div>
+        </div>
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="Home.html">ホーム<span class="icon"></span></a></li>
+                <li class="career-story">
+                    <a href="#">キャリアストーリー<span class="icon"></span></a>
+                    <ul class="dropdown">
+                        <li><a href="Career_overview.html">概要<span class="icon"></span></a></li>
+                        <li><a href="Career_detail.html">詳細<span class="icon"></span></a></li>
+                    </ul>
+                </li>
+                <li><a href="Career_path.html">キャリアパス<span class="icon"></span></a></li>
+                <li><a href="Stats.html">統計とグラフ<span class="icon"></span></a></li>
+                <li><a href="Mypage.html">マイページ<span class="icon"></span></a></li>
+                <li><a href="Contact.html">お問い合わせ<span class="icon"></span></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h2>キャリアの未来を描く</h2>
+                <p>あなたのキャリアストーリーを共有し、他のプロフェッショナルから学ぶためのプラットフォームです。<br>
+                   成功事例や挑戦を通じて、次世代のキャリア形成をサポートします。キャリアの転機や挑戦を共有し、共に成長しましょう。</p>
+            </div>
+        </section>
+
+        <section id="life-path">
+            <h2 class="section-title">ライフパスの可視化</h2>
+            <p>このセクションでは、ユーザーの学歴から現在の職業に至るまでのキャリアパスを視覚的に表現しています。<br>
+                各ステージの節目や転職のタイミングが一目で分かるようになっており、丸の大きさは、そのステージにおける人数の多さを示しています。</p>
+            <div id="career-path-visualization" style="width: 100%; height: 400px;"></div>
+            <div class="carousel-indicators">
+                <span class="indicator active"></span>
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+            </div>
+        </section>
+
+        <section id="recent-stories">
+            <h2 class="section-title">最近のキャリアストーリー</h2>
+            <div class="card-container" id="recent-stories-list">
+                <!-- JavaScriptでキャリアストーリーハイライトを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="recent-stories-indicators" class="recent-stories-carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+        <section id="popular-stories">
+            <h2 class="section-title">人気のキャリアストーリー</h2>
+            <div class="card-container" id="popular-stories-list">
+                <!-- JavaScriptで人気のキャリアストーリーを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="popular-stories-indicators" class="popular-stories-carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+        <section id="site-features">
+            <h2 class="section-title">サイトの機能紹介</h2>
+            
+            <div class="feature-section left-image">
+                <img src="images/feature-image1.jpg" alt="キャリアストーリーの共有" class="feature-image">
+                <div class="feature-description">
+                    <h3>キャリアストーリーの共有</h3>
+                    <p>ユーザーは自身のキャリアストーリーを共有し、他のユーザーと知見を共有することができます。<br>
+                        成功体験や失敗談を通じて、他のユーザーにインスピレーションを与えます。</p>
+                        <a href="Career_overview.html" class="detail-button">Detail</a>
+                </div>
+            </div>
+            
+            <div class="feature-section right-image">
+                <img src="images/feature-image2.jpg" alt="キャリアパスの可視化" class="feature-image">
+                <div class="feature-description">
+                    <h3>キャリアパスの可視化</h3>
+                    <p>ユーザーの学歴から現在の職業に至るまでのキャリアパスを視覚的に表現します。<br>
+                        各ステージの節目や転職のタイミングが一目で分かるようになっています。<br>
+                        丸の大きさは人数の多さを表しています。</p>
+                        <a href="Career_path.html" class="detail-button">Detail</a>
+                </div>
+            </div>
+            
+            <div class="feature-section left-image">
+                <img src="images/feature-image3.jpg" alt="統計データの閲覧" class="feature-image">
+                <div class="feature-description">
+                    <h3>統計データの閲覧</h3>
+                    <p>業界や職業ごとの統計データを閲覧できます。<br>
+                        キャリアの傾向や収入のトレンドを分析することで、より良いキャリアパスを計画する手助けとなります。</p>
+                        <a href="Career_overview.html" class="detail-button">Detail</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="announcements">
+            <h2 class="section-title">お知らせと更新情報</h2>
+            <div id="announcements-list">
+                <!-- JavaScriptでお知らせを動的に生成 -->
+            </div>
+        </section>
+
+        <section id="user-feedback">
+            <h2 class="section-title">ユーザーフィードバック</h2>
+            <div id="feedback-form">
+                <textarea id="feedback-text" rows="4" cols="50" placeholder="フィードバックを入力してください"></textarea><br>
+                <button onclick="sendFeedback()">送信</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Imnormal</p>
+    </footer>
+    <script src="js/hamburgermenu.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/lifePath.js"></script>
+    <script src="js/stories.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
+
+</body>
+</html>

@@ -1,0 +1,417 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    padding: 1rem;
+}
+
+#hero {
+    background: url('../images/hero-image.jpg') no-repeat center center;
+    background-size: cover;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    background-color: rgba(78, 61, 18, 0.6);
+    height: calc(80vh / 3);
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+section {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+h2.section-title {
+    color: var(--main-color);
+}
+
+#career-path-visualization {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.university-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.carousel-indicators .indicator {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.carousel-indicators .indicator.active {
+    background-color: #8ba141;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.card {
+    flex: 1 1 calc(33.333% - 1rem);
+    box-sizing: border-box;
+    background: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    overflow: hidden;
+    height: 300px;
+    position: relative;
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.card p {
+    margin-bottom: 0.5rem;
+}
+
+.card p:last-child {
+    margin-bottom: 0;
+}
+
+.card p:last-of-type {
+    margin-bottom: 4rem;
+}
+
+.career-path-svg {
+    width: 100%;
+    height: 60px;
+    overflow: visible;
+    margin: 0 auto;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.card .arrow-symbol {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #000;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.announcement-item,
+.feedback-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--card-border-color);
+}
+
+#site-features {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.feature-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.feature-section.left-image {
+    flex-direction: row;
+}
+
+.feature-section.right-image {
+    flex-direction: row-reverse;
+}
+
+.feature-image {
+    width: 50%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.feature-description {
+    width: 50%;
+    padding: 1rem;
+}
+
+.feature-description h3 {
+    font-size: 1.5rem;
+    color: #4e3d12;
+    margin-bottom: 1rem;
+}
+
+.feature-description p {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+.detail-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.7rem 2rem;
+    background-color: #574637;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1.1rem;
+}
+
+.detail-button:hover {
+    background-color: var(--accent-color);
+}
+
+#feedback-form {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#feedback-text {
+    width: 80%;
+    padding: 1rem;
+    border: 1px solid var(--card-border-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#feedback-form button {
+    margin-top: 1rem;
+    padding: 0.5rem 2rem;
+    background-color: var(--main-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#feedback-form button:hover {
+    background-color: var(--accent-color);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    h2.section-title {
+        font-size: 1.4rem;
+    }
+
+    .card-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .card {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+    }
+
+    #recent-stories-indicators,
+    #popular-stories-indicators {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    #recent-stories-indicators .indicator,
+    #popular-stories-indicators .indicator {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+        background-color: #ccc;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #recent-stories-indicators .indicator.active,
+    #popular-stories-indicators .indicator.active {
+        background-color: #8ba141;
+    }
+
+    #site-features .feature-section {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    #site-features .feature-section .feature-image,
+    #site-features .feature-section .feature-description {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #site-features .feature-section .feature-image {
+        margin-bottom: 1rem;
+    }
+
+    #site-features .feature-section .feature-description {
+        padding: 1rem 0;
+    }
+
+    .feature-description h3 {
+        font-size: 1.3rem;
+    }
+
+    .feature-description p {
+        font-size: 1rem;
+        line-height: 1.4;
+        text-align: left;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .detail-button {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.5rem;
+    }
+}
+
+@media (min-width: 769px) {
+    #recent-stories-indicators,
+    #popular-stories-indicators {
+        display: none;
+    }
+}
+
+/* 450px以下の画面サイズに対応 */
+@media (max-width: 450px) {
+    #hero {
+        height: 50vh;
+    }
+
+    .hero-content {
+        height: calc(50vh / 3);
+        padding: 0.5rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.0rem;
+        margin: 0.1rem 0;
+    }
+
+    .hero-content p {
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    #life-path h2.section-title {
+        font-size: 1.2rem;
+        margin: 0.5rem 0;
+    }
+
+    #life-path p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin: 0.5rem 0;
+        text-align: left;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .card {
+        height: auto;
+    }
+
+    .career-path-svg {
+        width: 100%;
+        height: auto;
+        max-height: 100px;
+        overflow: visible;
+    }
+
+    #career-path-visualization text {
+        font-size: 0.8rem;
+    }
+
+    #career-path-visualization tspan {
+        font-size: 0.8rem;
+    }
+
+    #career-path-visualization .university-label {
+        font-size: 1rem;
+    }
+
+    #career-path-visualization line {
+        stroke-width: 1px;
+    }
+
+    .career-path-svg text {
+        letter-spacing: -0.5px;
+    }
+
+    .career-path-svg g {
+        transform: translateX(-1120px);
+    }
+
+    .feature-description h3 {
+        font-size: 1.2rem;
+    }
+
+    .feature-description p {
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .detail-button {
+        font-size: 0.8rem;
+        padding: 0.4rem 1rem;
+    }
+}

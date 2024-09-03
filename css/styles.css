@@ -1,0 +1,301 @@
+:root {
+    --main-color: #574637; 
+    --accent-color: #b0941e; /* アクセントカラー */
+    --background-color: #f7f5f1; /* 背景色 */
+    --text-color: #333333; /* テキスト色 */
+    --card-background-color: #FFFFFF; /* カードの背景色 */
+    --card-border-color: #DDDDDD; /* カードの枠色 */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: #fff; /* 背景色を白に設定 */
+    padding: 2rem; /* パディングを調整して高さを増やす */
+}
+
+.header-content {
+    display: flex;
+    justify-content: flex-start; /* 左寄せで配置 */
+    align-items: center;
+    gap: 0.1rem; /* 要素間のギャップを追加 */
+}
+
+.logo-image {
+    height: 50px; /* ロゴ画像の高さを設定 */
+    width: auto; /* ロゴ画像の幅を自動調整 */
+}
+
+.header-content .logo {
+    color: var(--main-color);
+    margin-right: 2rem; /* 右にマージンを追加 */
+}
+
+.header-content .lead-text.long {
+    color: var(--main-color);
+    margin-left: 2rem; /* 左にマージンを追加 */
+}
+
+
+
+
+.login-button-container {
+    margin-left: auto;
+}
+
+.login-button {
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+}
+
+.login-button:hover {
+    background-color: var(--accent-color);
+}
+
+
+/* デフォルトではハンバーガーメニューを非表示に */
+.hamburger-menu {
+    display: none;
+}
+
+.navbar {
+    background-color: #f6ebd9; /* 薄焦茶色 */
+    padding: 0.5rem 1rem; /* パディングを調整して高さを増やす */
+    position: relative; /* メニューの絶対位置を親要素に基づかせる */
+    z-index: 20; /* 他の要素よりも前面に表示されるようにする */
+}
+
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-list li {
+    margin: 0 1rem;
+    position: relative; /* サブメニューを表示するためにrelativeを追加 */
+}
+
+.nav-list li a {
+    text-decoration: none;
+    color: var(--main-color);
+    padding: 0.75rem 1rem; /* ホバー時と通常時でパディングを統一する */
+    display: block;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between; /* アイコンを右端に配置 */
+    align-items: center;
+}
+
+/* ハンバーガーメニュー時に表示されるアイコンのスタイル */
+.nav-list li a .icon {
+    display: none; /* デフォルトでアイコンを非表示に */
+}
+
+.nav-list li a:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+.nav-list .career-story .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* 親メニューの下に配置 */
+    left: 0;
+    right: 0;
+    margin: auto;
+    background-color: #f6ebd9; /* 背景色をメニューに合わせる */
+    padding: 0.5rem 0;
+    list-style: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 影を追加 */
+    z-index: 10; /* サブメニューを前面に表示 */
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.nav-list .career-story:hover .dropdown {
+    display: block;
+}
+
+.nav-list .dropdown li {
+    margin: 0;
+}
+
+.nav-list .dropdown li a {
+    color: var(--main-color);
+    padding: 0.75rem 1rem; /* ホバー時と通常時でパディングを統一する */
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between; /* アイコンを右端に配置 */
+    align-items: center;
+}
+
+.nav-list .dropdown li a .icon {
+    display: none; /* デフォルトでアイコンを非表示に */
+}
+
+.nav-list .dropdown li a:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    padding: 0.5rem 1rem; /* フッターの高さを調整 */
+    width: 100%;
+    background-color: var(--accent-color); /* 茶色の背景色 */
+    color: #fff; /* テキスト色を白に */
+    border-top: 2px solid var(--accent-color); /* 境界線を上部に追加 */
+    position: static; /* フッターを固定しないようにする */
+}
+
+/* モバイルサイズでのみ表示 */
+@media (max-width: 768px) {
+    header {
+        background-color: transparent; /* 背景色を透明に設定 */
+        padding: 1rem; /* パディングを小さく */
+    }
+
+    .header-content .logo {
+        font-size: 1.5rem; /* ロゴのフォントサイズを小さく */
+    }
+
+    .header-content .lead-text.long {
+        font-size: 0.9rem; /* リードテキストのフォントサイズを小さく */
+        margin-left: -0.5rem; /* 左に寄せるためのマージンを小さくする */
+    }
+
+    .login-button {
+        font-size: 0.6rem;
+    }
+
+    .logo-image {
+        height: 30px; /* ロゴ画像のサイズを小さく */
+        width: auto;
+    }
+
+    .hamburger-menu {
+        display: block;
+        font-size: 2rem; /* アイコンのサイズを調整 */
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: var(--main-color);
+        margin-left: auto; /* ハンバーガーメニューを右寄せ */
+    }
+
+    .navbar {
+        background-color: transparent; /* 背景色を透明に設定 */
+    }
+
+    /* ナビゲーションリストの初期設定を非表示に */
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: white; /* メニュー項目の背景色を白に */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 20;
+    }
+
+    /* ハンバーガーメニューがクリックされた時に表示 */
+    .nav-list.show {
+        display: flex !important;
+        background-color: white;
+        padding: 1rem 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        z-index: 20;
+    }
+
+    .nav-list li {
+        margin: 0.5rem 0;
+        width: 100%; /* リンクを全幅に拡張 */
+    }
+
+    .nav-list li a {
+        padding: 1rem; /* 各項目のパディングを調整 */
+        justify-content: space-between; /* アイコンを右端に配置 */
+    }
+
+    .nav-list li a .icon {
+        display: inline-block;
+        margin-left: auto;
+        flex-grow: 1;
+        text-align: right;
+    }
+
+    .nav-list .dropdown {
+        display: none;
+        position: relative;
+        background-color: white; /* サブメニューの背景色を白に */
+        padding: 0.5rem 0;
+        list-style: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 影を追加 */
+        z-index: 10; /* サブメニューを前面に表示 */
+        width: 90%;
+        box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .nav-list .career-story .dropdown li a {
+        justify-content: space-between; /* サブメニュー内のアイコンを右端に配置 */
+    }
+
+    .nav-list .dropdown li a .icon {
+        display: inline-block; /* ハンバーガーメニュー時にアイコンを表示 */
+        margin-left: auto;
+        position: absolute;
+        right: 1rem; /* アイコンを右端に配置 */
+    }
+}
+
+/* 450px以下の画面サイズに対応 */
+@media (max-width: 450px) {
+    .header-content .logo {
+        font-size: 1.2rem; /* ロゴのフォントサイズを小さくする */
+    }
+
+    .header-content .lead-text.long {
+        display: none; /* 長いテキストを非表示にする */
+    }
+
+    .header-content .logo-image {
+        height: 30px; /* ロゴ画像の高さを小さくする */
+    }
+
+    .navbar {
+        padding: 0.3rem 0.5rem; /* ヘッダーのパディングを小さくする */
+    }
+
+    .nav-list li a {
+        font-size: 0.9rem; /* ナビゲーションのフォントサイズを小さくする */
+        padding: 0.5rem 0.75rem; /* パディングを小さくする */
+    }
+}
