@@ -9,6 +9,7 @@ from typing import Optional
 import mysql.connector
 from passlib.context import CryptContext
 import secrets
+from config import environment
 
 # ログの設定
 logger = logging.getLogger(__name__)
@@ -34,14 +35,22 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
-# データベース接続
+# データベース接続の設定
 def get_db_connection():
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Imnormal",  # 使用するパスワード
-        database="my_database"  # 使用するデータベース名
-    )
+    if environment == "development":
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Imnormal",  # テスト環境用のパスワード
+            database="my_database"  # テスト環境用のデータベース
+        )
+    elif environment == "production":
+        connection = mysql.connector.connect(
+            host="3.105.210.253",
+            user="immormal_user",
+            password="Imnormal_20240901",  # 本番環境用のパスワード
+            database="Imnormal_production_database"  # 本番環境用のデータベース
+        )
     return connection
 
 async def get_token_from_request(request: Request):
@@ -66,15 +75,27 @@ def get_password_hash(password):
 def get_user_from_db(username: str):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
+    
+    # クエリの実行
     cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    
+    # 結果を1行だけフェッチ
     user = cursor.fetchone()
+
+    # 残りの行があればフェッチして処理する
+    if cursor.with_rows:
+        cursor.fetchall()  # 未読の残りの行をフェッチして処理
+    
+    # カーソルと接続を閉じる
     cursor.close()
     connection.close()
     
+    # 結果が存在する場合の処理
     if user:
         # 'password' フィールド名がデータベースと一致しているか確認
         user["hashed_password"] = user.pop("password")
         return UserInDB(**user)
+    
     return None
 
 # JWTトークンのデコードとユーザーの取得

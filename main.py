@@ -15,18 +15,13 @@ from scripts.auth import authenticate_user, create_access_token, get_current_use
 from fastapi.responses import JSONResponse
 from scripts.email_config import fast_mail, EmailSchema
 from fastapi_mail import MessageSchema
+from config import environment, local_base_url, production_base_url, database_url
 
 # ロギングの設定
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 load_dotenv()
-
-# 環境変数を取得
-environment = os.getenv("ENVIRONMENT")
-local_base_url = os.getenv("LOCAL_BASE_URL")
-production_base_url = os.getenv("PRODUCTION_BASE_URL")
-database_url = os.getenv("DATABASE_URL")
 
 app = FastAPI()
 
