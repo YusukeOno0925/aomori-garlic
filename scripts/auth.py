@@ -9,7 +9,7 @@ from typing import Optional
 import mysql.connector
 from passlib.context import CryptContext
 import secrets
-from config import environment
+from config import db_host, db_user, db_password, db_name, db_port
 
 # ログの設定
 logger = logging.getLogger(__name__)
@@ -37,20 +37,13 @@ class UserInDB(User):
 
 # データベース接続の設定
 def get_db_connection():
-    if environment == "development":
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="Imnormal",  # テスト環境用のパスワード
-            database="my_database"  # テスト環境用のデータベース
-        )
-    elif environment == "production":
-        connection = mysql.connector.connect(
-            host="3.105.210.253",
-            user="immormal_user",
-            password="Imnormal_20240901",  # 本番環境用のパスワード
-            database="Imnormal_production_database"  # 本番環境用のデータベース
-        )
+    connection = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_name,
+        port=db_port
+    )
     return connection
 
 async def get_token_from_request(request: Request):

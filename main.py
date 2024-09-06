@@ -15,7 +15,7 @@ from scripts.auth import authenticate_user, create_access_token, get_current_use
 from fastapi.responses import JSONResponse
 from scripts.email_config import fast_mail, EmailSchema
 from fastapi_mail import MessageSchema
-from config import environment, local_base_url, production_base_url, database_url
+from config import environment, local_base_url, production_base_url
 
 # ロギングの設定
 logging.basicConfig(level=logging.DEBUG)

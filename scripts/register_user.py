@@ -2,6 +2,7 @@
 
 import mysql.connector
 from passlib.context import CryptContext
+from config import db_host, db_user, db_password, db_name, db_port
 
 # パスワードハッシュのコンテキスト
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -9,10 +10,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # データベース接続
 def get_db_connection():
     connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Imnormal",  # 使用するパスワード
-        database="my_database"  # 使用するデータベース名
+        host=db_host,
+        user=db_user,
+        password=db_password,
+        database=db_name,
+        port=db_port
     )
     return connection
 

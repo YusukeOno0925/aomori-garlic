@@ -8,4 +8,11 @@ load_dotenv()
 environment = os.getenv("ENVIRONMENT")
 local_base_url = os.getenv("LOCAL_BASE_URL")
 production_base_url = os.getenv("PRODUCTION_BASE_URL")
-database_url = os.getenv("DATABASE_URL")
+
+
+# データベース接続情報の取得
+db_host = os.getenv("DB_HOST")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_name = os.getenv("DB_NAME")
+db_port = os.getenv("DB_PORT")
