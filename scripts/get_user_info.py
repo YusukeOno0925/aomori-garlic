@@ -15,13 +15,21 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     
-    # クエリを実行
-    cursor.execute("SELECT username, email, profile FROM users WHERE username = %s", (current_user.username,))
+    # クエリを実行 (ユーザーIDを使って情報を取得)
+    cursor.execute("""
+        SELECT username, email, profile, birthdate, education,
+        career_step, career_challenges, career_approach,
+        company_name, industry, position, job_type, work_period, 
+        success_experience, failure_experience, reflection
+        FROM users 
+        LEFT JOIN job_experiences ON users.id = job_experiences.user_id
+        WHERE users.id = %s
+    """, (current_user.id,))
     
     # 結果を1件取得
     user_info = cursor.fetchone()
-    
-    # カーソルに未処理の結果が残っている場合は全てをfetchallで取得してクリア
+
+    # 未処理の結果が残っている場合はfetchallで取得してクリア
     if cursor.with_rows:
         cursor.fetchall()
 
@@ -32,7 +40,5 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
     if not user_info:
         logger.error(f"User {current_user.username} not found in the database.")
         raise HTTPException(status_code=404, detail="User not found")
-    
-    logger.info(f"User {current_user.username} information retrieved successfully.")
     
     return user_info

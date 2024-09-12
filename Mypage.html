@@ -45,9 +45,36 @@
     <main>
         <h2>マイページ</h2>
         <form id="mypage-form" method="post">
-            <input type="text" id="username" name="username" placeholder="Username" readonly>
-            <input type="email" id="email" name="email" placeholder="Email" readonly>
-            <textarea id="profile" name="profile" placeholder="Profile"></textarea>
+            <h3>基本情報</h3>
+            <input type="text" id="username" name="username" placeholder="ユーザ名(必須)" readonly>
+            <input type="email" id="email" name="email" placeholder="メールアドレス(必須)" readonly>
+            <input type="text" onfocus="(this.type='date')" id="birthdate" name="birthdate" placeholder="生年月日(必須)" required>
+            <input type="text" id="education" name="education" placeholder="最終学歴(必須)" required>
+            
+            <h3>現在のキャリア</h3>
+            <input type="text" id="career_step" name="career_step" placeholder="理想のキャリアステップ/今後の目標(必須)" required>
+            <input type="text" id="career_challenges" name="career_challenges" placeholder="理想のキャリア課題/直面している課題(必須)" required>
+            <textarea id="career_approach" name="career_approach" placeholder="キャリア達成への取り組み/目標達成のための具体的なアクション(任意)"></textarea>
+
+            <h3>職歴と経験</h3>
+            <div id="job-experiences-container">
+                <div class="job-info-group">
+                    <input type="text" id="company_name" name="company_name" placeholder="企業名(必須)" required>
+                    <input type="text" id="industry" name="industry" placeholder="業界(必須)" required>
+                    <input type="text" id="position" name="position" placeholder="職位(必須)" required>
+                    <input type="text" id="job_type" name="job_type" placeholder="職種(必須)" required>
+                    <input type="text" onfocus="(this.type='date')" id="work_period" name="work_period" placeholder="勤務期間(必須)" required>
+                    <input type="number" id="entry_salary" name="entry_salary" placeholder="入社時の年収(任意)">
+                    <input type="number" id="entry_satisfaction" name="entry_satisfaction" placeholder="入社時の満足度(任意)">
+                    <input type="number" id="current_salary" name="current_salary" placeholder="現時点（または退職時）の年収(任意)">
+                    <input type="number" id="current_satisfaction" name="current_satisfaction" placeholder="現時点の満足度(任意)">
+                    <textarea id="success_experience" name="success_experience" placeholder="成功経験(任意)"></textarea>
+                    <textarea id="failure_experience" name="failure_experience" placeholder="失敗経験(任意)"></textarea>
+                    <textarea id="reflection" name="reflection" placeholder="こうしておけばよかったこと(任意)"></textarea>
+                </div>
+            </div>
+            
+            <button type="button" id="add-job-experience">企業追加</button>
             <button type="button" id="edit-button">編集</button>
             <button type="submit" id="save-button" style="display: none;">保存</button>
         </form>

@@ -18,9 +18,13 @@ form {
     flex-direction: column;
 }
 
+/* 入力フィールドの幅を統一 */
 input[type="text"],
 input[type="email"],
+input[type="date"],
+input[type="number"],
 textarea {
+    width: 100%; /* 幅を統一 */
     margin-bottom: 15px;
     padding: 10px;
     border: 1px solid var(--card-border-color);
@@ -28,9 +32,26 @@ textarea {
     font-size: 16px;
     background-color: var(--background-color);
     color: var(--text-color);
+    box-sizing: border-box; /* パディングを含めて幅を計算 */
 }
 
+/* 企業情報と転職履歴の項目を整列させる */
+.job-info-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.job-info-group input,
+.job-info-group textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* ボタンのスタイル */
 button {
+    display: block;
+    width: 100%; /* ボタンの幅をフォームと統一 */
     padding: 12px;
     background-color: var(--main-color);
     color: white;
@@ -39,6 +60,7 @@ button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -50,17 +72,4 @@ button:hover {
     main {
         width: 95%;
     }
-
-    form {
-        margin-top: 10px;
-    }
-}
-
-/* フォームフィールドのフォーカス時のスタイル */
-input[type="text"]:focus,
-input[type="email"]:focus,
-textarea:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 5px rgba(176, 148, 30, 0.5);
 }
