@@ -29,6 +29,7 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 class User(BaseModel):
+    id: Optional[int] 
     username: str
     email: str
 
@@ -70,7 +71,7 @@ def get_user_from_db(username: str):
     cursor = connection.cursor(dictionary=True)
     
     # クエリの実行
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    cursor.execute("SELECT id, username, email, password FROM users WHERE username = %s", (username,))
     
     # 結果を1行だけフェッチ
     user = cursor.fetchone()

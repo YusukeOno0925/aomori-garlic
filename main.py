@@ -39,7 +39,7 @@ app.include_router(update_user_info_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        local_base_url if environment == "development" else production_base_url
+        local_base_url if environment == "development" else production_base_url.split(", ")
     ],
     allow_credentials=True,
     allow_methods=["*"],
