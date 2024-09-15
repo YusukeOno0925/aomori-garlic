@@ -51,6 +51,10 @@ app.add_middleware(
 async def read_root():
     return FileResponse("Home.html")
 
+@app.head("/")
+async def read_root_head():
+    return Response(status_code=200)
+
 # ユーザー登録のエンドポイント
 @app.post("/register/")
 async def register_user(username: str = Form(...), email: str = Form(...), profile: str = Form(None), password: str = Form(...)):
