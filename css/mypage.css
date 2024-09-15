@@ -23,6 +23,7 @@ input[type="text"],
 input[type="email"],
 input[type="date"],
 input[type="number"],
+select,
 textarea {
     width: 100%; /* 幅を統一 */
     margin-bottom: 15px;
