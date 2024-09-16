@@ -42,6 +42,7 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding: 0 1rem;
 }
 
 input {
@@ -51,6 +52,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 button {
@@ -74,6 +76,7 @@ button:hover {
         padding: 1rem;
         max-width: 90%;
         box-shadow: none;
+        margin: 1rem 5%;
     }
 
     h2 {
@@ -83,5 +86,6 @@ button:hover {
     input, button {
         font-size: 14px;
         padding: 8px;
+        box-sizing: border-box;
     }
 }

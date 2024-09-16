@@ -16,6 +16,9 @@ main {
 form {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    padding: 0 1rem; /* 左右に1remの余白を追加 */
+    box-sizing: border-box; /* paddingも含めて幅を計算 */
 }
 
 /* 入力フィールドの幅を統一 */
