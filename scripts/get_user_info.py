@@ -17,7 +17,7 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
     
     # ユーザー基本情報の取得
     cursor.execute("""
-        SELECT username, email, profile, birthdate, education,
+        SELECT username, email, profile, birthdate, education, education_start, education_end,
         career_step, career_challenges, career_approach
         FROM users 
         WHERE id = %s

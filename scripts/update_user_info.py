@@ -17,10 +17,11 @@ async def update_user_info(
     # ユーザー基本情報の更新
     cursor.execute("""
         UPDATE users SET 
-            username = %s, email = %s, profile = %s, birthdate = %s, education = %s, career_step = %s, career_challenges = %s, career_approach = %s
+            username = %s, email = %s, profile = %s, birthdate = %s, education = %s, education_start = %s, education_end = %s, career_step = %s, career_challenges = %s, career_approach = %s
         WHERE id = %s
     """, (data['username'], data['email'], data.get('profile'), data.get('birthdate'), 
-          data.get('education'), data.get('career_step'), data.get('career_challenges'), 
+          data.get('education'), data.get('education_start'), data.get('education_end'), 
+          data.get('career_step'), data.get('career_challenges'), 
           data.get('career_approach'), current_user.id))
     
     # 空文字列を None に変換するヘルパー関数

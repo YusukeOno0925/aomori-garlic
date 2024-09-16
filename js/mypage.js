@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const profileField = document.getElementById('profile') || null;  // プロフィールフィールドが存在しない場合はnull
     const birthdateField = document.getElementById('birthdate');
     const educationField = document.getElementById('education');
+    const educationStartField = document.getElementById('education_start');
+    const educationEndField = document.getElementById('education_end');
     const careerStepField = document.getElementById('career_step');
     const careerChallengesField = document.getElementById('career_challenges');
     const careerApproachField = document.getElementById('career_approach');
@@ -22,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         birthdateField[action]('readonly', 'readonly');
         educationField[action]('readonly', 'readonly');
+        educationStartField[action]('readonly', 'readonly');
+        educationEndField[action]('readonly', 'readonly');
         careerStepField[action]('readonly', 'readonly');
         careerChallengesField[action]('readonly', 'readonly');
         careerApproachField[action]('readonly', 'readonly');
@@ -149,6 +153,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     birthdateField.value = data.birthdate || '';
                     educationField.value = data.education || '';
+                    educationStartField.value = data.education_start || '';
+                    educationEndField.value = data.education_end || '';
                     careerStepField.value = data.career_step || '';
                     careerChallengesField.value = data.career_challenges || '';
                     careerApproachField.value = data.career_approach || '';
@@ -181,6 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     profile: profileField ? profileField.value : '',
                     birthdate: birthdateField.value || '',
                     education: educationField.value || '',
+                    education_start: educationStartField.value || '',
+                    education_end: educationEndField.value || '',
                     career_step: careerStepField.value || '',
                     career_challenges: careerChallengesField.value || '',
                     career_approach: careerApproachField.value || '',
@@ -241,6 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         profileField.setAttribute('readonly', 'readonly');
                     }
                     birthdateField.setAttribute('readonly', 'readonly');
+                    educationField.setAttribute('readonly', 'readonly');
+                    educationStartField.setAttribute('readonly', 'readonly');
+                    educationEndField.setAttribute('readonly', 'readonly');
                     careerStepField.setAttribute('readonly', 'readonly');
                     careerChallengesField.setAttribute('readonly', 'readonly');
                     careerApproachField.setAttribute('readonly', 'readonly');
