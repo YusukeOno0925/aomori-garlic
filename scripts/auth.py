@@ -94,25 +94,21 @@ def get_user_from_db(username: str):
 
 # JWTトークンのデコードとユーザーの取得
 async def get_current_user(token: str = Depends(get_token_from_request)):
-    if not token:
-        logger.error("トークンが存在しません")
-        raise HTTPException(status_code=401, detail="認証トークンが見つかりません")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            logger.error("トークンにユーザー名が含まれていません")
             raise HTTPException(status_code=401, detail="無効なトークン")
-        token_data = TokenData(username=username)
+        
     except JWTError as e:
-        logger.error(f"JWTのエラーが発生しました: {e}")
-        raise HTTPException(status_code=401, detail="トークンの検証に失敗しました")
+        logger.error(f"JWTのエラー: {str(e)}")
+        raise HTTPException(status_code=401, detail="無効なトークンまたは期限切れ")
     
-    user = get_user_from_db(username=token_data.username)
+    # データベースからユーザー情報を取得
+    user = get_user_from_db(username=username)
     if user is None:
-        logger.error("ユーザーが見つかりません")
         raise HTTPException(status_code=401, detail="ユーザーが見つかりません")
-
+    
     return user
 
 # パスワードの検証
@@ -134,7 +130,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=15)  # デフォルト15分
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt

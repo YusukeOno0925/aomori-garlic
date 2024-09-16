@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from scripts.register_user import register_user_to_db, get_db_connection
 from scripts.get_user_info import router as get_user_info_router
 from scripts.update_user_info import router as update_user_info_router
-from scripts.auth import authenticate_user, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from scripts.auth import authenticate_user, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES, get_token_from_request
 from fastapi.responses import JSONResponse
 from scripts.email_config import fast_mail, EmailSchema
 from fastapi_mail import MessageSchema
@@ -172,10 +172,21 @@ async def contact():
 
 # マイページのエンドポイント
 @app.get("/Mypage.html")
-async def mypage(request: Request, current_user: dict = Depends(get_current_user)):
-    if current_user is None:
-        # ログインしていない場合はログインページにリダイレクト
+async def mypage(request: Request):
+    try:
+        # トークンをデバッグ用にログに出力
+        token = await get_token_from_request(request)
+        logger.debug(f"トークンを取得しました: {token}")
+
+        current_user = await get_current_user(token=token)
+        logger.debug(f"取得したユーザー情報: {current_user}")
+
+    except HTTPException as e:
+        logger.error(f"認証エラー: {e.detail}")
+        # 認証エラーが発生した場合、ログイン画面にリダイレクト
         return RedirectResponse(url="/Login.html")
+    
+    # 認証に成功した場合はマイページを表示
     return FileResponse("Mypage.html")
 
 # 統計ページへのエンドポイント
