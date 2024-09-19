@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <option value="601〜700万円" ${jobExperience.entry_salary === '601〜700万円' ? 'selected' : ''}>601〜700万円</option>
                 <option value="701〜800万円" ${jobExperience.entry_salary === '701〜800万円' ? 'selected' : ''}>701〜800万円</option>
                 <option value="801〜900万円" ${jobExperience.entry_salary === '801〜900万円' ? 'selected' : ''}>801〜900万円</option>
-                <option value="901〜1000万円" ${jobExperience.entry_salary === '901〜1000万円' ? 'selected' : ''}>901〜300万円</option>
+                <option value="901〜1000万円" ${jobExperience.entry_salary === '901〜1000万円' ? 'selected' : ''}>901〜1000万円</option>
                 <option value="1001〜1500万円" ${jobExperience.entry_salary === '1001〜1500万円' ? 'selected' : ''}>1001〜1500万円</option>
                 <option value="1500万円以上" ${jobExperience.entry_salary === '1500万円以上' ? 'selected' : ''}>1500万円以上</option>
             </select>
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <option value="601〜700万円" ${jobExperience.current_salary === '601〜700万円' ? 'selected' : ''}>601〜700万円</option>
                 <option value="701〜800万円" ${jobExperience.current_salary === '701〜800万円' ? 'selected' : ''}>701〜800万円</option>
                 <option value="801〜900万円" ${jobExperience.current_salary === '801〜900万円' ? 'selected' : ''}>801〜900万円</option>
-                <option value="901〜1000万円" ${jobExperience.current_salary === '901〜1000万円' ? 'selected' : ''}>901〜300万円</option>
+                <option value="901〜1000万円" ${jobExperience.current_salary === '901〜1000万円' ? 'selected' : ''}>901〜1000万円</option>
                 <option value="1001〜1500万円" ${jobExperience.current_salary === '1001〜1500万円' ? 'selected' : ''}>1001〜1500万円</option>
                 <option value="1500万円以上" ${jobExperience.current_salary === '1500万円以上' ? 'selected' : ''}>1500万円以上</option>
             </select>

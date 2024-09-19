@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('data/careers.json')
+    fetch('/career-overview')
         .then(response => response.json())
         .then(data => {
             const industrySelect = document.getElementById('filter-industry');
 
-            // 最新の会社の業界名を取得してセットに追加
-            const uniqueIndustries = [...new Set(data.careers.map(career =>
-                career.companies[career.companies.length - 1].industry))];
+            // すべての会社の業界名を取得してセットに追加
+            const uniqueIndustries = [...new Set(data.careers.flatMap(career => 
+                career.companies.map(company => company.industry)
+            ))];
 
             uniqueIndustries.forEach(industry => {
                 const option = document.createElement('option');
@@ -22,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             function displayCareers(careers) {
                 const careerList = document.getElementById('career-list');
-                careerList.innerHTML = '';
+                careerList.innerHTML = ''; // 前回の表示をクリア
+
                 careers.forEach(career => {
-                    // 年齢を計算
                     const age = calculateAge(career.birthYear);
 
                     const listItem = document.createElement('li');
@@ -34,6 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     listItem.addEventListener('click', function () {
                         window.location.href = `Career_detail.html?id=${career.id}`;
                     });
+
+                    // 一つのキャリアについて、大学と会社の情報を取得
+                    let stages = career.careerStages.map(stage => ({
+                        year: stage.year,
+                        stage: stage.stage
+                    }));
 
                     listItem.innerHTML = `
                         <div class="career-info">
@@ -48,26 +55,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     careerList.appendChild(listItem);
 
-                    drawCareerPath(`#career-path-${career.id}`, career.careerStages);
+                    drawCareerPath(`#career-path-${career.id}`, stages);
                 });
             }
 
             function drawCareerPath(selector, stages) {
                 const container = document.querySelector(selector);
-                const width = container.clientWidth; 
+                const width = container.clientWidth;
                 const height = 100;
-            
+
                 const svg = d3.select(selector)
                     .append("svg")
-                    .attr("width", "100%")  // SVG自体の幅を100%に設定
+                    .attr("width", "100%")
                     .attr("height", height)
-                    .attr("viewBox", `0 0 ${width} ${height}`)  // ビューボックスを設定してスケーリング対応
-                    .attr("preserveAspectRatio", "xMinYMid meet");  // アスペクト比を保ちながらリサイズ
-            
+                    .attr("viewBox", `0 0 ${width} ${height}`)
+                    .attr("preserveAspectRatio", "xMinYMid meet");
+
                 const xScale = d3.scaleLinear()
                     .domain([0, stages.length - 1])
-                    .range([50, width - 50]); 
-            
+                    .range([50, width - 50]);
+
                 svg.append("g")
                     .selectAll("line")
                     .data(stages)
@@ -79,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("y2", height / 2)
                     .attr("stroke", "#574637")
                     .attr("stroke-width", 2);
-            
+
                 svg.append("g")
                     .selectAll("circle")
                     .data(stages)
@@ -89,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("cy", height / 2)
                     .attr("r", 5)
                     .attr("fill", "#8ba141");
-            
+
                 svg.append("g")
                     .selectAll("text.year")
                     .data(stages)
@@ -98,9 +105,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("x", (d, i) => xScale(i))
                     .attr("y", height / 2 - 15)
                     .attr("text-anchor", "middle")
-                    .style("font-size", "12px")
+                    .style("font-size", "14px")
                     .text(d => d.year);
-            
+
                 svg.append("g")
                     .selectAll("text.stage")
                     .data(stages)
@@ -110,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("y", height / 2 + 25)
                     .attr("text-anchor", "middle")
                     .style("font-size", "12px")
-                    .each(function(d) {
+                    .each(function (d) {
                         const stageText = d3.select(this);
                         const lines = d.stage.match(/.{1,6}/g) || [];
                         stageText.selectAll("tspan")
@@ -121,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             .attr("dy", (d, i) => i === 0 ? 0 : 14)
                             .text(d => d);
                     });
-            
+
                 svg.append("g")
                     .selectAll("text.icon")
                     .data([stages[stages.length - 1]])
@@ -130,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("x", (d, i) => xScale(stages.length - 1) + 10)
                     .attr("y", height / 2 + 5)
                     .attr("text-anchor", "middle")
-                    .style("font-size", "16px")
+                    .style("font-size", "18px")
                     .text('👤');
             }
 
@@ -140,9 +147,10 @@ document.addEventListener('DOMContentLoaded', function () {
             searchInput.addEventListener('input', function () {
                 const keyword = searchInput.value.toLowerCase();
                 const filteredCareers = data.careers.filter(career =>
-                    career.name.toLowerCase().includes(keyword) ||
-                    career.profession.toLowerCase().includes(keyword) ||
-                    career.story.toLowerCase().includes(keyword)
+                    career.name.toLowerCase().includes(keyword) ||  // 名前で検索
+                    (career.education && career.education.toLowerCase().includes(keyword)) ||  // 大学名で検索
+                    career.careerStages.some(stage => stage.stage.toLowerCase().includes(keyword)) ||  // 企業名で検索
+                    career.companies.some(company => company.name.toLowerCase().includes(keyword))  // 会社名で検索
                 );
                 displayCareers(filteredCareers);
             });
@@ -151,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedIndustry = industrySelect.value;
                 const filteredCareers = selectedIndustry
                     ? data.careers.filter(career =>
-                        career.companies[career.companies.length - 1].industry === selectedIndustry)
+                        career.companies.some(company => company.industry === selectedIndustry))
                     : data.careers;
                 displayCareers(filteredCareers);
             });
