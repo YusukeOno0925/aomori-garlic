@@ -65,6 +65,15 @@ li.career-card h2, li.career-card p {
     margin: 0;
 }
 
+li.career-card p {
+    display: -webkit-box;           /* Flexboxでの表示を制御 */
+    -webkit-box-orient: vertical;   /* テキストを垂直方向に並べる */
+    -webkit-line-clamp: 2;          /* 最大2行に制限 */
+    overflow: hidden;               /* 2行を超えた部分は隠す */
+    text-overflow: ellipsis;        /* 溢れた部分を "..." で省略 */
+    white-space: normal;            /* テキストを折り返す */
+}
+
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {

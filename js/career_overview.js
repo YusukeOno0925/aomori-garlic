@@ -119,13 +119,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     .style("font-size", "12px")
                     .each(function (d) {
                         const stageText = d3.select(this);
-                        const lines = d.stage.match(/.{1,6}/g) || [];
+                        let stage = d.stage.length > 12 ? d.stage.substring(0, 12) + '...' : d.stage; // 最大文字数を12に制限
+                        const lines = stage.match(/.{1,6}/g); // 6文字ごとに区切る
+                        
+                        if (lines.length > 2) {
+                            lines[1] = lines[1].substring(0, 3) + '...'; // 2行目を3文字＋「...」に
+                        }
+                        
                         stageText.selectAll("tspan")
-                            .data(lines)
+                            .data(lines.slice(0, 2)) // 最初の2行だけ表示
                             .enter()
                             .append("tspan")
                             .attr("x", stageText.attr("x"))
-                            .attr("dy", (d, i) => i === 0 ? 0 : 14)
+                            .attr("dy", (d, i) => i === 0 ? 0 : 14) // 2行目は14px下に
                             .text(d => d);
                     });
 
