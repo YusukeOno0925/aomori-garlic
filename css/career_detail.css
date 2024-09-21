@@ -9,6 +9,16 @@ main {
     margin: 0 auto;
 }
 
+h2 {
+    text-align: center; /* タイトルを中央揃え */
+}
+
+#career-chart-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5rem;
+}
+
 section {
     margin-bottom: 2rem;
 }
@@ -70,4 +80,62 @@ button#submit-comment {
 
 button#submit-comment:hover {
     background-color: #555;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (min-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+
+    .card h2, .card h3 {
+        font-size: 1.75rem;
+    }
+
+    .card p {
+        font-size: 1rem;
+    }
+}
+
+/* 画面が中程度の場合（タブレット） */
+@media (min-width: 768px) and (max-width: 1023px) {
+    body {
+        font-size: 14px;
+    }
+
+    .card h2, .card h3 {
+        font-size: 1.5rem;
+    }
+
+    .card p {
+        font-size: 0.9rem;
+    }
+}
+
+/* 画面が小さい場合（スマートフォン） */
+@media (max-width: 767px) {
+    body {
+        font-size: 12px;
+    }
+
+    .card h2, .card h3 {
+        font-size: 1.25rem;
+    }
+
+    .card p {
+        font-size: 0.8rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
 }

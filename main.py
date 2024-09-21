@@ -262,3 +262,59 @@ async def get_career_overview():
         raise HTTPException(status_code=500, detail="Database query failed")
     finally:
         db.close()
+
+
+@app.get("/career-detail/{career_id}")
+async def get_career_detail(career_id: int):
+    db = get_db_connection()
+    try:
+        cursor = db.cursor(dictionary=True)
+        
+        # クエリ実行
+        cursor.execute("""
+            SELECT u.id, u.username, j.company_name, j.position, j.entry_salary, j.current_salary,
+                   j.entry_satisfaction, j.current_satisfaction, j.work_start_period, j.work_end_period, 
+                   j.success_experience, j.failure_experience, u.education
+            FROM users u
+            JOIN job_experiences j ON u.id = j.user_id
+            WHERE u.id = %s
+        """, (career_id,))
+        
+        career_data = cursor.fetchall()
+
+        if not career_data:
+            raise HTTPException(status_code=404, detail="Career not found")
+
+        # null値をNoneに置き換える処理を追加
+        for row in career_data:
+            if row['entry_salary'] is None:
+                row['entry_salary'] = "N/A"
+            if row['current_salary'] is None:
+                row['current_salary'] = "N/A"
+
+        # データをクライアントに返す
+        response_data = {
+            "name": career_data[0]["username"],
+            "profession": career_data[0]["position"],
+            "success_experience": career_data[0]["success_experience"],
+            "failures": career_data[0]["failure_experience"],
+            "challenges": career_data[0]["entry_satisfaction"],
+            "education": career_data[0]["education"],
+            "companies": [
+                {
+                    "name": row["company_name"],
+                    "startYear": row["work_start_period"].year,
+                    "endYear": row["work_end_period"].year if row["work_end_period"] else '現時点',
+                    "entry_salary": row["entry_salary"],
+                    "current_salary": row["current_salary"],
+                    "entry_satisfaction": row["entry_satisfaction"],
+                    "current_satisfaction": row["current_satisfaction"]
+                } for row in career_data
+            ]
+        }
+
+        return JSONResponse(content=response_data)
+
+    finally:
+        cursor.close()
+        db.close()
