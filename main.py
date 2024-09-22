@@ -282,7 +282,7 @@ async def get_career_detail(career_id: int):
 
         # 全職歴データを取得するクエリ
         cursor.execute("""
-            SELECT u.id, u.username, u.profile, u.career_challenges, 
+            SELECT u.id, u.username, u.profile, u.career_step,
                 j.company_name, j.position, j.entry_salary, j.current_salary,
                 j.entry_satisfaction, j.current_satisfaction, j.work_start_period, j.work_end_period, 
                 j.success_experience, j.failure_experience, j.reflection, u.education
@@ -308,11 +308,10 @@ async def get_career_detail(career_id: int):
         response_data = {
             "name": career_data[0]["username"],
             "profile": career_data[0]["profile"],
-            "career_challenges": career_data[0]["career_challenges"],
+            "career_step": career_data[0]["career_step"],
             "profession": latest_job_type_data["job_type"],  # 最新のjob_typeを使用
             "success_experience": career_data[0]["success_experience"],
             "failures": career_data[0]["failure_experience"],
-            "challenges": career_data[0]["entry_satisfaction"],
             "education": career_data[0]["education"],
             "companies": [
                 {

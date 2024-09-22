@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             careerDetail.innerHTML += `
                 <div class="card">
                     <h3>理想のキャリアステップ</h3>
-                    <p>${data.career_challenges || 'N/A'}</p>
+                    <p>${data.career_step || 'N/A'}</p>
                 </div>
             `;
             
