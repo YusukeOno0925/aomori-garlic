@@ -272,9 +272,9 @@ async def get_career_detail(career_id: int):
         
         # クエリ実行
         cursor.execute("""
-            SELECT u.id, u.username, j.company_name, j.position, j.entry_salary, j.current_salary,
-                   j.entry_satisfaction, j.current_satisfaction, j.work_start_period, j.work_end_period, 
-                   j.success_experience, j.failure_experience, u.education
+            SELECT u.id, u.username, u.profile, j.company_name, j.position, j.entry_salary, j.current_salary,
+                j.entry_satisfaction, j.current_satisfaction, j.work_start_period, j.work_end_period, 
+                j.success_experience, j.failure_experience, u.education
             FROM users u
             JOIN job_experiences j ON u.id = j.user_id
             WHERE u.id = %s
@@ -295,6 +295,7 @@ async def get_career_detail(career_id: int):
         # データをクライアントに返す
         response_data = {
             "name": career_data[0]["username"],
+            "profile": career_data[0]["profile"],
             "profession": career_data[0]["position"],
             "success_experience": career_data[0]["success_experience"],
             "failures": career_data[0]["failure_experience"],

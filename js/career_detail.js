@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><strong>職業:</strong> ${data.profession}</p>
                     <p><strong>最終学歴:</strong> ${data.education}</p>
                     <p><strong>経験企業数:</strong> ${data.companies.length}</p>
-                    <p><strong>登録時のプロフィール:</strong> ${data.user_profile || 'N/A'}</p>
+                    <p><strong>登録時のプロフィール:</strong> ${data.profile || 'N/A'}</p>
                 </div>
             `;
 

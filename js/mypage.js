@@ -19,9 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const action = isReadOnly ? 'setAttribute' : 'removeAttribute';
         usernameField[action]('readonly', 'readonly');
         emailField[action]('readonly', 'readonly');
-        if (profileField) {
-            profileField[action]('readonly', 'readonly');
-        }
+        profileField[action]('readonly', 'readonly');
         birthdateField[action]('readonly', 'readonly');
         educationField[action]('readonly', 'readonly');
         educationStartField[action]('readonly', 'readonly');
@@ -148,9 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data) {
                     usernameField.value = data.username || '';
                     emailField.value = data.email || '';
-                    if (profileField) {
-                        profileField.value = data.profile || '';
-                    }
+                    profileField.value = data.profile || '';
                     birthdateField.value = data.birthdate || '';
                     educationField.value = data.education || '';
                     educationStartField.value = data.education_start || '';
