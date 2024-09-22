@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <h3>${index + 1}社目: ${company.name} (${company.startYear}〜${company.endYear || '現時点'})</h3>
                         <p><strong>成功体験:</strong> ${company.success_experience || 'N/A'}</p>
                         <p><strong>失敗体験:</strong> ${company.failure_experience || 'N/A'}</p>
-                        <p><strong>こうすればよかったこと:</strong> ${company.improvement || 'N/A'}</p>
+                        <p><strong>こうすればよかったこと:</strong> ${company.reflection || 'N/A'}</p>
                     </div>
                 `;
             });
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             careerDetail.innerHTML += `
                 <div class="card">
                     <h3>理想のキャリアステップ</h3>
-                    <p>${data.ideal_career || 'N/A'}</p>
+                    <p>${data.career_challenges || 'N/A'}</p>
                 </div>
             `;
             

@@ -16,9 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 industrySelect.appendChild(option);
             });
 
+            // 年齢を計算する関数
             function calculateAge(birthYear) {
+                if (!birthYear) {
+                    return "null";  // 誕生日が入力されていない場合
+                }
                 const currentYear = new Date().getFullYear();
-                return currentYear - birthYear;
+                return `${currentYear - birthYear}`;
             }
 
             function displayCareers(careers) {

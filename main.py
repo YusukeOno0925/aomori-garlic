@@ -270,33 +270,46 @@ async def get_career_detail(career_id: int):
     try:
         cursor = db.cursor(dictionary=True)
         
-        # クエリ実行
+        # 最新のjob_typeを取得するクエリ
         cursor.execute("""
-            SELECT u.id, u.username, u.profile, j.company_name, j.position, j.entry_salary, j.current_salary,
+            SELECT job_type 
+            FROM job_experiences 
+            WHERE user_id = %s 
+            ORDER BY work_end_period IS NULL DESC, work_end_period DESC
+            LIMIT 1
+        """, (career_id,))
+        latest_job_type_data = cursor.fetchone()
+
+        # 全職歴データを取得するクエリ
+        cursor.execute("""
+            SELECT u.id, u.username, u.profile, u.career_challenges, 
+                j.company_name, j.position, j.entry_salary, j.current_salary,
                 j.entry_satisfaction, j.current_satisfaction, j.work_start_period, j.work_end_period, 
-                j.success_experience, j.failure_experience, u.education
+                j.success_experience, j.failure_experience, j.reflection, u.education
             FROM users u
             JOIN job_experiences j ON u.id = j.user_id
             WHERE u.id = %s
+            ORDER BY j.work_start_period ASC
         """, (career_id,))
-        
         career_data = cursor.fetchall()
 
-        if not career_data:
+        # 結果がない場合のエラーハンドリング
+        if not career_data or not latest_job_type_data:
             raise HTTPException(status_code=404, detail="Career not found")
 
-        # null値をNoneに置き換える処理を追加
+        # null値を適切に処理する
         for row in career_data:
             if row['entry_salary'] is None:
                 row['entry_salary'] = "N/A"
             if row['current_salary'] is None:
                 row['current_salary'] = "N/A"
 
-        # データをクライアントに返す
+        # 最新のjob_typeを取得してresponseに含める
         response_data = {
             "name": career_data[0]["username"],
             "profile": career_data[0]["profile"],
-            "profession": career_data[0]["position"],
+            "career_challenges": career_data[0]["career_challenges"],
+            "profession": latest_job_type_data["job_type"],  # 最新のjob_typeを使用
             "success_experience": career_data[0]["success_experience"],
             "failures": career_data[0]["failure_experience"],
             "challenges": career_data[0]["entry_satisfaction"],
@@ -309,7 +322,10 @@ async def get_career_detail(career_id: int):
                     "entry_salary": row["entry_salary"],
                     "current_salary": row["current_salary"],
                     "entry_satisfaction": row["entry_satisfaction"],
-                    "current_satisfaction": row["current_satisfaction"]
+                    "current_satisfaction": row["current_satisfaction"],
+                    "success_experience": row["success_experience"],
+                    "failure_experience": row["failure_experience"],
+                    "reflection": row["reflection"]
                 } for row in career_data
             ]
         }
