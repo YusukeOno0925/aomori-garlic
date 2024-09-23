@@ -1,8 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetchCareerStories();
 
-    // 画面サイズ変更時に再度fetchCareerStoriesを呼び出す
-    window.addEventListener('resize', fetchCareerStories);
+    if (window.innerWidth > 768) {
+        // デスクトップのみリサイズイベントを設定
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                fetchCareerStories();
+            }, 200);
+        });
+    }
 });
 
 function fetchCareerStories() {
