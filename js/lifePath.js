@@ -171,8 +171,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // 初回グラフの描画
             updateGraph();
 
-            // 5秒ごとにグラフを更新
-            setInterval(updateGraph, 5000);
+            // 自動更新処理
+            if (window.innerWidth > 768) {
+                // デスクトップでのみ5秒ごとにグラフを更新
+                setInterval(updateGraph, 10000);
+            }
 
             // インジケータークリック時のイベント
             indicators.forEach((indicator, index) => {
