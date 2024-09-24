@@ -208,9 +208,11 @@ async def get_career_overview():
     try:
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
-               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
+               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period,
+               IFNULL(pv.view_count, 0) AS view_count  -- 閲覧回数を取得
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
+        LEFT JOIN profile_views pv ON u.id = pv.user_id  -- 閲覧回数を結合
         """
         cursor = db.cursor(dictionary=True)
         cursor.execute(query)
@@ -229,7 +231,8 @@ async def get_career_overview():
                     "profession": None,  
                     "income": [],
                     "careerStages": [],
-                    "companies": []
+                    "companies": [],
+                    "view_count": row['view_count']  # 閲覧回数を追加
                 }
                 # 最初に大学の入学情報を追加
                 if row['education']:
@@ -464,6 +467,33 @@ async def get_popular_career_stories():
     except Exception as e:
         print(f"Error fetching popular career stories: {e}")
         raise HTTPException(status_code=500, detail="Database query failed")
+    finally:
+        cursor.close()
+        db.close()
+
+
+# 各ユーザのプロフィール回数の表示に用いる
+@app.post("/increment-profile-view/{user_id}")
+async def increment_profile_view(user_id: int):
+    db = get_db_connection()  # データベース接続を取得
+    try:
+        print(f"Incrementing view count for user_id: {user_id}")
+        cursor = db.cursor()
+        
+        # profile_viewsテーブルに挿入/更新
+        cursor.execute("""
+            INSERT INTO profile_views (user_id, view_count, last_viewed_at)
+            VALUES (%s, 1, NOW())
+            ON DUPLICATE KEY UPDATE view_count = view_count + 1, last_viewed_at = NOW()
+        """, (user_id,))  # user_idに基づいてインクリメント処理
+        
+        db.commit()  # データベースの変更をコミット
+        return {"message": "Profile view incremented"}
+    
+    except Exception as e:
+        print(f"Error incrementing profile view: {e}")
+        raise HTTPException(status_code=500, detail="Failed to increment profile view")
+    
     finally:
         cursor.close()
         db.close()

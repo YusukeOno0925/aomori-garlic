@@ -35,8 +35,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     const listItem = document.createElement('li');
                     listItem.className = 'career-card';
 
-                    // カードをクリックすると詳細ページに遷移するように設定
+                    // カードをクリックすると閲覧回数をインクリメント
                     listItem.addEventListener('click', function () {
+                        // サーバーに閲覧回数のインクリメントを通知
+                        fetch(`/increment-profile-view/${career.id}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                console.error('Failed to increment view count');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+
+                        // 詳細ページに遷移
                         window.location.href = `Career_detail.html?id=${career.id}`;
                     });
 
@@ -45,6 +57,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         year: stage.year,
                         stage: stage.stage
                     }));
+
+                    // 閲覧回数の表示を追加
+                    const viewCountSection = `
+                    <div class="card-footer" style="position: absolute; right: 10px; bottom: 10px;">
+                        <img src="images/eye-icon.png" alt="View Icon" style="width: 16px; height: 16px; vertical-align: middle;">
+                        <span class="view-count">${career.view_count || 0} 回</span>
+                    </div>
+                    `;
 
                     listItem.innerHTML = `
                         <div class="career-info">
@@ -55,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="career-path" id="career-path-${career.id}">
                             <!-- ここにD3.jsで描画されるキャリアパスの図が入る -->
                         </div>
+                        ${viewCountSection}  <!-- 閲覧回数を表示 -->
                     `;
 
                     careerList.appendChild(listItem);

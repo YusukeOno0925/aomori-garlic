@@ -43,10 +43,25 @@ li.career-card {
 
 .career-info {
     flex: 1;
+    margin-bottom: 0rem; /* 年収とグラフの間の余白を狭める */
 }
 
 .career-path {
     flex: 2;
+    margin-bottom: 1.5rem; /* グラフと目アイコンの間に余白を追加 */
+}
+
+.card-footer {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem; /* 目のアイコンとグラフの間に余白を追加 */
+}
+
+.card-footer img {
+    margin-right: 5px; /* アイコンと閲覧回数の間に余白を追加 */
 }
 
 li.career-card.selected {
