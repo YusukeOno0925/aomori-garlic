@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="career-info">
                             <h2>${career.name} (${age}歳)</h2>
                             <p>職業: ${career.profession}</p>
-                            <p>年収: ${career.income[career.income.length - 1].income}万円</p>
+                            <p>年収: ${career.income[career.income.length - 1].income}</p>
                         </div>
                         <div class="career-path" id="career-path-${career.id}">
                             <!-- ここにD3.jsで描画されるキャリアパスの図が入る -->

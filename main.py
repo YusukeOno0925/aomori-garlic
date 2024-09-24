@@ -208,7 +208,7 @@ async def get_career_overview():
     try:
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
-               j.company_name, j.industry, j.position, j.current_salary, j.work_start_period
+               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
         """
@@ -240,7 +240,7 @@ async def get_career_overview():
                     })
 
             # 最新の職業情報として上書き
-            career_dict[row['id']]['profession'] = row['position']
+            career_dict[row['id']]['profession'] = row['job_type']
             career_dict[row['id']]['income'] = [{"income": row['current_salary']}]
 
             # 各会社の入社情報を追加
@@ -343,7 +343,7 @@ async def get_recent_career_stories():
     try:
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
-               j.company_name, j.industry, j.position, j.current_salary, j.work_start_period
+               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
         ORDER BY j.work_start_period DESC
@@ -374,7 +374,7 @@ async def get_recent_career_stories():
                     })
 
             # 最新の職業情報として上書き
-            career_dict[row['id']]['profession'] = row['position']
+            career_dict[row['id']]['profession'] = row['job_type']
             career_dict[row['id']]['income'].append({"income": row['current_salary']})
 
             # 各会社の入社情報を追加
@@ -409,7 +409,7 @@ async def get_popular_career_stories():
     try:
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
-               j.company_name, j.industry, j.position, j.current_salary, j.work_start_period
+               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
         ORDER BY u.id DESC  -- 仮にここで人気順を模倣
@@ -440,7 +440,7 @@ async def get_popular_career_stories():
                     })
 
             # 最新の職業情報として上書き
-            career_dict[row['id']]['profession'] = row['position']
+            career_dict[row['id']]['profession'] = row['job_type']
             career_dict[row['id']]['income'].append({"income": row['current_salary']})
 
             # 各会社の入社情報を追加
