@@ -344,43 +344,44 @@ async def get_career_detail(career_id: int):
 async def get_recent_career_stories():
     db = get_db_connection()
     try:
+        # 最新の3ユーザーとその職歴、学歴を一度に取得
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
                j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
-        ORDER BY j.work_start_period DESC
-        """  # すべてのユーザーの職歴を取得（LIMITは削除）
+        ORDER BY u.created_at DESC, j.work_start_period ASC  -- 作成日時の降順で並べ替え、職歴は時系列で取得
+        LIMIT 3  -- 最新のキャリアを持つ3ユーザーを取得
+        """
         cursor = db.cursor(dictionary=True)
         cursor.execute(query)
-        all_careers = cursor.fetchall()
+        recent_careers = cursor.fetchall()
 
-        # ユーザーごとに職歴をグループ化
+        # ユーザーごとのキャリアをグループ化して返す
         career_dict = {}
-        for row in all_careers:
+        for row in recent_careers:
             if row['id'] not in career_dict:
+                # ユーザー情報を初期化
                 career_dict[row['id']] = {
                     "id": row['id'],
                     "name": row['username'],
                     "birthYear": row['birthdate'].year if row['birthdate'] else None,
-                    "profession": None,  # 初期値
+                    "profession": None,
                     "income": [],
                     "careerStages": [],
-                    "companies": []
+                    "companies": [],
                 }
-                # 最初に大学の入学情報を追加
+
+                # 学歴情報を最初に追加（入学年）
                 if row['education']:
-                    education_start_year = row['education_start'].year if row['education_start'] else "不明"
                     career_dict[row['id']]['careerStages'].append({
-                        "year": education_start_year, 
+                        "year": row['education_start'].year if row['education_start'] else '不明',
                         "stage": f"{row['education']} 入学"
                     })
 
-            # 最新の職業情報として上書き
+            # 職業情報を追加
             career_dict[row['id']]['profession'] = row['job_type']
             career_dict[row['id']]['income'].append({"income": row['current_salary']})
-
-            # 各会社の入社情報を追加
             career_dict[row['id']]['careerStages'].append({
                 "year": row['work_start_period'].year, 
                 "stage": f"{row['company_name']} 入社"
@@ -391,13 +392,10 @@ async def get_recent_career_stories():
                 "startYear": row['work_start_period'].year
             })
 
-        # 取得したユーザーごとのキャリア情報をリスト化
+        # すべてのユーザーのキャリアをリスト化
         careers = list(career_dict.values())
 
-        # 最近のキャリアストーリーのみを取得（例：3件まで）
-        recent_careers = careers[:3]
-
-        return JSONResponse(content={"careers": recent_careers})
+        return JSONResponse(content={"careers": careers})
     except Exception as e:
         print(f"Error fetching recent career stories: {e}")
         raise HTTPException(status_code=500, detail="Database query failed")
@@ -412,41 +410,51 @@ async def get_popular_career_stories():
     try:
         query = """
         SELECT u.id, u.username, u.birthdate, u.education, u.education_start,
-               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period
+               j.company_name, j.industry, j.job_type, j.current_salary, j.work_start_period,
+               IFNULL(pv.view_count, 0) AS view_count  -- 閲覧回数を取得
         FROM users u
         JOIN job_experiences j ON u.id = j.user_id
-        ORDER BY u.id DESC  -- 仮にここで人気順を模倣
+        LEFT JOIN profile_views pv ON u.id = pv.user_id  -- 閲覧回数を結合
+        WHERE u.id IN (
+            SELECT user_id FROM (
+                SELECT u.id AS user_id, IFNULL(pv.view_count, 0) AS view_count
+                FROM users u
+                LEFT JOIN profile_views pv ON u.id = pv.user_id
+                ORDER BY view_count DESC  -- 閲覧回数で並べ替え
+                LIMIT 3  -- 人気のキャリアを持つ3ユーザーを取得
+            ) AS popular_users
+        )
+        ORDER BY view_count DESC, j.work_start_period ASC -- 閲覧回数順に並べ、各ユーザーのキャリアは時系列で取得
         """
         cursor = db.cursor(dictionary=True)
         cursor.execute(query)
-        all_careers = cursor.fetchall()
+        popular_careers = cursor.fetchall()
 
-        # ユーザーごとに職歴をグループ化
+        # ユーザーごとのキャリアをグループ化して返す
         career_dict = {}
-        for row in all_careers:
+        for row in popular_careers:
             if row['id'] not in career_dict:
                 career_dict[row['id']] = {
                     "id": row['id'],
                     "name": row['username'],
                     "birthYear": row['birthdate'].year if row['birthdate'] else None,
-                    "profession": None,  # 初期値
+                    "profession": None,  
                     "income": [],
                     "careerStages": [],
-                    "companies": []
+                    "companies": [],
+                    "view_count": row['view_count']
                 }
-                # 最初に大学の入学情報を追加
+
+                # 学歴情報を最初に追加（入学年）
                 if row['education']:
-                    education_start_year = row['education_start'].year if row['education_start'] else "不明"
                     career_dict[row['id']]['careerStages'].append({
-                        "year": education_start_year, 
+                        "year": row['education_start'].year if row['education_start'] else '不明',
                         "stage": f"{row['education']} 入学"
                     })
 
-            # 最新の職業情報として上書き
+            # キャリアステージを追加
             career_dict[row['id']]['profession'] = row['job_type']
             career_dict[row['id']]['income'].append({"income": row['current_salary']})
-
-            # 各会社の入社情報を追加
             career_dict[row['id']]['careerStages'].append({
                 "year": row['work_start_period'].year, 
                 "stage": f"{row['company_name']} 入社"
@@ -457,13 +465,10 @@ async def get_popular_career_stories():
                 "startYear": row['work_start_period'].year
             })
 
-        # 取得したユーザーごとのキャリア情報をリスト化
+        # すべてのユーザーのキャリアをリスト化
         careers = list(career_dict.values())
 
-        # 人気のキャリアストーリーのみを取得（例：3件まで）
-        popular_careers = careers[:3]
-
-        return JSONResponse(content={"careers": popular_careers})
+        return JSONResponse(content={"careers": careers})
     except Exception as e:
         print(f"Error fetching popular career stories: {e}")
         raise HTTPException(status_code=500, detail="Database query failed")
