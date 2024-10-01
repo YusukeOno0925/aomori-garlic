@@ -18,30 +18,26 @@
         <div class="header-content">
             <img src="images/company-logo.jpg" alt="Company Logo" class="logo-image">
             <h1 class="logo">インノーマル</h1>
-            <p class="lead-text long">〜キャリアの未来を共に創る〜</p>
+            <p class="lead-text">〜キャリアの未来を共に創る〜</p>
             <div class="login-button-container">
                 <a href="Login.html" id="login-button" class="login-button" style="display: none;">ログイン</a>
                 <a href="#" id="logout-button" class="login-button" style="display: none;">ログアウト</a>
             </div>
             <div class="hamburger-menu">☰</div>
         </div>
-        <nav class="navbar">
-            <ul class="nav-list">
-                <li><a href="Home.html">ホーム<span class="icon"></span></a></li>
-                <li class="career-story">
-                    <a href="#">キャリアストーリー<span class="icon"></span></a>
-                    <ul class="dropdown">
-                        <li><a href="Career_overview.html">概要<span class="icon"></span></a></li>
-                        <li><a href="Career_detail.html">詳細<span class="icon"></span></a></li>
-                    </ul>
-                </li>
-                <li><a href="Career_path.html">キャリアパス<span class="icon"></span></a></li>
-                <li><a href="Stats.html">統計とグラフ<span class="icon"></span></a></li>
-                <li><a href="Mypage.html">マイページ<span class="icon"></span></a></li>
-                <li><a href="Contact.html">お問い合わせ<span class="icon"></span></a></li>
+    </header>
+    <aside class="main-menu" id="main-menu">
+        <nav>
+            <ul>
+                <li><a href="Home.html"><img src="images/home-icon.png" alt="ホームアイコン"> ホーム</a></li>
+                <li><a href="Career_overview.html"><img src="images/career-icon.png" alt="キャリアストーリーアイコン"> キャリアストーリー</a></li>
+                <li><a href="Board.html"><img src="images/board-icon.png" alt="掲示板アイコン"> 掲示板（Q&A）</a></li>
+                <li><a href="Mypage.html"><img src="images/board-icon.png" alt="マイページアイコン"> マイページ</a></li>
+                <li><a href="Contact.html"><img src="images/notification-icon.png" alt="お知らせアイコン"> お知らせ</a></li>
+                <li><a href="Contact.html"><img src="images/contact-icon.png" alt="問い合わせアイコン"> お問い合わせ</a></li>
             </ul>
         </nav>
-    </header>
+    </aside>
 
     <main>
         <form id="contact-form" method="POST">
@@ -58,7 +54,6 @@
         <p>&copy; 2024 Imnormal</p>
     </footer>
     <script src="js/hamburgermenu.js"></script>
-    <script src="js/dropdown.js"></script>
     <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
     <script src="js/contact.js"></script>
 

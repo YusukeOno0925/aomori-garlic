@@ -7,6 +7,8 @@ main {
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
+    margin-top: 100px; /* ヘッダー分のマージンを追加 */
+    margin-left: 220px;
 }
 
 h2 {
@@ -132,6 +134,7 @@ canvas {
 
     main {
         padding: 1rem;
+        margin-left: 0px;
     }
 
     canvas {

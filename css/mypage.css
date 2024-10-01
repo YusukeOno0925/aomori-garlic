@@ -4,12 +4,13 @@ body {
 }
 
 main {
-    width: 80%;
+    width: calc(100% - 250px); /* サイドメニュー分の幅を引いた幅を設定 */
     margin: 20px auto;
     padding: 20px;
     background-color: var(--card-background-color);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin-left: 220px;
 }
 
 /* フォームのスタイル */
@@ -75,5 +76,6 @@ button:hover {
 @media (max-width: 768px) {
     main {
         width: 95%;
+        margin-left: 0px;
     }
 }
