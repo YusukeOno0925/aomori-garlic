@@ -38,32 +38,70 @@
             </ul>
         </nav>
     </aside>
-    
+
     <main>
         <h2>マイページ</h2>
         <form id="mypage-form" method="post">
             <h3>基本情報</h3>
-            <input type="text" id="username" name="username" placeholder="ユーザ名(必須)" readonly>
-            <input type="email" id="email" name="email" placeholder="メールアドレス(必須)" readonly>
-            <textarea id="profile" name="profile" placeholder="プロフィール情報を入力してください"></textarea>
-            <input type="text" onfocus="(this.type='date')" id="birthdate" name="birthdate" placeholder="生年月日(必須)" required>
-            <input type="text" id="education" name="education" placeholder="最終学歴(必須)" required>
-            <input type="text" onfocus="(this.type='date')" id="education_start" name="education_start" placeholder="入学時期(必須)" required>
-            <input type="text" onfocus="(this.type='date')" id="education_end" name="education_end" placeholder="卒業時期(必須)" required>
+            <input type="text" id="username" name="username" placeholder="ユーザ名">
+            <input type="email" id="email" name="email" placeholder="メールアドレス">
+            <input type="text" id="family_name" name="family_name" placeholder="姓">
+            <input type="text" id="given_name" name="given_name" placeholder="名">
+            <input type="date" id="birthdate" name="birthdate" placeholder="生年月日">
+            <select id="gender" name="gender">
+                <option value="">性別を選択してください</option>
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+                <option value="other">その他</option>
+            </select>
+            <label>
+                <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription">
+                公開クチコミの通知メールを受信する
+            </label>
             
-            <h3>理想のキャリア</h3>
-            <input type="text" id="career_step" name="career_step" placeholder="理想のキャリアステップ/今後の目標(必須)" required>
-            <input type="text" id="career_challenges" name="career_challenges" placeholder="理想のキャリア課題/直面している課題(必須)" required>
-            <textarea id="career_approach" name="career_approach" placeholder="キャリア達成への取り組み/目標達成のための具体的なアクション(任意)"></textarea>
+            <h3>学歴</h3>
+            <input type="text" id="institution" name="institution" placeholder="学校名">
+            <input type="text" id="degree" name="degree" placeholder="学部">
+            <input type="text" id="major" name="major" placeholder="学科">
+            <input type="date" id="education_start" name="education_start" placeholder="入学日">
+            <input type="date" id="education_end" name="education_end" placeholder="卒業日">
+            <input type="hidden" id="education_id" name="education_id">
 
-            <h3>職歴と経験</h3>
+            <h3>職歴</h3>
             <div id="job-experiences-container">
-                <div class="job-info-group">
-                    <!-- Javascriptにて対応 -->
-                </div>
+                <!-- 職歴フィールドを動的に追加 -->
             </div>
-            
-            <button type="button" id="add-job-experience">企業追加</button>
+            <button type="button" id="add-job-experience">職歴を追加</button>
+
+            <h3>今後のキャリア志向</h3>
+            <input type="text" id="career_type" name="career_type" placeholder="今後のキャリア志向を選択する（必須）">
+            <textarea id="career_description" name="career_description" placeholder="キャリア達成のために取り組んでいることがあれば教えてください。（任意）"></textarea>
+            <textarea id="career_satisfaction_feedback" name="career_satisfaction_feedback" placeholder="今後の目標を考えたとき、これまでのキャリアは満足のいくものでしたか？どのような点に満足した、または満足していないか教えてください。（任意）"></textarea>
+            <input type="hidden" id="career_aspirations_id" name="career_aspirations_id">
+
+            <h3>キャリアのスタート地点</h3>
+            <textarea id="start_reason" name="start_reason" placeholder="どのような経緯・理由でその職業・業界を選びましたか？（任意）"></textarea>
+            <textarea id="first_job_feedback" name="first_job_feedback" placeholder="新卒または初めての仕事での経験や感想はどのようなものでしたか？（任意）"></textarea>
+            <input type="hidden" id="start_point_id" name="start_point_id">
+
+            <h3>キャリアの転機</h3>
+            <textarea id="transition_type" name="transition_type" placeholder="転職や異動・出向、結構などキャリアの転機はありましたか？（任意）"></textarea>
+            <textarea id="transition_story" name="transition_story" placeholder="上記に際して具体的なエピソードや心境の変化があれば教えてください。（キャリアチェンジを考えたきっかけなど）（任意）"></textarea>
+            <textarea id="reason_for_job_change" name="reason_for_job_change" placeholder="転職を選んだ理由（社内異動ではなく、転職を選んだ理由など）（任意）"></textarea>
+            <textarea id="job_experience_feedback" name="job_experience_feedback" placeholder="転職先での仕事の経験や感想（任意）"></textarea>
+            <input type="hidden" id="transition_id" name="transition_id">
+
+            <h3>キャリアの達成と失敗経験</h3>
+            <textarea id="proudest_achievement" name="proudest_achievement" placeholder="これまでのキャリアで最も誇りに思う達成は何ですか？それを達成するために乗り越えた課題は何ですか？（任意）"></textarea>
+            <textarea id="failure_experience" name="failure_experience" placeholder="これまでのキャリアで失敗や挫折した経験はありますか？（任意）"></textarea>
+            <textarea id="lesson_learned" name="lesson_learned" placeholder="その経験から学んだことは何ですか？（任意）"></textarea>
+            <input type="hidden" id="achievement_id" name="achievement_id">
+
+            <h3>学びと成長</h3>
+            <input type="text" id="skill" name="skill" placeholder="得たスキル">
+            <textarea id="growth_description" name="growth_description" placeholder="スキルの詳細説明"></textarea>
+            <input type="hidden" id="growth_id" name="growth_id">
+
             <button type="button" id="edit-button">編集</button>
             <button type="submit" id="save-button" style="display: none;">保存</button>
         </form>

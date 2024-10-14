@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // すべての会社の業界名を取得してセットに追加
             const uniqueIndustries = [...new Set(data.careers.flatMap(career => 
-                career.companies.map(company => company.industry)
+                (career.companies || []).map(company => company.industry || '不明')
             ))];
 
             uniqueIndustries.forEach(industry => {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 年齢を計算する関数
             function calculateAge(birthYear) {
                 if (!birthYear) {
-                    return "null";  // 誕生日が入力されていない場合
+                    return "不明";  // 誕生日が入力されていない場合
                 }
                 const currentYear = new Date().getFullYear();
                 return `${currentYear - birthYear}`;
@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = `Career_detail.html?id=${career.id}`;
                     });
 
-                    // 一つのキャリアについて、大学と会社の情報を取得
+                    // 各ステージ（大学、企業）の情報を取得
                     let stages = career.careerStages.map(stage => ({
-                        year: stage.year,
-                        stage: stage.stage
+                        year: stage.year || '不明', // 年が不明な場合
+                        stage: stage.stage || '不明' // ステージが不明な場合
                     }));
 
                     // 閲覧回数の表示を追加
@@ -68,9 +68,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     listItem.innerHTML = `
                         <div class="career-info">
-                            <h2>${career.name} (${age}歳)</h2>
-                            <p>職業: ${career.profession}</p>
-                            <p>年収: ${career.income[career.income.length - 1].income}</p>
+                            <h2>${career.name || '不明'} (${age}歳)</h2>  <!-- 名前が不明な場合 -->
+                            <p>職業: ${career.profession || '不明'}</p>  <!-- 職業が不明な場合 -->
+                            <p>年収: ${career.income[career.income.length - 1]?.income || '不明'}</p>  <!-- 年収が不明な場合 -->
                         </div>
                         <div class="career-path" id="career-path-${career.id}">
                             <!-- ここにD3.jsで描画されるキャリアパスの図が入る -->
@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
+            // キャリアパスを描画する関数はそのまま
             function drawCareerPath(selector, stages) {
                 const container = document.querySelector(selector);
                 const width = container.clientWidth;
@@ -177,12 +178,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('search');
             searchInput.addEventListener('input', function () {
                 const keyword = searchInput.value.toLowerCase();
-                const filteredCareers = data.careers.filter(career =>
-                    career.name.toLowerCase().includes(keyword) ||  // 名前で検索
-                    (career.education && career.education.toLowerCase().includes(keyword)) ||  // 大学名で検索
-                    career.careerStages.some(stage => stage.stage.toLowerCase().includes(keyword)) ||  // 企業名で検索
-                    career.companies.some(company => company.name.toLowerCase().includes(keyword))  // 会社名で検索
-                );
+                const filteredCareers = data.careers.filter(career => {
+                    const name = career.name?.toLowerCase() || '';  // 名前がnullの場合に備えて
+                    const education = career.education?.toLowerCase() || '';  // 大学名がnullの場合に備えて
+                    const stages = (career.careerStages || []).some(stage => stage.stage?.toLowerCase().includes(keyword));  // ステージがnullの場合に備えて
+                    const companies = (career.companies || []).some(company => company.name?.toLowerCase().includes(keyword));  // 会社名がnullの場合に備えて
+            
+                    return name.includes(keyword) || education.includes(keyword) || stages || companies;
+                });
                 displayCareers(filteredCareers);
             });
 
@@ -190,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedIndustry = industrySelect.value;
                 const filteredCareers = selectedIndustry
                     ? data.careers.filter(career =>
-                        career.companies.some(company => company.industry === selectedIndustry))
+                        (career.companies || []).some(company => company.industry === selectedIndustry))
                     : data.careers;
                 displayCareers(filteredCareers);
             });

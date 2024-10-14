@@ -23,7 +23,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 # ユーザーをデータベースに登録
-def register_user_to_db(username: str, email: str, profile: str, password: str):
+def register_user_to_db(username: str, email: str, password: str):
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -31,8 +31,8 @@ def register_user_to_db(username: str, email: str, profile: str, password: str):
 
     # データベースにユーザー情報を挿入
     cursor.execute(
-        "INSERT INTO users (username, email, profile, password) VALUES (%s, %s, %s, %s)",
-        (username, email, profile, hashed_password)
+        "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+        (username, email, hashed_password)
     )
     connection.commit()
     cursor.close()

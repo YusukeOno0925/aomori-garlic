@@ -24,11 +24,11 @@ function adjustSVGWidth() {
         const svg = card.querySelector('svg');
         const cardWidth = card.getBoundingClientRect().width;
 
-        if (window.innerWidth <= 450) {
-            svg.setAttribute('width', cardWidth - 20);
-        } else {
-            svg.setAttribute('width', cardWidth - 40);
-        }
+        // if (window.innerWidth <= 450) {
+        //     svg.setAttribute('width', cardWidth - 20);
+        // } else {
+        //     svg.setAttribute('width', cardWidth - 40);
+        // }
     });
 }
 

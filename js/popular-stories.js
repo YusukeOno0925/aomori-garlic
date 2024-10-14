@@ -25,11 +25,11 @@ function adjustSVGWidth() {
         const svg = card.querySelector('svg');
         const cardWidth = card.getBoundingClientRect().width;
 
-        if (window.innerWidth <= 450) {
-            svg.setAttribute('width', cardWidth - 20);
-        } else {
-            svg.setAttribute('width', cardWidth - 40);
-        }
+        // if (window.innerWidth <= 450) {
+        //     svg.setAttribute('width', cardWidth - 20);
+        // } else {
+        //     svg.setAttribute('width', cardWidth - 40);
+        // }
     });
 }
 
@@ -65,7 +65,7 @@ function createStoryCard(story) {
         window.location.href = `Career_detail.html?id=${story.id}`;
     };
 
-    const latestIncome = story.income[story.income.length - 1].income || "不明"; // 最新の年収
+    const latestIncome = story.income?.length > 0 ? story.income[story.income.length - 1].income : "不明"; // 最新の年収
     const age = story.birthYear ? calculateAge(story.birthYear) : '不明'; // 年齢
 
     const cardHeader = `
