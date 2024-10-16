@@ -11,13 +11,19 @@ async def get_recent_career_stories():
     try:
         # 最新の3ユーザーとその職歴、学歴を一度に取得
         query = """
-        SELECT u.id, u.username, u.birthdate, e.institution, e.education_start,
+        WITH recent_users AS (
+            SELECT id, username, birthdate, created_at
+            FROM users
+            ORDER BY created_at DESC
+            LIMIT 3
+        )
+        SELECT u.id, u.username, u.birthdate, 
+               e.institution, e.education_start,
                j.company_name, j.industry, j.job_category, j.salary, j.work_start_period
-        FROM users u
+        FROM recent_users u
         LEFT JOIN education e ON u.id = e.user_id
         LEFT JOIN job_experiences j ON u.id = j.user_id
-        ORDER BY u.created_at DESC, j.work_start_period ASC  -- 作成日時の降順で並べ替え、職歴は時系列で取得
-        LIMIT 3  -- 最新のキャリアを持つ3ユーザーを取得
+        ORDER BY u.created_at DESC, j.work_start_period ASC;
         """
         cursor = db.cursor(dictionary=True)
         cursor.execute(query)
@@ -42,7 +48,7 @@ async def get_recent_career_stories():
                 if row['institution']:
                     career_dict[row['id']]['careerStages'].append({
                         "year": row['education_start'].year if row['education_start'] else '不明',
-                        "stage": f"{row['institution']} 入学"
+                        "stage": f"{row['institution'] or '学歴情報なし'} 入学"
                     })
 
             # キャリアステージを追加（職歴が存在する場合のみ）
@@ -51,7 +57,7 @@ async def get_recent_career_stories():
                 career_dict[row['id']]['income'].append({"income": row['salary'] or '不明'}) 
                 career_dict[row['id']]['careerStages'].append({
                     "year": row['work_start_period'].year if row['work_start_period'] else '不明',
-                    "stage": f"{row['company_name']} 入社"
+                    "stage": f"{row['company_name'] or '会社情報なし'} 入社"
                 })
                 career_dict[row['id']]['companies'].append({
                     "name": row['company_name'],
