@@ -22,9 +22,6 @@ async def get_career_overview():
         cursor.execute(query)
         result = cursor.fetchall()
 
-        # クエリ結果をログに出力
-        print("取得したクエリ結果:", result)
-
         careers = []
         career_dict = {}
 

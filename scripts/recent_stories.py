@@ -11,18 +11,19 @@ async def get_recent_career_stories():
     try:
         # 最新の3ユーザーとその職歴、学歴を一度に取得
         query = """
-        WITH recent_users AS (
-            SELECT id, username, birthdate, created_at
+        SELECT 
+            u.id, u.username, u.birthdate, 
+            e.institution, e.education_start,
+            j.company_name, j.industry, j.job_category, j.salary, j.work_start_period
+        FROM users u
+        LEFT JOIN education e ON u.id = e.user_id
+        LEFT JOIN job_experiences j ON u.id = j.user_id
+        INNER JOIN (
+            SELECT id
             FROM users
             ORDER BY created_at DESC
             LIMIT 3
-        )
-        SELECT u.id, u.username, u.birthdate, 
-               e.institution, e.education_start,
-               j.company_name, j.industry, j.job_category, j.salary, j.work_start_period
-        FROM recent_users u
-        LEFT JOIN education e ON u.id = e.user_id
-        LEFT JOIN job_experiences j ON u.id = j.user_id
+        ) recent ON u.id = recent.id
         ORDER BY u.created_at DESC, j.work_start_period ASC;
         """
         cursor = db.cursor(dictionary=True)
