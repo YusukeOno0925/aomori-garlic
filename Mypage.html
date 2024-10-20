@@ -41,6 +41,10 @@
 
     <main>
         <h2>マイページ</h2>
+        <div class="button-group">
+            <button type="button" id="edit-button-top">編集</button>
+            <button type="submit" id="save-button-top" style="display: none;">保存</button>
+        </div>
         <form id="mypage-form" method="post">
             <h3>基本情報</h3>
             <input type="text" id="username" name="username" placeholder="ユーザ名">
@@ -101,10 +105,11 @@
             <input type="text" id="skill" name="skill" placeholder="得たスキル">
             <textarea id="growth_description" name="growth_description" placeholder="スキルの詳細説明"></textarea>
             <input type="hidden" id="growth_id" name="growth_id">
-
-            <button type="button" id="edit-button">編集</button>
-            <button type="submit" id="save-button" style="display: none;">保存</button>
         </form>
+        <div class="button-group">
+            <button type="button" id="edit-button-top">編集</button>
+            <button type="submit" id="save-button-top" style="display: none;">保存</button>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Imnormal</p>

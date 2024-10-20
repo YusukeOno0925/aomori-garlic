@@ -56,17 +56,17 @@ textarea {
 
 /* ボタンのスタイル */
 button {
-    display: block;
-    width: 100%; /* ボタンの幅をフォームと統一 */
-    padding: 12px;
-    background-color: var(--main-color);
-    color: white;
+    width: calc(100% - 2rem); /* 左右のマージン分だけ幅を減らす */
+    margin: 0 1rem 15px 1rem; /* 上:0, 右:1rem, 下:15px, 左:1rem */
+    padding: 10px;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
     font-size: 16px;
+    background-color: var(--main-color);
+    color: white;
+    cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
+    box-sizing: border-box;
 }
 
 button:hover {
