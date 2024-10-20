@@ -71,6 +71,16 @@ textarea[readonly] {
     margin-bottom: 10px;
 }
 
+.date-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--card-border-color);  /* カスタムプロパティを使用している場合 */
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
 /* ボタンのスタイル */
 button {
     width: calc(100% - 2rem); /* 左右のマージン分だけ幅を減らす */

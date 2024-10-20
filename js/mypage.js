@@ -6,6 +6,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const jobExperiencesContainer = document.getElementById('job-experiences-container');
     let jobExperienceIndex = 0;  // インデックスの初期化
 
+    //職種の選択肢を定義
+    const jobCategoryOptions = [
+        { value: '営業', text: '営業' },
+        { value: '管理・事務', text: '管理・事務' },
+        { value: '経営・企画', text: '経営・企画' },
+        { value: 'マーケティング', text: 'マーケティング' },
+        { value: 'ITエンジニア', text: 'ITエンジニア' },
+        { value: '機械・電気・電子・半導体（技術職）', text: '機械・電気・電子・半導体（技術職）' },
+        { value: '化学・薬品・食品（技術職）', text: '化学・薬品・食品（技術職）' },
+        { value: '建築・土木・設備（技術職）', text: '建築・土木・設備（技術職）' },
+        { value: 'メディカル（専門職）', text: 'メディカル（専門職）' },
+        { value: '金融（専門職）', text: '金融（専門職）' },
+        { value: '不動産（専門職）', text: '不動産（専門職）' },
+        { value: 'コンサルタント・専門職', text: 'コンサルタント・専門職' },
+        { value: 'クリエイティブ', text: 'クリエイティブ' },
+        { value: 'サービス・小売・運輸・その他', text: 'サービス・小売・運輸・その他' }
+    ];
+
+    //職種の選択肢を生成する関数
+    function createJobCategoryOptions(selectedValue) {
+        return jobCategoryOptions.map(option => {
+            const selected = option.value === selectedValue ? 'selected' : '';
+            return `<option value="${option.value}" ${selected}>${option.text}</option>`;
+        }).join('');
+    }
+
     // 初期化時に全てのフィールドを読み取り専用に設定
     function setReadOnly(isReadOnly) {
         formFields.forEach(field => {
@@ -88,13 +114,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 <option value="other" ${jobExperience.industry === 'other' ? 'selected' : ''}>その他</option>
             </select>
             <input type="text" name="job_experiences[${jobExperienceIndex}][position]" value="${jobExperience.position || ''}" placeholder="役職">
-            <input type="date" name="job_experiences[${jobExperienceIndex}][work_start_period]" value="${jobExperience.work_start_period || ''}" placeholder="入社日">
-            <input type="date" name="job_experiences[${jobExperienceIndex}][work_end_period]" value="${jobExperience.work_end_period || ''}" placeholder="退社日">
+            <input type="date" name="job_experiences[${jobExperienceIndex}][work_start_period]" class="date-input" value="${jobExperience.work_start_period || ''}" placeholder="入社日">
+            <input type="date" name="job_experiences[${jobExperienceIndex}][work_end_period]" class="date-input" value="${jobExperience.work_end_period || ''}" placeholder="退社日">
             <select name="job_experiences[${jobExperienceIndex}][salary]">
                 <option value="" disabled ${!jobExperience.salary ? 'selected' : ''}>年収を選択</option>
                 ${createSalaryOptions(jobExperience.salary)}
             </select>
-            <input type="text" name="job_experiences[${jobExperienceIndex}][job_category]" value="${jobExperience.job_category || ''}" placeholder="職種">
+            <select name="job_experiences[${jobExperienceIndex}][job_category]" class="job-category-select">
+                <option value="" disabled ${!jobExperience.job_category ? 'selected' : ''}>職種を選択してください</option>
+                ${createJobCategoryOptions(jobExperience.job_category)}
+            </select>
             <input type="text" name="job_experiences[${jobExperienceIndex}][job_sub_category]" value="${jobExperience.job_sub_category || ''}" placeholder="職種分類">
             <select name="job_experiences[${jobExperienceIndex}][satisfaction_level]">
                 <option value="" disabled ${!jobExperience.satisfaction_level ? 'selected' : ''}>満足度を選択</option>
@@ -219,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             work_start_period: group.querySelector(`input[name="job_experiences[${index}][work_start_period]"]`)?.value || '',
                             work_end_period: group.querySelector(`input[name="job_experiences[${index}][work_end_period]"]`)?.value || '',
                             salary: group.querySelector(`select[name="job_experiences[${index}][salary]"]`)?.value || '',
-                            job_category: group.querySelector(`input[name="job_experiences[${index}][job_category]"]`)?.value || '',
+                            job_category: group.querySelector(`select[name="job_experiences[${index}][job_category]"]`)?.value || '',
                             job_sub_category: group.querySelector(`input[name="job_experiences[${index}][job_sub_category]"]`)?.value || '',
                             satisfaction_level: group.querySelector(`select[name="job_experiences[${index}][satisfaction_level]"]`)?.value || ''
                         };
