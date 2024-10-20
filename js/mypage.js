@@ -74,7 +74,19 @@ document.addEventListener('DOMContentLoaded', function () {
         jobGroup.innerHTML = `
             <input type="hidden" name="job_experiences[${jobExperienceIndex}][id]" value="${jobExperience.id || ''}">
             <input type="text" name="job_experiences[${jobExperienceIndex}][company_name]" value="${jobExperience.company_name || ''}" placeholder="企業名">
-            <input type="text" name="job_experiences[${jobExperienceIndex}][industry]" value="${jobExperience.industry || ''}" placeholder="業界">
+            <select name="job_experiences[${jobExperienceIndex}][industry]" class="industry-select">
+                <option value="" disabled ${!jobExperience.industry ? 'selected' : ''}>業界を選択してください</option>
+                <option value="finance" ${jobExperience.industry === 'finance' ? 'selected' : ''}>金融</option>
+                <option value="consulting" ${jobExperience.industry === 'consulting' ? 'selected' : ''}>コンサルティング・専門事務所</option>
+                <option value="it" ${jobExperience.industry === 'it' ? 'selected' : ''}>IT・通信・インターネット</option>
+                <option value="media" ${jobExperience.industry === 'media' ? 'selected' : ''}>マスコミ・広告関連</option>
+                <option value="medical" ${jobExperience.industry === 'medical' ? 'selected' : ''}>メディカル</option>
+                <option value="infrastructure" ${jobExperience.industry === 'infrastructure' ? 'selected' : ''}>生活インフラ、運輸、不動産、建設</option>
+                <option value="government" ${jobExperience.industry === 'government' ? 'selected' : ''}>行政機関、社団法人、非営利団体</option>
+                <option value="manufacturing" ${jobExperience.industry === 'manufacturing' ? 'selected' : ''}>メーカー・商社</option>
+                <option value="service" ${jobExperience.industry === 'service' ? 'selected' : ''}>サービス、小売、外食</option>
+                <option value="other" ${jobExperience.industry === 'other' ? 'selected' : ''}>その他</option>
+            </select>
             <input type="text" name="job_experiences[${jobExperienceIndex}][position]" value="${jobExperience.position || ''}" placeholder="役職">
             <input type="date" name="job_experiences[${jobExperienceIndex}][work_start_period]" value="${jobExperience.work_start_period || ''}" placeholder="入社日">
             <input type="date" name="job_experiences[${jobExperienceIndex}][work_end_period]" value="${jobExperience.work_end_period || ''}" placeholder="退社日">
@@ -198,10 +210,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     const jobExperiences = [];
                     document.querySelectorAll('.job-info-group').forEach(group => {
                         const index = group.getAttribute('data-index');
+                        const industryValue = group.querySelector(`select[name="job_experiences[${index}][industry]"]`)?.value || '';
                         const experience = {
                             id: group.querySelector(`input[name="job_experiences[${index}][id]"]`)?.value || '',
                             company_name: group.querySelector(`input[name="job_experiences[${index}][company_name]"]`)?.value || '',
-                            industry: group.querySelector(`input[name="job_experiences[${index}][industry]"]`)?.value || '',
+                            industry: industryValue,
                             position: group.querySelector(`input[name="job_experiences[${index}][position]"]`)?.value || '',
                             work_start_period: group.querySelector(`input[name="job_experiences[${index}][work_start_period]"]`)?.value || '',
                             work_end_period: group.querySelector(`input[name="job_experiences[${index}][work_end_period]"]`)?.value || '',
