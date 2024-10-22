@@ -18,6 +18,7 @@ from scripts.recent_stories import router as recent_stories_router
 from scripts.popular_stories import router as popular_stories_router
 from scripts.career_overview import router as career_overview_router
 from scripts.career_detail import router as career_detail_router
+from scripts.board import router as board_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -42,6 +43,7 @@ app.include_router(recent_stories_router)
 app.include_router(popular_stories_router)
 app.include_router(career_overview_router)
 app.include_router(career_detail_router)
+app.include_router(board_router)
 
 # CORSの設定
 app.add_middleware(
@@ -201,6 +203,11 @@ async def mypage(request: Request):
 @app.get("/Stats.html")
 async def stats():
     return FileResponse("Stats.html")
+
+# board.htmlを返すエンドポイント
+@app.get("/Board.html")
+async def board_page():
+    return FileResponse("Board.html")
 
 
 @app.get("/get-environment")
