@@ -19,21 +19,21 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'Authorization': `Bearer ${getAccessToken()}`,
                 },
             });
-
+    
             if (response.status === 401) {
                 console.error('ユーザーは認証されていません');
                 return;
             }
-
+    
             if (!response.ok) {
                 throw new Error(`投稿の取得に失敗しました: ${response.statusText}`);
             }
-
+    
             const data = await response.json();
             const postsContainer = document.getElementById('posts-container');
             postsContainer.innerHTML = '';
-
-            data.posts.forEach(post => {
+    
+            data.posts.forEach((post, index) => {
                 const postElement = document.createElement('div');
                 postElement.classList.add('post');
                 postElement.innerHTML = `
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="post-title">
                             <strong>${post.author}</strong>: ${post.content.substring(0, 30)}...
                         </div>
-                        <div class="expand-button" data-post-id="${post.id}">＞</div>
+                        <div class="expand-button" data-post-id="${post.id}" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">＞</div>
                     </div>
                     <div class="post-details" id="post-details-${post.id}" style="display: none;">
                         <div class="replies-container" id="replies-${post.id}"></div>
@@ -53,8 +53,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </div>
                 `;
                 postsContainer.appendChild(postElement);
-            });
 
+                // 各投稿の間にのみ罫線を追加
+                if (index < data.posts.length - 1) {
+                    const separator = document.createElement('hr');
+                    separator.classList.add('single-line-separator');
+                    postsContainer.appendChild(separator);
+                }
+            });
+    
             // 各投稿の「＞」ボタンにイベントリスナーを追加して詳細を展開
             document.querySelectorAll('.expand-button').forEach(button => {
                 button.addEventListener('click', function() {
@@ -62,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     toggleDetails(postId);
                 });
             });
-
+    
             // リプライに関する機能を初期化
             initializeReplyFeatures();
         } catch (error) {
@@ -135,14 +142,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             const data = await response.json();
             const repliesContainer = document.getElementById(`replies-${postId}`);
-            repliesContainer.innerHTML = '';
+            if (repliesContainer) {
+                repliesContainer.innerHTML = '';
 
-            data.replies.forEach(reply => {
-                const replyElement = document.createElement('div');
-                replyElement.classList.add('reply');
-                replyElement.innerHTML = `<strong>${reply.author}</strong>: ${reply.content}`;
-                repliesContainer.appendChild(replyElement);
-            });
+                data.replies.forEach(reply => {
+                    const replyElement = document.createElement('div');
+                    replyElement.classList.add('reply');
+                    replyElement.innerHTML = `<strong>${reply.author}</strong>: ${reply.content}`;
+                    repliesContainer.appendChild(replyElement);
+                });
+            }
         } catch (error) {
             console.error('リプライの取得に失敗しました:', error);
         }

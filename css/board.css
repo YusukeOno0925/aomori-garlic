@@ -73,25 +73,32 @@ button:hover {
 
 .post {
     padding: 1rem;
-    border-bottom: 1px solid #ddd;
 }
 
-.post p {
-    margin: 0.5rem 0;
-    color: #333;
-}
-
-.post p:first-of-type {
-    font-weight: bold;
-    color: #4e3d12;
-}
-
-hr {
+.single-line-separator {
     border: none;
     border-top: 1px solid #ddd;
-    margin: 2rem 0;
+    margin: 10px 0;
 }
 
+.post-summary {
+    position: relative;
+    padding-right: 30px;
+}
+
+.expand-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .post-summary {
+        word-break: break-word;
+    }
+}
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
