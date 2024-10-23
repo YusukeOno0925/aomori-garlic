@@ -20,8 +20,11 @@
             <input type="text" name="username" placeholder="ユーザ名" required>
             <input type="email" name="email" placeholder="Emailアドレス" required>
             <input type="password" name="password" placeholder="パスワード" required>
-            <button type="submit">登録</button>
+            <button type="submit" id="register-button">登録</button>
         </form>
+        <div id="loading-popup" class="loading-popup" style="display: none;">
+            <p>登録中です、お待ちください...</p>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Imnormal</p>
