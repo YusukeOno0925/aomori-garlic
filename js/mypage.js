@@ -37,15 +37,32 @@ document.addEventListener('DOMContentLoaded', function () {
         formFields.forEach(field => {
             if (isReadOnly) {
                 field.setAttribute('readonly', 'readonly');
-                field.disabled = true;
+                if (field.tagName === 'SELECT' || field.type === 'checkbox') {
+                    field.disabled = true;
+                }
             } else {
                 field.removeAttribute('readonly');
-                field.disabled = false;
+                if (field.tagName === 'SELECT' || field.type === 'checkbox') {
+                    field.disabled = false;
+                }
             }
         });
-
-        document.querySelectorAll('select').forEach(select => {
-            select.disabled = isReadOnly;
+    
+        // 「職歴を追加」ボタンの表示制御
+        addJobExperienceButton.style.display = isReadOnly ? 'none' : 'block';
+    
+        // 職歴フィールド内の入力要素の読み取り専用状態を設定
+        document.querySelectorAll('.job-info-group').forEach(group => {
+            group.querySelectorAll('input, textarea').forEach(field => {
+                if (isReadOnly) {
+                    field.setAttribute('readonly', 'readonly');
+                } else {
+                    field.removeAttribute('readonly');
+                }
+            });
+            group.querySelectorAll('select').forEach(select => {
+                select.disabled = isReadOnly;
+            });
         });
     }
 
@@ -96,41 +113,90 @@ document.addEventListener('DOMContentLoaded', function () {
         const jobGroup = document.createElement('div');
         jobGroup.classList.add('job-info-group');
         jobGroup.setAttribute('data-index', jobExperienceIndex);
-
+    
+        // 職歴フィールドの読み取り専用状態を取得
+        const isReadOnly = document.getElementById('username').hasAttribute('readonly');
+    
+        // 各フィールドをフローティングラベルの構造に変更
         jobGroup.innerHTML = `
             <input type="hidden" name="job_experiences[${jobExperienceIndex}][id]" value="${jobExperience.id || ''}">
-            <input type="text" name="job_experiences[${jobExperienceIndex}][company_name]" value="${jobExperience.company_name || ''}" placeholder="企業名">
-            <select name="job_experiences[${jobExperienceIndex}][industry]" class="industry-select">
-                <option value="" disabled ${!jobExperience.industry ? 'selected' : ''}>業界を選択してください</option>
-                <option value="finance" ${jobExperience.industry === 'finance' ? 'selected' : ''}>金融</option>
-                <option value="consulting" ${jobExperience.industry === 'consulting' ? 'selected' : ''}>コンサルティング・専門事務所</option>
-                <option value="it" ${jobExperience.industry === 'it' ? 'selected' : ''}>IT・通信・インターネット</option>
-                <option value="media" ${jobExperience.industry === 'media' ? 'selected' : ''}>マスコミ・広告関連</option>
-                <option value="medical" ${jobExperience.industry === 'medical' ? 'selected' : ''}>メディカル</option>
-                <option value="infrastructure" ${jobExperience.industry === 'infrastructure' ? 'selected' : ''}>生活インフラ、運輸、不動産、建設</option>
-                <option value="government" ${jobExperience.industry === 'government' ? 'selected' : ''}>行政機関、社団法人、非営利団体</option>
-                <option value="manufacturing" ${jobExperience.industry === 'manufacturing' ? 'selected' : ''}>メーカー・商社</option>
-                <option value="service" ${jobExperience.industry === 'service' ? 'selected' : ''}>サービス、小売、外食</option>
-                <option value="other" ${jobExperience.industry === 'other' ? 'selected' : ''}>その他</option>
-            </select>
-            <input type="text" name="job_experiences[${jobExperienceIndex}][position]" value="${jobExperience.position || ''}" placeholder="役職">
-            <input type="date" name="job_experiences[${jobExperienceIndex}][work_start_period]" class="date-input" value="${jobExperience.work_start_period || ''}" placeholder="入社日">
-            <input type="date" name="job_experiences[${jobExperienceIndex}][work_end_period]" class="date-input" value="${jobExperience.work_end_period || ''}" placeholder="退社日">
-            <select name="job_experiences[${jobExperienceIndex}][salary]">
-                <option value="" disabled ${!jobExperience.salary ? 'selected' : ''}>年収を選択</option>
-                ${createSalaryOptions(jobExperience.salary)}
-            </select>
-            <select name="job_experiences[${jobExperienceIndex}][job_category]" class="job-category-select">
-                <option value="" disabled ${!jobExperience.job_category ? 'selected' : ''}>職種を選択してください</option>
-                ${createJobCategoryOptions(jobExperience.job_category)}
-            </select>
-            <input type="text" name="job_experiences[${jobExperienceIndex}][job_sub_category]" value="${jobExperience.job_sub_category || ''}" placeholder="職種分類">
-            <select name="job_experiences[${jobExperienceIndex}][satisfaction_level]">
-                <option value="" disabled ${!jobExperience.satisfaction_level ? 'selected' : ''}>満足度を選択</option>
-                ${createSatisfactionOptions(jobExperience.satisfaction_level)}
-            </select>
+            
+            <!-- 企業名 -->
+            <div class="floating-label">
+                <input type="text" name="job_experiences[${jobExperienceIndex}][company_name]" value="${jobExperience.company_name || ''}" ${isReadOnly ? 'readonly' : ''} required>
+                <label>企業名</label>
+            </div>
+            
+            <!-- 業界 -->
+            <div class="floating-label">
+                <select name="job_experiences[${jobExperienceIndex}][industry]" ${isReadOnly ? 'disabled' : ''} required>
+                    <option value="" ${!jobExperience.industry ? 'selected' : ''}></option>
+                    <option value="finance" ${jobExperience.industry === 'finance' ? 'selected' : ''}>金融</option>
+                    <option value="consulting" ${jobExperience.industry === 'consulting' ? 'selected' : ''}>コンサルティング・専門事務所</option>
+                    <option value="it" ${jobExperience.industry === 'it' ? 'selected' : ''}>IT・通信・インターネット</option>
+                    <option value="media" ${jobExperience.industry === 'media' ? 'selected' : ''}>マスコミ・広告関連</option>
+                    <option value="medical" ${jobExperience.industry === 'medical' ? 'selected' : ''}>メディカル</option>
+                    <option value="infrastructure" ${jobExperience.industry === 'infrastructure' ? 'selected' : ''}>生活インフラ、運輸、不動産、建設</option>
+                    <option value="government" ${jobExperience.industry === 'government' ? 'selected' : ''}>行政機関、社団法人、非営利団体</option>
+                    <option value="manufacturing" ${jobExperience.industry === 'manufacturing' ? 'selected' : ''}>メーカー・商社</option>
+                    <option value="service" ${jobExperience.industry === 'service' ? 'selected' : ''}>サービス、小売、外食</option>
+                    <option value="other" ${jobExperience.industry === 'other' ? 'selected' : ''}>その他</option>
+                </select>
+                <label>業界</label>
+            </div>
+            
+            <!-- 役職 -->
+            <div class="floating-label">
+                <input type="text" name="job_experiences[${jobExperienceIndex}][position]" value="${jobExperience.position || ''}" ${isReadOnly ? 'readonly' : ''}>
+                <label>役職</label>
+            </div>
+            
+            <!-- 入社日 -->
+            <div class="floating-label">
+                <input type="date" name="job_experiences[${jobExperienceIndex}][work_start_period]" value="${jobExperience.work_start_period || ''}" ${isReadOnly ? 'readonly' : ''}>
+                <label>入社日</label>
+            </div>
+            
+            <!-- 退社日 -->
+            <div class="floating-label">
+                <input type="date" name="job_experiences[${jobExperienceIndex}][work_end_period]" value="${jobExperience.work_end_period || ''}" ${isReadOnly ? 'readonly' : ''}>
+                <label>退社日</label>
+            </div>
+            
+            <!-- 年収 -->
+            <div class="floating-label">
+                <select name="job_experiences[${jobExperienceIndex}][salary]" ${isReadOnly ? 'disabled' : ''}>
+                    <option value="" ${!jobExperience.salary ? 'selected' : ''}></option>
+                    ${createSalaryOptions(jobExperience.salary)}
+                </select>
+                <label>年収</label>
+            </div>
+            
+            <!-- 職種 -->
+            <div class="floating-label">
+                <select name="job_experiences[${jobExperienceIndex}][job_category]" ${isReadOnly ? 'disabled' : ''}>
+                    <option value="" ${!jobExperience.job_category ? 'selected' : ''}></option>
+                    ${createJobCategoryOptions(jobExperience.job_category)}
+                </select>
+                <label>職種</label>
+            </div>
+            
+            <!-- 職種分類 -->
+            <div class="floating-label">
+                <input type="text" name="job_experiences[${jobExperienceIndex}][job_sub_category]" value="${jobExperience.job_sub_category || ''}" ${isReadOnly ? 'readonly' : ''}>
+                <label>職種分類</label>
+            </div>
+            
+            <!-- 満足度 -->
+            <div class="floating-label">
+                <select name="job_experiences[${jobExperienceIndex}][satisfaction_level]" ${isReadOnly ? 'disabled' : ''}>
+                    <option value="" ${!jobExperience.satisfaction_level ? 'selected' : ''}></option>
+                    ${createSatisfactionOptions(jobExperience.satisfaction_level)}
+                </select>
+                <label>満足度</label>
+            </div>
         `;
-
+    
         jobExperiencesContainer.appendChild(jobGroup);
         jobExperienceIndex++;
     }

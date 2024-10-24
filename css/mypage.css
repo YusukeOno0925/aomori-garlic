@@ -23,69 +23,73 @@ form {
     box-sizing: border-box; /* paddingも含めて幅を計算 */
 }
 
-/* 入力フィールドの幅を統一 */
-input[type="text"],
-input[type="email"],
-input[type="date"],
-input[type="number"],
-select,
-textarea {
-    width: 100%; /* 幅を統一 */
-    margin-bottom: 15px;
-    padding: 10px;
+/* フローティングラベルのスタイル */
+.floating-label {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-label input[type="text"],
+.floating-label input[type="email"],
+.floating-label input[type="date"],
+.floating-label select,
+.floating-label textarea {
+    width: 100%;
+    padding: 12px 12px 12px 12px; /* パディングを調整 */
     border: 1px solid var(--card-border-color);
     border-radius: 4px;
     font-size: 16px;
     background-color: var(--background-color);
     color: var(--text-color);
-    box-sizing: border-box; /* パディングを含めて幅を計算 */
-}
-
-/* disabled や readonly のフォーム要素のテキスト色を通常に設定 */
-input[type="text"]:disabled,
-input[type="email"]:disabled,
-input[type="date"]:disabled,
-input[type="number"]:disabled,
-select:disabled,
-textarea:disabled,
-input[type="text"][readonly],
-input[type="email"][readonly],
-input[type="date"][readonly],
-input[type="number"][readonly],
-select[readonly],
-textarea[readonly] {
-    color: var(--text-color); /* テキストの色を通常の色に設定 */
-    opacity: 1; /* 不透明度を通常に設定 */
-}
-
-/* 企業情報と転職履歴の項目を整列させる */
-.job-info-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-
-.job-info-group input,
-.job-info-group textarea {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.date-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid var(--card-border-color);  /* カスタムプロパティを使用している場合 */
-    border-radius: 4px;
-    font-size: 16px;
     box-sizing: border-box;
+    resize: vertical; /* テキストエリアのサイズ変更を縦方向のみに制限 */
+}
+
+.floating-label label {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background-color: var(--background-color);
+    padding: 0 4px;
+    color: #aaa;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label textarea:focus + label,
+.floating-label textarea:not(:placeholder-shown) + label,
+.floating-label select:focus + label,
+.floating-label select:not([value=""]) + label {
+    top: -10px;
+    left: 12px;
+    font-size: 12px;
+    color: var(--main-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+    opacity: 0;
+}
+
+textarea {
+    min-height: 100px; /* テキストエリアの最小高さを設定 */
 }
 
 /* ボタンのスタイル */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0;
+}
+
+.button-group button {
+    margin-left: 10px;
+}
+
 button {
-    width: calc(100% - 2rem); /* 左右のマージン分だけ幅を減らす */
-    margin: 0 1rem 15px 1rem; /* 上:0, 右:1rem, 下:15px, 左:1rem */
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 4px;
     font-size: 16px;
@@ -93,11 +97,60 @@ button {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    box-sizing: border-box;
 }
 
 button:hover {
     background-color: var(--accent-color);
+}
+
+/* チェックボックスのスタイル */
+.checkbox-group {
+    margin-bottom: 20px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* 読み取り専用フィールドのスタイル調整 */
+input[readonly],
+textarea[readonly],
+select:disabled {
+    background-color: #f9f9f9;
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* 職歴フィールドのコンテナ */
+.job-info-group {
+    border: 1px solid var(--card-border-color);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9; /* 必要に応じて背景色を設定 */
+}
+
+/* 職歴の見出し */
+.job-experience-header {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* フローティングラベルのマージン調整 */
+.job-fields-container .floating-label {
+    margin-bottom: 15px;
+}
+
+/* 職歴セクション間のスペースを調整 */
+.job-info-group + .job-info-group {
+    margin-top: 30px;
 }
 
 /* モバイルデバイス対応 */
@@ -105,5 +158,28 @@ button:hover {
     main {
         width: 95%;
         margin-left: 0px;
+    }
+
+    .button-group {
+        justify-content: center;
+    }
+
+    .floating-label textarea,
+    .floating-label input[type="text"],
+    .floating-label input[type="email"],
+    .floating-label input[type="date"] {
+        padding-top: 28px; /* モバイル用にさらにパディングを増やす */
+    }
+
+    .floating-label label {
+        top: 18px;
+    }
+
+    .floating-label input:focus + label,
+    .floating-label input:not(:placeholder-shown) + label,
+    .floating-label textarea:focus + label,
+    .floating-label textarea:not(:placeholder-shown) + label {
+        top: -10px;
+        font-size: 10px;
     }
 }
