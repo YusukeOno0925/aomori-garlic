@@ -27,9 +27,17 @@ def register_user_to_db(username: str, email: str, password: str):
     connection = get_db_connection()
     cursor = connection.cursor()
 
+    # ユーザー名の存在をチェック
+    cursor.execute("SELECT COUNT(*) FROM users WHERE username = %s", (username,))
+    result = cursor.fetchone()
+    if result[0] > 0:
+        cursor.close()
+        connection.close()
+        raise ValueError("ユーザー名は既に存在します")
+
     hashed_password = get_password_hash(password)
 
-    # データベースにユーザー情報を挿入
+    # 新しいユーザーを挿入
     cursor.execute(
         "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
         (username, email, hashed_password)

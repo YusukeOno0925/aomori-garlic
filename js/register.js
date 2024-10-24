@@ -33,12 +33,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         // ホーム画面にリダイレクト
                         window.location.href = '/Home.html';
                     } else {
-                        throw new Error('登録に失敗しました');
+                        return response.json().then(data => { throw new Error(data.message || '登録に失敗しました'); });
                     }
                 })
                 .catch(error => {
                     console.error('登録中にエラーが発生しました:', error);
-                    alert('登録に失敗しました。もう一度お試しください。');
+                    alert(error.message);
                     loadingPopup.style.display = 'none'; // エラー時にポップアップを非表示
                     registerButton.disabled = false; // ボタンを再度有効化
                 });

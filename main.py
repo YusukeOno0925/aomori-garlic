@@ -88,9 +88,14 @@ async def register_user(username: str = Form(...), email: str = Form(...), passw
             return response
         
         return RedirectResponse(url="/Home.html", status_code=303)
+    except ValueError as ve:
+        print(f"ValueError in registration: {ve}")
+        # エラーメッセージと共に400ステータスコードを返す
+        return JSONResponse(content={"message": str(ve)}, status_code=400)
     except Exception as e:
         print(f"Error in registration: {e}")
-        return {"message": "Registration failed"}
+        # サーバーエラーとして500ステータスコードを返す
+        return JSONResponse(content={"message": "サーバーエラーが発生しました。"}, status_code=500)
 
 # トークン取得のエンドポイント（ログイン処理）
 @app.post("/login/")
