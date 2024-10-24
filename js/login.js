@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('login-form');
     const errorMessage = document.getElementById('error-message');
+    const loadingIndicator = document.getElementById('loading-indicator'); // ロード中の要素を取得
+    const loginButton = form.querySelector('button[type="submit"]'); // ログインボタンを取得
 
     // ページがロードされたら環境に応じたベースURLを取得
     fetch('/get-environment')
@@ -17,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     password: formData.get('password')
                 };
 
+                // ロード中の表示を開始
+                loadingIndicator.style.display = 'flex';
+                // ログインボタンを無効化
+                loginButton.disabled = true;
+
                 try {
                     // 環境に応じたベースURLを使用してfetchリクエストを送信
                     const response = await fetch(`${baseUrl}/login/`, {
@@ -28,13 +35,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
                     if (response.ok) {
-                        window.location.href = 'Home.html'; // ログイン成功時、ホームページにリダイレクト
+                        // ログイン成功時、ホームページにリダイレクト
+                        window.location.href = 'Home.html';
                     } else {
-                        errorMessage.style.display = 'block'; // エラーメッセージを表示
+                        // エラーメッセージを表示
+                        errorMessage.style.display = 'block';
                     }
                 } catch (error) {
                     console.error('ログイン中にエラーが発生しました:', error);
-                    errorMessage.style.display = 'block'; // エラーメッセージを表示
+                    // エラーメッセージを表示
+                    errorMessage.style.display = 'block';
+                } finally {
+                    // ロード中の表示を終了
+                    loadingIndicator.style.display = 'none';
+                    // ログインボタンを有効化
+                    loginButton.disabled = false;
                 }
             });
         })
