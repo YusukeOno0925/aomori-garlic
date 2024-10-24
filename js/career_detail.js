@@ -5,65 +5,133 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`/career-detail/${careerId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('ネットワークエラーが発生しました。');
             }
             return response.json();
         })
         .then(data => {
-            const careerDetail = document.getElementById('career-detail');
-            
-            // 1. プロフィール情報の表示
-            careerDetail.innerHTML += `
-                <div class="card">
-                    <h3>プロフィール</h3>
+            // プロフィール情報の表示
+            const profileSection = document.getElementById('profile-section');
+            profileSection.innerHTML = `
+                <div class="detail">
                     <p><strong>名前:</strong> ${data.name}</p>
                     <p><strong>職業:</strong> ${data.profession}</p>
                 </div>
             `;
 
-            // 2. キャリア体験情報の表示
+            // キャリア体験情報の表示
+            const careerExperiencesSection = document.getElementById('career-experiences-section');
             const careerExperiences = data.career_experiences;
-            careerDetail.innerHTML += `
-                <div class="card">
-                    <h3>キャリア体験</h3>
-                    <p><strong>職業を選んだ理由:</strong> ${careerExperiences.start_reason || 'N/A'}</p>
-                    <p><strong>初めての仕事のフィードバック:</strong> ${careerExperiences.first_job_feedback || 'N/A'}</p>
-                    <p><strong>転職タイプ:</strong> ${careerExperiences.transition_type || 'N/A'}</p>
-                    <p><strong>転職の詳細:</strong> ${careerExperiences.transition_story || 'N/A'}</p>
-                    <p><strong>転職理由:</strong> ${careerExperiences.reason_for_job_change || 'N/A'}</p>
-                    <p><strong>仕事のフィードバック:</strong> ${careerExperiences.job_experience_feedback || 'N/A'}</p>
-                    <p><strong>最も誇りに思う達成:</strong> ${careerExperiences.proudest_achievement || 'N/A'}</p>
-                    <p><strong>失敗経験:</strong> ${careerExperiences.failure_experience || 'N/A'}</p>
-                    <p><strong>学んだこと:</strong> ${careerExperiences.lesson_learned || 'N/A'}</p>
-                </div>
-            `;
 
-            // 3. 会社ごとの経験を一つのカードにまとめて表示
-            data.companies.forEach((company, index) => {
-                careerDetail.innerHTML += `
-                    <div class="card">
+            // テキスト項目の配列を作成
+            const experiences = [
+                { title: '職業を選んだ理由', content: careerExperiences.start_reason },
+                { title: '初めての仕事のフィードバック', content: careerExperiences.first_job_feedback },
+                { title: '転職タイプ', content: careerExperiences.transition_type },
+                { title: '転職の詳細', content: careerExperiences.transition_story },
+                { title: '転職理由', content: careerExperiences.reason_for_job_change },
+                { title: '仕事のフィードバック', content: careerExperiences.job_experience_feedback },
+                { title: '最も誇りに思う達成', content: careerExperiences.proudest_achievement },
+                { title: '失敗経験', content: careerExperiences.failure_experience },
+                { title: '学んだこと', content: careerExperiences.lesson_learned }
+            ];
+
+            // 各項目をループして表示
+            careerExperiencesSection.innerHTML = experiences.map(exp => {
+                if (exp.content) {
+                    // テキストを短くする関数を使用
+                    const truncatedText = truncateText(exp.content, 100);
+
+                    return `
+                        <div class="detail">
+                            <p><strong>${exp.title}:</strong></p>
+                            <p class="short-text">${truncatedText}
+                                ${exp.content.length > 100 ? `<span class="read-more-link">続きを読む</span>` : ''}
+                            </p>
+                            <p class="read-more-content">${exp.content} <span class="read-less-link">閉じる</span></p>
+                        </div>
+                    `;
+                }
+                return '';
+            }).join('');
+
+            // 会社ごとの経験の表示
+            const companyExperiencesSection = document.getElementById('company-experiences-section');
+            companyExperiencesSection.innerHTML = data.companies.map((company, index) => {
+                return `
+                    <div class="company-experience">
                         <h3>${index + 1}社目: ${company.name} (${company.startYear}〜${company.endYear || '現時点'})</h3>
-                        <p><strong>年収:</strong> ${company.salary || 'N/A'}</p>
-                        <p><strong>満足度:</strong> ${company.satisfaction_level || 'N/A'}</p>
+                        ${company.salary ? `<p><strong>年収:</strong> ${company.salary}</p>` : ''}
+                        ${company.satisfaction_level ? `<p><strong>満足度:</strong> ${company.satisfaction_level}</p>` : ''}
+                        ${company.experience_detail ? `
+                            <p class="short-text">${truncateText(company.experience_detail, 100)}
+                                ${company.experience_detail.length > 100 ? `<span class="read-more-link">続きを読む</span>` : ''}
+                            </p>
+                            <p class="read-more-content">${company.experience_detail} <span class="read-less-link">閉じる</span></p>
+                        ` : ''}
                     </div>
                 `;
-            });
+            }).join('');
 
             // 年収と満足度のグラフ描画
             if (data.companies && data.companies.length > 0) {
                 drawChart(data.companies);
             } else {
-                console.error('Company data is missing');
+                console.error('会社データが見つかりませんでした。');
             }
 
             handleComments(careerId); // コメント処理の関数呼び出し
+            initializeAccordion();    // アコーディオンの初期化
+            initializeReadMore();     // 「続きを読む」機能の初期化
         })
         .catch(error => {
-            console.error('Error fetching career details:', error);
+            console.error('キャリア詳細の取得中にエラーが発生しました:', error);
             const careerDetail = document.getElementById('career-detail');
             careerDetail.innerHTML = '<p>キャリアが見つかりませんでした。</p>';
         });
 });
+
+// アコーディオンの動作を実装する関数
+function initializeAccordion() {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const item = this.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+}
+
+// 「続きを読む」機能のイベントリスナーを追加する関数
+function initializeReadMore() {
+    const sections = [document.getElementById('career-experiences-section'), document.getElementById('company-experiences-section')];
+    sections.forEach(section => {
+        if (section) {
+            const readMoreLinks = section.querySelectorAll('.read-more-link');
+            readMoreLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const detail = this.closest('.detail') || this.closest('.company-experience');
+                    detail.querySelector('.short-text').style.display = 'none';
+                    detail.querySelector('.read-more-content').style.display = 'block';
+                });
+            });
+
+            const readLessLinks = section.querySelectorAll('.read-less-link');
+            readLessLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const detail = this.closest('.detail') || this.closest('.company-experience');
+                    detail.querySelector('.short-text').style.display = 'block';
+                    detail.querySelector('.read-more-content').style.display = 'none';
+                });
+            });
+        }
+    });
+}
+
+// テキストをトランケートする関数
+function truncateText(text, length) {
+    return text.length > length ? text.substring(0, length) + '...' : text;
+}
 
 // グラフ描画関数
 function drawChart(companies) {

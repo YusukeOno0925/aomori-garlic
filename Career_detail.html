@@ -40,24 +40,52 @@
     </aside>
 
     <main>
-        <!-- ここにグラフ用のコンテナを追加 -->
+        <!-- 年収と満足度のグラフ -->
         <h2>年収✖️満足度</h2>
         <div id="career-chart-container"> 
             <canvas id="income-satisfaction-chart"></canvas>
         </div>
 
-        <div id="career-detail">
-            <!-- JavaScriptでキャリア詳細を動的に生成 -->
-        </div>
+        <!-- アコーディオンコンテナ -->
+        <div class="accordion">
 
-        <section id="comments">
-            <h3>コメント一覧</h3>
-            <div id="comment-list">
-                <!-- JavaScriptでコメントを動的に生成 -->
+            <!-- プロフィール -->
+            <div class="accordion-item">
+                <div class="accordion-header">プロフィール<span class="accordion-icon">＞</span></div>
+                <div class="accordion-content" id="profile-section">
+                    <!-- JavaScriptで動的に生成 -->
+                </div>
             </div>
-            <textarea id="comment-text" placeholder="コメントを追加"></textarea>
-            <button id="submit-comment">新しいコメントを投稿</button>
-        </section>
+
+            <!-- 会社ごとの経験 -->
+            <div class="accordion-item">
+                <div class="accordion-header">会社ごとの経験<span class="accordion-icon">＞</span></div>
+                <div class="accordion-content" id="company-experiences-section">
+                    <!-- JavaScriptで動的に生成 -->
+                </div>
+            </div>
+
+            <!-- キャリア体験 -->
+            <div class="accordion-item">
+                <div class="accordion-header">キャリア体験<span class="accordion-icon">＞</span></div>
+                <div class="accordion-content" id="career-experiences-section">
+                    <!-- JavaScriptで動的に生成 -->
+                </div>
+            </div>
+
+            <!-- コメント -->
+            <div class="accordion-item">
+                <div class="accordion-header">コメント一覧<span class="accordion-icon">＞</span></div>
+                <div class="accordion-content" id="comments-section">
+                    <div id="comment-list">
+                        <!-- JavaScriptでコメントを動的に生成 -->
+                    </div>
+                    <textarea id="comment-text" placeholder="コメントを追加"></textarea>
+                    <button id="submit-comment">新しいコメントを投稿</button>
+                </div>
+            </div>
+
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Imnormal</p>
