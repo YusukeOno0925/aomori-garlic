@@ -137,22 +137,29 @@ function truncateText(text, length) {
 function drawChart(companies) {
     const ctx = document.getElementById('income-satisfaction-chart').getContext('2d');
 
-    // グラフ用のラベルを企業名で作成
+    // ラベルを取得
     const labels = companies.map(company => company.name);
 
-    // 年収データを作成
+    // 年収データを取得
     const income = companies.map(company => calculateMedianIncome(company.salary));
 
-    // 満足度データを作成
-    const satisfaction = companies.map(company => company.satisfaction_level !== null ? company.satisfaction_level : NaN); 
+    // 年収データの最大値を取得し、余白を追加
+    const maxIncome = Math.max(...income.filter(value => !isNaN(value) && value !== null));
+    const yAxisMaxIncome = Math.ceil(maxIncome / 100) * 100;
+    const incomePadding = yAxisMaxIncome * 0.1; // 10% の余白
+    const yAxisMaxIncomeWithPadding = yAxisMaxIncome + incomePadding;
+    const incomeStepSize = yAxisMaxIncome / 5;
+
+    // 満足度データを取得
+    const satisfaction = companies.map(company => company.satisfaction_level !== null ? company.satisfaction_level : NaN);
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,  // 企業名ラベル
+            labels: labels,
             datasets: [{
                 label: '年収',
-                data: income,  // 年収データ
+                data: income,
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
                 borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1,
@@ -160,44 +167,77 @@ function drawChart(companies) {
             }, {
                 label: '満足度',
                 type: 'line',
-                data: satisfaction,  // 満足度データ
+                data: satisfaction,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 2,
                 yAxisID: 'y1',
-                spanGaps: true  // nullをスキップして線をつなげる
+                spanGaps: true
             }]
         },
         options: {
             scales: {
+                x: {
+                    ticks: {
+                        callback: function(value, index) {
+                            const label = this.getLabelForValue(index);
+                            return label.length > 10 ? label.substring(0, 10) + '...' : label;
+                        },
+                        maxRotation: 0,
+                        minRotation: 0,
+                        font: {
+                            size: 12
+                        },
+                        autoSkip: false
+                    }
+                },
                 y: {
                     beginAtZero: true,
-                    max: 2500,
+                    max: yAxisMaxIncomeWithPadding,
                     ticks: {
-                        stepSize: 500,
+                        stepSize: incomeStepSize,
                         callback: function(value) {
-                            return value + '万円';
+                            if (value <= yAxisMaxIncome) {
+                                return value + '万円';
+                            }
+                            return '';
                         }
                     },
-                    position: 'left'
+                    position: 'left',
+                    grid: {
+                        drawTicks: true,
+                        drawBorder: true,
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
                 },
                 y1: {
-                    beginAtZero: true,
-                    max: 5,
+                    min: 0,
+                    max: 5.5,
                     ticks: {
                         stepSize: 1,
                         callback: function(value) {
-                            return value + '点';
+                            if (value <= 5) {
+                                return value + '点';
+                            }
+                            return '';
                         }
                     },
-                    position: 'right'
+                    position: 'right',
+                    grid: {
+                        drawTicks: true,
+                        drawBorder: true,
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
                 }
             },
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        const label = data.datasets[tooltipItem.datasetIndex].label || '';
-                        return label + ': ' + (isNaN(tooltipItem.yLabel) ? 'データなし' : tooltipItem.yLabel);
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.parsed.y;
+                            return label + ': ' + (isNaN(value) ? 'データなし' : value);
+                        }
                     }
                 }
             }
