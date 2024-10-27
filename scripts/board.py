@@ -16,10 +16,16 @@ async def get_posts():
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT * FROM posts ORDER BY created_at DESC")
+        cursor.execute(
+            "SELECT id, author, content, created_at FROM posts ORDER BY created_at DESC"
+        )
         posts = cursor.fetchall()
+        # Python側で日付をフォーマット
+        for post in posts:
+            post['created_at'] = post['created_at'].strftime('%Y-%m-%d %H:%M:%S')
         return {"posts": posts}
     except Exception as e:
+        print(f"Error in get_posts: {e}")
         raise HTTPException(status_code=500, detail=f"投稿の取得に失敗しました: {str(e)}")
     finally:
         cursor.close()
@@ -38,6 +44,7 @@ async def add_post(post_data: PostData):
         db.commit()
         return {"message": "投稿が追加されました"}
     except Exception as e:
+        print(f"Error in add_post: {e}")
         raise HTTPException(status_code=500, detail=f"投稿の追加に失敗しました: {str(e)}")
     finally:
         cursor.close()
