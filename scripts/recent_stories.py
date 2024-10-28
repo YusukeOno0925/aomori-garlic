@@ -5,19 +5,22 @@ from fastapi.responses import JSONResponse
 router = APIRouter()
 
 # 最近のキャリアストーリーを取得するエンドポイント
+# 最近のキャリアストーリーを取得するエンドポイント
 @router.get("/recent-career-stories/")
 async def get_recent_career_stories():
     db = get_db_connection()
     try:
-        # 最新の3ユーザーとその職歴、学歴を一度に取得
+        # 最新の3ユーザーとその職歴、学歴、閲覧回数を取得
         query = """
         SELECT 
             u.id, u.username, u.birthdate, 
             e.institution, e.education_start,
-            j.company_name, j.industry, j.job_category, j.salary, j.work_start_period
+            j.company_name, j.industry, j.job_category, j.salary, j.work_start_period,
+            IFNULL(pv.view_count, 0) AS view_count  -- 閲覧回数を取得
         FROM users u
         LEFT JOIN education e ON u.id = e.user_id
         LEFT JOIN job_experiences j ON u.id = j.user_id
+        LEFT JOIN profile_views pv ON u.id = pv.user_id  -- 閲覧回数を結合
         INNER JOIN (
             SELECT id
             FROM users
@@ -43,6 +46,7 @@ async def get_recent_career_stories():
                     "income": [],
                     "careerStages": [],
                     "companies": [],
+                    "view_count": row['view_count']  # 閲覧回数を追加
                 }
 
                 # 学歴情報を最初に追加（入学年）

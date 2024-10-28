@@ -113,7 +113,7 @@ svg {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     overflow: hidden;
-    height: 300px;
+    height: 320px; /* 高さを300pxから320pxに調整 */
     position: relative;
 }
 
@@ -133,13 +133,40 @@ svg {
     margin-bottom: 4rem;
 }
 
+/* カードヘッダーのスタイル */
+.card-header {
+    margin-bottom: 0.5rem; /* ヘッダーとグラフの間の余白を調整 */
+}
+
+/* キャリアパスのグラフのスタイル */
 .career-path-svg {
     width: 100%;
     height: 60px;
     overflow: visible;
     margin: 0 auto;
+    margin-bottom: 1rem; /* グラフとフッターの間に余白を追加 */
     white-space: pre-line;
     word-wrap: break-word;
+}
+
+/* カードフッターのスタイル */
+.card-footer {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.card-footer .view-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.card-footer .view-count {
+    font-size: 0.9rem;
+    color: #666;
 }
 
 .card .arrow-symbol {
@@ -266,6 +293,20 @@ svg {
     .card {
         flex: 0 0 100%;
         scroll-snap-align: center;
+        height: auto; /* モバイル表示では高さを自動に */
+    }
+
+    /* カード内の要素を縦方向に配置 */
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* カードフッターの位置を維持 */
+    .card-footer {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
     }
 
     #recent-stories-indicators,
@@ -381,6 +422,7 @@ svg {
         height: auto;
         max-height: 100px;
         overflow: visible;
+        margin-bottom: 2rem; /* グラフとフッターの間に余白を2remに拡大 */
     }
 
     #career-path-visualization text {
@@ -419,5 +461,24 @@ svg {
     .detail-button {
         font-size: 0.8rem;
         padding: 0.4rem 1rem;
+    }
+
+    /* カードフッターの位置を相対位置に変更 */
+    .card-footer {
+        position: relative; /* absoluteからrelativeへ変更 */
+        right: 0; /* 位置をリセット */
+        bottom: 0; /* 位置をリセット */
+        margin-top: 1rem; /* グラフとの間に余白を追加 */
+        align-self: flex-end; /* 右端に配置 */
+    }
+
+    /* カードのパディングを調整してフッターのスペースを確保 */
+    .card {
+        padding-bottom: 3rem; /* フッターが重ならないようにパディングを増加 */
+    }
+
+    /* カードヘッダーの余白を減少してグラフを上に移動 */
+    .card-header {
+        margin-bottom: 0.2rem; /* グラフを上に移動させるために余白を減少 */
     }
 }

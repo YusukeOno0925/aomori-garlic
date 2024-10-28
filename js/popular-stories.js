@@ -61,12 +61,34 @@ function fetchPopularCareerStories() {
 function createStoryCard(story) {
     const card = document.createElement('div');
     card.className = 'card';
-    card.onclick = () => {
-        window.location.href = `Career_detail.html?id=${story.id}`;
-    };
+    card.setAttribute('data-story-id', story.id); // データ属性を追加
 
-    const latestIncome = story.income?.length > 0 ? story.income[story.income.length - 1].income : "不明"; // 最新の年収
-    const age = story.birthYear ? calculateAge(story.birthYear) : '不明'; // 年齢
+    // カードクリック時のイベントリスナーを追加
+    card.addEventListener('click', function () {
+        // 閲覧回数を増やすAPIリクエスト
+        fetch(`/increment-profile-view/${story.id}`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 表示されている閲覧回数を更新
+                const viewCountElement = card.querySelector('.view-count');
+                viewCountElement.textContent = `${data.newViewCount} 回`;
+            } else {
+                console.error('閲覧回数の更新に失敗しました:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('閲覧回数の更新中にエラーが発生しました:', error);
+        });
+
+        // 詳細ページへリダイレクト
+        window.location.href = `Career_detail.html?id=${story.id}`;
+    });
+
+    const latestIncome = story.income?.length > 0 ? story.income[story.income.length - 1].income : "不明";
+    const age = story.birthYear ? calculateAge(story.birthYear) : '不明';
 
     const cardHeader = `
         <div class="card-header">
@@ -76,10 +98,18 @@ function createStoryCard(story) {
         </div>
     `;
 
-    // キャリアパスのグラフ描画（D3.jsを使用）
+    // キャリアパスのグラフ描画
     const careerPathSVG = drawCareerPathD3(story.careerStages, window.innerWidth);
 
-    card.innerHTML = cardHeader + careerPathSVG;
+    // 閲覧回数の表示を追加
+    const viewCountSection = `
+        <div class="card-footer">
+            <img src="images/eye-icon.png" alt="View Icon" class="view-icon">
+            <span class="view-count">${story.view_count || 0} 回</span>
+        </div>
+    `;
+
+    card.innerHTML = cardHeader + careerPathSVG + viewCountSection;
 
     return card;
 }
