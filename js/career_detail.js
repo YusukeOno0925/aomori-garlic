@@ -153,6 +153,8 @@ function drawChart(companies) {
     // 満足度データを取得
     const satisfaction = companies.map(company => company.satisfaction_level !== null ? company.satisfaction_level : NaN);
 
+    const showXAxisLabels = companies.length <= 2;  // 会社数が3つ以下の場合のみ表示
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -178,6 +180,7 @@ function drawChart(companies) {
         options: {
             scales: {
                 x: {
+                    display: showXAxisLabels,  // 会社数が3を超える場合は非表示
                     ticks: {
                         callback: function(value, index) {
                             const label = this.getLabelForValue(index);
