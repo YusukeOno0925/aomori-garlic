@@ -301,6 +301,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const formData = new FormData(document.getElementById('mypage-form'));
 
+                    // チェック状態をbooleanで取得する
+                    const newsletterSubscription = document.getElementById('newsletter_subscription').checked;  
+
+
                     // job_experiencesフィールドを配列として集める
                     const jobExperiences = [];
                     document.querySelectorAll('.job-info-group').forEach(group => {
@@ -331,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         given_name: formData.get('given_name') || '',
                         birthdate: formData.get('birthdate') || '',
                         gender: formData.get('gender') || '',
-                        newsletter_subscription: formData.get('newsletter_subscription') || false,
+                        newsletter_subscription: newsletterSubscription,  // booleanで送信
 
                         institution: formData.get('institution') || '',
                         degree: formData.get('degree') || '',
