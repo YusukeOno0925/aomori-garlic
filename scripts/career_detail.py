@@ -66,11 +66,12 @@ async def get_career_detail(career_id: int):
             "companies": [
                 {
                     "name": row["company_name"],
-                    "startYear": row["work_start_period"].year,
+                    "startYear": row["work_start_period"].year if row["work_start_period"] else None,
                     "endYear": row["work_end_period"].year if row["work_end_period"] else '現時点',
                     "salary": row["salary"],
                     "satisfaction_level": row["satisfaction_level"]
                 } for row in career_data
+                if row["work_start_period"]
             ]
         }
 
