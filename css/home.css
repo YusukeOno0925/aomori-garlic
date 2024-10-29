@@ -109,11 +109,13 @@ svg {
     background: var(--card-background-color);
     border: 1px solid var(--card-border-color);
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.8rem; /* パディングを減少 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     overflow: hidden;
-    height: 320px; /* 高さを300pxから320pxに調整 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
 }
 
@@ -130,7 +132,7 @@ svg {
 }
 
 .card p:last-of-type {
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
 }
 
 /* カードヘッダーのスタイル */
@@ -151,11 +153,12 @@ svg {
 
 /* カードフッターのスタイル */
 .card-footer {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
     display: flex;
     align-items: center;
+    justify-content: flex-end; /* フッター内容を右寄せ */
+    margin-top: auto; /* フッターを下部に押し下げ */
+    /* 不要なpositionプロパティを削除 */
+    margin-top: 0.5rem; /* 必要最低限の余白 */
 }
 
 .card-footer .view-icon {
@@ -304,9 +307,12 @@ svg {
 
     /* カードフッターの位置を維持 */
     .card-footer {
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
+        margin-top: auto; /* フッターを下部に押し下げ */
+        display: flex;
+        align-items: center;
+        justify-content: flex-end; /* フッター内容を右寄せ */
+        /* 必要最低限の余白 */
+        margin-top: 0.5rem;
     }
 
     #recent-stories-indicators,
@@ -420,9 +426,11 @@ svg {
     .career-path-svg {
         width: 100%;
         height: auto;
-        max-height: 100px;
+        max-height: 80px; /* 必要に応じて調整 */
         overflow: visible;
-        margin-bottom: 2rem; /* グラフとフッターの間に余白を2remに拡大 */
+        margin-bottom: 1rem; /* 2remから1remに減少 */
+        white-space: pre-line;
+        word-wrap: break-word;
     }
 
     #career-path-visualization text {
@@ -468,13 +476,15 @@ svg {
         position: relative; /* absoluteからrelativeへ変更 */
         right: 0; /* 位置をリセット */
         bottom: 0; /* 位置をリセット */
-        margin-top: 1rem; /* グラフとの間に余白を追加 */
+        margin-top: 0.5rem; /* グラフとの間に余白を追加 */
         align-self: flex-end; /* 右端に配置 */
     }
 
     /* カードのパディングを調整してフッターのスペースを確保 */
     .card {
-        padding-bottom: 3rem; /* フッターが重ならないようにパディングを増加 */
+        flex: 0 0 100%;
+        padding: 0.5rem; /* パディングをさらに減少 */
+        padding-bottom: 1rem; /* フッターのスペースを確保 */
     }
 
     /* カードヘッダーの余白を減少してグラフを上に移動 */
