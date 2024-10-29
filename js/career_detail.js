@@ -181,7 +181,7 @@ function drawChart(companies) {
                     ticks: {
                         callback: function(value, index) {
                             const label = this.getLabelForValue(index);
-                            return label.length > 10 ? label.substring(0, 10) + '...' : label;
+                            return label.length > 9 ? label.substring(0, 9) + '...' : label;
                         },
                         maxRotation: 0,
                         minRotation: 0,
