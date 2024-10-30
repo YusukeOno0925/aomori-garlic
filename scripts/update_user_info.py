@@ -26,17 +26,18 @@ async def update_user_info(
     if 'education_id' in data and data['education_id']:  # IDが存在すれば更新
         cursor.execute("""
             UPDATE education SET 
-                institution = %s, degree = %s, major = %s, education_start = %s, education_end = %s
+                institution = %s, degree = %s, major = %s, education_start = %s, education_end = %s, hide_institution = %s
             WHERE education_id = %s AND user_id = %s
         """, (data.get('institution'), data.get('degree'), data.get('major'), 
               data.get('education_start'), data.get('education_end'), 
+              data.get('hide_institution', False),
               data['education_id'], current_user.id))
     else:  # IDが存在しなければ新規追加
         cursor.execute("""
-            INSERT INTO education (user_id, institution, degree, major, education_start, education_end)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO education (user_id, institution, degree, major, education_start, education_end, hide_institution)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (current_user.id, data.get('institution'), data.get('degree'), data.get('major'), 
-              data.get('education_start'), data.get('education_end')))
+              data.get('education_start'), data.get('education_end'), data.get('hide_institution', False)))
 
     # 職歴情報の処理
     for experience in data['job_experiences']:
@@ -44,22 +45,23 @@ async def update_user_info(
             cursor.execute("""
                 UPDATE job_experiences SET 
                     company_name = %s, industry = %s, position = %s, work_start_period = %s, work_end_period = %s,
-                    salary = %s, satisfaction_level = %s, job_category = %s, job_sub_category = %s
+                    salary = %s, satisfaction_level = %s, job_category = %s, job_sub_category = %s, is_private = %s
                 WHERE id = %s AND user_id = %s
             """, (experience['company_name'], experience['industry'], experience['position'], 
                   experience['work_start_period'], experience['work_end_period'],
                   experience['salary'], experience['satisfaction_level'],
                   experience['job_category'], experience['job_sub_category'],
+                  experience.get('is_private', False), 
                   experience['id'], current_user.id))
         else:  # IDが存在しなければ新規追加
             cursor.execute("""
                 INSERT INTO job_experiences (user_id, company_name, industry, position, work_start_period, work_end_period, 
-                                            salary, satisfaction_level, job_category, job_sub_category)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                            salary, satisfaction_level, job_category, job_sub_category, is_private)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (current_user.id, experience['company_name'], experience['industry'], experience['position'], 
                   experience['work_start_period'], experience['work_end_period'],  
                   experience['salary'], experience['satisfaction_level'], 
-                  experience['job_category'], experience['job_sub_category']))
+                  experience['job_category'], experience['job_sub_category'], experience.get('is_private', False)))
 
     # キャリア志向と成長の処理
     if 'career_aspirations_id' in data and data['career_aspirations_id']:  # IDが存在すれば更新

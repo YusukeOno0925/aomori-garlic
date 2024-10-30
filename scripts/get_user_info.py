@@ -26,7 +26,7 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
 
         # 学歴情報の取得
         cursor.execute("""
-            SELECT education_id, institution, degree, major, education_start, education_end
+            SELECT education_id, institution, degree, major, education_start, education_end, hide_institution
             FROM education 
             WHERE user_id = %s
         """, (current_user.id,))
@@ -40,7 +40,7 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
         # 職歴情報の取得
         cursor.execute("""
             SELECT id, company_name, industry, position, work_start_period, work_end_period,
-                    salary, job_category, job_sub_category, satisfaction_level
+                    salary, job_category, job_sub_category, satisfaction_level, is_private
             FROM job_experiences 
             WHERE user_id = %s
         """, (current_user.id,))

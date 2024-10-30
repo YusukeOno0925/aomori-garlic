@@ -126,6 +126,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 <input type="text" name="job_experiences[${jobExperienceIndex}][company_name]" value="${jobExperience.company_name || ''}" ${isReadOnly ? 'readonly' : ''} required>
                 <label>企業名</label>
             </div>
+
+            <!-- 非公開チェックボックス -->
+            <div class="checkbox-group">
+                <label>
+                <input type="checkbox" name="job_experiences[${jobExperienceIndex}][is_private]" ${jobExperience.is_private ? 'checked' : ''}>
+                    この職歴を非公開にする
+                </label>
+            </div>
             
             <!-- 業界 -->
             <div class="floating-label">
@@ -245,6 +253,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('education_end').value = data.education_end || '';
                     document.getElementById('education_id').value = data.education_id || '';
 
+                    // 学歴非公開チェックボックスの処理を追加
+                    const hideInstitutionCheckbox = document.getElementById('hide_institution');
+                    hideInstitutionCheckbox.checked = data.hide_institution || false;
+
                     // 職歴情報の処理
                     jobExperiencesContainer.innerHTML = ''; // 既存の要素をクリア
                     jobExperienceIndex = 0;  // インデックスのリセット
@@ -301,6 +313,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const formData = new FormData(document.getElementById('mypage-form'));
 
+                    // 学歴の非公開チェックボックスの状態を取得
+                    const hideInstitution = document.getElementById('hide_institution').checked;
+
                     // チェック状態をbooleanで取得する
                     const newsletterSubscription = document.getElementById('newsletter_subscription').checked;  
 
@@ -310,6 +325,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.querySelectorAll('.job-info-group').forEach(group => {
                         const index = group.getAttribute('data-index');
                         const industryValue = group.querySelector(`select[name="job_experiences[${index}][industry]"]`)?.value || '';
+                        const isPrivate = group.querySelector(`input[name="job_experiences[${index}][is_private]"]`)?.checked || false;
+
                         const experience = {
                             id: group.querySelector(`input[name="job_experiences[${index}][id]"]`)?.value || '',
                             company_name: group.querySelector(`input[name="job_experiences[${index}][company_name]"]`)?.value || '',
@@ -320,7 +337,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             salary: group.querySelector(`select[name="job_experiences[${index}][salary]"]`)?.value || '',
                             job_category: group.querySelector(`select[name="job_experiences[${index}][job_category]"]`)?.value || '',
                             job_sub_category: group.querySelector(`input[name="job_experiences[${index}][job_sub_category]"]`)?.value || '',
-                            satisfaction_level: group.querySelector(`select[name="job_experiences[${index}][satisfaction_level]"]`)?.value || ''
+                            satisfaction_level: group.querySelector(`select[name="job_experiences[${index}][satisfaction_level]"]`)?.value || '',
+                            is_private: isPrivate
                         };
                         // 少なくとも一つのフィールドに値がある場合のみ追加
                         if (experience.company_name || experience.industry || experience.position) {
@@ -338,6 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         newsletter_subscription: newsletterSubscription,  // booleanで送信
 
                         institution: formData.get('institution') || '',
+                        hide_institution: hideInstitution,
                         degree: formData.get('degree') || '',
                         major: formData.get('major') || '',
                         education_start: formData.get('education_start') || '',
