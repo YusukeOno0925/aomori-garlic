@@ -24,7 +24,7 @@ async def get_career_detail(career_id: int):
         # 全職歴データを取得するクエリ
         cursor.execute("""
             SELECT u.id, u.username, j.company_name, j.position, j.salary,
-                j.satisfaction_level, j.work_start_period, j.work_end_period, 
+                j.satisfaction_level, j.work_start_period, j.work_end_period, j.is_private,
                 c.start_reason, c.first_job_feedback, t.transition_type, t.transition_story,
                 t.reason_for_job_change, t.job_experience_feedback,
                 a.proudest_achievement, a.failure_experience, a.lesson_learned
@@ -65,7 +65,7 @@ async def get_career_detail(career_id: int):
             },
             "companies": [
                 {
-                    "name": row["company_name"],
+                    "name": row["company_name"] if row["is_private"] == 0 else "非公開",
                     "startYear": row["work_start_period"].year if row["work_start_period"] else None,
                     "endYear": row["work_end_period"].year if row["work_end_period"] else '現時点',
                     "salary": row["salary"],
