@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const baseUrl = data.base_url;
 
             // ユーザー情報を事前にフォームに表示
-            fetch(`${baseUrl}/user-info/`, {
+            fetch(`${baseUrl}/user-info?include_private=true`, {
                 credentials: 'include',
             })
             .then(response => {

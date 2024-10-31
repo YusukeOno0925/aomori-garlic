@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.get("/user-info/")
-async def get_user_info(current_user: User = Depends(get_current_user)):
+async def get_user_info(current_user: User = Depends(get_current_user), include_private: bool = False):
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
 
@@ -32,6 +32,9 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
         """, (current_user.id,))
         education_info = cursor.fetchone()
         if education_info:
+            # 非公開チェックが必要な場合
+            if not include_private and education_info['hide_institution']:
+                education_info['institution'] = '非公開'
             user_info.update(education_info)
 
         # クエリの結果を消費してから次のクエリを実行
@@ -45,6 +48,12 @@ async def get_user_info(current_user: User = Depends(get_current_user)):
             WHERE user_id = %s
         """, (current_user.id,))
         job_experiences = cursor.fetchall()  # すべての職歴を取得
+
+        # 非公開フラグに基づいて表示内容を調整
+        for experience in job_experiences:
+            if not include_private and experience['is_private']:
+                experience['company_name'] = '非公開'
+
         user_info["job_experiences"] = job_experiences
 
         # クエリの結果を消費してから次のクエリを実行

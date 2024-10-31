@@ -10,8 +10,8 @@ async def get_popular_career_stories():
     db = get_db_connection()
     try:
         query = """
-        SELECT u.id, u.username, u.birthdate, e.institution, e.education_start,
-               j.company_name, j.industry, j.job_category, j.salary, j.work_start_period,
+        SELECT u.id, u.username, u.birthdate, e.institution, e.education_start, e.hide_institution,
+               j.company_name, j.industry, j.job_category, j.salary, j.work_start_period, j.is_private,
                IFNULL(pv.view_count, 0) AS view_count  -- 閲覧回数を取得
         FROM users u
         LEFT JOIN education e ON u.id = e.user_id
@@ -48,23 +48,23 @@ async def get_popular_career_stories():
                     "view_count": row['view_count']
                 }
 
-                # 学歴情報を最初に追加（入学年）
-                if row['institution']:
-                    career_dict[row['id']]['careerStages'].append({
-                        "year": row['education_start'].year if row['education_start'] else '不明',
-                        "stage": f"{row['institution']} 入学"
-                    })
+                # 学歴情報の公開設定を確認
+                institution_name = row['institution'] if row['hide_institution'] == 0 else '非公開'
+                career_dict[row['id']]['careerStages'].append({
+                    "year": row['education_start'].year if row['education_start'] else '不明',
+                    "stage": f"{institution_name} 入学"
+                })
 
             # キャリアステージを追加（職歴が存在する場合のみ）
             if row['company_name']:  # 会社名がある場合のみ
-                career_dict[row['id']]['profession'] = row['job_category']
+                company_name = row['company_name'] if row['is_private'] == 0 else '非公開'
                 career_dict[row['id']]['income'].append({"income": row['salary'] or '不明'}) 
                 career_dict[row['id']]['careerStages'].append({
                     "year": row['work_start_period'].year if row['work_start_period'] else '不明',
-                    "stage": f"{row['company_name']} 入社"
+                    "stage": f"{company_name} 入社"
                 })
                 career_dict[row['id']]['companies'].append({
-                    "name": row['company_name'],
+                    "name": company_name,
                     "industry": row['industry'] or '不明',
                     "startYear": row['work_start_period'].year if row['work_start_period'] else '不明'
                 })

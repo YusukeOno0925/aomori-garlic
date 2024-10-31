@@ -43,7 +43,8 @@ function fetchRecentCareerStories() {
         .then((data) => {
             // 最近のキャリアストーリーを表示
             data.careers.forEach((story) => {
-                const storyCard = createStoryCard(story);
+                const filteredStory = filterPrivateInfo(story);
+                const storyCard = createStoryCard(filteredStory);
                 recentStoriesContainer.appendChild(storyCard);
             });
 
@@ -54,6 +55,25 @@ function fetchRecentCareerStories() {
             }
         })
         .catch((error) => console.error('Error fetching recent career stories:', error));
+}
+
+// 非公開情報をフィルタリングする関数
+function filterPrivateInfo(story) {
+    story.careerStages = story.careerStages.map(stage => {
+        if (stage.is_private) {
+            stage.stage = '非公開';
+        }
+        return stage;
+    });
+
+    story.companies = story.companies.map(company => {
+        if (company.is_private) {
+            company.name = '非公開';
+        }
+        return company;
+    });
+
+    return story;
 }
 
 // キャリアカードを生成
