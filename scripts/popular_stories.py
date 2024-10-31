@@ -41,7 +41,7 @@ async def get_popular_career_stories():
                     "id": row['id'],
                     "name": row['username'],
                     "birthYear": row['birthdate'].year if row['birthdate'] else '不明',
-                    "profession": row['job_category'] or '不明',
+                    "profession": None, 
                     "income": [],
                     "careerStages": [],
                     "companies": [],
@@ -58,6 +58,10 @@ async def get_popular_career_stories():
             # キャリアステージを追加（職歴が存在する場合のみ）
             if row['company_name']:  # 会社名がある場合のみ
                 company_name = row['company_name'] if row['is_private'] == 0 else '非公開'
+
+                # 最新の職歴の職業情報を設定（常に上書き）
+                career_dict[row['id']]['profession'] = row['job_category']
+                
                 career_dict[row['id']]['income'].append({"income": row['salary'] or '不明'}) 
                 career_dict[row['id']]['careerStages'].append({
                     "year": row['work_start_period'].year if row['work_start_period'] else '不明',
