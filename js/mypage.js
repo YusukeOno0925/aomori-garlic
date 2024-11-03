@@ -139,16 +139,16 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="floating-label">
                 <select name="job_experiences[${jobExperienceIndex}][industry]" ${isReadOnly ? 'disabled' : ''} required>
                     <option value="" ${!jobExperience.industry ? 'selected' : ''}></option>
-                    <option value="finance" ${jobExperience.industry === 'finance' ? 'selected' : ''}>金融</option>
-                    <option value="consulting" ${jobExperience.industry === 'consulting' ? 'selected' : ''}>コンサルティング・専門事務所</option>
-                    <option value="it" ${jobExperience.industry === 'it' ? 'selected' : ''}>IT・通信・インターネット</option>
-                    <option value="media" ${jobExperience.industry === 'media' ? 'selected' : ''}>マスコミ・広告関連</option>
-                    <option value="medical" ${jobExperience.industry === 'medical' ? 'selected' : ''}>メディカル</option>
-                    <option value="infrastructure" ${jobExperience.industry === 'infrastructure' ? 'selected' : ''}>生活インフラ、運輸、不動産、建設</option>
-                    <option value="government" ${jobExperience.industry === 'government' ? 'selected' : ''}>行政機関、社団法人、非営利団体</option>
-                    <option value="manufacturing" ${jobExperience.industry === 'manufacturing' ? 'selected' : ''}>メーカー・商社</option>
-                    <option value="service" ${jobExperience.industry === 'service' ? 'selected' : ''}>サービス、小売、外食</option>
-                    <option value="other" ${jobExperience.industry === 'other' ? 'selected' : ''}>その他</option>
+                    <option value="金融" ${jobExperience.industry === '金融' ? 'selected' : ''}>金融</option>
+                    <option value="コンサルティング・専門事務所" ${jobExperience.industry === 'コンサルティング・専門事務所' ? 'selected' : ''}>コンサルティング・専門事務所</option>
+                    <option value="IT・通信・インターネット" ${jobExperience.industry === 'IT・通信・インターネット' ? 'selected' : ''}>IT・通信・インターネット</option>
+                    <option value="マスコミ・広告関連" ${jobExperience.industry === 'マスコミ・広告関連' ? 'selected' : ''}>マスコミ・広告関連</option>
+                    <option value="メディカル" ${jobExperience.industry === 'メディカル' ? 'selected' : ''}>メディカル</option>
+                    <option value="生活インフラ、運輸、不動産、建設" ${jobExperience.industry === '生活インフラ、運輸、不動産、建設' ? 'selected' : ''}>生活インフラ、運輸、不動産、建設</option>
+                    <option value="行政機関、社団法人、非営利団体" ${jobExperience.industry === '行政機関、社団法人、非営利団体' ? 'selected' : ''}>行政機関、社団法人、非営利団体</option>
+                    <option value="メーカー・商社" ${jobExperience.industry === 'メーカー・商社' ? 'selected' : ''}>メーカー・商社</option>
+                    <option value="サービス、小売、外食" ${jobExperience.industry === 'サービス、小売、外食' ? 'selected' : ''}>サービス、小売、外食</option>
+                    <option value="その他" ${jobExperience.industry === 'その他' ? 'selected' : ''}>その他</option>
                 </select>
                 <label>業界</label>
             </div>
