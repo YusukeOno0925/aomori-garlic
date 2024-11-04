@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="css/career_detail.css">
     <link rel="canonical" href="https://www.imnormal.jp/">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 <body>
     <header>
@@ -34,7 +36,7 @@
                 <li><a href="Home.html"><img src="images/home-icon.png" alt="ホームアイコン"> ホーム</a></li>
                 <li><a href="Career_overview.html"><img src="images/career-icon.png" alt="キャリアストーリーアイコン"> キャリアストーリー</a></li>
                 <li><a href="Board.html"><img src="images/board-icon.png" alt="掲示板アイコン"> 掲示板（Q&A）</a></li>
-                <li><a href="Mypage.html"><img src="images/board-icon.png" alt="マイページアイコン"> マイページ</a></li>
+                <li><a href="Mypage.html"><img src="images/mypage-icon.png" alt="マイページアイコン"> マイページ</a></li>
                 <li><a href="Contact.html"><img src="images/notification-icon.png" alt="お知らせアイコン"> お知らせ</a></li>
                 <li><a href="Contact.html"><img src="images/contact-icon.png" alt="問い合わせアイコン"> お問い合わせ</a></li>
             </ul>
@@ -43,7 +45,7 @@
 
     <main>
         <!-- 年収と満足度のグラフ -->
-        <h2>年収✖️満足度</h2>
+        <h2>年収と満足度の推移</h2>
         <div id="career-chart-container"> 
             <canvas id="income-satisfaction-chart"></canvas>
         </div>
@@ -82,6 +84,7 @@
                     <div id="comment-list">
                         <!-- JavaScriptでコメントを動的に生成 -->
                     </div>
+                    <div id="pagination"></div>
                     <textarea id="comment-text" placeholder="コメントを追加"></textarea>
                     <button id="submit-comment">新しいコメントを投稿</button>
                 </div>

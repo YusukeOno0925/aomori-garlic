@@ -80,7 +80,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('会社データが見つかりませんでした。');
             }
 
-            handleComments(careerId); // コメント処理の関数呼び出し
+            // コメント機能の初期化
+            checkLoginStatus().then(isLoggedIn => {
+                handleComments(careerId, isLoggedIn); // コメント処理の関数呼び出し
+            });
+
             initializeAccordion();    // アコーディオンの初期化
             initializeReadMore();     // 「続きを読む」機能の初期化
         })
@@ -90,6 +94,19 @@ document.addEventListener('DOMContentLoaded', function () {
             careerDetail.innerHTML = '<p>キャリアが見つかりませんでした。</p>';
         });
 });
+
+// ログイン状態を確認する関数
+function checkLoginStatus() {
+    return fetch('/check-login-status/', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.ok)
+    .catch(error => {
+        console.error('ログイン状態の確認中にエラーが発生しました:', error);
+        return false;
+    });
+}
 
 // アコーディオンの動作を実装する関数
 function initializeAccordion() {
@@ -271,30 +288,288 @@ function calculateMedianIncome(income) {
 }
 
 // コメントを管理する関数
-function handleComments(careerId) {
+function handleComments(careerId, isLoggedIn) {
     const commentList = document.getElementById('comment-list');
-    const comments = JSON.parse(localStorage.getItem(`comments-${careerId}`)) || [];
-    
-    comments.forEach(comment => {
-        const commentItem = document.createElement('div');
-        commentItem.classList.add('card');
-        commentItem.textContent = comment;
-        commentList.appendChild(commentItem);
-    });
-
     const commentText = document.getElementById('comment-text');
     const submitComment = document.getElementById('submit-comment');
-    
-    submitComment.addEventListener('click', function () {
-        const newComment = commentText.value;
-        if (newComment) {
-            comments.push(newComment);
-            localStorage.setItem(`comments-${careerId}`, JSON.stringify(comments));
-            const commentItem = document.createElement('div');
-            commentItem.classList.add('card');
-            commentItem.textContent = newComment;
-            commentList.appendChild(commentItem);
-            commentText.value = '';
+    const pagination = document.getElementById('pagination');
+    let currentPage = 1;
+    const commentsPerPage = 10;
+
+    // コメントを取得して表示する関数
+    function fetchComments() {
+        fetch(`/comments/${careerId}?page=${currentPage}&per_page=${commentsPerPage}`)
+            .then(response => response.json())
+            .then(data => {
+                commentList.innerHTML = ''; // 既存のコメントをクリア
+                data.comments.forEach(comment => {
+                    const commentItem = createCommentElement(comment);
+                    commentList.appendChild(commentItem);
+                });
+                // ページネーションのナビゲーションを表示
+                displayPagination(data.total_pages);
+            })
+            .catch(error => {
+                console.error('コメントの取得中にエラーが発生しました:', error);
+            });
+    }
+
+    // コメント要素を作成する関数
+    function createCommentElement(comment, nestLevel = 0) {
+        const maxNestLevel = 2; // ネストレベルの最大値
+
+        const commentItem = document.createElement('div');
+        commentItem.classList.add('comment-item');
+        commentItem.dataset.commentId = comment.id; // データ属性を追加
+
+        // コメントヘッダー
+        const commentHeader = document.createElement('div');
+        commentHeader.classList.add('comment-header');
+
+        const username = document.createElement('p');
+        username.innerHTML = `<strong>${escapeHTML(comment.username)}</strong> (${new Date(comment.created_at).toLocaleString()})`;
+
+        commentHeader.appendChild(username);
+
+        // コメント内容
+        const commentContent = document.createElement('div');
+        commentContent.classList.add('comment-content');
+
+        // 長いコメントを「続きを読む」で折りたたむ
+        if (comment.content.length > 100) {
+            const shortText = truncateText(comment.content, 100);
+            commentContent.innerHTML = `
+                <span class="short-text">${escapeHTML(shortText)}<span class="read-more-link">続きを読む</span></span>
+                <span class="full-text" style="display:none;">${escapeHTML(comment.content)}<span class="read-less-link">閉じる</span></span>
+            `;
+        } else {
+            commentContent.textContent = comment.content;
         }
+
+        // コメントアクション（返信ボタン、いいねボタン）
+        const commentActions = document.createElement('div');
+        commentActions.classList.add('comment-actions');
+
+        // 返信ボタン
+        const replyButton = document.createElement('button');
+        replyButton.classList.add('reply-button');
+        replyButton.innerHTML = `<i class="fas fa-reply"></i> <span class="button-text">返信</span>`;
+        replyButton.addEventListener('click', function() {
+            if (isLoggedIn) {
+                showReplyForm(comment.id);
+            } else {
+                alert('返信を投稿するにはログインが必要です。');
+            }
+        });
+
+        // いいねボタン
+        const likeButton = document.createElement('button');
+        likeButton.classList.add('like-button');
+        likeButton.innerHTML = `<i class="fas fa-thumbs-up"></i> <span class="button-text">いいね</span> (${comment.like_count || 0})`;
+        likeButton.addEventListener('click', function() {
+            if (isLoggedIn) {
+                toggleLike(comment.id, likeButton);
+            } else {
+                alert('いいねをするにはログインが必要です。');
+            }
+        });
+
+        commentActions.appendChild(replyButton);
+        commentActions.appendChild(likeButton);
+
+        // コメントアイテムに要素を追加
+        commentItem.appendChild(commentHeader);
+        commentItem.appendChild(commentContent);
+        commentItem.appendChild(commentActions);
+
+        // 返信リスト
+        if (comment.replies && comment.replies.length > 0 && nestLevel < maxNestLevel) {
+            const replyList = document.createElement('div');
+            replyList.classList.add('reply-list');
+            comment.replies.forEach(reply => {
+                const replyItem = createCommentElement(reply, nestLevel + 1);
+                replyList.appendChild(replyItem);
+            });
+            commentItem.appendChild(replyList);
+        }
+
+        return commentItem;
+    }
+
+    // 返信フォームを表示する関数
+    function showReplyForm(parentCommentId) {
+        const parentComment = commentList.querySelector(`[data-comment-id="${parentCommentId}"]`);
+        const existingForm = parentComment.querySelector('.reply-form');
+        if (existingForm) {
+            existingForm.remove();
+            return;
+        }
+
+        const replyForm = document.createElement('div');
+        replyForm.classList.add('reply-form');
+        replyForm.innerHTML = `
+            <textarea class="reply-text" placeholder="返信を入力してください"></textarea>
+            <button class="submit-reply">返信を投稿</button>
+        `;
+        parentComment.appendChild(replyForm);
+
+        const replyText = replyForm.querySelector('.reply-text');
+        const submitReply = replyForm.querySelector('.submit-reply');
+
+        submitReply.addEventListener('click', function() {
+            const content = replyText.value.trim();
+            if (content) {
+                const formData = new FormData();
+                formData.append('content', content);
+                formData.append('parent_comment_id', parentCommentId);
+
+                fetch(`/comments/${careerId}`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        alert('返信の投稿に失敗しました。');
+                        throw new Error('返信の投稿に失敗しました。');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    replyForm.remove();
+                    fetchComments();
+                })
+                .catch(error => {
+                    console.error('返信の投稿中にエラーが発生しました:', error);
+                });
+            } else {
+                alert('返信を入力してください。');
+            }
+        });
+    }
+
+    // いいねをトグルする関数
+    function toggleLike(commentId, likeButton) {
+        fetch(`/comments/${commentId}/like`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                alert('いいねの処理に失敗しました。');
+                throw new Error('いいねの処理に失敗しました。');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // ボタンの表示を更新
+            likeButton.innerHTML = `<i class="fas fa-thumbs-up"></i> いいね (${data.like_count})`;
+        })
+        .catch(error => {
+            console.error('いいねの処理中にエラーが発生しました:', error);
+        });
+    }
+
+    // ページネーションの表示
+    function displayPagination(totalPages) {
+        pagination.innerHTML = '';
+
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '前へ';
+            prevButton.addEventListener('click', () => {
+                currentPage--;
+                fetchComments();
+            });
+            pagination.appendChild(prevButton);
+        }
+
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '次へ';
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                fetchComments();
+            });
+            pagination.appendChild(nextButton);
+        }
+    }
+
+    // コメントの投稿
+    if (isLoggedIn) {
+        submitComment.addEventListener('click', function () {
+            const newComment = commentText.value.trim();
+            if (newComment) {
+                const formData = new FormData();
+                formData.append('content', newComment);
+
+                fetch(`/comments/${careerId}`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            alert('コメントを投稿するにはログインが必要です。');
+                        } else {
+                            alert('コメントの投稿に失敗しました。');
+                        }
+                        throw new Error('コメントの投稿に失敗しました。');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    commentText.value = '';
+                    currentPage = 1; // 新しいコメントを表示するためにページをリセット
+                    fetchComments(); // コメント一覧を再取得
+                })
+                .catch(error => {
+                    console.error('コメントの投稿中にエラーが発生しました:', error);
+                });
+            } else {
+                alert('コメントを入力してください。');
+            }
+        });
+    } else {
+        submitComment.disabled = true;
+        commentText.disabled = true;
+    }
+
+    // 初回のコメント取得
+    fetchComments();
+
+    // 「続きを読む」機能の初期化
+    initializeCommentReadMore();
+}
+
+// コメント内の「続きを読む」機能のイベントリスナーを追加
+function initializeCommentReadMore() {
+    const commentList = document.getElementById('comment-list');
+    commentList.addEventListener('click', function(event) {
+        if (event.target.classList.contains('read-more-link')) {
+            const commentContent = event.target.closest('.comment-content');
+            commentContent.querySelector('.short-text').style.display = 'none';
+            commentContent.querySelector('.full-text').style.display = 'block';
+        } else if (event.target.classList.contains('read-less-link')) {
+            const commentContent = event.target.closest('.comment-content');
+            commentContent.querySelector('.short-text').style.display = 'block';
+            commentContent.querySelector('.full-text').style.display = 'none';
+        }
+    });
+}
+
+// 特殊文字をエスケープする関数（XSS対策）
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&'`"<>]/g, function(match) {
+        return {
+            '&': '&amp;',
+            "'": '&#x27;',
+            '`': '&#x60;',
+            '"': '&quot;',
+            '<': '&lt;',
+            '>': '&gt;',
+        }[match];
     });
 }
