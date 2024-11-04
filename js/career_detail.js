@@ -532,8 +532,10 @@ function handleComments(careerId, isLoggedIn) {
             }
         });
     } else {
-        submitComment.disabled = true;
-        commentText.disabled = true;
+        // 未ログイン時のイベントリスナーを追加
+        submitComment.addEventListener('click', function () {
+            alert('コメントを投稿するにはログインが必要です。');
+        });
     }
 
     // 初回のコメント取得
