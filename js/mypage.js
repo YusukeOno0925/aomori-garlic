@@ -1,4 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // タブ切り替えのスクリプト
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function () {
+            // タブリンクのactiveクラスをリセット
+            tabLinks.forEach(link => link.classList.remove('active'));
+            // クリックされたタブにactiveクラスを追加
+            this.classList.add('active');
+
+            // タブコンテンツの表示をリセット
+            tabContents.forEach(content => content.classList.remove('active'));
+            // 対応するタブコンテンツを表示
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
     const editButtons = document.querySelectorAll('#edit-button-top, #edit-button-bottom');
     const saveButtons = document.querySelectorAll('#save-button-top, #save-button-bottom');
     const addJobExperienceButton = document.getElementById('add-job-experience');

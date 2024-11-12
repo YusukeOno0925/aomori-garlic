@@ -47,149 +47,166 @@
             <button type="button" id="edit-button-top">編集</button>
             <button type="submit" id="save-button-top" style="display: none;">保存</button>
         </div>
+
+        <!-- タブメニュー -->
+        <div class="tab-menu">
+            <button class="tab-link active" data-tab="tab-basic">基本情報</button>
+            <button class="tab-link" data-tab="tab-career-details">キャリア詳細</button>
+            <button class="tab-link" data-tab="tab-future">今後のキャリア志向</button>
+        </div>
+
         <form id="mypage-form" method="post">
-            <h3>基本情報</h3>
-            <div class="floating-label">
-                <input type="text" id="username" name="username" required readonly>
-                <label for="username">ユーザ名</label>
-            </div>
-            <div class="floating-label">
-                <input type="email" id="email" name="email" required readonly>
-                <label for="email">メールアドレス</label>
-            </div>
-            <div class="floating-label">
-                <input type="text" id="family_name" name="family_name" readonly>
-                <label for="family_name">姓</label>
-            </div>
-            <div class="floating-label">
-                <input type="text" id="given_name" name="given_name" readonly>
-                <label for="given_name">名</label>
-            </div>
-            <div class="floating-label">
-                <input type="date" id="birthdate" name="birthdate" readonly>
-                <label for="birthdate">生年月日</label>
-            </div>
-            <div class="floating-label">
-                <select id="gender" name="gender" disabled>
-                    <option value="" disabled selected>性別を選択してください</option>
-                    <option value="男性">男性</option>
-                    <option value="女性">女性</option>
-                    <option value="その他">その他</option>
-                </select>
-                <label for="gender">性別</label>
-            </div>
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" disabled>
-                    キャリアストーリーの通知メールを受信する
-                </label>
+            <!-- タブ1: 基本情報 -->
+            <div id="tab-basic" class="tab-content active">
+                <h3>基本情報</h3>
+                <div class="floating-label">
+                    <input type="text" id="username" name="username" required readonly>
+                    <label for="username">ユーザ名</label>
+                </div>
+                <div class="floating-label">
+                    <input type="email" id="email" name="email" required readonly>
+                    <label for="email">メールアドレス</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="family_name" name="family_name" readonly>
+                    <label for="family_name">姓</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="given_name" name="given_name" readonly>
+                    <label for="given_name">名</label>
+                </div>
+                <div class="floating-label">
+                    <input type="date" id="birthdate" name="birthdate" readonly>
+                    <label for="birthdate">生年月日</label>
+                </div>
+                <div class="floating-label">
+                    <select id="gender" name="gender" disabled>
+                        <option value="" disabled selected>性別を選択してください</option>
+                        <option value="男性">男性</option>
+                        <option value="女性">女性</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <label for="gender">性別</label>
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" disabled>
+                        キャリアストーリーの通知メールを受信する
+                    </label>
+                </div>
+
+                <h3>学歴</h3>
+                <div class="floating-label">
+                    <input type="text" id="institution" name="institution" readonly>
+                    <label for="institution">学校名</label>
+                </div>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="hide_institution" name="hide_institution">
+                        学歴を非公開にする
+                    </label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="degree" name="degree" readonly>
+                    <label for="degree">学部</label>
+                </div>
+                <div class="floating-label">
+                    <input type="text" id="major" name="major" readonly>
+                    <label for="major">学科</label>
+                </div>
+                <div class="floating-label">
+                    <input type="date" id="education_start" name="education_start" readonly>
+                    <label for="education_start">入学日</label>
+                </div>
+                <div class="floating-label">
+                    <input type="date" id="education_end" name="education_end" readonly>
+                    <label for="education_end">卒業日</label>
+                </div>
+                <input type="hidden" id="education_id" name="education_id">
+
+                <h3>職歴</h3>
+                <div id="job-experiences-container">
+                    <!-- 職歴フィールドを動的に追加 -->
+                </div>
+                <button type="button" id="add-job-experience" style="display: none;">職歴を追加</button>
             </div>
 
-            <h3>学歴</h3>
-            <div class="floating-label">
-                <input type="text" id="institution" name="institution" readonly>
-                <label for="institution">学校名</label>
-            </div>
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" id="hide_institution" name="hide_institution">
-                    学歴を非公開にする
-                </label>
-            </div>
-            <div class="floating-label">
-                <input type="text" id="degree" name="degree" readonly>
-                <label for="degree">学部</label>
-            </div>
-            <div class="floating-label">
-                <input type="text" id="major" name="major" readonly>
-                <label for="major">学科</label>
-            </div>
-            <div class="floating-label">
-                <input type="date" id="education_start" name="education_start" readonly>
-                <label for="education_start">入学日</label>
-            </div>
-            <div class="floating-label">
-                <input type="date" id="education_end" name="education_end" readonly>
-                <label for="education_end">卒業日</label>
-            </div>
-            <input type="hidden" id="education_id" name="education_id">
+            <!-- タブ2: キャリア詳細 -->
+            <div id="tab-career-details" class="tab-content">
+                <h3>キャリアのスタート地点</h3>
+                <div class="floating-label">
+                    <textarea id="start_reason" name="start_reason" readonly></textarea>
+                    <label for="start_reason">どのような経緯・理由でその職業・業界を選びましたか？（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="first_job_feedback" name="first_job_feedback" readonly></textarea>
+                    <label for="first_job_feedback">新卒または初めての仕事での経験や感想はどのようなものでしたか？（任意）</label>
+                </div>
+                <input type="hidden" id="start_point_id" name="start_point_id">
 
-            <h3>職歴</h3>
-            <div id="job-experiences-container">
-                <!-- 職歴フィールドを動的に追加 -->
-            </div>
-            <button type="button" id="add-job-experience" style="display: none;">職歴を追加</button>
+                <h3>キャリアの転機</h3>
+                <div class="floating-label">
+                    <textarea id="transition_type" name="transition_type" readonly></textarea>
+                    <label for="transition_type">転職や異動・出向、結婚などキャリアの転機はありましたか？（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="transition_story" name="transition_story" readonly></textarea>
+                    <label for="transition_story">具体的なエピソードや心境の変化があれば教えてください。（キャリアチェンジを考えたきっかけなど）（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="reason_for_job_change" name="reason_for_job_change" readonly></textarea>
+                    <label for="reason_for_job_change">転職を選んだ理由（社内異動ではなく、転職を選んだ理由など）（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="job_experience_feedback" name="job_experience_feedback" readonly></textarea>
+                    <label for="job_experience_feedback">転職先での仕事の経験や感想（任意）</label>
+                </div>
+                <input type="hidden" id="transition_id" name="transition_id">
 
-            <h3>キャリアのスタート地点</h3>
-            <div class="floating-label">
-                <textarea id="start_reason" name="start_reason" readonly></textarea>
-                <label for="start_reason">どのような経緯・理由でその職業・業界を選びましたか？（任意）</label>
+                <h3>キャリアの達成と失敗経験</h3>
+                <div class="floating-label">
+                    <textarea id="proudest_achievement" name="proudest_achievement" readonly></textarea>
+                    <label for="proudest_achievement">これまでのキャリアで最も誇りに思う達成は何ですか？それを達成するために乗り越えた課題は何ですか？（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="failure_experience" name="failure_experience" readonly></textarea>
+                    <label for="failure_experience">これまでのキャリアで失敗や挫折した経験はありますか？（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="lesson_learned" name="lesson_learned" readonly></textarea>
+                    <label for="lesson_learned">その経験から学んだことは何ですか？（任意）</label>
+                </div>
+                <input type="hidden" id="achievement_id" name="achievement_id">
             </div>
-            <div class="floating-label">
-                <textarea id="first_job_feedback" name="first_job_feedback" readonly></textarea>
-                <label for="first_job_feedback">新卒または初めての仕事での経験や感想はどのようなものでしたか？（任意）</label>
-            </div>
-            <input type="hidden" id="start_point_id" name="start_point_id">
 
-            <h3>キャリアの転機</h3>
-            <div class="floating-label">
-                <textarea id="transition_type" name="transition_type" readonly></textarea>
-                <label for="transition_type">転職や異動・出向、結婚などキャリアの転機はありましたか？（任意）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="transition_story" name="transition_story" readonly></textarea>
-                <label for="transition_story">具体的なエピソードや心境の変化があれば教えてください。（キャリアチェンジを考えたきっかけなど）（任意）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="reason_for_job_change" name="reason_for_job_change" readonly></textarea>
-                <label for="reason_for_job_change">転職を選んだ理由（社内異動ではなく、転職を選んだ理由など）（任意）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="job_experience_feedback" name="job_experience_feedback" readonly></textarea>
-                <label for="job_experience_feedback">転職先での仕事の経験や感想（任意）</label>
-            </div>
-            <input type="hidden" id="transition_id" name="transition_id">
+            <!-- タブ3: 今後のキャリア志向 -->
+            <div id="tab-future" class="tab-content">
+                <h3>今後のキャリア志向</h3>
+                <div class="floating-label">
+                    <input type="text" id="career_type" name="career_type" readonly>
+                    <label for="career_type">今後のキャリア志向を選択する（必須）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="career_description" name="career_description" readonly></textarea>
+                    <label for="career_description">キャリア達成のために取り組んでいることがあれば教えてください。（任意）</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="career_satisfaction_feedback" name="career_satisfaction_feedback" readonly></textarea>
+                    <label for="career_satisfaction_feedback">これまでのキャリアに満足していますか？理由を教えてください。（任意）</label>
+                </div>
+                <input type="hidden" id="career_aspirations_id" name="career_aspirations_id">
 
-            <h3>キャリアの達成と失敗経験</h3>
-            <div class="floating-label">
-                <textarea id="proudest_achievement" name="proudest_achievement" readonly></textarea>
-                <label for="proudest_achievement">これまでのキャリアで最も誇りに思う達成は何ですか？それを達成するために乗り越えた課題は何ですか？（任意）</label>
+                <h3>学びと成長</h3>
+                <div class="floating-label">
+                    <input type="text" id="skill" name="skill" readonly>
+                    <label for="skill">得たスキル</label>
+                </div>
+                <div class="floating-label">
+                    <textarea id="growth_description" name="growth_description" readonly></textarea>
+                    <label for="growth_description">スキルの詳細説明</label>
+                </div>
+                <input type="hidden" id="growth_id" name="growth_id">
             </div>
-            <div class="floating-label">
-                <textarea id="failure_experience" name="failure_experience" readonly></textarea>
-                <label for="failure_experience">これまでのキャリアで失敗や挫折した経験はありますか？（任意）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="lesson_learned" name="lesson_learned" readonly></textarea>
-                <label for="lesson_learned">その経験から学んだことは何ですか？（任意）</label>
-            </div>
-            <input type="hidden" id="achievement_id" name="achievement_id">
-
-            <h3>今後のキャリア志向</h3>
-            <div class="floating-label">
-                <input type="text" id="career_type" name="career_type" readonly>
-                <label for="career_type">今後のキャリア志向を選択する（必須）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="career_description" name="career_description" readonly></textarea>
-                <label for="career_description">キャリア達成のために取り組んでいることがあれば教えてください。（任意）</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="career_satisfaction_feedback" name="career_satisfaction_feedback" readonly></textarea>
-                <label for="career_satisfaction_feedback">これまでのキャリアに満足していますか？理由を教えてください。（任意）</label>
-            </div>
-            <input type="hidden" id="career_aspirations_id" name="career_aspirations_id">
-
-            <h3>学びと成長</h3>
-            <div class="floating-label">
-                <input type="text" id="skill" name="skill" readonly>
-                <label for="skill">得たスキル</label>
-            </div>
-            <div class="floating-label">
-                <textarea id="growth_description" name="growth_description" readonly></textarea>
-                <label for="growth_description">スキルの詳細説明</label>
-            </div>
-            <input type="hidden" id="growth_id" name="growth_id">
         </form>
         <div class="button-group">
             <button type="button" id="edit-button-bottom">編集</button>
@@ -199,8 +216,9 @@
     <footer>
         <p>&copy; 2024 Imnormal</p>
     </footer>
+    <!-- JavaScriptファイルのリンクをボディの最後に配置 -->
     <script src="js/hamburgermenu.js"></script>
-    <script src="js/mypage.js"></script>
     <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
+    <script src="js/mypage.js"></script> <!-- タブ切り替えやフォーム操作のスクリプト -->
 </body>
 </html>
