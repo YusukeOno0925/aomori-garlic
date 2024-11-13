@@ -240,3 +240,21 @@ select:disabled {
         font-size: 10px;
     }
 }
+
+/* Chrome、Safari、Edge 対応 */
+.floating-label input[type="date"]::-webkit-datetime-edit {
+    text-align: left;
+    padding-left: 12px; /* 必要に応じてパディングを調整 */
+}
+
+/* Firefox 対応 */
+.floating-label input[type="date"]::-moz-datetime-edit {
+    text-align: left;
+    padding-left: 12px; /* 必要に応じてパディングを調整 */
+}
+
+/* Microsoft Edge（旧バージョン）対応 */
+.floating-label input[type="date"]::-ms-datetime-edit {
+    text-align: left;
+    padding-left: 12px; /* 必要に応じてパディングを調整 */
+}
