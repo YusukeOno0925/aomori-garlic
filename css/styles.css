@@ -13,6 +13,7 @@ body {
     padding: 0;
     background-color: var(--background-color);
     color: var(--text-color);
+    overflow-x: hidden; /* 横スクロールを無効にする */
 }
 
 /* ヘッダーのスタイル */
