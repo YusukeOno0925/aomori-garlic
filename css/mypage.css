@@ -62,9 +62,7 @@ form {
     margin-bottom: 20px;
 }
 
-.floating-label input[type="text"],
-.floating-label input[type="email"],
-.floating-label input[type="date"],
+.floating-label input,
 .floating-label select,
 .floating-label textarea {
     width: 100%;
@@ -76,6 +74,14 @@ form {
     color: var(--text-color);
     box-sizing: border-box;
     resize: vertical; /* テキストエリアのサイズ変更を縦方向のみに制限 */
+}
+
+/* 日付入力欄のスタイル調整 */
+.floating-label input[type="date"] {
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .floating-label label {
