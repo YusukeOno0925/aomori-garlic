@@ -7,6 +7,11 @@
     --card-border-color: #DDDDDD; /* カードの枠色 */
 }
 
+/* すべての要素にbox-sizingを適用 */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -19,12 +24,12 @@ body {
 /* ヘッダーのスタイル */
 header {
     background-color: #fff;
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px; /* ヘッダーの高さを固定 */
+    /* height: 60px; ヘッダーの高さを固定 */
     z-index: 100;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

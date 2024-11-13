@@ -79,6 +79,7 @@ form {
 /* 日付入力欄のスタイル調整 */
 .floating-label input[type="date"] {
     width: 100%;
+    text-align: left; /* 左揃えに設定 */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
