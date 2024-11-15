@@ -41,6 +41,7 @@ textarea {
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1rem;
+    margin-bottom: 1rem;
 }
 
 textarea {
@@ -66,7 +67,8 @@ button[type="submit"]:hover {
 }
 
 /* 投稿カードのスタイル */
-.post-card {
+.post-card,
+.popular-post-card {
     background-color: #ffffff;
     padding: 1.5rem;
     border-radius: 8px;
@@ -74,7 +76,8 @@ button[type="submit"]:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.post-card:hover {
+.post-card:hover,
+.popular-post-card:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -102,9 +105,12 @@ button[type="submit"]:hover {
 .post-content {
     font-size: 1rem;
     color: #555;
-    margin-bottom: 1rem;
-    word-wrap: break-word;
-    word-break: break-word;
+    line-height: 1.5;
+    overflow: hidden; /* 高さを超えた場合に隠す */
+    text-overflow: ellipsis; /* 長すぎる場合は省略記号を表示 */
+    white-space: pre-wrap; /* 改行を許可 */
+    word-wrap: break-word; /* 長い単語を途中で改行 */
+    max-height: 4.5em; /* 表示行数の高さを制限する */
 }
 
 .post-view-count {
@@ -127,20 +133,6 @@ button[type="submit"]:hover {
 .post-details {
     display: none;
     margin-top: 1rem;
-}
-
-.popular-post-card {
-    background-color: #ffffff;
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
-    position: relative;
-}
-
-.popular-post-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .popular-post-header {
@@ -174,15 +166,6 @@ button[type="submit"]:hover {
     font-size: 0.9rem;
     color: #888;
     margin-bottom: 1rem;
-}
-
-.post-content {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 4.5em;
 }
 
 .popular-post-footer {
@@ -219,11 +202,6 @@ button[type="submit"]:hover {
 
 .post-footer .expand-button:hover {
     text-decoration: underline;
-}
-
-.post-details {
-    display: none;
-    margin-top: 1rem;
 }
 
 /* リプライ部分のスタイル */
@@ -327,22 +305,6 @@ button[type="submit"]:hover {
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-input[type="text"],
-textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-}
-
 #posts h2 {
     margin-top: 50px; /* タイトルの上に余白を追加 */
 }
@@ -364,7 +326,8 @@ textarea {
         margin-left: 0;
     }
 
-    .post-card {
+    .post-card,
+    .popular-post-card {
         padding: 1rem;
     }
 
@@ -377,16 +340,13 @@ textarea {
         font-size: 0.8rem;
     }
 
-    .post-title {
-        white-space: normal;
-    }
-
     .post-content {
-        max-height: 3em; /* 2行分に縮小 */
-    }
-
-    .popular-post-card {
-        padding: 1rem;
+        font-size: 0.9rem; /* モバイルのフォントサイズを調整 */
+        max-height: 6em; /* モバイルでの高さ制限 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 
     .popular-post-header {
