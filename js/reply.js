@@ -22,29 +22,29 @@ window.fetchReplies = async function(postId) {
         data.replies.forEach(reply => {
             const replyElement = document.createElement('div');
             replyElement.classList.add('reply');
-        
+
             let replyContent = reply.content;
             let isLongContent = false;
             const maxLength = 100; // 最大表示文字数
-        
+
             if (replyContent.length > maxLength) {
                 isLongContent = true;
                 replyContent = replyContent.substring(0, maxLength) + '...';
             }
-        
+
             replyElement.innerHTML = `
                 <div class="reply-date">${reply.created_at}</div>
                 <div class="reply-author">${reply.author}</div>
                 <div class="reply-content">${replyContent}</div>
             `;
-        
+
             if (isLongContent) {
                 const readMoreLink = document.createElement('a');
                 readMoreLink.href = '#';
                 readMoreLink.textContent = '続きを読む';
                 readMoreLink.classList.add('read-more-link');
                 replyElement.appendChild(readMoreLink);
-        
+
                 readMoreLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     // フルテキストを表示
@@ -55,9 +55,12 @@ window.fetchReplies = async function(postId) {
                     readMoreLink.style.display = 'none';
                 });
             }
-        
+
             repliesContainer.appendChild(replyElement);
         });
+
+        // リプライフォームを確実に生成する
+        generateReplyForm(postId);
     } catch (error) {
         console.error('リプライの取得に失敗しました:', error);
     }
@@ -70,8 +73,8 @@ window.generateReplyForm = function(postId) {
     const replyForm = document.createElement('div');
     replyForm.classList.add('reply-form');
     replyForm.innerHTML = `
-        <input type="text" id="reply-author-${postId}" placeholder="名前" required>
-        <textarea id="reply-content-${postId}" placeholder="リプライ内容" required></textarea>
+        <input type="text" id="reply-author-${postId}" placeholder="名前（50文字以内）" required maxlength="50">
+        <textarea id="reply-content-${postId}" placeholder="リプライ内容（100文字以内）" required maxlength="100"></textarea>
         <button class="reply-submit-button" data-post-id="${postId}">送信</button>
     `;
     postDetails.appendChild(replyForm);
@@ -86,8 +89,26 @@ window.generateReplyForm = function(postId) {
 window.addReply = async function(postId) {
     const authorInput = document.getElementById(`reply-author-${postId}`);
     const contentInput = document.getElementById(`reply-content-${postId}`);
-    const author = authorInput.value;
-    const content = contentInput.value;
+    const author = authorInput.value.trim();
+    const content = contentInput.value.trim();
+
+    // フロントエンドでのバリデーション
+    if (author.length === 0) {
+        alert('名前を入力してください。');
+        return;
+    }
+    if (author.length > 50) {
+        alert('名前は50文字以内で入力してください。');
+        return;
+    }
+    if (content.length === 0) {
+        alert('リプライ内容を入力してください。');
+        return;
+    }
+    if (content.length > 100) {
+        alert('リプライ内容は100文字以内で入力してください。');
+        return;
+    }
 
     try {
         const response = await fetch('/reply', {

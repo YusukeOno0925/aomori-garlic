@@ -34,7 +34,7 @@
                 <li><a href="Home.html"><img src="images/home-icon.png" alt="ホームアイコン"> ホーム</a></li>
                 <li><a href="Career_overview.html"><img src="images/career-icon.png" alt="キャリアストーリーアイコン"> キャリアストーリー</a></li>
                 <li><a href="Board.html"><img src="images/board-icon.png" alt="掲示板アイコン"> 掲示板（Q&A）</a></li>
-                <li><a href="Mypage.html"><img src="images/board-icon.png" alt="マイページアイコン"> マイページ</a></li>
+                <li><a href="Mypage.html"><img src="images/mypage-icon.png" alt="マイページアイコン"> マイページ</a></li>
                 <li><a href="Contact.html"><img src="images/notification-icon.png" alt="お知らせアイコン"> お知らせ</a></li>
                 <li><a href="Contact.html"><img src="images/contact-icon.png" alt="問い合わせアイコン"> お問い合わせ</a></li>
             </ul>
@@ -43,7 +43,23 @@
 
     <main>
         <div class="content-wrapper">
-            <section id="post-form">
+            <!-- 人気のある投稿 -->
+            <section id="popular-posts">
+                <h2>よく見られている質問トップ3</h2>
+                <div id="popular-posts-container"></div>
+            </section>
+
+            <!-- 新しい投稿を促すボタン -->
+            <section id="ask-question">
+                <div class="ask-question-container">
+                    <button id="ask-question-button" class="ask-question-button">
+                        <img src="images/ask_new.png" alt="質問アイコン" class="ask-icon"> 気になることを聞いてみる
+                    </button>
+                </div>
+            </section>
+
+            <!-- 新しい投稿フォーム（初期状態は非表示） -->
+            <section id="post-form" style="display: none;">
                 <h2>新しい投稿</h2>
                 <form id="new-post-form">
                     <div class="form-group">
@@ -58,7 +74,23 @@
                 </form>
             </section>
 
-            <section id="posts">
+            <!-- 最新の投稿 -->
+            <section id="new-posts">
+                <h2>最新の投稿</h2>
+                <div id="new-posts-container"></div>
+            </section>
+
+            <!-- 投稿一覧を表示するボタン -->
+            <section id="toggle-posts-section">
+                <div class="ask-question-container">
+                    <button id="toggle-posts-button" class="ask-question-button">
+                        投稿一覧を見る
+                    </button>
+                </div>
+            </section>
+
+            <!-- 投稿一覧（初期は非表示） -->
+            <section id="posts" style="display: none;">
                 <h2>投稿一覧</h2>
                 <div id="posts-container"></div>
             </section>
