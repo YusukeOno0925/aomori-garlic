@@ -71,8 +71,11 @@ main {
 
 .hero-note {
     font-size: 0.9rem;
-    padding-bottom: 3em; /* フッターのスペースを確保 */
+    padding-bottom: 2em; /* フッターのスペースを確保 */
     color: #666;
+    position: relative; /* 位置を相対的に設定 */
+    margin-top: -10px; /* 画像に寄せるためのマイナスマージン */
+    top: -10px; /* 画像にさらに寄せるための調整 */
 }
 
 section {
@@ -455,7 +458,7 @@ svg {
 
     .hero-note {
         font-size: 0.7rem;
-        padding-bottom: 2rem; /* フッターのスペースを確保 */
+        padding-bottom: 1rem; /* フッターのスペースを確保 */
     }
 
     #life-path h2.section-title {
