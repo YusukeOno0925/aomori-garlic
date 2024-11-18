@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .attr("x", (d, i) => xScale(i))
                     .attr("y", height / 2 + 25)
                     .attr("text-anchor", "middle")
-                    .style("font-size", "12px")
+                    .style("font-size", "10px")
                     .each(function (d) {
                         const stageText = d3.select(this);
                         let stage = d.stage.length > 12 ? d.stage.substring(0, 12) + '...' : d.stage; // 最大文字数を12に制限
