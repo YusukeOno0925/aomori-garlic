@@ -11,7 +11,7 @@ main {
 #hero {
     background: url('../images/hero-image.jpg') no-repeat center center;
     background-size: cover;
-    height: 60vh; /* 高さを指定 */
+    height: 50vh; /* 高さを指定 */
     position: relative;
     display: flex;
     align-items: center;
@@ -71,6 +71,7 @@ main {
 
 .hero-note {
     font-size: 0.9rem;
+    padding-bottom: 3em; /* フッターのスペースを確保 */
     color: #666;
 }
 
@@ -429,7 +430,7 @@ svg {
 /* 450px以下の画面サイズに対応 */
 @media (max-width: 450px) {
     #hero {
-        height: 50vh;
+        height: 30vh;
     }
 
     .hero-content {
@@ -438,7 +439,7 @@ svg {
     }
 
     .hero-content h2 {
-        font-size: 1.0rem;
+        font-size: 1.2rem;
         margin: 0.1rem 0;
     }
 
@@ -450,6 +451,11 @@ svg {
     .cta-button {
         font-size: 0.8rem;
         padding: 0.6rem 1rem; /* ボタンのパディングを減少 */
+    }
+
+    .hero-note {
+        font-size: 0.7rem;
+        padding-bottom: 2rem; /* フッターのスペースを確保 */
     }
 
     #life-path h2.section-title {
