@@ -25,16 +25,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 return `${currentYear - birthYear}`;
             }
 
+            // ページネーション設定
+            let currentPage = 1;
+            const itemsPerPage = 10;
+
             function displayCareers(careers) {
                 const careerList = document.getElementById('career-list');
                 careerList.innerHTML = ''; // 前回の表示をクリア
-
-                careers.forEach(career => {
+    
+                // ページネーションに基づいて表示するアイテムを抽出
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const careersToDisplay = careers.slice(startIndex, endIndex);
+    
+                careersToDisplay.forEach(career => {
                     const age = calculateAge(career.birthYear);
-
+    
                     const listItem = document.createElement('li');
                     listItem.className = 'career-card';
-
+    
                     // カードをクリックすると閲覧回数をインクリメント
                     listItem.addEventListener('click', function () {
                         // サーバーに閲覧回数のインクリメントを通知
@@ -47,17 +56,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                         })
                         .catch(error => console.error('Error:', error));
-
+    
                         // 詳細ページに遷移
                         window.location.href = `Career_detail.html?id=${career.id}`;
                     });
-
+    
                     // 各ステージ（大学、企業）の情報を取得
                     let stages = career.careerStages.map(stage => ({
                         year: stage.year || '不明', // 年が不明な場合
                         stage: stage.stage || '不明' // ステージが不明な場合
                     }));
-
+    
                     // 閲覧回数の表示を追加
                     const viewCountSection = `
                     <div class="card-footer" style="position: absolute; right: 10px; bottom: 10px;">
@@ -65,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <span class="view-count">${career.view_count || 0} 回</span>
                     </div>
                     `;
-
+    
                     listItem.innerHTML = `
                         <div class="career-info">
                             <h2>${career.name || '不明'} (${age}歳)</h2>  <!-- 名前が不明な場合 -->
@@ -77,11 +86,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         ${viewCountSection}  <!-- 閲覧回数を表示 -->
                     `;
-
+    
                     careerList.appendChild(listItem);
-
+    
                     drawCareerPath(`#career-path-${career.id}`, stages);
                 });
+    
+                updatePaginationButtons(careers.length);
             }
 
             // キャリアパスを描画する関数はそのまま
@@ -173,6 +184,39 @@ document.addEventListener('DOMContentLoaded', function () {
                     .text('👤');
             }
 
+            function updatePaginationButtons(totalItems) {
+                const paginationContainer = document.getElementById('pagination-container');
+                paginationContainer.innerHTML = '';
+    
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
+                if (totalPages > 1) {
+                    if (currentPage > 1) {
+                        const prevButton = document.createElement('button');
+                        prevButton.textContent = '前へ';
+                        prevButton.addEventListener('click', () => {
+                            currentPage--;
+                            displayCareers(data.careers);
+                        });
+                        paginationContainer.appendChild(prevButton);
+                    }
+    
+                    const pageInfo = document.createElement('span');
+                    pageInfo.textContent = `ページ ${currentPage} / ${totalPages}`;
+                    paginationContainer.appendChild(pageInfo);
+    
+                    if (currentPage < totalPages) {
+                        const nextButton = document.createElement('button');
+                        nextButton.textContent = '次へ';
+                        nextButton.addEventListener('click', () => {
+                            currentPage++;
+                            displayCareers(data.careers);
+                        });
+                        paginationContainer.appendChild(nextButton);
+                    }
+                }
+            }
+
             displayCareers(data.careers);
 
             const searchInput = document.getElementById('search');
@@ -186,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
                     return name.includes(keyword) || education.includes(keyword) || stages || companies;
                 });
+                currentPage = 1;
                 displayCareers(filteredCareers);
             });
 
@@ -195,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? data.careers.filter(career =>
                         (career.companies || []).some(company => company.industry === selectedIndustry))
                     : data.careers;
+                currentPage = 1;
                 displayCareers(filteredCareers);
             });
         });

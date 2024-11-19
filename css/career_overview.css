@@ -90,6 +90,36 @@ li.career-card p {
     white-space: normal;            /* テキストを折り返す */
 }
 
+/* ページネーションボタンのスタイル */
+.pagination button {
+    background-color: #8ba141; /* ブランドカラーに合わせた背景色 */
+    color: #ffffff; /* ボタンの文字色を白にして読みやすく */
+    border: none; /* ボーダーを削除してすっきりとした見た目に */
+    padding: 0.8rem 1.5rem; /* ボタンのサイズを大きくして押しやすく */
+    margin: 0.5rem; /* ボタン間に適切な余白を設定 */
+    border-radius: 5px; /* 角を少し丸くして見た目を柔らかく */
+    cursor: pointer; /* ポインタを変更してクリック可能であることを示す */
+    font-weight: bold; /* 文字を太くして強調 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時のエフェクト */
+}
+
+.pagination button:hover {
+    background-color: #6e8c35; /* ホバー時に少し濃い色に変更 */
+    transform: translateY(-2px); /* ホバー時に少し浮き上がる効果を追加 */
+}
+
+.pagination button:disabled {
+    background-color: #cccccc; /* 無効なボタンはグレーに */
+    cursor: not-allowed; /* 無効状態を示す */
+    transform: none; /* ホバー時の浮き上がり効果を無効に */
+}
+
+.pagination span {
+    font-size: 1.2rem; /* 現在のページ表示を大きくして見やすく */
+    margin: 0 1rem; /* 前後のボタンとの間に適切な余白を追加 */
+    vertical-align: middle; /* テキストの位置を中央に揃える */
+}
+
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {

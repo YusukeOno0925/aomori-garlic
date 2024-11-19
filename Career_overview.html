@@ -47,9 +47,17 @@
             <option value="">業界を選択</option>
             <!-- JavaScriptで業界オプションを動的に生成 -->
         </select>
+
         <ul id="career-list">
             <!-- JavaScriptでキャリアリストを動的に生成 -->
         </ul>
+
+        <!-- ページネーションボタンの追加 -->
+        <div id="pagination-container" class="pagination">
+            <button id="prev-page" style="display: none;">前へ</button>
+            <span id="current-page">1</span> / <span id="total-pages"></span>
+            <button id="next-page" style="display: none;">次へ</button>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Imnormal</p>
