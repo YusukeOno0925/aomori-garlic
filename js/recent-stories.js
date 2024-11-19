@@ -230,7 +230,9 @@ function drawCareerPathD3(stages, screenWidth) {
         .each(function (d) {
             const stageText = d3.select(this);
             let stage = d.stage.length > 12 ? d.stage.substring(0, 12) + '...' : d.stage; // 最大文字数を12に制限
-            const lines = stage.match(/.{1,6}/g); // 6文字ごとに区切る
+            // 画面サイズによって切り返しの文字数を変更
+            const splitLength = screenWidth <= 450 ? 5 : 6;
+            const lines = stage.match(new RegExp(`.{1,${splitLength}}`, 'g')); // 切り返しの文字数を動的に設定
 
             if (lines.length > 2) {
                 lines[1] = lines[1].substring(0, 3) + '...'; // 2行目を3文字＋「...」に
