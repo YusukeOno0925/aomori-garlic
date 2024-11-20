@@ -146,8 +146,16 @@
 
                 <h3>キャリアの転機</h3>
                 <div class="floating-label">
-                    <textarea id="transition_type" name="transition_type" readonly></textarea>
-                    <label for="transition_type">転職や異動・出向、結婚などキャリアの転機はありましたか？（任意）</label>
+                    <select id="transition_type" name="transition_type" disabled required>
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="転職">転職</option>
+                        <option value="異動">異動</option>
+                        <option value="出向">出向</option>
+                        <option value="昇進">昇進</option>
+                        <option value="結婚・出産">結婚・出産</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <label for="transition_type">キャリアの転機となった主な理由を選択してください。（任意）</label>
                 </div>
                 <div class="floating-label">
                     <textarea id="transition_story" name="transition_story" readonly></textarea>
@@ -183,8 +191,19 @@
             <div id="tab-future" class="tab-content">
                 <h3>今後のキャリア志向</h3>
                 <div class="floating-label">
-                    <input type="text" id="career_type" name="career_type" readonly>
-                    <label for="career_type">今後のキャリア志向を選択する（必須）</label>
+                    <select id="career_type" name="career_type" disabled required>
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="専門職としてスキルを磨きたい">専門職としてスキルを磨きたい</option>
+                        <option value="マネジメント職に就きたい">マネジメント職に就きたい</option>
+                        <option value="起業を考えている">起業を考えている</option>
+                        <option value="ワークライフバランスを重視したい">ワークライフバランスを重視したい</option>
+                        <option value="その他">その他</option>
+                    </select>
+                    <label for="career_type">今後のキャリア志向を選択する（任意）</label>
+                </div>
+                <div class="floating-label" id="career_type_other_container" style="display: none;">
+                    <input type="text" id="career_type_other" name="career_type_other" readonly>
+                    <label for="career_type_other">その他のキャリア志向を入力してください</label>
                 </div>
                 <div class="floating-label">
                     <textarea id="career_description" name="career_description" readonly></textarea>
