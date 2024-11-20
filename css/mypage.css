@@ -224,7 +224,8 @@ select:disabled {
     .floating-label textarea,
     .floating-label input[type="text"],
     .floating-label input[type="email"],
-    .floating-label input[type="date"] {
+    .floating-label input[type="date"],
+    .floating-label select {
         padding-top: 28px; /* モバイル用にさらにパディングを増やす */
     }
 
@@ -235,7 +236,9 @@ select:disabled {
     .floating-label input:focus + label,
     .floating-label input:not(:placeholder-shown) + label,
     .floating-label textarea:focus + label,
-    .floating-label textarea:not(:placeholder-shown) + label {
+    .floating-label textarea:not(:placeholder-shown) + label,
+    .floating-label select:focus + label,
+    .floating-label select:not([value=""]) + label {
         top: -10px;
         font-size: 10px;
     }
