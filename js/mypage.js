@@ -137,8 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const isReadOnly = document.getElementById('username').hasAttribute('readonly');
     
         // 各フィールドをフローティングラベルの構造に変更
+        const idValue = jobExperience.id !== undefined && jobExperience.id !== null ? jobExperience.id : '';
         jobGroup.innerHTML = `
-            <input type="hidden" name="job_experiences[${jobExperienceIndex}][id]" value="${jobExperience.id || ''}">
+            <input type="hidden" name="job_experiences[${jobExperienceIndex}][id]" value="${idValue}">
             
             <!-- 企業名 -->
             <div class="floating-label">
@@ -346,8 +347,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         const industryValue = group.querySelector(`select[name="job_experiences[${index}][industry]"]`)?.value || '';
                         const isPrivate = group.querySelector(`input[name="job_experiences[${index}][is_private]"]`)?.checked || false;
 
+                        let idValue = group.querySelector(`input[name="job_experiences[${index}][id]"]`)?.value;
+                        idValue = idValue !== '' ? idValue : null;  // 空文字列の場合はnullを設定
+
                         const experience = {
-                            id: group.querySelector(`input[name="job_experiences[${index}][id]"]`)?.value || '',
+                            id: idValue,
                             company_name: group.querySelector(`input[name="job_experiences[${index}][company_name]"]`)?.value || '',
                             industry: industryValue,
                             position: group.querySelector(`input[name="job_experiences[${index}][position]"]`)?.value || '',

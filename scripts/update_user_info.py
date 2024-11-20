@@ -23,7 +23,8 @@ async def update_user_info(
           data.get('birthdate'), data.get('gender'), data.get('newsletter_subscription'), current_user.id))
 
     # 学歴情報の処理
-    if 'education_id' in data and data['education_id']:  # IDが存在すれば更新
+    education_id = data.get('education_id')
+    if education_id is not None and education_id != '':
         cursor.execute("""
             UPDATE education SET 
                 institution = %s, degree = %s, major = %s, education_start = %s, education_end = %s, hide_institution = %s
@@ -41,7 +42,8 @@ async def update_user_info(
 
     # 職歴情報の処理
     for experience in data['job_experiences']:
-        if 'id' in experience and experience['id']:  # IDが存在すれば更新
+        experience_id = experience.get('id')
+        if experience_id is not None and experience_id != '':
             cursor.execute("""
                 UPDATE job_experiences SET 
                     company_name = %s, industry = %s, position = %s, work_start_period = %s, work_end_period = %s,
