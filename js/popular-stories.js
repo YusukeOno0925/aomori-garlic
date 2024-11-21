@@ -42,18 +42,33 @@ function fetchPopularCareerStories() {
     fetch('/popular-career-stories/')
         .then((response) => response.json())
         .then((data) => {
-            // 人気のキャリアストーリーを表示
-            data.careers.forEach((story) => {
-                const filteredStory = filterPrivateInfo(story);
-                const storyCard = createStoryCard(filteredStory);
-                popularStoriesContainer.appendChild(storyCard);
+            const userIds = data.careers.map(story => story.id);
+            // ユーザーのオンラインステータスを取得
+            fetch('/users-status/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userIds)
+            })
+            .then(response => response.json())
+            .then(statusData => {
+                if (!statusData || !statusData.statuses) {
+                    console.error('オンラインステータスの取得に失敗しました');
+                    return;
+                }
+                // オンラインステータスを各ストーリーに追加
+                data.careers.forEach((story) => {
+                    story.activity_status = statusData.statuses[story.id] || 'inactive';
+                    const filteredStory = filterPrivateInfo(story);
+                    const storyCard = createStoryCard(filteredStory);
+                    popularStoriesContainer.appendChild(storyCard);
+                });
+
+                adjustSVGWidth();
+
+                if (window.innerWidth <= 768) {
+                    setupIndicators('popular-stories', 'popular-stories-list');
+                }
             });
-
-            adjustSVGWidth();  // SVGのサイズを調整
-
-            if (window.innerWidth <= 768) {
-                setupIndicators('popular-stories', 'popular-stories-list');
-            }
         })
         .catch((error) => console.error('Error fetching popular career stories:', error));
 }
@@ -110,9 +125,14 @@ function createStoryCard(story) {
     const latestIncome = story.income?.length > 0 ? story.income[story.income.length - 1].income : "不明";
     const age = story.birthYear ? calculateAge(story.birthYear) : '不明';
 
+    // オンラインステータスの取得
+    const activityStatus = story.activity_status || 'inactive';
+
     const cardHeader = `
         <div class="card-header">
-            <h3>${story.name} (${age}歳)</h3>
+            <h3>${story.name} (${age}歳)
+                <span class="status-dot ${activityStatus}"></span>
+            </h3>
             <p>職業: ${story.profession}</p>
             <p>年収: ${latestIncome}</p>
         </div>

@@ -41,18 +41,33 @@ function fetchRecentCareerStories() {
     fetch('/recent-career-stories/')
         .then((response) => response.json())
         .then((data) => {
-            // 最近のキャリアストーリーを表示
-            data.careers.forEach((story) => {
-                const filteredStory = filterPrivateInfo(story);
-                const storyCard = createStoryCard(filteredStory);
-                recentStoriesContainer.appendChild(storyCard);
+            const userIds = data.careers.map(story => story.id);
+            // ユーザーのオンラインステータスを取得
+            fetch('/users-status/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userIds)
+            })
+            .then(response => response.json())
+            .then(statusData => {
+                if (!statusData || !statusData.statuses) {
+                    console.error('オンラインステータスの取得に失敗しました');
+                    return;
+                }
+                // オンラインステータスを各ストーリーに追加
+                data.careers.forEach((story) => {
+                    story.activity_status = statusData.statuses[story.id] || 'inactive';
+                    const filteredStory = filterPrivateInfo(story);
+                    const storyCard = createStoryCard(filteredStory);
+                    recentStoriesContainer.appendChild(storyCard);
+                });
+
+                adjustSVGWidth();
+
+                if (window.innerWidth <= 768) {
+                    setupIndicators('recent-stories', 'recent-stories-list');
+                }
             });
-
-            adjustSVGWidth();  // SVGのサイズを調整
-
-            if (window.innerWidth <= 768) {
-                setupIndicators('recent-stories', 'recent-stories-list');
-            }
         })
         .catch((error) => console.error('Error fetching recent career stories:', error));
 }
@@ -109,9 +124,14 @@ function createStoryCard(story) {
     const latestIncome = story.income?.length > 0 ? story.income[story.income.length - 1].income : "不明";
     const age = story.birthYear ? calculateAge(story.birthYear) : '不明';
 
+    // オンラインステータスの取得
+    const activityStatus = story.activity_status || 'inactive';
+
     const cardHeader = `
         <div class="card-header">
-            <h3>${story.name} (${age}歳)</h3>
+            <h3>${story.name} (${age}歳)
+                <span class="status-dot ${activityStatus}"></span>
+            </h3>
             <p>職業: ${story.profession}</p>
             <p>年収: ${latestIncome}</p>
         </div>
@@ -230,7 +250,7 @@ function drawCareerPathD3(stages, screenWidth) {
         .each(function (d) {
             const stageText = d3.select(this);
             let stage = d.stage.length > 12 ? d.stage.substring(0, 12) + '...' : d.stage; // 最大文字数を12に制限
-            
+
             // ステージ数が4つ以上の場合、切り返しの文字数を5文字に変更
             const splitLength = stages.length >= 4 ? 5 : 6;
             const lines = stage.match(new RegExp(`.{1,${splitLength}}`, 'g')); // 切り返しの文字数を動的に設定

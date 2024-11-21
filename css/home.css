@@ -327,6 +327,27 @@ svg {
     background-color: var(--accent-color);
 }
 
+/* オンラインステータスのドットのスタイル */
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.status-dot.online {
+    background-color: green;
+}
+
+.status-dot.recently_active {
+    background-color: yellow;
+}
+
+.status-dot.inactive {
+    background-color: red;
+}
+
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
     h2.section-title {

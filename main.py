@@ -21,6 +21,8 @@ from scripts.career_detail import router as career_detail_router
 from scripts.board import router as board_router
 from scripts.reply_routes import router as reply_router
 from scripts.comments import router as comments_router
+from scripts.online_status import router as online_status_router
+from scripts.online_status import update_last_active  # ミドルウェア関数をインポート
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -48,6 +50,7 @@ app.include_router(career_detail_router)
 app.include_router(board_router)
 app.include_router(reply_router)
 app.include_router(comments_router)
+app.include_router(online_status_router)
 
 # CORSの設定
 app.add_middleware(
@@ -59,6 +62,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ミドルウェアをアプリケーションに追加
+app.middleware("http")(update_last_active)
 
 # トップページのルート
 @app.get("/")
