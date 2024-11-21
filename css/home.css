@@ -334,6 +334,7 @@ svg {
     height: 10px;
     border-radius: 50%;
     margin-left: 5px;
+    vertical-align: middle; /* テキストと垂直方向を揃える */
 }
 
 .status-dot.online {
@@ -346,6 +347,22 @@ svg {
 
 .status-dot.inactive {
     background-color: red;
+}
+
+/* ステータス凡例のスタイル */
+.status-legend {
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;  /* テキストを中央揃え */
+}
+
+.status-legend .status-dot {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.status-legend span {
+    margin-right: 15px;
 }
 
 /* レスポンシブデザイン */
