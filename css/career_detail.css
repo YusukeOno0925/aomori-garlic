@@ -239,6 +239,54 @@ button:hover {
     display: inline;
 }
 
+/* メッセージボックスのスタイル */
+.message-box {
+    position: fixed;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%) translateY(-20px); /* 初期位置 */
+    width: 300px;
+    max-width: 90%;
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: #fff;
+    z-index: 1000; /* 前面に表示 */
+    font-size: 18px;
+    opacity: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.message-box.show {
+    opacity: 0.95;
+    transform: translateX(50%) translateY(0); /* 表示位置 */
+}
+
+.message-box.success {
+    background-color: var(--main-color); /* サイトのメインカラー */
+}
+
+.message-box.error {
+    background-color: var(--accent-color); /* サイトのアクセントカラー */
+}
+
+/* 追加: ローディングインジケーターのスタイル（必要に応じて） */
+#loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 2000;
+    font-size: 18px;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 /* レスポンシブデザイン */
 @media (max-width: 767px) {
     main {

@@ -2,6 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends, Form
 from .register_user import get_db_connection
 from .auth import get_current_user
 from fastapi.responses import JSONResponse
+from scripts.email_config import fast_mail, EmailSchema
+from fastapi_mail import MessageSchema
+from fastapi import APIRouter, HTTPException, Depends, Form, BackgroundTasks
 
 router = APIRouter()
 
@@ -70,22 +73,54 @@ async def get_comments(career_id: int, page: int = 1, per_page: int = 10):
 @router.post("/comments/{career_id}")
 async def post_comment(
     career_id: int,
+    background_tasks: BackgroundTasks,
     content: str = Form(...),
     parent_comment_id: int = Form(None),
     current_user = Depends(get_current_user)
 ):
     db = get_db_connection()
     try:
-        cursor = db.cursor()
+        cursor = db.cursor(dictionary=True)
+        # コメントをデータベースに挿入
         cursor.execute("""
             INSERT INTO comments (user_id, career_id, content, parent_comment_id, created_at, updated_at)
             VALUES (%s, %s, %s, %s, NOW(), NOW())
         """, (current_user.id, career_id, content, parent_comment_id))
         db.commit()
-        return JSONResponse(content={"message": "コメントが投稿されました"})
+
+        # 挿入されたコメントのIDを取得
+        comment_id = cursor.lastrowid
+
+        # キャリア所有者の情報を取得（直接 users テーブルから取得）
+        cursor.execute("""
+            SELECT username, email FROM users WHERE id = %s
+        """, (career_id,))
+        owner_info = cursor.fetchone()
+        if not owner_info:
+            raise HTTPException(status_code=404, detail="キャリア所有者が見つかりませんでした")
+
+        owner_email = owner_info.get('email')
+        owner_username = owner_info.get('username')
+
+        # メールアドレスが取得できない場合の対処
+        if not owner_email:
+            print("キャリア所有者のメールアドレスが見つかりませんでした。")
+            # メール送信をスキップするか、適切な処理を行います。
+        else:
+            # 返信メール送信をバックグラウンドタスクとして追加
+            background_tasks.add_task(
+                send_email_notification,
+                recipient_email=owner_email,
+                recipient_name=owner_username,
+                commenter_name=current_user.username,
+                content=content,
+                career_id=career_id
+            )
+
+        return JSONResponse(content={"message": "コメントが投稿されました", "comment_id": comment_id})
     except Exception as e:
         print(f"Error posting comment: {e}")
-        raise HTTPException(status_code=500, detail="Failed to post comment")
+        raise HTTPException(status_code=500, detail="コメントの投稿に失敗しました")
     finally:
         cursor.close()
         db.close()
@@ -130,3 +165,37 @@ async def toggle_like(
     finally:
         cursor.close()
         db.close()
+
+def send_email_notification(
+    recipient_email: str,
+    recipient_name: str,
+    commenter_name: str,
+    content: str,
+    career_id: int
+):
+    email_subject = "あなたのキャリアに新しいコメントがありました"
+    email_body = f"""
+    <p>{recipient_name}様、</p>
+    <p>{commenter_name}さんがあなたのキャリアにコメントしました：</p>
+    <p>「{content}」</p>
+    <p>詳細を見るには、以下のリンクをクリックしてください：</p>
+    <p><a href="https://yourdomain.com/Career_detail.html?id={career_id}">キャリア詳細ページを見る</a></p>
+    <hr>
+    <p>※このメールは自動送信されています。</p>
+    """
+
+    message = MessageSchema(
+        subject=email_subject,
+        recipients=[recipient_email],  # キャリア所有者のみ
+        bcc=["yusuke.ono@imnormal.co.jp"],  # 管理者はBCCで送信
+        body=email_body,
+        subtype="html"
+    )
+
+    try:
+        # 非同期関数を同期的に呼び出す
+        import asyncio
+        asyncio.run(fast_mail.send_message(message))
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        # メール送信に失敗しても、コメント投稿自体は成功させます

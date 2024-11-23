@@ -1,3 +1,29 @@
+// 成功メッセージを表示する関数
+function showSuccessMessage(message) {
+    const messageBox = document.createElement('div');
+    messageBox.className = 'message-box success';
+    messageBox.textContent = message;
+    document.body.appendChild(messageBox);
+
+    // 3秒後にメッセージを自動的に消す
+    setTimeout(() => {
+        messageBox.remove();
+    }, 3000);
+}
+
+// エラーメッセージを表示する関数
+function showErrorMessage(message) {
+    const messageBox = document.createElement('div');
+    messageBox.className = 'message-box error';
+    messageBox.textContent = message;
+    document.body.appendChild(messageBox);
+
+    // 5秒後にメッセージを自動的に消す
+    setTimeout(() => {
+        messageBox.remove();
+    }, 5000);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const careerId = urlParams.get('id');
@@ -500,9 +526,23 @@ function handleComments(careerId, isLoggedIn) {
         submitComment.addEventListener('click', function () {
             const newComment = commentText.value.trim();
             if (newComment) {
+                // 楽観的UI更新：コメントを即座に表示
+                const temporaryComment = {
+                    id: 'temp-' + Date.now(), // 一時的なID
+                    content: newComment,
+                    created_at: new Date().toISOString(),
+                    username: 'あなた', // fixed value
+                    like_count: 0,
+                    replies: []
+                };
+                const commentItem = createCommentElement(temporaryComment);
+                commentList.insertBefore(commentItem, commentList.firstChild); // 一番上に追加
+    
+                commentText.value = ''; // 入力フィールドをクリア
+    
                 const formData = new FormData();
                 formData.append('content', newComment);
-
+    
                 fetch(`/comments/${careerId}`, {
                     method: 'POST',
                     body: formData,
@@ -510,25 +550,30 @@ function handleComments(careerId, isLoggedIn) {
                 })
                 .then(response => {
                     if (!response.ok) {
-                        if (response.status === 401) {
-                            alert('コメントを投稿するにはログインが必要です。');
-                        } else {
-                            alert('コメントの投稿に失敗しました。');
-                        }
-                        throw new Error('コメントの投稿に失敗しました。');
+                        return response.json().then(data => {
+                            showErrorMessage(data.detail || 'コメントの投稿に失敗しました。');
+                            throw new Error(data.detail || 'コメントの投稿に失敗しました。');
+                        });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    commentText.value = '';
-                    currentPage = 1; // 新しいコメントを表示するためにページをリセット
-                    fetchComments(); // コメント一覧を再取得
+                    // サーバーから返ってきた正式なコメントIDで更新
+                    temporaryComment.id = data.comment_id;
+                    commentItem.dataset.commentId = data.comment_id;
+                    showSuccessMessage('コメントが投稿されました。');
+    
+                    // コメントリストを再取得して最新の状態に更新
+                    fetchComments();
                 })
                 .catch(error => {
                     console.error('コメントの投稿中にエラーが発生しました:', error);
+                    // 一時的なコメントを削除
+                    commentItem.remove();
+                    showErrorMessage('コメントの投稿に失敗しました。');
                 });
             } else {
-                alert('コメントを入力してください。');
+                showErrorMessage('コメントを入力してください。');
             }
         });
     } else {
