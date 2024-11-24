@@ -242,6 +242,9 @@ function drawChart(companies) {
                     max: yAxisMaxIncomeWithPadding,
                     ticks: {
                         stepSize: incomeStepSize,
+                        font: {
+                            size: window.innerWidth <= 450 ? 8 : 10 // 画面幅に応じてフォントサイズを調整
+                        },
                         callback: function(value) {
                             if (value <= yAxisMaxIncome) {
                                 return value + '万円';
@@ -261,6 +264,9 @@ function drawChart(companies) {
                     max: 5.5,
                     ticks: {
                         stepSize: 1,
+                        font: {
+                            size: window.innerWidth <= 450 ? 8 : 10 // 画面幅に応じてフォントサイズを調整
+                        },
                         callback: function(value) {
                             if (value <= 5) {
                                 return value + '点';
@@ -270,9 +276,13 @@ function drawChart(companies) {
                     },
                     position: 'right',
                     grid: {
-                        drawTicks: true,
-                        drawBorder: true,
-                        color: 'rgba(0, 0, 0, 0.1)'
+                        color: function(context) {
+                            if (context.tick.value > 5) {
+                                return 'rgba(0,0,0,0)'; // 5を超えるグリッド線は透明に
+                            }
+                            return 'rgba(0, 0, 0, 0.1)';
+                        },
+                        drawBorder: false // ボーダー線を非表示
                     }
                 }
             },
