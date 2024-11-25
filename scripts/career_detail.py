@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from .register_user import get_db_connection
 from fastapi.responses import JSONResponse
+from datetime import date
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ async def get_career_detail(career_id: int):
 
         # 全職歴データを取得するクエリ
         cursor.execute("""
-            SELECT u.id, u.username, j.company_name, j.position, j.salary,
+            SELECT u.id, u.username, u.birthdate, j.company_name, j.position, j.salary,
                 j.satisfaction_level, j.work_start_period, j.work_end_period, j.is_private,
                 c.start_reason, c.first_job_feedback, t.transition_type, t.transition_story,
                 t.reason_for_job_change, t.job_experience_feedback,
@@ -42,6 +43,14 @@ async def get_career_detail(career_id: int):
         if not career_data or not latest_job_category_data:
             raise HTTPException(status_code=404, detail="Career not found")
 
+        # 年齢の計算
+        birthdate = career_data[0].get("birthdate")
+        if birthdate:
+            today = date.today()
+            age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+        else:
+            age = "N/A"
+
         # null値を適切に処理する
         for row in career_data:
             if row['salary'] is None:
@@ -51,6 +60,7 @@ async def get_career_detail(career_id: int):
 
         response_data = {
             "name": career_data[0]["username"],
+            "age": age,
             "profession": latest_job_category_data["job_category"],  # 最新の職種を使用
             "career_experiences": {
                 "start_reason": career_data[0]["start_reason"],

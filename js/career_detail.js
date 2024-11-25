@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const profileSection = document.getElementById('profile-section');
             profileSection.innerHTML = `
                 <div class="detail">
-                    <p><strong>名前:</strong> ${data.name}</p>
+                <p><strong>名前:</strong> ${escapeHTML(data.name)} ${data.age !== undefined ? `(${data.age}歳)` : ''}</p>
                     <p><strong>職業:</strong> ${data.profession}</p>
                 </div>
             `;
