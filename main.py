@@ -23,6 +23,8 @@ from scripts.reply_routes import router as reply_router
 from scripts.comments import router as comments_router
 from scripts.online_status import router as online_status_router
 from scripts.online_status import update_last_active  # ミドルウェア関数をインポート
+from scripts.password_reset import router as password_reset_router
+from scripts.auth import router as auth_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -51,6 +53,8 @@ app.include_router(board_router)
 app.include_router(reply_router)
 app.include_router(comments_router)
 app.include_router(online_status_router)
+app.include_router(auth_router)
+app.include_router(password_reset_router)
 
 # CORSの設定
 app.add_middleware(
@@ -223,6 +227,16 @@ async def stats():
 @app.get("/Board.html")
 async def board_page():
     return FileResponse("Board.html")
+
+# Forgot_password.html のエンドポイントを追加
+@app.get("/Forgot_password.html")
+async def forgot_password():
+    return FileResponse("Forgot_password.html")
+
+# Reset_password.html のエンドポイントを追加
+@app.get("/Reset_password.html")
+async def reset_password():
+    return FileResponse("Reset_password.html")
 
 
 @app.get("/get-environment")

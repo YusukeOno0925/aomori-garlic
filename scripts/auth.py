@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException, Request, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
@@ -13,6 +13,8 @@ from config import db_host, db_user, db_password, db_name, db_port
 
 # ログの設定
 logger = logging.getLogger(__name__)
+
+router = APIRouter()
 
 # 秘密鍵とアルゴリズムの設定（JWT用）
 SECRET_KEY = "aP8jS9f3hT6KlmN7QpX5zV7bW9rXyT3gPzR4tB6kJcM2nPdH8sJr"  # 例として生成されたランダムな文字列
@@ -66,14 +68,21 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 # ユーザーの検索
-def get_user_from_db(username: str):
+def get_user_from_db(username: Optional[str] = None, email: Optional[str] = None, user_id: Optional[int] = None):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     
-    # クエリの実行
-    cursor.execute("SELECT id, username, email, password FROM users WHERE username = %s", (username,))
-    
-    # 結果を1行だけフェッチ
+    if user_id:
+        cursor.execute("SELECT id, username, email, password FROM users WHERE id = %s", (user_id,))
+    elif username:
+        cursor.execute("SELECT id, username, email, password FROM users WHERE username = %s", (username,))
+    elif email:
+        cursor.execute("SELECT id, username, email, password FROM users WHERE email = %s", (email,))
+    else:
+        cursor.close()
+        connection.close()
+        return None
+
     user = cursor.fetchone()
 
     # 残りの行があればフェッチして処理する
