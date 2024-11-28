@@ -96,11 +96,11 @@ button:hover {
     margin-bottom: 20px;
 }
 
-main p {
+main > p {
     align-self: flex-start;
     width: 100%;
-    padding: 0 1rem; /* 左右に同じパディングを追加 */
-    margin: 1rem 0; /* 上下に1remのマージンを追加 */
+    padding: 0 1rem;
+    margin: 1rem 0;
     color: #333;
 }
 

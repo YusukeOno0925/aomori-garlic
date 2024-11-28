@@ -109,20 +109,25 @@ async def register_user(username: str = Form(...), email: str = Form(...), passw
         # サーバーエラーとして500ステータスコードを返す
         return JSONResponse(content={"message": "サーバーエラーが発生しました。"}, status_code=500)
 
+class EmailPasswordRequestForm:
+    def __init__(self, email: str = Form(...), password: str = Form(...)):
+        self.email = email
+        self.password = password
+
 # トークン取得のエンドポイント（ログイン処理）
 @app.post("/login/")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    db = get_db_connection()  # データベース接続を取得
-    user = await authenticate_user(db, form_data.username, form_data.password)  # すべての引数を渡す
+async def login_for_access_token(form_data: EmailPasswordRequestForm = Depends()):
+    db = get_db_connection()
+    user = await authenticate_user(db, email=form_data.email, password=form_data.password)
     if not user:
         raise HTTPException(
             status_code=400,
-            detail="Incorrect username or password",
+            detail="メールアドレスまたはパスワードが正しくありません。",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.email}, expires_delta=access_token_expires
     )
     response = RedirectResponse(url="/Home.html", status_code=303)
     response.set_cookie(key="access_token", value=access_token, httponly=True)

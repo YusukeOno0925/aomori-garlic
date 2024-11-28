@@ -21,7 +21,7 @@ document.getElementById('password-reset-form').addEventListener('submit', functi
     }
 
     // ロード中の表示
-    document.getElementById('loading-indicator').style.display = 'block';
+    document.getElementById('loading-indicator').style.display = 'flex';
     document.getElementById('message').style.display = 'none';
 
     fetch('/password-reset/', {

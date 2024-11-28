@@ -105,19 +105,15 @@ def get_user_from_db(username: Optional[str] = None, email: Optional[str] = None
 async def get_current_user(token: str = Depends(get_token_from_request)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise HTTPException(status_code=401, detail="無効なトークン")
-        
     except JWTError as e:
         logger.error(f"JWTのエラー: {str(e)}")
         raise HTTPException(status_code=401, detail="無効なトークンまたは期限切れ")
-    
-    # データベースからユーザー情報を取得
-    user = get_user_from_db(username=username)
+    user = get_user_from_db(email=email)
     if user is None:
         raise HTTPException(status_code=401, detail="ユーザーが見つかりません")
-    
     return user
 
 # パスワードの検証
@@ -125,8 +121,8 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 # ユーザー認証
-async def authenticate_user(db, username: str, password: str):
-    user = get_user_from_db(username)
+async def authenticate_user(db, email: str, password: str):
+    user = get_user_from_db(email=email)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
