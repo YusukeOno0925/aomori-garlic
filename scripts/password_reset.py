@@ -17,6 +17,14 @@ logging.basicConfig(level=logging.DEBUG)  # ログレベルをDEBUGに設定
 # 環境変数の読み込み
 load_dotenv()
 
+# 環境に応じたBASE_URLの設定
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+if ENVIRONMENT == "production":
+    BASE_URL = os.getenv("PRODUCTION_BASE_URL", "https://www.imnormal.jp")
+else:
+    BASE_URL = os.getenv("LOCAL_BASE_URL", "http://127.0.0.1:5501")
+
 router = APIRouter()
 
 # パスワードリセット用の設定
@@ -87,7 +95,6 @@ async def password_reset_request(request: PasswordResetRequest):
     reset_token = create_password_reset_token(user.id)
 
     # リセットリンクの生成
-    BASE_URL = os.getenv("BASE_URL", "http://localhost:5501")  # `.env` ファイルで設定
     reset_link = f"{BASE_URL}/Reset_password.html?token={reset_token}"
 
     # メールの内容を MessageSchema で構築
