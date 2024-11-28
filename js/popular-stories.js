@@ -67,6 +67,12 @@ function fetchPopularCareerStories() {
 
                 if (window.innerWidth <= 768) {
                     setupIndicators('popular-stories', 'popular-stories-list');
+                    // 初期表示時にインジケータを更新
+                    const cardsContainer = document.getElementById('popular-stories-list');
+                    const cardWidth = cardsContainer.querySelector('.card').offsetWidth + parseInt(getComputedStyle(cardsContainer.querySelector('.card')).marginRight);
+                    const scrollLeft = cardsContainer.scrollLeft;
+                    const index = Math.round(scrollLeft / cardWidth);
+                    updateIndicators('popular-stories', index);
                 }
             });
         })
@@ -157,7 +163,8 @@ function createStoryCard(story) {
 // インジケータを設定する関数
 function setupIndicators(sectionId, containerId) {
     const indicatorsContainer = document.getElementById(`${sectionId}-indicators`);
-    const cards = document.querySelectorAll(`#${containerId} .card`);
+    const cardsContainer = document.getElementById(containerId);
+    const cards = cardsContainer.querySelectorAll('.card');
 
     if (!indicatorsContainer || !cards.length) return;
 
@@ -168,10 +175,18 @@ function setupIndicators(sectionId, containerId) {
         indicator.className = 'indicator';
         if (index === 0) indicator.classList.add('active');
         indicator.addEventListener('click', () => {
-            card.scrollIntoView({ behavior: 'smooth' });
+            card.scrollIntoView({ behavior: 'smooth', inline: 'center' });
             updateIndicators(sectionId, index);
         });
         indicatorsContainer.appendChild(indicator);
+    });
+
+    // スクロールイベントリスナーを追加
+    cardsContainer.addEventListener('scroll', () => {
+        const cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(cards[0]).marginRight);
+        const scrollLeft = cardsContainer.scrollLeft;
+        const index = Math.round(scrollLeft / cardWidth);
+        updateIndicators(sectionId, index);
     });
 }
 
