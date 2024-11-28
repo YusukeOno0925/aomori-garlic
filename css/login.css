@@ -96,6 +96,14 @@ button:hover {
     margin-bottom: 20px;
 }
 
+main p {
+    align-self: flex-start;
+    width: 100%;
+    padding: 0 1rem; /* 左右に同じパディングを追加 */
+    margin: 1rem 0; /* 上下に1remのマージンを追加 */
+    color: #333;
+}
+
 /* スピナーのアニメーション */
 @keyframes spin {
     0% { transform: rotate(0deg); }
