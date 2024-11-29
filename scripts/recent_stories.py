@@ -25,7 +25,7 @@ async def get_recent_career_stories():
             SELECT id
             FROM users
             ORDER BY created_at DESC
-            LIMIT 3
+            LIMIT 5
         ) recent ON u.id = recent.id
         ORDER BY u.created_at DESC, j.work_start_period ASC;
         """

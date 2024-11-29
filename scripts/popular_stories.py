@@ -24,7 +24,7 @@ async def get_popular_career_stories():
                 LEFT JOIN profile_views pv ON u.id = pv.user_id
                 GROUP BY u.id  -- ユーザーごとにグループ化
                 ORDER BY view_count DESC  -- 閲覧回数で並べ替え
-                LIMIT 3  -- 人気のキャリアを持つ3ユーザーを取得
+                LIMIT 5  -- 人気のキャリアを持つ5ユーザーを取得
             ) AS popular_users
         )
         ORDER BY view_count DESC, j.work_start_period ASC -- 閲覧回数順に並べ、各ユーザーのキャリアは時系列で取得

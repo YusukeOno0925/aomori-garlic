@@ -72,6 +72,8 @@ function fetchRecentCareerStories() {
                     const scrollLeft = cardsContainer.scrollLeft;
                     const index = Math.round(scrollLeft / cardWidth);
                     updateIndicators('recent-stories', index);
+                } else {
+                    setupIndicators('recent-stories', 'recent-stories-list');
                 }
             });
         })
@@ -174,7 +176,9 @@ function setupIndicators(sectionId, containerId) {
         indicator.className = 'indicator';
         if (index === 0) indicator.classList.add('active');
         indicator.addEventListener('click', () => {
-            card.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            const cardsToScroll = window.innerWidth > 768 ? index : index;
+            const scrollAmount = cardsToScroll * (cards[0].offsetWidth + parseInt(getComputedStyle(cards[0]).marginRight));
+            cardsContainer.scrollTo({ left: scrollAmount, behavior: 'smooth' });
             updateIndicators(sectionId, index);
         });
         indicatorsContainer.appendChild(indicator);
@@ -182,9 +186,9 @@ function setupIndicators(sectionId, containerId) {
 
     // スクロールイベントリスナーを追加
     cardsContainer.addEventListener('scroll', () => {
-        const cardWidth = cards[0].offsetWidth + parseInt(getComputedStyle(cards[0]).marginRight);
+        const cardWidthWithMargin = cards[0].offsetWidth + parseInt(getComputedStyle(cards[0]).marginRight);
         const scrollLeft = cardsContainer.scrollLeft;
-        const index = Math.round(scrollLeft / cardWidth);
+        const index = Math.round(scrollLeft / cardWidthWithMargin);
         updateIndicators(sectionId, index);
     });
 }

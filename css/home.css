@@ -145,12 +145,14 @@ svg {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto; /* 横スクロールを許可 */
+    scroll-snap-type: x mandatory; /* スクロールスナップを有効化 */
     gap: 1rem;
     padding: 1rem;
 }
 
 .card {
-    flex: 1 1 calc(33.333% - 1rem);
+    flex: 0 0 calc((100% / 3) - 1rem); /* 一度に3枚表示 */
+    scroll-snap-align: center; /* カードが中央にスナップ */
     box-sizing: border-box;
     background: var(--card-background-color);
     border: 1px solid var(--card-border-color);
