@@ -42,7 +42,7 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
 
         # 職歴情報の取得
         cursor.execute("""
-            SELECT id, company_name, industry, position, work_start_period, work_end_period,
+            SELECT id AS id, company_name, industry, position, work_start_period, work_end_period,
                     salary, job_category, job_sub_category, satisfaction_level, is_private
             FROM job_experiences 
             WHERE user_id = %s

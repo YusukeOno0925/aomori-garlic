@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const isReadOnly = document.getElementById('username').hasAttribute('readonly');
     
         // 各フィールドをフローティングラベルの構造に変更
-        const idValue = jobExperience.id !== undefined && jobExperience.id !== null ? jobExperience.id : '';
+        const idValue = jobExperience.id !== undefined && jobExperience.id !== null && jobExperience.id !== '' ? jobExperience.id : '';
         jobGroup.innerHTML = `
             <input type="hidden" name="job_experiences[${jobExperienceIndex}][id]" value="${idValue}">
             
