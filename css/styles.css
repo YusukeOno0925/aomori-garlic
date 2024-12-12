@@ -148,16 +148,46 @@ main {
     margin-left: auto; /* ハンバーガーメニューを右寄せ */
 }
 
+/* フッター全体のスタイル */
 footer {
-    background-color: var(--accent-color);
-    color: white;
-    text-align: center;
-    padding: 0.5rem;
+    background-color: var(--accent-color); /* アクセントカラー */
+    color: white; /* テキスト色 */
+    text-align: center; /* テキストを中央揃え */
+    padding: 1rem 0; /* 上下のパディングを増やす */
     position: relative;
     width: 100%;
     bottom: 0;
     left: 0;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* フッターのコンテンツをフレックスボックスで中央揃え */
+.footer-content {
+    display: flex;
+    justify-content: center; /* 中央揃え */
+    align-items: center; /* 垂直方向に中央揃え */
+    max-width: 1000px; /* フッターの最大幅 */
+    margin: 0 auto; /* コンテンツを中央に配置 */
+    padding: 0; /* 既存のパディングをリセット */
+}
+
+/* フッター内のアイテムを横並びにする */
+.footer-items {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* テキストとアイコン間のスペース */
+}
+
+/* インスタグラムアイコンのスタイル */
+.instagram-icon {
+    width: 24px; /* アイコンの幅 */
+    height: 24px; /* アイコンの高さ */
+    transition: transform 0.3s ease; /* ホバー時のアニメーション */
+}
+
+/* インスタグラムアイコンにホバー効果を追加 */
+.footer-items a:hover .instagram-icon {
+    transform: scale(1.1); /* アイコンを拡大 */
 }
 
 /* モバイルサイズ用 */
@@ -201,6 +231,15 @@ footer {
     .main-menu .icon {
         display: inline-block;
         text-align: right;
+    }
+
+    .footer-content {
+        flex-direction: column; /* 縦並びに変更 */
+        gap: 1rem; /* 上下のスペースを追加 */
+    }
+
+    .footer-items {
+        justify-content: center; /* 中央揃え */
     }
 }
 
