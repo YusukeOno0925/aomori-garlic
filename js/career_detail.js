@@ -24,10 +24,12 @@ function showErrorMessage(message) {
     }, 5000);
 }
 
+// メイン処理
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const careerId = urlParams.get('id');
 
+    // 1) キャリア詳細データを取得
     fetch(`/career-detail/${careerId}`)
         .then(response => {
             if (!response.ok) {
@@ -36,20 +38,25 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            // プロフィール情報の表示
+            // ================================
+            // (A) 取得したデータを画面に反映
+            // ================================
+            // プロフィール情報
             const profileSection = document.getElementById('profile-section');
             profileSection.innerHTML = `
                 <div class="detail">
-                <p><strong>名前:</strong> ${escapeHTML(data.name)} ${data.age !== undefined ? `(${data.age}歳)` : ''}</p>
-                    <p><strong>職業:</strong> ${data.profession}</p>
+                    <p><strong>名前:</strong> ${escapeHTML(data.name)} 
+                        ${data.age !== undefined ? `(${data.age}歳)` : ''}
+                    </p>
+                    <p><strong>職業:</strong> ${escapeHTML(data.profession)}</p>
                 </div>
             `;
 
-            // キャリア体験情報の表示
+            // キャリア体験情報
             const careerExperiencesSection = document.getElementById('career-experiences-section');
             const careerExperiences = data.career_experiences;
 
-            // テキスト項目の配列を作成
+            // 表示用の配列を作成
             const experiences = [
                 { title: '職業を選んだ理由', content: careerExperiences.start_reason },
                 { title: '初めての仕事のフィードバック', content: careerExperiences.first_job_feedback },
@@ -65,63 +72,75 @@ document.addEventListener('DOMContentLoaded', function () {
             // 各項目をループして表示
             careerExperiencesSection.innerHTML = experiences.map(exp => {
                 if (exp.content) {
-                    // テキストを短くする関数を使用
                     const truncatedText = truncateText(exp.content, 100);
-
                     return `
                         <div class="detail">
-                            <p><strong>${exp.title}:</strong></p>
-                            <p class="short-text">${truncatedText}
+                            <p><strong>${escapeHTML(exp.title)}:</strong></p>
+                            <p class="short-text">
+                                ${escapeHTML(truncatedText)}
                                 ${exp.content.length > 100 ? `<span class="read-more-link">続きを読む</span>` : ''}
                             </p>
-                            <p class="read-more-content">${exp.content} <span class="read-less-link">閉じる</span></p>
+                            <p class="read-more-content">
+                                ${escapeHTML(exp.content)} 
+                                <span class="read-less-link">閉じる</span>
+                            </p>
                         </div>
                     `;
                 }
                 return '';
             }).join('');
 
-            // 会社ごとの経験の表示
+            // 会社ごとの経験
             const companyExperiencesSection = document.getElementById('company-experiences-section');
             companyExperiencesSection.innerHTML = data.companies.map((company, index) => {
+                const cName = escapeHTML(company.name);
+                const cStart = company.startYear ? company.startYear : '不明';
+                const cEnd = company.endYear ? company.endYear : '現時点';
+                const cSalary = company.salary ? `${escapeHTML(company.salary)}` : '不明';
+                const cSatisfaction = company.satisfaction_level ? `${escapeHTML(company.satisfaction_level)}` : '不明';
+
                 return `
                     <div class="company-experience">
-                        <h3>${index + 1}社目: ${company.name} (${company.startYear}〜${company.endYear || '現時点'})</h3>
-                        ${company.salary ? `<p><strong>年収:</strong> ${company.salary}</p>` : ''}
-                        ${company.satisfaction_level ? `<p><strong>満足度:</strong> ${company.satisfaction_level}</p>` : ''}
-                        ${company.experience_detail ? `
-                            <p class="short-text">${truncateText(company.experience_detail, 100)}
-                                ${company.experience_detail.length > 100 ? `<span class="read-more-link">続きを読む</span>` : ''}
-                            </p>
-                            <p class="read-more-content">${company.experience_detail} <span class="read-less-link">閉じる</span></p>
-                        ` : ''}
+                        <h3>${index + 1}社目: ${cName} (${cStart}〜${cEnd})</h3>
+                        <p><strong>年収:</strong> ${cSalary}</p>
+                        <p><strong>満足度:</strong> ${cSatisfaction}</p>
                     </div>
                 `;
             }).join('');
 
-            // 年収と満足度のグラフ描画
+            // (B) 年収と満足度のグラフ描画
             if (data.companies && data.companies.length > 0) {
                 drawChart(data.companies);
             } else {
                 console.error('会社データが見つかりませんでした。');
             }
 
-            // コメント機能の初期化
+            // ================================
+            // (C) コメント機能の初期化
+            // ================================
             checkLoginStatus().then(isLoggedIn => {
-                handleComments(careerId, isLoggedIn); // コメント処理の関数呼び出し
+                handleComments(careerId, isLoggedIn);
             });
 
-            initializeAccordion();    // アコーディオンの初期化
-            initializeReadMore();     // 「続きを読む」機能の初期化
+            // ================================
+            // (D) アコーディオン初期化（後述修正）
+            // ================================
+            initializeAccordion();
+
+            // 「続きを読む」機能初期化
+            initializeReadMore();
         })
         .catch(error => {
             console.error('キャリア詳細の取得中にエラーが発生しました:', error);
             const careerDetail = document.getElementById('career-detail');
-            careerDetail.innerHTML = '<p>キャリアが見つかりませんでした。</p>';
+            if (careerDetail) {
+                careerDetail.innerHTML = '<p>キャリアが見つかりませんでした。</p>';
+            }
         });
 });
 
-// ログイン状態を確認する関数
+// ---------------------------------------------
+// ログイン状態を確認する関数（既存のまま）
 function checkLoginStatus() {
     return fetch('/check-login-status/', {
         method: 'GET',
@@ -134,20 +153,33 @@ function checkLoginStatus() {
     });
 }
 
-// アコーディオンの動作を実装する関数
+// ---------------------------------------------
+// ★ 修正ポイント：アコーディオンをクリックしたらログインチェックする ★
 function initializeAccordion() {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', async function() {
+            // ログインチェック
+            const isLoggedIn = await checkLoginStatus();
+            if (!isLoggedIn) {
+                alert('この情報を閲覧するにはログインが必要です。');
+                window.location.href = '/Login.html';
+                return;
+            }
+            // ログイン済み → アコーディオン開閉
             const item = this.parentElement;
             item.classList.toggle('active');
         });
     });
 }
 
-// 「続きを読む」機能のイベントリスナーを追加する関数
+// ---------------------------------------------
+// 「続きを読む」機能
 function initializeReadMore() {
-    const sections = [document.getElementById('career-experiences-section'), document.getElementById('company-experiences-section')];
+    const sections = [
+        document.getElementById('career-experiences-section'),
+        document.getElementById('company-experiences-section')
+    ];
     sections.forEach(section => {
         if (section) {
             const readMoreLinks = section.querySelectorAll('.read-more-link');
@@ -171,59 +203,56 @@ function initializeReadMore() {
     });
 }
 
+// ---------------------------------------------
 // テキストをトランケートする関数
 function truncateText(text, length) {
     return text.length > length ? text.substring(0, length) + '...' : text;
 }
 
+// ---------------------------------------------
 // グラフ描画関数
 function drawChart(companies) {
     const ctx = document.getElementById('income-satisfaction-chart').getContext('2d');
-
-    // ラベルを取得
-    const labels = companies.map(company => company.name);
-
-    // 年収データを取得
-    const income = companies.map(company => calculateMedianIncome(company.salary));
-
-    // 年収データの最大値を取得し、余白を追加
-    const maxIncome = Math.max(...income.filter(value => !isNaN(value) && value !== null));
+    const labels = companies.map(c => c.name);
+    const income = companies.map(c => calculateMedianIncome(c.salary));
+    const maxIncome = Math.max(...income.filter(v => !isNaN(v) && v !== null));
     const yAxisMaxIncome = Math.ceil(maxIncome / 100) * 100;
-    const incomePadding = yAxisMaxIncome * 0.1; // 10% の余白
+    const incomePadding = yAxisMaxIncome * 0.1;
     const yAxisMaxIncomeWithPadding = yAxisMaxIncome + incomePadding;
     const incomeStepSize = yAxisMaxIncome / 5;
 
-    // 満足度データを取得
-    const satisfaction = companies.map(company => company.satisfaction_level !== null ? company.satisfaction_level : NaN);
-
-    const showXAxisLabels = companies.length <= 2;  // 会社数が3つ以下の場合のみ表示
+    const satisfaction = companies.map(c => c.satisfaction_level !== null ? c.satisfaction_level : NaN);
+    const showXAxisLabels = companies.length <= 2;
 
     new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: '年収',
-                data: income,
-                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 1,
-                yAxisID: 'y'
-            }, {
-                label: '満足度',
-                type: 'line',
-                data: satisfaction,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                yAxisID: 'y1',
-                spanGaps: true
-            }]
+            datasets: [
+                {
+                    label: '年収',
+                    data: income,
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '満足度',
+                    type: 'line',
+                    data: satisfaction,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    yAxisID: 'y1',
+                    spanGaps: true
+                }
+            ]
         },
         options: {
             scales: {
                 x: {
-                    display: showXAxisLabels,  // 会社数が3を超える場合は非表示
+                    display: showXAxisLabels,
                     ticks: {
                         callback: function(value, index) {
                             const label = this.getLabelForValue(index);
@@ -231,9 +260,7 @@ function drawChart(companies) {
                         },
                         maxRotation: 0,
                         minRotation: 0,
-                        font: {
-                            size: 12
-                        },
+                        font: { size: 12 },
                         autoSkip: false
                     }
                 },
@@ -242,9 +269,7 @@ function drawChart(companies) {
                     max: yAxisMaxIncomeWithPadding,
                     ticks: {
                         stepSize: incomeStepSize,
-                        font: {
-                            size: window.innerWidth <= 450 ? 8 : 10 // 画面幅に応じてフォントサイズを調整
-                        },
+                        font: { size: window.innerWidth <= 450 ? 8 : 10 },
                         callback: function(value) {
                             if (value <= yAxisMaxIncome) {
                                 return value + '万円';
@@ -264,9 +289,7 @@ function drawChart(companies) {
                     max: 5.5,
                     ticks: {
                         stepSize: 1,
-                        font: {
-                            size: window.innerWidth <= 450 ? 8 : 10 // 画面幅に応じてフォントサイズを調整
-                        },
+                        font: { size: window.innerWidth <= 450 ? 8 : 10 },
                         callback: function(value) {
                             if (value <= 5) {
                                 return value + '点';
@@ -278,11 +301,11 @@ function drawChart(companies) {
                     grid: {
                         color: function(context) {
                             if (context.tick.value > 5) {
-                                return 'rgba(0,0,0,0)'; // 5を超えるグリッド線は透明に
+                                return 'rgba(0,0,0,0)';
                             }
                             return 'rgba(0, 0, 0, 0.1)';
                         },
-                        drawBorder: false // ボーダー線を非表示
+                        drawBorder: false
                     }
                 }
             },
@@ -301,29 +324,25 @@ function drawChart(companies) {
     });
 }
 
-// 年収範囲の中央値を取得する関数
+// ---------------------------------------------
+// 年収範囲の中央値を取得
 function calculateMedianIncome(income) {
-    if (!income) return null;  // incomeがundefinedまたはnullの場合はnullを返す
-
+    if (!income) return null;
     if (typeof income === 'string') {
-        const range = income.split('〜').map(value => parseInt(value.replace('万', '')));
+        const range = income.split('〜').map(v => parseInt(v.replace('万', '')));
         if (range.length === 2) {
-            return (range[0] + range[1]) / 2;  // 範囲がある場合は中央値を取る
+            return (range[0] + range[1]) / 2;
         }
     }
-    
     const parsedIncome = parseInt(income.replace('万', ''));
-    if (isNaN(parsedIncome)) return null;  // 数値に変換できない場合はnullを返す
-    
-    if (parsedIncome < 100) {
-        return 50;  // 100万円未満の場合は50万円とする
-    } else if (parsedIncome > 1500) {
-        return 1500;  // 1500万円以上の場合は1500万円とする
-    }
-    return parsedIncome;  // 単一値の場合はそのまま返す
+    if (isNaN(parsedIncome)) return null;
+    if (parsedIncome < 100) return 50;
+    if (parsedIncome > 1500) return 1500;
+    return parsedIncome;
 }
 
-// コメントを管理する関数
+// ---------------------------------------------
+// コメント処理
 function handleComments(careerId, isLoggedIn) {
     const commentList = document.getElementById('comment-list');
     const commentText = document.getElementById('comment-text');
@@ -332,17 +351,15 @@ function handleComments(careerId, isLoggedIn) {
     let currentPage = 1;
     const commentsPerPage = 10;
 
-    // コメントを取得して表示する関数
     function fetchComments() {
         fetch(`/comments/${careerId}?page=${currentPage}&per_page=${commentsPerPage}`)
             .then(response => response.json())
             .then(data => {
-                commentList.innerHTML = ''; // 既存のコメントをクリア
+                commentList.innerHTML = '';
                 data.comments.forEach(comment => {
                     const commentItem = createCommentElement(comment);
                     commentList.appendChild(commentItem);
                 });
-                // ページネーションのナビゲーションを表示
                 displayPagination(data.total_pages);
             })
             .catch(error => {
@@ -350,28 +367,22 @@ function handleComments(careerId, isLoggedIn) {
             });
     }
 
-    // コメント要素を作成する関数
     function createCommentElement(comment, nestLevel = 0) {
-        const maxNestLevel = 2; // ネストレベルの最大値
-
+        const maxNestLevel = 2;
         const commentItem = document.createElement('div');
         commentItem.classList.add('comment-item');
-        commentItem.dataset.commentId = comment.id; // データ属性を追加
+        commentItem.dataset.commentId = comment.id;
 
-        // コメントヘッダー
         const commentHeader = document.createElement('div');
         commentHeader.classList.add('comment-header');
 
         const username = document.createElement('p');
         username.innerHTML = `<strong>${escapeHTML(comment.username)}</strong> (${new Date(comment.created_at).toLocaleString()})`;
-
         commentHeader.appendChild(username);
 
-        // コメント内容
         const commentContent = document.createElement('div');
         commentContent.classList.add('comment-content');
 
-        // 長いコメントを「続きを読む」で折りたたむ
         if (comment.content.length > 100) {
             const shortText = truncateText(comment.content, 100);
             commentContent.innerHTML = `
@@ -382,11 +393,9 @@ function handleComments(careerId, isLoggedIn) {
             commentContent.textContent = comment.content;
         }
 
-        // コメントアクション（返信ボタン、いいねボタン）
         const commentActions = document.createElement('div');
         commentActions.classList.add('comment-actions');
 
-        // 返信ボタン
         const replyButton = document.createElement('button');
         replyButton.classList.add('reply-button');
         replyButton.innerHTML = `<i class="fas fa-reply"></i> <span class="button-text">返信</span>`;
@@ -398,7 +407,6 @@ function handleComments(careerId, isLoggedIn) {
             }
         });
 
-        // いいねボタン
         const likeButton = document.createElement('button');
         likeButton.classList.add('like-button');
         likeButton.innerHTML = `<i class="fas fa-thumbs-up"></i> <span class="button-text">いいね</span> (${comment.like_count || 0})`;
@@ -413,12 +421,10 @@ function handleComments(careerId, isLoggedIn) {
         commentActions.appendChild(replyButton);
         commentActions.appendChild(likeButton);
 
-        // コメントアイテムに要素を追加
         commentItem.appendChild(commentHeader);
         commentItem.appendChild(commentContent);
         commentItem.appendChild(commentActions);
 
-        // 返信リスト
         if (comment.replies && comment.replies.length > 0 && nestLevel < maxNestLevel) {
             const replyList = document.createElement('div');
             replyList.classList.add('reply-list');
@@ -432,7 +438,6 @@ function handleComments(careerId, isLoggedIn) {
         return commentItem;
     }
 
-    // 返信フォームを表示する関数
     function showReplyForm(parentCommentId) {
         const parentComment = commentList.querySelector(`[data-comment-id="${parentCommentId}"]`);
         const existingForm = parentComment.querySelector('.reply-form');
@@ -484,7 +489,6 @@ function handleComments(careerId, isLoggedIn) {
         });
     }
 
-    // いいねをトグルする関数
     function toggleLike(commentId, likeButton) {
         fetch(`/comments/${commentId}/like`, {
             method: 'POST',
@@ -498,7 +502,6 @@ function handleComments(careerId, isLoggedIn) {
             return response.json();
         })
         .then(data => {
-            // ボタンの表示を更新
             likeButton.innerHTML = `<i class="fas fa-thumbs-up"></i> いいね (${data.like_count})`;
         })
         .catch(error => {
@@ -506,7 +509,6 @@ function handleComments(careerId, isLoggedIn) {
         });
     }
 
-    // ページネーションの表示
     function displayPagination(totalPages) {
         pagination.innerHTML = '';
 
@@ -531,28 +533,25 @@ function handleComments(careerId, isLoggedIn) {
         }
     }
 
-    // コメントの投稿
     if (isLoggedIn) {
         submitComment.addEventListener('click', function () {
             const newComment = commentText.value.trim();
             if (newComment) {
-                // 楽観的UI更新：コメントを即座に表示
                 const temporaryComment = {
-                    id: 'temp-' + Date.now(), // 一時的なID
+                    id: 'temp-' + Date.now(),
                     content: newComment,
                     created_at: new Date().toISOString(),
-                    username: 'あなた', // fixed value
+                    username: 'あなた',
                     like_count: 0,
                     replies: []
                 };
                 const commentItem = createCommentElement(temporaryComment);
-                commentList.insertBefore(commentItem, commentList.firstChild); // 一番上に追加
-    
-                commentText.value = ''; // 入力フィールドをクリア
-    
+                commentList.insertBefore(commentItem, commentList.firstChild);
+                commentText.value = '';
+
                 const formData = new FormData();
                 formData.append('content', newComment);
-    
+
                 fetch(`/comments/${careerId}`, {
                     method: 'POST',
                     body: formData,
@@ -568,17 +567,13 @@ function handleComments(careerId, isLoggedIn) {
                     return response.json();
                 })
                 .then(data => {
-                    // サーバーから返ってきた正式なコメントIDで更新
                     temporaryComment.id = data.comment_id;
                     commentItem.dataset.commentId = data.comment_id;
                     showSuccessMessage('コメントが投稿されました。');
-    
-                    // コメントリストを再取得して最新の状態に更新
                     fetchComments();
                 })
                 .catch(error => {
                     console.error('コメントの投稿中にエラーが発生しました:', error);
-                    // 一時的なコメントを削除
                     commentItem.remove();
                     showErrorMessage('コメントの投稿に失敗しました。');
                 });
@@ -587,20 +582,16 @@ function handleComments(careerId, isLoggedIn) {
             }
         });
     } else {
-        // 未ログイン時のイベントリスナーを追加
         submitComment.addEventListener('click', function () {
             alert('コメントを投稿するにはログインが必要です。');
         });
     }
 
-    // 初回のコメント取得
     fetchComments();
-
-    // 「続きを読む」機能の初期化
     initializeCommentReadMore();
 }
 
-// コメント内の「続きを読む」機能のイベントリスナーを追加
+// コメント内の「続きを読む」機能を初期化
 function initializeCommentReadMore() {
     const commentList = document.getElementById('comment-list');
     commentList.addEventListener('click', function(event) {
@@ -618,8 +609,9 @@ function initializeCommentReadMore() {
 
 // 特殊文字をエスケープする関数（XSS対策）
 function escapeHTML(str) {
-    if (!str) return '';
-    return str.replace(/[&'`"<>]/g, function(match) {
+    if (str == null) return '';
+    const safeStr = String(str);
+    return safeStr.replace(/[&'`"<>]/g, function(match) {
         return {
             '&': '&amp;',
             "'": '&#x27;',
