@@ -437,8 +437,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 });
             });
+
+            // ▼ (A) 折りたたみ機能の初期化
+            initializeCollapsible();
         })
         .catch(error => {
             console.error('環境変数の取得中にエラーが発生しました:', error);
         });
+    
+    // ======================================
+    // ▼ 折りたたみ機能実装: initializeCollapsible
+    // ======================================
+    function initializeCollapsible() {
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 親要素 .collapsible-block を探す
+                const collapsibleBlock = btn.closest('.collapsible-block');
+                if (!collapsibleBlock) return;
+                // .collapsible-details を取得
+                const details = collapsibleBlock.querySelector('.collapsible-details');
+                if (!details) return;
+
+                // 表示/非表示を切り替え
+                if (details.style.display === 'block') {
+                    details.style.display = 'none';
+                } else {
+                    details.style.display = 'block';
+                }
+            });
+        });
+    }
 });

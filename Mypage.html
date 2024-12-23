@@ -136,20 +136,81 @@
                 <button type="button" id="add-job-experience" style="display: none;">職歴を追加</button>
             </div>
 
-            <!-- タブ2: キャリア詳細 -->
+            <!-- ▼▼▼ タブ2: キャリア詳細 ▼▼▼ -->
             <div id="tab-career-details" class="tab-content">
+
+                <!-- (1) キャリアのスタート地点 -->
                 <h3>キャリアのスタート地点</h3>
+
+                <!-- 折りたたみブロック -->
+                <div class="section-explain collapsible-block">
+                    <div class="collapsible-summary">
+                        <strong>なぜ書くといい？</strong><br>
+                        - 同じ業界を目指すユーザの参考になり、閲覧数が増える可能性<br>
+                        - あなたの具体的な選択理由が「共感」や「アドバイス」を呼びやすい<br>
+                        （※いずれも任意入力です。後ほど追記も可能）
+                        <br><br>
+                        <span class="toggle-btn">もっと見る</span>
+                    </div>
+                    <div class="collapsible-details" style="display:none;">
+                        <p>
+                            ここでは初めての仕事（新卒など）や、最初にどの業界を選んだかの理由を入力できます。<br>
+                            <em>詳しく書くほど、他のユーザがあなたの選んだ道をイメージしやすくなります。</em>
+                        </p>
+                        <p>例:</p>
+                        <ul>
+                            <li>興味を持ったきっかけやエピソード</li>
+                            <li>他の業界と迷った点 / 最終的に選んだ決め手</li>
+                            <li>学生時代や前職で得たスキルが活かせる理由 etc.</li>
+                        </ul>
+                        <p class="toggle-btn">閉じる</p>
+                    </div>
+                </div>
+                <!-- 入力フィールド -->
                 <div class="floating-label">
                     <textarea id="start_reason" name="start_reason" readonly></textarea>
                     <label for="start_reason">どのような経緯・理由でその職業・業界を選びましたか？（任意）</label>
+                    <p class="textarea-guide">
+                        書き方のヒント：<br>
+                        - 興味を持ったきっかけやエピソード<br>
+                        - 他の業界と迷った点 / 最終的に選んだ決め手<br>
+                        - 学生時代や前職で得たスキルが活かせると思った理由 etc.
+                    </p>
                 </div>
+
                 <div class="floating-label">
                     <textarea id="first_job_feedback" name="first_job_feedback" readonly></textarea>
-                    <label for="first_job_feedback">新卒または初めての仕事での経験や感想はどのようなものでしたか？（任意）</label>
+                    <label for="first_job_feedback">新卒または初めての仕事での経験や感想（任意）</label>
+                    <p class="textarea-guide">
+                        具体的に書くと、同じ初職を歩んだ人との交流やフィードバックを得やすくなります。<br>
+                        例：<br>
+                        - 入社後に感じたギャップや驚き<br>
+                        - 一番苦労した部分 / 成長できたところ<br>
+                        - 上司や同期との関係 etc.
+                    </p>
                 </div>
                 <input type="hidden" id="start_point_id" name="start_point_id">
 
+                <!-- (2) キャリアの転機 -->
                 <h3>キャリアの転機</h3>
+                <div class="section-explain collapsible-block">
+                    <div class="collapsible-summary">
+                        あなたのキャリアを大きく変えたタイミングについて書けます。<br>
+                        <strong>なぜ書くといい？</strong><br>
+                        - 「どんなきっかけで転職を決断したのか？」を知りたい人が多い<br>
+                        - 詳しく書くほど、共感やコメントが集まり、閲覧数アップに繋がります
+                        <br><br>
+                        <span class="toggle-btn">もっと見る</span>
+                    </div>
+                    <div class="collapsible-details" style="display:none;">
+                        <p>
+                            例えば、「転職を考えたきっかけや周囲の反応、実際に動いてみて役立った情報」などを書けば、
+                            同じ悩みを抱える人にとって非常に有益な事例になります。
+                        </p>
+                        <p class="toggle-btn">閉じる</p>
+                    </div>
+                </div>
+
                 <div class="floating-label">
                     <select id="transition_type" name="transition_type" disabled required>
                         <option value="" disabled selected>選択してください</option>
@@ -160,41 +221,102 @@
                         <option value="結婚・出産">結婚・出産</option>
                         <option value="その他">その他</option>
                     </select>
-                    <label for="transition_type">キャリアの転機となった主な理由を選択してください。（任意）</label>
+                    <label for="transition_type">キャリアの転機となった主な理由（任意）</label>
                 </div>
                 <div class="floating-label">
                     <textarea id="transition_story" name="transition_story" readonly></textarea>
-                    <label for="transition_story">具体的なエピソードや心境の変化があれば教えてください。（キャリアチェンジを考えたきっかけなど）（任意）</label>
+                    <label for="transition_story">具体的なエピソードや心境の変化があれば教えてください（任意）</label>
+                    <p class="textarea-guide">
+                        例：<br>
+                        - キャリアチェンジを考えたきっかけや出来事<br>
+                        - 周囲の反応や自分の気持ちの変化<br>
+                        - 実際に動き始めた時に役立った情報 etc.
+                    </p>
                 </div>
                 <div class="floating-label">
                     <textarea id="reason_for_job_change" name="reason_for_job_change" readonly></textarea>
                     <label for="reason_for_job_change">転職を選んだ理由（社内異動ではなく、転職を選んだ理由など）（任意）</label>
+                    <p class="textarea-guide">
+                        「なぜ転職だったのか？」は非常に多くのユーザが知りたがります。<br>
+                        あなたの決断プロセスを共有することで、同じ悩みを抱える人の助けになるかも。
+                    </p>
                 </div>
                 <div class="floating-label">
                     <textarea id="job_experience_feedback" name="job_experience_feedback" readonly></textarea>
                     <label for="job_experience_feedback">転職先での仕事の経験や感想（任意）</label>
+                    <p class="textarea-guide">
+                        転職後のリアルな感想を詳しく書くと、同じ業界・職種を目指す人にとって
+                        とても貴重な情報になります。<br>
+                        - 具体的な業務内容・大変だったこと<br>
+                        - 前職と比べた違いや学び etc.
+                    </p>
                 </div>
                 <input type="hidden" id="transition_id" name="transition_id">
 
+                <!-- (3) キャリアの達成と失敗経験 -->
                 <h3>キャリアの達成と失敗経験</h3>
+                <div class="section-explain collapsible-block">
+                    <div class="collapsible-summary">
+                        ここでは、あなたがこれまで達成したことや失敗談を共有できます。<br>
+                        <span class="toggle-btn">もっと見る</span>
+                    </div>
+                    <div class="collapsible-details" style="display:none;">
+                        <p>
+                            <strong>なぜ書くといい？</strong><br>
+                            - 成功体験：同じ道を歩む人への大きな励み<br>
+                            - 失敗体験：後からくる人が同じミスを回避できるヒント<br>
+                            書き込むほど、他ユーザからの感謝やコメントが集まるかもしれません。
+                        </p>
+                        <p class="toggle-btn">閉じる</p>
+                    </div>
+                </div>
+
                 <div class="floating-label">
                     <textarea id="proudest_achievement" name="proudest_achievement" readonly></textarea>
-                    <label for="proudest_achievement">これまでのキャリアで最も誇りに思う達成は何ですか？それを達成するために乗り越えた課題は何ですか？（任意）</label>
+                    <label for="proudest_achievement">最も誇りに思う達成や、その背景（任意）</label>
+                    <p class="textarea-guide">
+                        - 達成に至った経緯<br>
+                        - 乗り越えた課題や困難は？<br>
+                        - 周囲のサポートや学び etc.
+                    </p>
                 </div>
                 <div class="floating-label">
                     <textarea id="failure_experience" name="failure_experience" readonly></textarea>
-                    <label for="failure_experience">これまでのキャリアで失敗や挫折した経験はありますか？（任意）</label>
+                    <label for="failure_experience">失敗や挫折した経験（任意）</label>
+                    <p class="textarea-guide">
+                        失敗談こそ、他ユーザが最も参考にするポイントです。<br>
+                        どうして失敗したのか？ 何が足りなかったのか？を書けば、
+                        誰かの行動を変えるきっかけになるかもしれません。
+                    </p>
                 </div>
                 <div class="floating-label">
                     <textarea id="lesson_learned" name="lesson_learned" readonly></textarea>
-                    <label for="lesson_learned">その経験から学んだことは何ですか？（任意）</label>
+                    <label for="lesson_learned">その経験から学んだこと（任意）</label>
+                    <p class="textarea-guide">
+                        失敗や成功から得た学びを書くと、あなたのストーリーがぐっと深みを増し、
+                        多くの共感・交流を呼ぶきっかけとなります。
+                    </p>
                 </div>
                 <input type="hidden" id="achievement_id" name="achievement_id">
             </div>
 
-            <!-- タブ3: 今後のキャリア志向 -->
+            <!-- ▼▼▼ タブ3: 今後のキャリア志向 ▼▼▼ -->
             <div id="tab-future" class="tab-content">
                 <h3>今後のキャリア志向</h3>
+                <div class="section-explain collapsible-block">
+                    <div class="collapsible-summary">
+                        ここでは、これからどのようにキャリアを築きたいかを記入できます。<br>
+                        <span class="toggle-btn">もっと見る</span>
+                    </div>
+                    <div class="collapsible-details" style="display:none;">
+                        <p>
+                            「マネジメントに興味あり」「専門職として極めたい」「起業を目指す」等、
+                            あなたの将来像を共有することで、アドバイスや仲間探しに繋がるかもしれません。
+                        </p>
+                        <p class="toggle-btn">閉じる</p>
+                    </div>
+                </div>
+
                 <div class="floating-label">
                     <select id="career_type" name="career_type" disabled required>
                         <option value="" disabled selected>選択してください</option>
@@ -204,30 +326,73 @@
                         <option value="ワークライフバランスを重視したい">ワークライフバランスを重視したい</option>
                         <option value="その他">その他</option>
                     </select>
-                    <label for="career_type">今後のキャリア志向を選択する（任意）</label>
+                    <label for="career_type">今後のキャリア志向（任意）</label>
+                    <p class="textarea-guide">
+                        ※いずれスカウト機能やマッチング機能が追加されるかもしれません。<br>
+                        あなたの将来像を明確にしておくと、ピンポイントの提案が届く可能性がアップします。
+                    </p>
                 </div>
+
                 <div class="floating-label" id="career_type_other_container" style="display: none;">
                     <input type="text" id="career_type_other" name="career_type_other" readonly>
-                    <label for="career_type_other">その他のキャリア志向を入力してください</label>
+                    <label for="career_type_other">その他のキャリア志向</label>
+                    <p class="textarea-guide">
+                        もし上記になくとも、自由に将来像を記載できます。
+                    </p>
                 </div>
+
                 <div class="floating-label">
                     <textarea id="career_description" name="career_description" readonly></textarea>
-                    <label for="career_description">キャリア達成のために取り組んでいることがあれば教えてください。（任意）</label>
+                    <label for="career_description">キャリア達成のために取り組んでいること（任意）</label>
+                    <p class="textarea-guide">
+                        - 資格取得の勉強やセミナー参加<br>
+                        - 人脈づくり、コミュニティ活動<br>
+                        - 副業、スキルアップのための学習 etc.
+                    </p>
                 </div>
+
                 <div class="floating-label">
                     <textarea id="career_satisfaction_feedback" name="career_satisfaction_feedback" readonly></textarea>
-                    <label for="career_satisfaction_feedback">これまでのキャリアに満足していますか？理由を教えてください。（任意）</label>
+                    <label for="career_satisfaction_feedback">これまでのキャリアに満足していますか？理由は？（任意）</label>
+                    <p class="textarea-guide">
+                        自分のキャリアへの満足度を書くと、他のユーザが「どう感じながら働いているか」を参考にできます。
+                        本音ベースで書いてOK！<br>
+                        - 満足している理由、不満点は何か？<br>
+                        - もしやり直せるならこうしたい…など
+                    </p>
                 </div>
                 <input type="hidden" id="career_aspirations_id" name="career_aspirations_id">
 
                 <h3>学びと成長</h3>
+                <div class="section-explain collapsible-block">
+                    <div class="collapsible-summary">
+                        あなたが得たスキルや成長した点を書き留める場所です。<br>
+                        <span class="toggle-btn">もっと見る</span>
+                    </div>
+                    <div class="collapsible-details" style="display:none;">
+                        <p>
+                            ほかのユーザが「このスキルを身につけたらどんな道が開けるのか？」を知る参考になります。<br>
+                            詳しく書くほど、同じスキルを学びたい人から質問が来るかもしれません。
+                        </p>
+                        <p class="toggle-btn">閉じる</p>
+                    </div>
+                </div>
+
                 <div class="floating-label">
                     <input type="text" id="skill" name="skill" readonly>
                     <label for="skill">得たスキル</label>
+                    <p class="textarea-guide">
+                        例：プログラミング言語、資格、コミュニケーション力etc.
+                    </p>
                 </div>
                 <div class="floating-label">
                     <textarea id="growth_description" name="growth_description" readonly></textarea>
-                    <label for="growth_description">スキルの詳細説明</label>
+                    <label for="growth_description">スキルの詳細説明（任意）</label>
+                    <p class="textarea-guide">
+                        - どのように学んだか<br>
+                        - 実務でどう活かしたか<br>
+                        - 習得の大変だった点やコツ
+                    </p>
                 </div>
                 <input type="hidden" id="growth_id" name="growth_id">
             </div>
