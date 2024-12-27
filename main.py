@@ -89,7 +89,7 @@ async def register_user(username: str = Form(...), email: str = Form(...), passw
         
         # 登録完了後、自動でログインする処理を追加
         db = get_db_connection()
-        user = await authenticate_user(db, username, password)
+        user = await authenticate_user(db, email, password)
         if user:
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = create_access_token(
