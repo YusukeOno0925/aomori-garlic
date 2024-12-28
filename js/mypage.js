@@ -428,8 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .then(() => {
                         alert('プロフィールが更新されました。');
-                        setReadOnly(true);
-                        toggleButtons(true);
+                        window.location.reload(); 
                     })
                     .catch(error => {
                         console.error('エラーが発生しました:', error);
