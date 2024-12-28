@@ -35,7 +35,13 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
             # 非公開チェックが必要な場合
             if not include_private and education_info['hide_institution']:
                 education_info['institution'] = '非公開'
-            user_info.update(education_info)
+            user_info["education_id"] = education_info["education_id"]
+            user_info["institution"] = education_info["institution"]
+            user_info["degree"] = education_info["degree"]
+            user_info["major"] = education_info["major"]
+            user_info["education_start"] = education_info["education_start"]
+            user_info["education_end"] = education_info["education_end"]
+            user_info["hide_institution"] = education_info["hide_institution"]
 
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
@@ -67,7 +73,10 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
         """, (current_user.id,))
         career_info = cursor.fetchone()
         if career_info:
-            user_info.update(career_info)
+            user_info["career_aspirations_id"] = career_info["career_aspirations_id"]
+            user_info["career_type"] = career_info["career_type"]
+            user_info["career_description"] = career_info["career_description"]
+            user_info["career_satisfaction_feedback"] = career_info["career_satisfaction_feedback"]
 
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
@@ -80,7 +89,9 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
         """, (current_user.id,))
         start_point_info = cursor.fetchone()
         if start_point_info:
-            user_info.update(start_point_info)
+            user_info["start_point_id"] = start_point_info["start_point_id"]
+            user_info["start_reason"] = start_point_info["start_reason"]
+            user_info["first_job_feedback"] = start_point_info["first_job_feedback"]
         
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
@@ -93,7 +104,11 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
         """, (current_user.id,))
         transition_info = cursor.fetchone()
         if transition_info:
-            user_info.update(transition_info)
+            user_info["transition_id"] = transition_info["transition_id"]
+            user_info["transition_type"] = transition_info["transition_type"]
+            user_info["transition_story"] = transition_info["transition_story"]
+            user_info["reason_for_job_change"] = transition_info["reason_for_job_change"]
+            user_info["job_experience_feedback"] = transition_info["job_experience_feedback"]
         
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
@@ -106,7 +121,10 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
         """, (current_user.id,))
         achievement_info = cursor.fetchone()
         if achievement_info:
-            user_info.update(achievement_info)
+            user_info["achievement_id"] = achievement_info["achievement_id"]
+            user_info["proudest_achievement"] = achievement_info["proudest_achievement"]
+            user_info["failure_experience"] = achievement_info["failure_experience"]
+            user_info["lesson_learned"] = achievement_info["lesson_learned"]
         
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
@@ -119,7 +137,9 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
         """, (current_user.id,))
         growth_info = cursor.fetchone()
         if growth_info:
-            user_info.update(growth_info)
+            user_info["growth_id"] = growth_info["growth_id"]
+            user_info["skill"] = growth_info["skill"]
+            user_info["growth_description"] = growth_info["growth_description"]
         
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()
