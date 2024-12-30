@@ -74,6 +74,7 @@ main {
     position: relative;
     margin-top: -10px; 
     top: -10px; 
+    margin-bottom: -3rem; 
   }
   
   /* ===== 各セクションの余白と中央寄せ ===== */
@@ -90,10 +91,10 @@ main {
     padding: 2rem 1rem;
     background-color: #fff; 
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: -3rem;
   }
   .howto-section h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 1.5rem;
     color: #4e3d12;
   }
@@ -141,14 +142,14 @@ main {
     background-color: #ffffff;
     padding: 2rem 1rem;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: -2rem;
   }
   .overview-container {
     max-width: 800px;
     margin: 0 auto;
   }
   .overview-container h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: #4e3d12;
     margin-bottom: 1.2rem;
   }
