@@ -7,54 +7,53 @@ main {
     padding: 1rem;
 }
 
-/* ヒーローセクションのスタイル */
+/* ===== ヒーローセクション ===== */
 #hero {
     background: url('../images/hero-image.jpg') no-repeat center center;
     background-size: cover;
-    height: 50vh; /* 高さを指定 */
+    height: 50vh; /* 画像の高さを指定 */
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     text-align: center;
-    overflow: hidden; /* オーバーフローを防止 */
-    width: 100%; /* 親要素の幅を基準にする */
-}
-
-/* テキストオーバーレイを画像と同じ幅に設定するスタイル */
-.text-overlay {
-    background-color: rgba(0, 0, 0, 0.6); /* 半透明の黒背景 */
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  .text-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 2rem;
-    border-radius: 0;
-    width: 100%; /* 背景画像と同じ幅に設定 */
-    max-width: 100%; /* 画像幅に揃えるため、幅を100%に指定 */
-    position: absolute; /* 絶対位置で中央揃え */
-    top: 50%; /* 親要素の中央に配置 */
-    left: 50%; /* 親要素の中央に配置 */
-    transform: translate(-50%, -50%); /* 中央に揃える */
-    box-sizing: border-box; /* パディングやボーダーの幅を考慮 */
-}
-
-.hero-content {
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+  }
+  
+  .hero-content {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* 高さの中央に配置 */
+    justify-content: center; 
     align-items: center;
-}
-
-.hero-content h2 {
+  }
+  
+  /* ヒーロー内の文言 */
+  .hero-content h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
-}
-
-.hero-content p {
+  }
+  
+  .hero-content p {
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
-}
-
-.cta-button {
+  }
+  
+  .cta-button {
     display: inline-block;
     padding: 1rem 2rem;
     background-color: #746302;
@@ -63,31 +62,126 @@ main {
     text-decoration: none;
     font-size: 1.1rem;
     transition: background-color 0.3s;
-}
-
-.cta-button:hover {
+  }
+  .cta-button:hover {
     background-color: #a34705;
-}
-
-.hero-note {
+  }
+  
+  .hero-note {
     font-size: 0.9rem;
-    padding-bottom: 2em; /* フッターのスペースを確保 */
+    padding-bottom: 2em;
     color: #666;
-    position: relative; /* 位置を相対的に設定 */
-    margin-top: -10px; /* 画像に寄せるためのマイナスマージン */
-    top: -10px; /* 画像にさらに寄せるための調整 */
-}
-
-section {
+    position: relative;
+    margin-top: -10px; 
+    top: -10px; 
+  }
+  
+  /* ===== 各セクションの余白と中央寄せ ===== */
+  section {
     margin-bottom: 2rem;
     text-align: center;
-}
-
-h2.section-title {
+  }
+  h2.section-title {
     color: var(--main-color);
-}
-
-#career-path-visualization {
+  }
+  
+  /* ===== howto-section ===== */
+  .howto-section {
+    padding: 2rem 1rem;
+    background-color: #fff; 
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .howto-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #4e3d12;
+  }
+  .howto-steps {
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem;
+    flex-wrap: wrap; 
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .step {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 300px; 
+    text-align: center;
+    position: relative;
+  }
+  .step-number {
+    display: inline-block;
+    font-size: 2rem;
+    background-color: #8ba141;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    margin-bottom: 1rem;
+  }
+  .step h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #574637;
+  }
+  .step p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+  }
+  
+  /* ===== overview-section (インノーマルとは？) ===== */
+  .overview-section {
+    background-color: #ffffff;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .overview-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .overview-container h2 {
+    font-size: 1.8rem;
+    color: #4e3d12;
+    margin-bottom: 1.2rem;
+  }
+  .overview-container p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    text-align: left; /* PCでは左寄せに変更して読みやすく */
+  }
+  
+  /* リスト（箇条書き）のデザイン */
+  .highlight-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem auto;
+    text-align: left; 
+    max-width: 600px;
+  }
+  .highlight-list li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+  }
+  .highlight-list li::before {
+    content: '✔';
+    color: #8ba141;
+    position: absolute;
+    left: 0;
+  }
+  
+  /* ===== ライフパス可視化セクション ===== */
+  #career-path-visualization {
     position: relative;
     display: flex;
     justify-content: center;
@@ -98,66 +192,32 @@ h2.section-title {
     padding: 1rem;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    max-width: 90%;  /* 親要素に最大幅を90%に設定 */
-    margin-left: auto; /* 左右をautoで中央寄せ */
+    max-width: 90%;
+    margin-left: auto;
     margin-right: auto;
-}
-
-svg {
-    width: 100%; /* SVG全体を親要素の幅に合わせる */
-    height: auto; /* 高さを自動に設定 */
-}
-
-.university-label {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 1.5rem;
-    color: #333;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-indicators {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-.carousel-indicators .indicator {
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
-    background-color: #ccc;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.carousel-indicators .indicator.active {
-    background-color: #8ba141;
-}
-
-.card-container {
+  }
+  svg {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* ===== 最近のキャリアストーリー/人気のキャリアストーリー共通 ===== */
+  .card-container {
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: auto; /* 横スクロールを許可 */
-    scroll-snap-type: x mandatory; /* スクロールスナップを有効化 */
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory;
     gap: 1rem;
     padding: 1rem;
-}
-
-.card {
-    flex: 0 0 calc((100% / 3) - 1rem); /* 一度に3枚表示 */
-    scroll-snap-align: center; /* カードが中央にスナップ */
+  }
+  .card {
+    flex: 0 0 calc((100% / 3) - 1rem);
+    scroll-snap-align: center;
     box-sizing: border-box;
     background: var(--card-background-color);
     border: 1px solid var(--card-border-color);
     border-radius: 8px;
-    padding: 0.8rem; /* パディングを減少 */
+    padding: 0.8rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     overflow: hidden;
@@ -165,126 +225,98 @@ svg {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-}
-
-.card h3 {
+  }
+  .card h3 {
     margin-top: 0;
-}
-
-.card p {
+  }
+  .card p {
     margin-bottom: 0.5rem;
-}
-
-.card p:last-child {
+  }
+  .card p:last-child {
     margin-bottom: 0;
-}
-
-.card p:last-of-type {
+  }
+  .card p:last-of-type {
     margin-bottom: 1rem;
-}
-
-/* カードヘッダーのスタイル */
-.card-header {
-    margin-bottom: 0.5rem; /* ヘッダーとグラフの間の余白を調整 */
-}
-
-/* キャリアパスのグラフのスタイル */
-.career-path-svg {
+  }
+  .card-header {
+    margin-bottom: 0.5rem;
+  }
+  .career-path-svg {
     width: 100%;
     height: 60px;
     overflow: visible;
     margin: 0 auto;
-    margin-bottom: 1rem; /* グラフとフッターの間に余白を追加 */
+    margin-bottom: 1rem;
     white-space: pre-line;
     word-wrap: break-word;
-}
-
-/* カードフッターのスタイル */
-.card-footer {
+  }
+  .card-footer {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* フッター内容を右寄せ */
-    margin-top: auto; /* フッターを下部に押し下げ */
-    /* 不要なpositionプロパティを削除 */
-    margin-top: 0.5rem; /* 必要最低限の余白 */
-}
-
-.card-footer .view-icon {
+    justify-content: flex-end;
+    margin-top: auto;
+    margin-top: 0.5rem;
+  }
+  .card-footer .view-icon {
     width: 16px;
     height: 16px;
     margin-right: 5px;
-}
-
-.card-footer .view-count {
+  }
+  .card-footer .view-count {
     font-size: 0.9rem;
     color: #666;
-}
-
-.card .arrow-symbol {
+  }
+  .card .arrow-symbol {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 24px;
     color: #000;
-}
-
-.card:hover {
+  }
+  .card:hover {
     transform: scale(1.05);
-}
-
-.announcement-item,
-.feedback-item {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--card-border-color);
-}
-
-#site-features {
+  }
+  
+  /* ===== サイト機能紹介( feature-section ) ===== */
+  #site-features {
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.feature-section {
+  }
+  .feature-section {
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
     justify-content: space-between;
     text-align: left;
-}
-
-.feature-section.left-image {
+  }
+  .feature-section.left-image {
     flex-direction: row;
-}
-
-.feature-section.right-image {
+  }
+  .feature-section.right-image {
     flex-direction: row-reverse;
-}
-
-.feature-image {
+  }
+  .feature-image {
     width: 50%;
     height: auto;
     border-radius: 8px;
-}
-
-.feature-description {
+  }
+  .feature-description {
     width: 50%;
     padding: 1rem;
-}
-
-.feature-description h3 {
+  }
+  .feature-description h3 {
     font-size: 1.5rem;
     color: #4e3d12;
     margin-bottom: 1rem;
-}
-
-.feature-description p {
+  }
+  .feature-description p {
     font-size: 1.2rem;
     color: #666;
     line-height: 1.6;
-}
-
-.detail-button {
+  }
+  .detail-button {
     display: inline-block;
     margin-top: 1rem;
     padding: 0.7rem 2rem;
@@ -295,26 +327,29 @@ svg {
     cursor: pointer;
     transition: background-color 0.3s;
     font-size: 1.1rem;
-}
-
-.detail-button:hover {
+  }
+  .detail-button:hover {
     background-color: var(--accent-color);
-}
-
-#feedback-form {
+  }
+  
+  /* ===== お知らせ / フィードバック ===== */
+  .announcement-item,
+  .feedback-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--card-border-color);
+  }
+  #feedback-form {
     text-align: center;
     margin-top: 2rem;
-}
-
-#feedback-text {
+  }
+  #feedback-text {
     width: 80%;
     padding: 1rem;
     border: 1px solid var(--card-border-color);
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#feedback-form button {
+  }
+  #feedback-form button {
     margin-top: 1rem;
     padding: 0.5rem 2rem;
     background-color: var(--main-color);
@@ -323,268 +358,256 @@ svg {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-#feedback-form button:hover {
+  }
+  #feedback-form button:hover {
     background-color: var(--accent-color);
-}
-
-/* オンラインステータスのドットのスタイル */
-.status-dot {
+  }
+  
+  /* ===== ステータス凡例のスタイル ===== */
+  .status-dot {
     display: inline-block;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     margin-left: 5px;
-    vertical-align: middle; /* テキストと垂直方向を揃える */
-}
-
-.status-dot.online {
+    vertical-align: middle;
+  }
+  .status-dot.online {
     background-color: green;
-}
-
-.status-dot.recently_active {
+  }
+  .status-dot.recently_active {
     background-color: yellow;
-}
-
-.status-dot.inactive {
+  }
+  .status-dot.inactive {
     background-color: red;
-}
-
-/* ステータス凡例のスタイル */
-.status-legend {
+  }
+  .status-legend {
     margin-bottom: 10px;
     font-size: 14px;
-    text-align: center;  /* テキストを中央揃え */
-}
-
-.status-legend .status-dot {
+    text-align: center;
+  }
+  .status-legend .status-dot {
     vertical-align: middle;
     margin-right: 5px;
-}
-
-.status-legend span {
+  }
+  .status-legend span {
     margin-right: 15px;
-}
-
-/* レスポンシブデザイン */
-@media (max-width: 768px) {
-    h2.section-title {
+  }
+  
+  /* =========================
+     レスポンシブデザイン
+     ========================= */
+  
+  /* 768px 以下 */
+  @media (max-width: 768px) {
+    .howto-section h2 {
         font-size: 1.4rem;
     }
-
-    .card-container {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
+  
+    /* 見出し・本文サイズのやや小型化 */
+    section h2.section-title {
+      font-size: 1.4rem;
     }
-
+    section p,
+    .feature-description p,
+    .overview-container p {
+      font-size: 0.95rem; 
+    }
+    .highlight-list li,
+    .step p {
+      font-size: 0.9rem;
+    }
+    .highlight-list li {
+        font-size: 0.9rem;
+    }
+  
+    /* カードを1列表示に */
     .card {
-        flex: 0 0 100%;
-        scroll-snap-align: center;
-        height: auto; /* モバイル表示では高さを自動に */
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      height: auto;
+      display: flex;
+      flex-direction: column;
     }
-
-    /* カード内の要素を縦方向に配置 */
-    .card {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* カードフッターの位置を維持 */
     .card-footer {
-        margin-top: auto; /* フッターを下部に押し下げ */
-        display: flex;
-        align-items: center;
-        justify-content: flex-end; /* フッター内容を右寄せ */
-        /* 必要最低限の余白 */
-        margin-top: 0.5rem;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
     }
-
+  
+    /* インジケータを表示 */
     #recent-stories-indicators,
     #popular-stories-indicators {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
     }
-
     #recent-stories-indicators .indicator,
     #popular-stories-indicators .indicator {
-        width: 10px;
-        height: 10px;
-        margin: 0 5px;
-        background-color: #ccc;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.3s;
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background-color: #ccc;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-
     #recent-stories-indicators .indicator.active,
     #popular-stories-indicators .indicator.active {
-        background-color: #8ba141;
+      background-color: #8ba141;
     }
-
+  
+    /* サイト機能紹介 */
     #site-features .feature-section {
-        display: block;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 2rem;
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 2rem;
     }
-
     #site-features .feature-section .feature-image,
     #site-features .feature-section .feature-description {
-        width: 100%;
-        margin: 0 auto;
+      width: 100%;
+      margin: 0 auto;
     }
-
     #site-features .feature-section .feature-image {
-        margin-bottom: 1rem;
+      margin-bottom: 1rem;
     }
-
     #site-features .feature-section .feature-description {
-        padding: 1rem 0;
+      padding: 1rem 0;
     }
-
     .feature-description h3 {
-        font-size: 1.3rem;
+      font-size: 1.3rem;
     }
-
-    .feature-description p {
-        font-size: 1rem;
-        line-height: 1.4;
-        text-align: left;
-        padding-left: 1rem;
-        padding-right: 1rem;
+  
+    /* howtoセクションでのカード幅を小さく */
+    .howto-steps {
+      justify-content: center;
     }
-
-    .detail-button {
-        font-size: 0.9rem;
-        padding: 0.5rem 1.5rem;
+    .step {
+      width: 90%;
+      margin-bottom: 1.5rem;
     }
-}
-
-@media (min-width: 769px) {
+  }
+  
+  /* 769px以上 */
+  @media (min-width: 769px) {
+    /* PCの場合、インジケータは不要なので非表示 */
     #recent-stories-indicators,
     #popular-stories-indicators {
-        display: none;
+      display: none;
     }
-}
-
-/* 450px以下の画面サイズに対応 */
-@media (max-width: 450px) {
+  }
+  
+  /* 450px以下 */
+  @media (max-width: 450px) {
+    .howto-section h2 {
+        font-size: 1.2rem;
+    }
+  
     #hero {
-        height: 30vh;
+      height: 30vh;
     }
-
     .hero-content {
-        height: calc(50vh / 3);
-        padding: 0.5rem;
+      height: calc(50vh / 3);
+      padding: 0.5rem;
     }
-
     .hero-content h1 {
-        font-size: 1.2rem;
-        margin: 0.1rem 0;
+      font-size: 1.2rem;
+      margin: 0.1rem 0;
     }
-
     .hero-content p {
-        font-size: 0.8rem;
-        line-height: 1.2;
+      font-size: 0.8rem;
+      line-height: 1.2;
     }
-
     .cta-button {
-        font-size: 0.8rem;
-        padding: 0.6rem 1rem; /* ボタンのパディングを減少 */
+      font-size: 0.8rem;
+      padding: 0.6rem 1rem;
     }
-
     .hero-note {
-        font-size: 0.65rem;
-        padding-bottom: 1rem; /* フッターのスペースを確保 */
+      font-size: 0.65rem;
+      padding-bottom: 1rem;
     }
-
+  
     #life-path h2.section-title {
-        font-size: 1.2rem;
-        margin: 0.5rem 0;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
     }
-
     #life-path p {
-        font-size: 0.8rem;
-        line-height: 1.4;
-        margin: 0.5rem 0;
-        text-align: left;
-        margin-left: 1rem;
-        margin-right: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin: 0.5rem 0;
+      text-align: left;
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
-
+  
+    /* さらに本文サイズを小さく */
+    section h2.section-title {
+      font-size: 1.2rem;
+    }
+    section p,
+    .feature-description p,
+    .overview-container p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .highlight-list li,
+    .step p {
+      font-size: 0.8rem;
+    }
+    .highlight-list li {
+        font-size: 0.8rem;
+    }
+  
+    /* カードのレイアウト微調整 */
     .card {
-        height: auto;
+      flex: 0 0 100%;
+      padding: 0.5rem;
+      padding-bottom: 1rem; 
     }
-
-    .career-path-svg {
-        width: 100%;
-        height: auto;
-        max-height: 80px; /* 必要に応じて調整 */
-        overflow: visible;
-        margin-bottom: 1rem; /* 2remから1remに減少 */
-        white-space: pre-line;
-        word-wrap: break-word;
-    }
-
-    #career-path-visualization text {
-        font-size: 0.7rem;
-    }
-
-    #career-path-visualization tspan {
-        font-size: 0.8rem;
-    }
-
-    #career-path-visualization .university-label {
-        font-size: 1rem;
-    }
-
-    #career-path-visualization line {
-        stroke-width: 1px;
-    }
-
-    .career-path-svg text {
-        letter-spacing: -0.5px;
-    }
-
-    .career-path-svg g {
-        transform: translateX(-1120px);
-    }
-
-    .feature-description h3 {
-        font-size: 1.2rem;
-    }
-
-    .feature-description p {
-        font-size: 0.8rem;
-        line-height: 1.2;
-    }
-
-    .detail-button {
-        font-size: 0.8rem;
-        padding: 0.4rem 1rem;
-    }
-
-    /* カードフッターの位置を相対位置に変更 */
     .card-footer {
-        position: relative; /* absoluteからrelativeへ変更 */
-        right: 0; /* 位置をリセット */
-        bottom: 0; /* 位置をリセット */
-        margin-top: 0.5rem; /* グラフとの間に余白を追加 */
-        align-self: flex-end; /* 右端に配置 */
+      position: relative; 
+      right: 0;
+      bottom: 0;
+      margin-top: 0.5rem;
+      align-self: flex-end;
     }
-
-    /* カードのパディングを調整してフッターのスペースを確保 */
-    .card {
-        flex: 0 0 100%;
-        padding: 0.5rem; /* パディングをさらに減少 */
-        padding-bottom: 1rem; /* フッターのスペースを確保 */
-    }
-
-    /* カードヘッダーの余白を減少してグラフを上に移動 */
     .card-header {
-        margin-bottom: 0.2rem; /* グラフを上に移動させるために余白を減少 */
+      margin-bottom: 0.2rem;
     }
-}
+    .career-path-svg {
+      max-height: 80px;
+      margin-bottom: 1rem;
+    }
+    #career-path-visualization text {
+      font-size: 0.7rem;
+    }
+    #career-path-visualization tspan {
+      font-size: 0.8rem;
+    }
+    #career-path-visualization .university-label {
+      font-size: 1rem;
+    }
+    #career-path-visualization line {
+      stroke-width: 1px;
+    }
+    .career-path-svg text {
+      letter-spacing: -0.5px;
+    }
+    .career-path-svg g {
+      transform: translateX(-1120px);
+    }
+    .feature-description h3 {
+      font-size: 1.2rem;
+    }
+    .feature-description p {
+      font-size: 0.8rem;
+      line-height: 1.2;
+    }
+    .detail-button {
+      font-size: 0.8rem;
+      padding: 0.4rem 1rem;
+    }
+  }
