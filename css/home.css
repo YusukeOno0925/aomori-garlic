@@ -86,12 +86,57 @@ main {
     color: var(--main-color);
   }
   
+  /* ===== overview-section (インノーマルとは？) ===== */
+  .overview-section {
+    background-color: #ffffff;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-bottom: -3rem;
+  }
+  .overview-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .overview-container h2 {
+    font-size: 1.6rem;
+    color: #4e3d12;
+    margin-bottom: 1.2rem;
+  }
+  .overview-container p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    text-align: left; /* PCでは左寄せに変更して読みやすく */
+  }
+  
+  /* リスト（箇条書き）のデザイン */
+  .highlight-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem auto;
+    text-align: left; 
+    max-width: 600px;
+  }
+  .highlight-list li {
+    position: relative;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+  }
+  .highlight-list li::before {
+    content: '✔';
+    color: #8ba141;
+    position: absolute;
+    left: 0;
+  }
+
   /* ===== howto-section ===== */
   .howto-section {
     padding: 2rem 1rem;
     background-color: #fff; 
     text-align: center;
-    margin-bottom: -3rem;
+    margin-bottom: -2rem;
+    border-top: 1px solid #ddd;
   }
   .howto-section h2 {
     font-size: 1.6rem;
@@ -137,51 +182,12 @@ main {
     line-height: 1.4;
   }
   
-  /* ===== overview-section (インノーマルとは？) ===== */
-  .overview-section {
-    background-color: #ffffff;
-    padding: 2rem 1rem;
-    text-align: center;
-    margin-bottom: -2rem;
-  }
-  .overview-container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .overview-container h2 {
-    font-size: 1.6rem;
-    color: #4e3d12;
-    margin-bottom: 1.2rem;
-  }
-  .overview-container p {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 1.2rem;
-    text-align: left; /* PCでは左寄せに変更して読みやすく */
-  }
-  
-  /* リスト（箇条書き）のデザイン */
-  .highlight-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem auto;
-    text-align: left; 
-    max-width: 600px;
-  }
-  .highlight-list li {
-    position: relative;
-    margin-bottom: 0.5rem;
-    padding-left: 1.5rem;
-  }
-  .highlight-list li::before {
-    content: '✔';
-    color: #8ba141;
-    position: absolute;
-    left: 0;
-  }
-  
   /* ===== ライフパス可視化セクション ===== */
+  .lifepath-section{
+    margin-top: 5rem;
+    border-top: 1px solid #ddd;
+  }
+
   #career-path-visualization {
     position: relative;
     display: flex;
@@ -203,6 +209,14 @@ main {
   }
   
   /* ===== 最近のキャリアストーリー/人気のキャリアストーリー共通 ===== */
+  .recentstories-section{
+    border-top: 1px solid #ddd;
+  }
+
+  .popularstories-section{
+    border-top: 1px solid #ddd;
+  }
+
   .card-container {
     display: flex;
     flex-wrap: nowrap;
@@ -531,6 +545,9 @@ main {
       padding-bottom: 1rem;
     }
   
+    .lifepath-section{
+        margin-top: 1rem;
+    }
     #life-path h2.section-title {
       font-size: 1.2rem;
       margin: 0.5rem 0;
