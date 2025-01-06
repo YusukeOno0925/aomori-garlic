@@ -11,6 +11,7 @@
     <link rel="canonical" href="https://www.imnormal.jp/">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script> <!-- 追加 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -51,13 +52,15 @@
                 これにより、ユーザーはフィルタリングされた条件に該当する具体的なキャリアパスを確認することができます。</p>
         </section>
 
-        <!-- フィルタリング項目を説明の下に配置 -->
+        <!-- フィルタリング項目 -->
         <section id="search-section">
             <select id="filter-university">
-                <option value="any">大学を選択</option>
+                <option value="any">すべての大学</option>
+                <!-- 大学のオプションは JavaScript で動的に追加 -->
             </select>
             <select id="filter-industry">
-                <option value="">業界を選択</option>
+                <option value="">すべての業界</option>
+                <!-- 業界のオプションは JavaScript で動的に追加 -->
             </select>
         </section>
 

@@ -25,6 +25,7 @@ from scripts.online_status import router as online_status_router
 from scripts.online_status import update_last_active  # ミドルウェア関数をインポート
 from scripts.password_reset import router as password_reset_router
 from scripts.auth import router as auth_router
+from scripts.career_path import router as career_path_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -55,6 +56,7 @@ app.include_router(comments_router)
 app.include_router(online_status_router)
 app.include_router(auth_router)
 app.include_router(password_reset_router)
+app.include_router(career_path_router)
 
 # CORSの設定
 app.add_middleware(
