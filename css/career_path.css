@@ -15,12 +15,16 @@ main {
     padding: 20px;
     text-align: center;
     margin-top: 20px; /* 上部に余白を追加 */
+    width: 100%; /* 幅を100%に設定 */
+    max-width: 800px; /* 最大幅を設定 */
 }
 
 /* キャリアパスグラフのセクション */
 #career-visualization {
     text-align: center;
     margin-bottom: 20px;
+    width: 100%; /* 幅を100%に設定 */
+    max-width: 800px; /* 最大幅を設定 */
 }
 
 #career-visualization h2 {
@@ -44,34 +48,44 @@ main {
     width: 100%;
     margin-top: 10px; /* 上部の余白を小さく */
     margin-bottom: 10px; /* 下部の余白を小さく */
-    overflow: visible; /* 必要に応じて表示 */
+    overflow: hidden; /* はみ出しを防止 */
+    height: auto; /* 高さを自動調整 */
 }
 
 /* ユーザーカードのセクション */
 #user-card-container {
-    display: block;
-    margin-top: 10px; /* 上部の余白を小さく */
-    justify-content: center;
+    display: block; /* ブロック要素に設定 */
+    width: 100%; /* 幅を100%に設定 */
+    max-width: 800px; /* 最大幅を設定 */
+    margin-top: 20px; /* 上部の余白を増やす */
 }
 
 /* カードスタイル */
 .career-card {
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 10px;
-    margin: 20px auto; /* カードを中央に配置 */
-    width: 90%; /* カードをコンテナの90%の幅にする */
-    max-width: 1000px; /* カードの最大幅を設定 */
+    padding: 20px; /* パディングを増やす */
+    margin-bottom: 20px; /* 下に余白を追加 */
+    width: 100%; /* 親コンテナに合わせて幅を設定 */
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: box-shadow 0.3s ease;
-    display: block; /* カードをブロック要素にする */
+    box-sizing: border-box; /* パディングとボーダーを含める */
 }
 
 .career-card:hover {
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.career-path {
-    margin-top: 20px;
+/* ツールチップのスタイル */
+.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 6px;
+    font-size: 12px;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
 }
