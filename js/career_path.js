@@ -1,3 +1,8 @@
+function truncateText(text, maxLength) {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength - 3) + '...' : text;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const universitySelect = document.getElementById('filter-university');
     const industrySelect = document.getElementById('filter-industry');
@@ -431,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("y", d => (d.y1 + d.y0) / 2)
                 .attr("dy", "0.35em")
                 .attr("text-anchor", "end")
-                .text(d => d.name)
+                .text(d => truncateText(d.name, 10))
                 .filter(d => d.x0 < width / 2)
                 .attr("x", d => d.x1 + 6)
                 .attr("text-anchor", "start")
