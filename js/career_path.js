@@ -143,14 +143,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 .style("font-size", "12px")
                 .each(function(d) {
                     const stageText = d3.select(this);
-                    const companyName = d.company_name || '不明'; // 会社名がない場合は '不明' を表示
-                    const lines = companyName.match(/.{1,6}/g) || [companyName]; // 6文字ごとに分割（必要に応じて調整）
+                    // 改行コードをスペースに置き換え、会社名を取得
+                    let companyName = (d.company_name || '不明').replace(/\n/g, ' ');
+
+                    const maxCharsPerLine = 6;  // 1行あたりの最大文字数
+                    let firstLine = companyName.slice(0, maxCharsPerLine);
+                    let secondLine = '';
+
+                    if (companyName.length > maxCharsPerLine) {
+                        // 2行目の取得
+                        secondLine = companyName.slice(maxCharsPerLine, maxCharsPerLine * 2);
+                        if (companyName.length > maxCharsPerLine * 2) {
+                            // 3行目以降がある場合、省略記号を追加
+                            secondLine = secondLine.slice(0, maxCharsPerLine - 3) + '...';
+                        }
+                    }
+
+                    const lines = [firstLine];
+                    if (secondLine) {
+                        lines.push(secondLine);
+                    }
+
                     stageText.selectAll("tspan")
                         .data(lines)
                         .enter()
                         .append("tspan")
                         .attr("x", stageText.attr("x"))
-                        .attr("dy", (d, i) => i === 0 ? 0 : 14)
+                        .attr("dy", (d, i) => i === 0 ? 0 : 14)  // 1行目はそのまま、2行目は14px下に配置
                         .text(d => d);
                 });
             

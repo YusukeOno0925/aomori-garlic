@@ -89,3 +89,14 @@ main {
     pointer-events: none;
     opacity: 0;
 }
+
+svg text {
+    font-size: 14px;  /* すべてのSVG内テキストを14pxに固定 */
+}
+
+/* 450px以下 */
+@media (max-width: 450px) {
+    svg text {
+        font-size: 12px;  /* すべてのSVG内テキストを12pxに固定 */
+    }
+}
