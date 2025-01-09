@@ -16,6 +16,7 @@
     <link rel="canonical" href="https://www.imnormal.jp/Home.html">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -104,14 +105,11 @@
 
         <section id="life-path" class="lifepath-section">
             <h2 class="section-title">ライフパスの可視化</h2>
-            <p>ユーザーの学歴から現在の職業に至るまでの<strong>キャリアパス</strong>を視覚的に表現しています。<br>
-                各ステージの節目や<strong>転職のタイミング</strong>が一目で分かります。丸の大きさは、そのステージにおける人数の多さを示しています。</p>
+            <p>
+                このグラフでは、データベースに基づき、上位3校の出身者がどのようなキャリアを歩んできたかを視覚化しています。<br>
+                各ノードは大学や業界を示し、リンクはキャリアの移動を表現します。長い大学名や業界名は自動的に省略され、省略記号「...」で表示されます。
+            </p>
             <div id="career-path-visualization" style="width: 100%; height: 400px;"></div>
-            <div class="carousel-indicators">
-                <span class="indicator active"></span>
-                <span class="indicator"></span>
-                <span class="indicator"></span>
-            </div>
         </section>
 
         <section id="recent-stories" class="recentstories-section">
