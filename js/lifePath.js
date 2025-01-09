@@ -128,28 +128,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 return (d.x0 + d.x1) / 2;
             })
             .each(function(d) {
-                // テキスト要素の選択
                 const textSel = d3.select(this);
-                
-                // 表示するテキストを取得（省略せず全表示する場合はtruncateTextを使わない）
+                // 長いテキストを2行まで表示し、それ以降は省略する処理
                 let fullText = d.name || '';
-                
-                // 最大文字数を超えたら改行処理を行う
                 const maxCharsPerLine = 6;  // 1行あたりの最大文字数
                 let lines = [];
-                while(fullText.length > maxCharsPerLine) {
+                // 最大3行まで分割（3行目が存在する場合は省略対象）
+                while(fullText.length > 0 && lines.length < 3) {
                     lines.push(fullText.slice(0, maxCharsPerLine));
                     fullText = fullText.slice(maxCharsPerLine);
                 }
-                lines.push(fullText); // 残りの部分を追加
-        
-                // tspan を使って複数行表示
+                // 3行目が存在したら2行目に「...」を追加して2行に制限
+                if(lines.length === 3) {
+                    lines = lines.slice(0, 2);
+                    let secondLine = lines[1];
+                    // 既に最大長に近ければ「...」を追加、そうでなければ末尾に「...」を追加
+                    if(secondLine.length > maxCharsPerLine - 3) {
+                        secondLine = secondLine.slice(0, maxCharsPerLine - 3) + '...';
+                    } else {
+                        secondLine += '...';
+                    }
+                    lines[1] = secondLine;
+                }
                 textSel.selectAll("tspan")
                     .data(lines)
                     .enter()
                     .append("tspan")
                     .attr("x", textSel.attr("x"))
-                    .attr("dy", (d, i) => i === 0 ? "0em" : "1.2em") 
+                    .attr("dy", (d, i) => i === 0 ? "0em" : "1.2em")
                     .text(d => d);
             });
         })
