@@ -11,11 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             const careers = data.careers;
 
-            // 大学ごとの出現回数をカウント
+            // 大学ごとの出現回数をカウント（非公開、不明を除外）
             const universityCount = {};
             careers.forEach(career => {
                 const uni = career.education;
-                // 非公開、不明を除外
                 if (uni && uni !== '非公開' && uni !== '不明') {
                     universityCount[uni] = (universityCount[uni] || 0) + 1;
                 }
@@ -27,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .slice(0, 3)
                 .map(entry => entry[0]);
 
-            console.log("Top Universities:", topUniversities); // デバッグ用ログ
+            console.log("Top Universities:", topUniversities);
 
             // 上位3校に関連するキャリアをフィルタリング
             const filteredCareers = careers.filter(career => topUniversities.includes(career.education));
@@ -83,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const sankey = d3.sankey()
                 .nodeWidth(15)
                 .nodePadding(10)
-                .extent([[20, 20], [width - 20, height - 20]]);
+                .extent([[40, 20], [width - 40, height - 20]]);  // 左右余白を40に設定
 
             const {nodes, links: sankeyLinks} = sankey(sankeyData);
 
@@ -115,12 +114,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("stroke", "#000");
 
             node.append("text")
-                .attr("x", d => (d.x0 + d.x1) / 2)
-                .attr("y", d => (d.y0 + d.y1) / 2)
-                .attr("dy", "0.35em")
-                .attr("text-anchor", "middle")
-                .style("font-size", "12px")
-                .text(d => truncateText(d.name, 12));
+            .attr("y", d => (d.y0 + d.y1) / 2)
+            .attr("dy", "0.35em")
+            .style("font-size", "12px")
+            .attr("text-anchor", function(d) {
+                if(d.x0 < 40) return "start";
+                if(d.x1 > (width - 40)) return "end";
+                return "middle";
+            })
+            .attr("x", function(d) {
+                if(d.x0 < 40) return d.x0 + 5;
+                if(d.x1 > (width - 40)) return d.x1 - 5;
+                return (d.x0 + d.x1) / 2;
+            })
+            .each(function(d) {
+                // テキスト要素の選択
+                const textSel = d3.select(this);
+                
+                // 表示するテキストを取得（省略せず全表示する場合はtruncateTextを使わない）
+                let fullText = d.name || '';
+                
+                // 最大文字数を超えたら改行処理を行う
+                const maxCharsPerLine = 6;  // 1行あたりの最大文字数
+                let lines = [];
+                while(fullText.length > maxCharsPerLine) {
+                    lines.push(fullText.slice(0, maxCharsPerLine));
+                    fullText = fullText.slice(maxCharsPerLine);
+                }
+                lines.push(fullText); // 残りの部分を追加
+        
+                // tspan を使って複数行表示
+                textSel.selectAll("tspan")
+                    .data(lines)
+                    .enter()
+                    .append("tspan")
+                    .attr("x", textSel.attr("x"))
+                    .attr("dy", (d, i) => i === 0 ? "0em" : "1.2em") 
+                    .text(d => d);
+            });
         })
         .catch(err => console.error("Error fetching career-path-data:", err));
 });
