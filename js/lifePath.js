@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .slice(0, 3)
                 .map(entry => entry[0]);
 
-            console.log("Top Universities:", topUniversities);
-
             // 上位3校に関連するキャリアをフィルタリング
             const filteredCareers = careers.filter(career => topUniversities.includes(career.education));
 
@@ -67,22 +65,41 @@ document.addEventListener('DOMContentLoaded', function () {
             // サンキーデータ準備
             const sankeyData = { nodes: nodesArray, links: linksArray };
 
-            // SVG 初期化
-            const width = container.clientWidth || 800;
-            const height = container.clientHeight || 400;
             container.innerHTML = '';
+
+            // 1) 画面幅を取得
+            const viewportWidth = window.innerWidth;
+
+            // 2) sankey用の幅・高さをデフォルトで設定
+            let sankeyWidth = 900;
+            let sankeyHeight = 500;
+                    
+            // 768px以下なら少し小さく
+            if (viewportWidth <= 768) {
+                sankeyWidth = 600;
+                sankeyHeight = 400;
+            }
+
+            // 450px以下ならさらに小さく
+            if (viewportWidth <= 450) {
+                sankeyWidth = 450;
+                sankeyHeight = 300;
+            }
+
+            // 3) SVG自体の幅・高さを ちょっとだけ広め (余白を含む) に設定
+            const svgWidth = sankeyWidth + 100;
+            const svgHeight = sankeyHeight + 100;
+
             const svg = d3.select(container)
                 .append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .attr("viewBox", `0 0 ${width} ${height}`)
-                .attr("preserveAspectRatio", "xMinYMin meet");
+                .attr("width", svgWidth)
+                .attr("height", svgHeight);
 
             // サンキーダイアグラムの設定
             const sankey = d3.sankey()
                 .nodeWidth(15)
-                .nodePadding(10)
-                .extent([[40, 20], [width - 40, height - 20]]);  // 左右余白を40に設定
+                .nodePadding(30)
+                .extent([[40, 20], [sankeyWidth, sankeyHeight]]);
 
             const {nodes, links: sankeyLinks} = sankey(sankeyData);
 
@@ -119,12 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .style("font-size", "12px")
             .attr("text-anchor", function(d) {
                 if(d.x0 < 40) return "start";
-                if(d.x1 > (width - 40)) return "end";
+                if (d.x1 > (sankeyWidth - 40)) return "end";
                 return "middle";
             })
             .attr("x", function(d) {
                 if(d.x0 < 40) return d.x0 + 5;
-                if(d.x1 > (width - 40)) return d.x1 - 5;
+                if (d.x1 > (sankeyWidth - 40)) return d.x1 - 5;
                 return (d.x0 + d.x1) / 2;
             })
             .each(function(d) {

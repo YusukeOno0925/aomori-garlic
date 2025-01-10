@@ -190,9 +190,9 @@ main {
 
   #career-path-visualization {
     position: relative;
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     margin-top: 2rem;
     margin-bottom: 2rem;
     background-color: #ffffff;
@@ -203,11 +203,12 @@ main {
     margin-left: auto;
     margin-right: auto;
     overflow-x: auto;
+    overflow-y: auto;
   }
-  svg {
+  /* svg {
     width: 100%;
     height: auto;
-  }
+  } */
   
   /* ===== 最近のキャリアストーリー/人気のキャリアストーリー共通 ===== */
   .recentstories-section{
