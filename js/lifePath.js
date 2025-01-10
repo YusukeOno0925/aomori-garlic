@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .enter().append("path")
                 .attr("d", d3.sankeyLinkHorizontal())
                 .attr("stroke", "#574637")
-                .attr("stroke-width", d => Math.max(1, d.width / 1.5))
+                .attr("stroke-width", d => Math.max(1, d.width / 1.2))
                 .attr("fill", "none")
                 .attr("opacity", 0.5);
 
