@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .enter().append("path")
                 .attr("d", d3.sankeyLinkHorizontal())
                 .attr("stroke", "#574637")
-                .attr("stroke-width", d => Math.max(1, d.width))
+                .attr("stroke-width", d => Math.max(1, d.width / 1.5))
                 .attr("fill", "none")
                 .attr("opacity", 0.5);
 
@@ -127,13 +127,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("y", d => d.y0)
                 .attr("height", d => d.y1 - d.y0)
                 .attr("width", d => d.x1 - d.x0)
-                .attr("fill", "#8ba141")
+                .attr("fill", "#f9ffcd")
                 .attr("stroke", "#000");
 
             node.append("text")
             .attr("y", d => (d.y0 + d.y1) / 2)
             .attr("dy", "0.35em")
             .style("font-size", "12px")
+            .style("font-weight", "bold")
             .attr("text-anchor", function(d) {
                 if(d.x0 < 40) return "start";
                 if (d.x1 > (sankeyWidth - 40)) return "end";
