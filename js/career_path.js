@@ -4,167 +4,191 @@ function truncateText(text, maxLength) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const universitySelect = document.getElementById('filter-university');
-    const industrySelect = document.getElementById('filter-industry');
-    const careerGraph = document.getElementById('career-path-graph');
+    var universitySelect = document.getElementById('filter-university');
+    var industrySelect = document.getElementById('filter-industry');
+    var careerGraph = document.getElementById('career-path-graph');
 
     // APIから実データを取得
     fetch('/career-path-data/', {
         credentials: 'include' // 認証情報を含める（必要な場合）
     })
-    .then(response => {
+    .then(function(response) {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error("HTTP error! status: " + response.status);
         }
         return response.json();
     })
-    .then(data => {
+    .then(function(data) {
         // APIから取得したデータ
-        const universities = data.universities;
-        const industries = data.industries;
-        const careers = data.careers;
+        var universities = data.universities;
+        var industries = data.industries;
+        var careers = data.careers;
 
         // 大学フィルターのオプションを動的に設定
-        universities.forEach(university => {
-            const option = document.createElement('option');
+        universities.forEach(function(university) {
+            var option = document.createElement('option');
             option.value = university;
             option.textContent = university;
             universitySelect.appendChild(option);
         });
 
         // 業界フィルターのオプションを動的に設定
-        industries.forEach(industry => {
-            const option = document.createElement('option');
+        industries.forEach(function(industry) {
+            var option = document.createElement('option');
             option.value = industry;
             option.textContent = industry;
             industrySelect.appendChild(option);
         });
 
+        // 年齢を計算する関数
         function calculateAge(birthYear) {
-            const currentYear = new Date().getFullYear();
+            var currentYear = new Date().getFullYear();
             return currentYear - birthYear;
         }
 
+        // ユーザー一覧（カード）を表示
         function displayUsers(filteredCareers) {
-            const userCardContainer = document.getElementById('user-card-container');
+            var userCardContainer = document.getElementById('user-card-container');
             userCardContainer.innerHTML = '';
-            filteredCareers.forEach(career => {
-                const age = calculateAge(career.birthYear);
-                
+
+            filteredCareers.forEach(function(career) {
+                var age = calculateAge(career.birthYear);
+
                 // companies 配列が存在し、少なくとも1つの会社があるか確認
                 if (!career.companies || career.companies.length === 0) {
-                    //console.warn(`ユーザーID ${career.id} (${career.name}) に会社情報がありません。`);
-                    return; // このキャリアをスキップ
+                    // 会社情報なしの場合、スキップ
+                    return;
                 }
-                
-                const latestJob = career.companies[career.companies.length - 1];
-                
-                // position プロパティが存在するか確認し、存在しない場合は '不明' を設定
-                const position = latestJob.position || '不明';
-                const salary = latestJob.salary !== undefined && latestJob.salary !== null ? `${latestJob.salary}万円` : '非公開';
-                
-                const card = document.createElement('div');
+                var latestJob = career.companies[career.companies.length - 1];
+
+                // position プロパティが存在しない場合は '不明'
+                var position = latestJob.position || '不明';
+                var salary = (latestJob.salary !== undefined && latestJob.salary !== null)
+                             ? (latestJob.salary + '万円')
+                             : '非公開';
+
+                var card = document.createElement('div');
                 card.className = 'career-card';
-                card.innerHTML = `
-                    <div class="career-info">
-                        <h2>${career.name} (${age}歳)</h2>
-                        <p>職業: ${position}</p>
-                        <p>年収: ${salary}</p>
-                    </div>
-                    <div class="career-path" id="career-path-${career.id}"></div>
-                `;
+                card.innerHTML =
+                    '<div class="career-info">' +
+                      '<h2>' + career.name + ' (' + age + '歳)</h2>' +
+                      '<p>職業: ' + position + '</p>' +
+                      '<p>年収: ' + salary + '</p>' +
+                    '</div>' +
+                    '<div class="career-path" id="career-path-' + career.id + '"></div>';
+
                 card.addEventListener('click', function () {
-                    window.location.href = `career_detail.html?id=${career.id}`;
+                    // テンプレートリテラルを使わず文字列結合
+                    window.location.href = "career_detail.html?id=" + career.id;
                 });
+
                 userCardContainer.appendChild(card);
-                drawCareerPath(`#career-path-${career.id}`, career.companies);
+                drawCareerPath("#career-path-" + career.id, career.companies);
             });
         }
 
+        // 小さな会社経歴用のパス描画（上部カードで使用）
         function drawCareerPath(selector, stages) {
-            const container = document.querySelector(selector);
-            const width = container.clientWidth || 300; // デフォルト幅
-            const height = 100;
-            
+            var container = document.querySelector(selector);
+            var width = container.clientWidth || 300; // デフォルト幅
+            var height = 100;
+
             // 既存のSVGをクリア
             container.innerHTML = '';
 
-            const svg = d3.select(selector)
+            var svg = d3.select(selector)
                 .append("svg")
                 .attr("width", "100%")
                 .attr("height", height)
-                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("viewBox", "0 0 " + width + " " + height)
                 .attr("preserveAspectRatio", "xMinYMid meet");
-            
-            const xScale = d3.scaleLinear()
+
+            // 画面幅で左右余白を決定
+            var screenWidth = window.innerWidth;
+            var leftMargin, rightMargin;
+            if (screenWidth < 450) {
+                // 450px 以下ならかなり詰める
+                leftMargin = 10;
+                rightMargin = 10;
+            } else if (screenWidth < 768) {
+                // 768px 以下（ただし450px以上）
+                leftMargin = 20;
+                rightMargin = 20;
+            } else {
+                // それ以上の画面サイズは従来どおり
+                leftMargin = 50;
+                rightMargin = 50;
+            }
+
+            var xScale = d3.scaleLinear()
                 .domain([0, stages.length - 1])
-                .range([50, width - 50]); 
-            
-            // リンク（線）を描画
+                .range([leftMargin, width - rightMargin]);
+
+            // リンク（線）
             svg.append("g")
                 .selectAll("line")
                 .data(stages)
                 .enter()
                 .append("line")
-                .attr("x1", (d, i) => i === 0 ? xScale(0) : xScale(i - 1))
+                .attr("x1", function(d, i) { return i === 0 ? xScale(0) : xScale(i - 1); })
                 .attr("y1", height / 2)
-                .attr("x2", (d, i) => xScale(i))
+                .attr("x2", function(d, i) { return xScale(i); })
                 .attr("y2", height / 2)
-                .attr("stroke", "#574637")
+                .attr("stroke", "#574637") // ホームと同様のリンク色
                 .attr("stroke-width", 2);
-            
-            // ノード（円）を描画
+
+            // ノード（円）
             svg.append("g")
                 .selectAll("circle")
                 .data(stages)
                 .enter()
                 .append("circle")
-                .attr("cx", (d, i) => xScale(i))
+                .attr("cx", function(d, i) { return xScale(i); })
                 .attr("cy", height / 2)
                 .attr("r", 5)
-                .attr("fill", "#8ba141");
-            
+                .attr("fill", "#8ba141"); // ホーム同様のノード色
+
             // 年を表示
             svg.append("g")
                 .selectAll("text.year")
                 .data(stages)
                 .enter()
                 .append("text")
-                .attr("x", (d, i) => xScale(i))
+                .attr("x", function(d, i) { return xScale(i); })
                 .attr("y", height / 2 - 15)
                 .attr("text-anchor", "middle")
                 .style("font-size", "12px")
-                .text(d => d.start_year || '');
-            
-            // ステージを表示
+                .text(function(d) {
+                    return d.start_year || '';
+                });
+
+            // ステージ（会社名）を表示
             svg.append("g")
                 .selectAll("text.stage")
                 .data(stages)
                 .enter()
                 .append("text")
-                .attr("x", (d, i) => xScale(i))
+                .attr("x", function(d, i) { return xScale(i); })
                 .attr("y", height / 2 + 25)
                 .attr("text-anchor", "middle")
                 .style("font-size", "12px")
                 .each(function(d) {
-                    const stageText = d3.select(this);
-                    // 改行コードをスペースに置き換え、会社名を取得
-                    let companyName = (d.company_name || '不明').replace(/\n/g, ' ');
+                    var stageText = d3.select(this);
+                    // 改行コードをスペースに
+                    var companyName = (d.company_name || '不明').replace(/\n/g, ' ');
 
-                    const maxCharsPerLine = 6;  // 1行あたりの最大文字数
-                    let firstLine = companyName.slice(0, maxCharsPerLine);
-                    let secondLine = '';
+                    var maxCharsPerLine = 6;
+                    var firstLine = companyName.slice(0, maxCharsPerLine);
+                    var secondLine = '';
 
                     if (companyName.length > maxCharsPerLine) {
-                        // 2行目の取得
                         secondLine = companyName.slice(maxCharsPerLine, maxCharsPerLine * 2);
                         if (companyName.length > maxCharsPerLine * 2) {
-                            // 3行目以降がある場合、省略記号を追加
                             secondLine = secondLine.slice(0, maxCharsPerLine - 3) + '...';
                         }
                     }
 
-                    const lines = [firstLine];
+                    var lines = [firstLine];
                     if (secondLine) {
                         lines.push(secondLine);
                     }
@@ -174,179 +198,192 @@ document.addEventListener('DOMContentLoaded', function () {
                         .enter()
                         .append("tspan")
                         .attr("x", stageText.attr("x"))
-                        .attr("dy", (d, i) => i === 0 ? 0 : 14)  // 1行目はそのまま、2行目は14px下に配置
-                        .text(d => d);
+                        .attr("dy", function(d, i) { return i === 0 ? 0 : 14; })
+                        .text(function(txt) { return txt; });
                 });
-            
-            // アイコンを表示
-            svg.append("g")
-                .selectAll("text.icon")
-                .data([stages[stages.length - 1]])
-                .enter()
-                .append("text")
-                .attr("x", (d, i) => xScale(stages.length - 1) + 10)
-                .attr("y", height / 2 + 5)
-                .attr("text-anchor", "middle")
-                .style("font-size", "16px")
-                .text('👤');
+
+            // アイコン
+            if (stages.length > 0) {
+                svg.append("g")
+                    .selectAll("text.icon")
+                    .data([stages[stages.length - 1]])
+                    .enter()
+                    .append("text")
+                    .attr("x", xScale(stages.length - 1) + 10)
+                    .attr("y", height / 2 + 5)
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "16px")
+                    .text('👤');
+            }
         }
 
+        // ===== サンキーダイアグラム（メイン可視化）の描画 =====
         function drawCareerGraph(filteredCareers) {
-            // ノードとリンクのデータ構造を作成
-            const nodesSet = new Set(); // ユニークなノードを収集
-            const links = [];
+            // ホーム画面と同じ色&ロジック、大学はすべて/業界数は3or4
+            var nodesSet = new Set();
+            var links = [];
 
-            // リンクの集約を行う関数
-            function addLink(links, source, target) {
-                const existingLink = links.find(link => link.source === source && link.target === target);
-                if (existingLink) {
-                    existingLink.value += 1;
+            function addSankeyLink(src, tgt) {
+                var existing = links.find(function(x) {
+                    return x.source === src && x.target === tgt;
+                });
+                if (existing) {
+                    existing.value += 1;
                 } else {
-                    links.push({ source, target, value: 1 });
+                    links.push({ source: src, target: tgt, value: 1 });
                 }
             }
 
-            filteredCareers.forEach(career => {
+            // 大学は全て、業界は後ほど上位3or4に
+            filteredCareers.forEach(function(career) {
+                var edu = career.education;
+                if (!edu) return;
+                nodesSet.add(edu);
+
                 if (!career.companies || career.companies.length === 0) {
-                    // 会社情報がない場合、ノードを追加しない
-                    //console.warn(`ユーザーID ${career.id} (${career.name}) に会社情報がありません。`);
                     return;
                 }
-                nodesSet.add(career.education); // 大学をノードに追加
-                career.companies.forEach((company, index) => {
-                    nodesSet.add(company.industry); // 業界をノードに追加
-
-                    if (index === 0) {
-                        // 大学から最初の業界へのリンク
-                        addLink(links, career.education, company.industry);
+                career.companies.forEach(function(comp, idx) {
+                    var ind = comp.industry || "不明";
+                    nodesSet.add(ind);
+                    if (idx === 0) {
+                        // 大学→最初の業界
+                        addSankeyLink(edu, ind);
                     } else {
-                        const prevIndustry = career.companies[index - 1].industry;
-                        // 同じ業界間の循環を防ぐため、以前の業界から現在の業界へのリンクのみ追加
-                        if (prevIndustry !== company.industry) { // 同じ業界への自己ループを防ぐ
-                            addLink(links, prevIndustry, company.industry);
+                        var prevInd = career.companies[idx - 1].industry || "不明";
+                        if (prevInd !== ind) {
+                            addSankeyLink(prevInd, ind);
                         }
                     }
                 });
             });
 
-            // 業界の出現頻度を計算
-            const industryCount = {};
-            links.forEach(link => {
-                if (link.target in industryCount) {
-                    industryCount[link.target] += link.value;
-                } else {
-                    industryCount[link.target] = link.value;
+            // 業界出現頻度
+            var industryCount = {};
+            links.forEach(function(ln) {
+                if (!industryCount[ln.target]) {
+                    industryCount[ln.target] = 0;
                 }
+                industryCount[ln.target] += ln.value;
             });
 
-            // 業界を出現頻度でソート
-            const sortedIndustries = Object.keys(industryCount).sort((a, b) => industryCount[b] - industryCount[a]);
-
-            // 画面サイズに応じた業界の表示数を決定
-            const screenWidth = window.innerWidth;
-            let maxIndustries;
+            // 画面幅で業界表示数を 3 or 4
+            var screenWidth = window.innerWidth;
+            var maxIndustries;
             if (screenWidth < 600) {
-                maxIndustries = 2;
-            } else if (screenWidth < 900) {
-                maxIndustries = 3;
+                maxIndustries = 4; // 小画面 -> 4
             } else {
-                maxIndustries = Infinity; // 全て表示
+                maxIndustries = 5; // それ以外 -> 5
             }
 
-            const topIndustries = sortedIndustries.slice(0, maxIndustries);
-            const otherIndustries = sortedIndustries.slice(maxIndustries);
+            // 業界ソート
+            var sortedIndustries = Object.keys(industryCount)
+                .sort(function(a,b) {
+                    return industryCount[b] - industryCount[a];
+                });
+            var topIndustries = sortedIndustries.slice(0, maxIndustries);
+            var otherIndustries = sortedIndustries.slice(maxIndustries);
 
-            // 「その他」業界を追加
+            // その他集約
             if (otherIndustries.length > 0) {
                 topIndustries.push("その他");
             }
 
-            // 「その他」業界へのリンクを集約
-            const updatedLinks = [];
-            links.forEach(link => {
-                if (topIndustries.includes(link.target)) {
-                    updatedLinks.push(link);
+            // 新しいリンク配列
+            var newLinks = [];
+            function addOrInc(s, t) {
+                var ex = newLinks.find(function(x) {
+                    return x.source === s && x.target === t;
+                });
+                if (ex) {
+                    ex.value += 1;
                 } else {
-                    // 「その他」へのリンクを集約
-                    addLink(updatedLinks, link.source, "その他");
+                    newLinks.push({ source: s, target: t, value: 1 });
                 }
-            });
-
-            // ノードのセットを更新
-            const finalNodesSet = new Set();
-            topIndustries.forEach(industry => finalNodesSet.add(industry));
-
-            // 大学ノードも追加（会社情報が存在する場合のみ）
-            filteredCareers.forEach(career => {
-                if (career.companies && career.companies.length > 0) {
-                    finalNodesSet.add(career.education);
-                }
-            });
-
-            // 「その他」業界が存在する場合のみ追加
-            if (topIndustries.includes("その他")) {
-                finalNodesSet.add("その他");
             }
 
-            const nodesArray = Array.from(finalNodesSet).map(name => ({ name }));
-
-            // ノード名からインデックスへのマッピングを作成
-            const nodeMap = {};
-            nodesArray.forEach((node, index) => {
-                nodeMap[node.name] = index;
+            links.forEach(function(ln) {
+                if (topIndustries.indexOf(ln.target) >= 0) {
+                    newLinks.push(ln);
+                } else {
+                    // その他へ集約
+                    addOrInc(ln.source, "その他");
+                }
             });
 
-            // リンクのsourceとtargetをインデックスに変換
-            const linksArray = updatedLinks.map(d => ({
-                source: nodeMap[d.source],
-                target: nodeMap[d.target],
-                value: d.value
-            })).filter(d => {
-                if (isNaN(d.source) || isNaN(d.target)) {
-                    //console.warn(`無効なリンクが除外されました: source=${d.source}, target=${d.target}`);
+            // 最終ノード
+            var finalNodesSet = new Set();
+
+            // 大学ノードは全部
+            filteredCareers.forEach(function(c) {
+                if (c.companies && c.companies.length > 0) {
+                    finalNodesSet.add(c.education);
+                }
+            });
+
+            // 業界ノード
+            topIndustries.forEach(function(ind) {
+                finalNodesSet.add(ind);
+            });
+
+            var nodesArray = Array.from(finalNodesSet).map(function(nm) {
+                return { name: nm };
+            });
+
+            var nodeMap = {};
+            nodesArray.forEach(function(n, i) {
+                nodeMap[n.name] = i;
+            });
+
+            var linksArray = newLinks.map(function(l) {
+                return {
+                    source: nodeMap[l.source],
+                    target: nodeMap[l.target],
+                    value: l.value
+                };
+            }).filter(function(x) {
+                // NaN除外
+                if (isNaN(x.source) || isNaN(x.target)) {
                     return false;
                 }
                 return true;
             });
 
-            // 循環リンクを除外
-            const cleanedLinksArray = removeCircularLinks(linksArray, nodesArray.length);
+            // 循環リンク除外
+            var cleanedLinksArray = removeCircularLinks(linksArray, nodesArray.length);
 
-            // サンキーダイアグラム用にデータを整形
-            const sankeyData = {
+            var sankeyData = {
                 nodes: nodesArray,
                 links: cleanedLinksArray
             };
 
-            // データ整形のデバッグログ
-            //console.log("Sankey Data:", sankeyData);
-
-            // SVGのクリア
+            // SVGをクリア
             careerGraph.innerHTML = '';
 
-            // サンキーダイアグラムの設定
-            const width = careerGraph.clientWidth || 800;
-
-            // 高さを画面サイズに応じて調整
-            let height;
+            // 横スクロール用に min-width など
+            var containerWidth = careerGraph.clientWidth || 800;
+            var svgWidth = (containerWidth < 1200) ? 1200 : containerWidth; // 1200固定以上
+            var svgHeight;
             if (screenWidth < 600) {
-                height = 400;
+                svgHeight = 400;
             } else if (screenWidth < 900) {
-                height = 500;
+                svgHeight = 500;
             } else {
-                height = 600;
+                svgHeight = 600;
             }
 
-            const svg = d3.select("#career-path-graph").append("svg")
-                .attr("width", width)
-                .attr("height", height);
+            // SVG生成
+            var svg = d3.select("#career-path-graph").append("svg")
+                .attr("width", svgWidth)
+                .attr("height", svgHeight)
+                .style("min-width", "1200px"); // 強制的に横スクロールが出る
 
-            const sankey = d3.sankey()
+            var sankey = d3.sankey()
                 .nodeWidth(15)
                 .nodePadding(10)
-                .extent([[1, 1], [width - 1, height - 6]]);
+                .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
 
-            let sankeyResult;
+            var sankeyResult;
             try {
                 sankeyResult = sankey(sankeyData);
             } catch (error) {
@@ -354,111 +391,77 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const { nodes, links: sankeyLinks } = sankeyResult;
+            var nodes = sankeyResult.nodes;
+            var sankeyLinks = sankeyResult.links;
 
-            // ツールチップの作成
-            const tooltip = d3.select("body").append("div")   
-                .attr("class", "tooltip")               
-                .style("position", "absolute")
-                .style("text-align", "center")           
-                .style("padding", "6px")              
-                .style("font-size", "12px")             
-                .style("background", "lightsteelblue")   
-                .style("border", "0px")      
-                .style("border-radius", "8px")           
-                .style("pointer-events", "none")         
-                .style("opacity", 0);
-
-            // リンクを描画
+            // リンク描画
             svg.append("g")
                 .attr("class", "links")
                 .selectAll("path")
                 .data(sankeyLinks)
                 .enter().append("path")
                 .attr("d", d3.sankeyLinkHorizontal())
-                .attr("stroke", "#574637")
-                .attr("stroke-width", d => Math.max(1, d.width))
-                .attr("fill", "none")
-                .attr("opacity", 0.5)
-                .on("mouseover", function(event, d) {
-                    d3.select(this).attr("opacity", 0.8);
-                    tooltip.transition()        
-                        .duration(200)      
-                        .style("opacity", .9);      
-                    tooltip.html(`${d.source.name} → ${d.target.name}<br>人数: ${d.value}`)
-                        .style("left", (event.pageX) + "px")     
-                        .style("top", (event.pageY - 28) + "px");    
+                .attr("stroke", "#574637") // ホームと同じリンク色
+                .attr("stroke-width", function(d) {
+                    return Math.max(1, d.width);
                 })
-                .on("mouseout", function(event, d) {
-                    d3.select(this).attr("opacity", 0.5);
-                    tooltip.transition()        
-                        .duration(500)      
-                        .style("opacity", 0);   
-                });
+                .attr("fill", "none")
+                .attr("opacity", 0.5);
 
-            // ノードを描画
-            const node = svg.append("g")
+            // ノード描画
+            var node = svg.append("g")
                 .attr("class", "nodes")
                 .selectAll("g")
                 .data(nodes)
                 .enter().append("g");
 
             node.append("rect")
-                .attr("x", d => d.x0)
-                .attr("y", d => d.y0)
-                .attr("height", d => d.y1 - d.y0)
-                .attr("width", d => d.x1 - d.x0)
-                .attr("fill", "#8ba141")
-                .attr("stroke", "#000")
-                .on("click", function(event, d) {
-                    // ノードをクリックした際の処理（例: 業界に関連するユーザーをフィルタリング）
-                    industrySelect.value = d.name;
-                    applyFilters();
-                })
-                .on("mouseover", function(event, d) {
-                    d3.select(this).attr("fill", "#a0c741");
-                    tooltip.transition()        
-                        .duration(200)      
-                        .style("opacity", .9);      
-                    tooltip.html(`業界: ${d.name}`)
-                        .style("left", (event.pageX) + "px")     
-                        .style("top", (event.pageY - 28) + "px");    
-                })
-                .on("mouseout", function(event, d) {
-                    d3.select(this).attr("fill", "#8ba141");
-                    tooltip.transition()        
-                        .duration(500)      
-                        .style("opacity", 0);   
-                });
+                .attr("x", function(d) { return d.x0; })
+                .attr("y", function(d) { return d.y0; })
+                .attr("height", function(d) { return d.y1 - d.y0; })
+                .attr("width", function(d) { return d.x1 - d.x0; })
+                .attr("fill", "#8ba141") // ホームと同じノード色
+                .attr("stroke", "#000");
 
             node.append("text")
-                .attr("x", d => d.x0 - 6)
-                .attr("y", d => (d.y1 + d.y0) / 2)
+                .style("font-size", "12px")
+                .attr("x", function(d) {
+                    // 左側(幅の半分より左)なら右に出す, 右側なら左に出す
+                    if (d.x0 < svgWidth / 2) {
+                        return d.x1 + 6;
+                    } else {
+                        return d.x0 - 6;
+                    }
+                })
+                .attr("y", function(d) {
+                    return (d.y1 + d.y0) / 2;
+                })
                 .attr("dy", "0.35em")
-                .attr("text-anchor", "end")
-                .text(d => truncateText(d.name, 10))
-                .filter(d => d.x0 < width / 2)
-                .attr("x", d => d.x1 + 6)
-                .attr("text-anchor", "start")
-                .style("font-size", "12px");
+                .attr("text-anchor", function(d) {
+                    return (d.x0 < svgWidth / 2) ? "start" : "end";
+                })
+                .text(function(d) {
+                    return truncateText(d.name, 10);
+                });
         }
 
+        // フィルタ適用
         function applyFilters() {
-            const selectedUniversity = universitySelect.value;
-            const selectedIndustry = industrySelect.value;
+            var selectedUniversity = universitySelect.value;
+            var selectedIndustry = industrySelect.value;
 
-            // フィルタリング
-            const filteredCareers = careers.filter(career => {
-                const matchUni = (selectedUniversity === "any")
+            var filteredCareers = careers.filter(function(career) {
+                var matchUni = (selectedUniversity === "any")
                     ? true
                     : (career.education === selectedUniversity);
-                const matchInd = (selectedIndustry === "")
+                var matchInd = (selectedIndustry === "")
                     ? true
-                    : (career.companies.some(company => company.industry === selectedIndustry));
+                    : (career.companies.some(function(company) {
+                        return (company.industry === selectedIndustry);
+                    }));
                 return matchUni && matchInd;
             });
 
-            // グラフとユーザーカードの更新
             drawCareerGraph(filteredCareers);
             displayUsers(filteredCareers);
         }
@@ -467,37 +470,43 @@ document.addEventListener('DOMContentLoaded', function () {
         drawCareerGraph(careers);
         displayUsers(careers);
 
-        // イベントリスナーの設定
+        // イベントリスナー
         universitySelect.addEventListener('change', applyFilters);
         industrySelect.addEventListener('change', applyFilters);
     })
-    .catch(err => {
+    .catch(function(err) {
         console.error("Error fetching career-path-data:", err);
     });
 });
 
-// 循環リンクを除外するための関数
+// 循環リンクを除外する関数
 function removeCircularLinks(linksArray, nodeCount) {
-    const adjList = Array.from({ length: nodeCount }, () => []);
-    linksArray.forEach(link => {
-        // link.source と link.target が有効なインデックスか確認
-        if (link.source >= 0 && link.source < nodeCount && link.target >= 0 && link.target < nodeCount) {
+    var adjList = [];
+    for (var i = 0; i < nodeCount; i++) {
+        adjList.push([]);
+    }
+
+    linksArray.forEach(function(link) {
+        if (link.source >= 0 && link.source < nodeCount &&
+            link.target >= 0 && link.target < nodeCount) {
             adjList[link.source].push(link.target);
         } else {
-            console.warn(`無効なリンクがスキップされました: source=${link.source}, target=${link.target}`);
+            console.warn("無効なリンクがスキップされました: source=" + link.source +
+                         ", target=" + link.target);
         }
     });
 
-    const visited = new Array(nodeCount).fill(false);
-    const recStack = new Array(nodeCount).fill(false);
-    const circularLinks = [];
+    var visited = new Array(nodeCount).fill(false);
+    var recStack = new Array(nodeCount).fill(false);
+    var circularLinks = [];
 
     function dfs(node) {
         if (!visited[node]) {
             visited[node] = true;
             recStack[node] = true;
 
-            for (const neighbor of adjList[node]) {
+            for (var i = 0; i < adjList[node].length; i++) {
+                var neighbor = adjList[node][i];
                 if (!visited[neighbor] && dfs(neighbor)) {
                     circularLinks.push({ source: node, target: neighbor });
                     return true;
@@ -511,12 +520,14 @@ function removeCircularLinks(linksArray, nodeCount) {
         return false;
     }
 
-    for (let i = 0; i < nodeCount; i++) {
-        dfs(i);
+    for (var n = 0; n < nodeCount; n++) {
+        dfs(n);
     }
 
     // 循環リンクを除外
-    return linksArray.filter(link => {
-        return !circularLinks.some(cLink => cLink.source === link.source && cLink.target === link.target);
+    return linksArray.filter(function(link) {
+        return !circularLinks.some(function(cLink) {
+            return (cLink.source === link.source && cLink.target === link.target);
+        });
     });
 }

@@ -48,7 +48,8 @@ main {
     width: 100%;
     margin-top: 10px; /* 上部の余白を小さく */
     margin-bottom: 10px; /* 下部の余白を小さく */
-    overflow: hidden; /* はみ出しを防止 */
+    overflow-x: auto; /* 横スクロールを可能に */
+    overflow-y: auto; /* 縦スクロールを可能に */
     height: auto; /* 高さを自動調整 */
 }
 
