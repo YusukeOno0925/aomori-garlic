@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 card.addEventListener('click', function () {
                     // テンプレートリテラルを使わず文字列結合
-                    window.location.href = "career_detail.html?id=" + career.id;
+                    window.location.href = "Career_detail.html?id=" + career.id;
                 });
 
                 userCardContainer.appendChild(card);
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 rightMargin = 50;
             }
 
-            var r = 22;
+            var r = 25;
             var xScale = d3.scaleLinear()
                 .domain([0, stages.length - 1])
                 .range([leftMargin + r, width - rightMargin - r]);
