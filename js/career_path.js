@@ -120,9 +120,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 rightMargin = 50;
             }
 
+            var r = 15;
             var xScale = d3.scaleLinear()
                 .domain([0, stages.length - 1])
-                .range([leftMargin, width - rightMargin]);
+                .range([leftMargin + r, width - rightMargin - r]);
 
             // リンク（線）
             svg.append("g")
