@@ -4,6 +4,12 @@ function truncateText(text, maxLength) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // ツールチップの作成
+    const tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
     var universitySelect = document.getElementById('filter-university');
     var industrySelect = document.getElementById('filter-industry');
     var careerGraph = document.getElementById('career-path-graph');
@@ -395,19 +401,35 @@ document.addEventListener('DOMContentLoaded', function () {
             var nodes = sankeyResult.nodes;
             var sankeyLinks = sankeyResult.links;
 
-            // リンク描画
+            // 色設定用スケールを追加
+            const linkColor = "#b0a299";
+
             svg.append("g")
                 .attr("class", "links")
                 .selectAll("path")
                 .data(sankeyLinks)
                 .enter().append("path")
                 .attr("d", d3.sankeyLinkHorizontal())
-                .attr("stroke", "#574637") // ホームと同じリンク色
-                .attr("stroke-width", function(d) {
-                    return Math.max(1, d.width);
-                })
+                .attr("stroke", linkColor)
+                .attr("stroke-width", function(d) { return Math.max(1, d.width); })
                 .attr("fill", "none")
-                .attr("opacity", 0.5);
+                .attr("opacity", 0.6)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).transition().duration(150)
+                        .attr("opacity", 1.0)
+                        .attr("stroke-width", Math.max(2, d.width + 1));
+                    tooltip.html(`${d.source.name} → ${d.target.name}<br/>人数: ${d.value}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY + 10) + "px")
+                        .transition().duration(200)
+                        .style("opacity", 0.9);
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).transition().duration(150)
+                        .attr("opacity", 0.6)
+                        .attr("stroke-width", Math.max(1, d.width));
+                    tooltip.transition().duration(200).style("opacity", 0);
+                });
 
             // ノード描画
             var node = svg.append("g")
@@ -416,13 +438,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 .data(nodes)
                 .enter().append("g");
 
+                const nodeColorScale = d3.scaleOrdinal()
+                .range(["#8ba141","#88c1d0","#fcb25f","#e67676","#af84db"]);
+            
             node.append("rect")
                 .attr("x", function(d) { return d.x0; })
                 .attr("y", function(d) { return d.y0; })
                 .attr("height", function(d) { return d.y1 - d.y0; })
                 .attr("width", function(d) { return d.x1 - d.x0; })
-                .attr("fill", "#8ba141") // ホームと同じノード色
-                .attr("stroke", "#000");
+                .attr("fill", function(d, i) { return nodeColorScale(i); })
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).transition().duration(150)
+                        .attr("stroke-width", 2)
+                        .attr("stroke", "#ffcc66");
+                    tooltip.html(`大学/業界: ${d.name}<br/>流入数: ${d.value || 0}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY + 10) + "px")
+                        .transition().duration(200)
+                        .style("opacity", 0.9);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).transition().duration(150)
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "#fff");
+                    tooltip.transition().duration(200).style("opacity", 0);
+                });
 
             node.append("text")
                 .style("font-size", "12px")
