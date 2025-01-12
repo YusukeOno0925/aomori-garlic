@@ -90,6 +90,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const svgWidth = sankeyWidth + 100;
             const svgHeight = sankeyHeight + 100;
 
+            // --- (1) ツールチップ用のdivを生成 ---
+            // body直下に追加し、position: absolute; で表示する
+            const tooltip = d3.select("body")
+              .append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);  // 初期は透明
+
             const svg = d3.select(container)
                 .append("svg")
                 .attr("width", svgWidth)
@@ -103,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const {nodes, links: sankeyLinks} = sankey(sankeyData);
 
+            const nodeColorScale = d3.scaleOrdinal()
+               .range(["#8ba141","#88c1d0","#fcb25f","#e67676","#af84db"]);
+            const linkColor = "#b0a299";
+
             // リンク描画
             svg.append("g")
                 .attr("class", "links")
@@ -110,10 +121,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 .data(sankeyLinks)
                 .enter().append("path")
                 .attr("d", d3.sankeyLinkHorizontal())
-                .attr("stroke", "#574637")
-                .attr("stroke-width", d => Math.max(1, d.width / 1.2))
+                // .attr("stroke", "#574637")
+                // .attr("stroke-width", d => Math.max(1, d.width / 1.2))
+                // .attr("fill", "none")
+                // .attr("opacity", 0.5);
+                .attr("stroke", linkColor)
                 .attr("fill", "none")
-                .attr("opacity", 0.5);
+                .attr("stroke-width", d => Math.max(1, d.width))
+                .attr("opacity", 0.6)
+                .on("mouseover", function(event, d) {
+                    // hover時にリンクを強調
+                    d3.select(this)
+                      .transition().duration(150)
+                      .attr("opacity", 1.0)
+                      .attr("stroke-width", Math.max(2, d.width + 1));
+                    // ツールチップ表示
+                    tooltip.html(`${d.source.name} → ${d.target.name}<br/>人数: ${d.value}`)
+                      .style("left", (event.pageX + 10) + "px")
+                      .style("top", (event.pageY + 10) + "px")
+                      .transition().duration(200)
+                      .style("opacity", 0.9);
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this)
+                      .transition().duration(150)
+                      .attr("opacity", 0.6)
+                      .attr("stroke-width", Math.max(1, d.width));
+                    tooltip.transition().duration(200).style("opacity", 0);
+                });
 
             // ノード描画
             const node = svg.append("g")
@@ -127,8 +162,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("y", d => d.y0)
                 .attr("height", d => d.y1 - d.y0)
                 .attr("width", d => d.x1 - d.x0)
-                .attr("fill", "#f9ffcd")
-                .attr("stroke", "#000");
+                // .attr("fill", "#f9ffcd")
+                // .attr("stroke", "#000");
+                .attr("fill", (d,i) => nodeColorScale(i)) // ノードによって色が変わる
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                // ホバー時のアニメ
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                      .transition().duration(150)
+                      .attr("stroke-width", 2)
+                      .attr("stroke", "#ffcc66");
+                    // ツールチップ
+                    tooltip.html(`大学/業界: ${d.name}<br/>流入数: ${d.value || 0}`)
+                      .style("left", (event.pageX + 10) + "px")
+                      .style("top", (event.pageY + 10) + "px")
+                      .transition().duration(200)
+                      .style("opacity", 0.9);
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                      .transition().duration(150)
+                      .attr("stroke-width", 1)
+                      .attr("stroke", "#fff");
+                    tooltip.transition().duration(200).style("opacity", 0);
+                });
 
             node.append("text")
             .attr("y", d => (d.y0 + d.y1) / 2)

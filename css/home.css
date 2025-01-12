@@ -410,6 +410,21 @@ main {
   .status-legend span {
     margin-right: 15px;
   }
+
+  .tooltip {
+    position: absolute;
+    /* デフォルトで隠す */
+    opacity: 0;
+    pointer-events: none; 
+    /* レイアウト */
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: opacity 0.2s ease;
+    z-index: 9999; /* 前面に */
+  }
   
   /* =========================
      レスポンシブデザイン
