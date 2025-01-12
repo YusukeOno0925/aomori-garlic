@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .attr("y", d => (d.y0 + d.y1) / 2)
             .attr("dy", "0.35em")
             .style("font-size", "12px")
-            .style("font-weight", "bold")
             .attr("text-anchor", function(d) {
                 if(d.x0 < 40) return "start";
                 if (d.x1 > (sankeyWidth - 40)) return "end";
