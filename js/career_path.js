@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // position プロパティが存在しない場合は '不明'
                 var position = latestJob.position || '不明';
                 var salary = (latestJob.salary !== undefined && latestJob.salary !== null)
-                             ? (latestJob.salary + '万円')
+                             ? (latestJob.salary)
                              : '非公開';
 
                 var card = document.createElement('div');
