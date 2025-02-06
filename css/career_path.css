@@ -57,7 +57,6 @@ main {
 #user-card-container {
     display: block; /* ブロック要素に設定 */
     width: 100%; /* 幅を100%に設定 */
-    max-width: 800px; /* 最大幅を設定 */
     margin-top: 20px; /* 上部の余白を増やす */
 }
 
