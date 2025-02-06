@@ -388,6 +388,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var sankey = d3.sankey()
                 .nodeWidth(15)
                 .nodePadding(10)
+                .nodeAlign(d3.sankeyLeft)
                 .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
 
             var sankeyResult;
