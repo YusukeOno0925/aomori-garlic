@@ -190,6 +190,17 @@ footer {
     transform: scale(1.1); /* アイコンを拡大 */
 }
 
+.linkedin-icon {
+    width: 24px;  /* 小さめに固定 */
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+/* ホバー時に少し拡大する */
+.footer-items a:hover .linkedin-icon {
+    transform: scale(1.1);
+}
+
 /* モバイルサイズ用 */
 @media (max-width: 768px) {
     main {
