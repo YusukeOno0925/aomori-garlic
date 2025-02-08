@@ -4,9 +4,10 @@ body {
 }
 
 main {
+    box-sizing: border-box;
     padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: none;
+    width: calc(100% - 220px);   /* 残りをすべて使う */
     margin-top: 100px;
     margin-left: 220px;
 }
@@ -290,9 +291,11 @@ button:hover {
 /* レスポンシブデザイン */
 @media (max-width: 767px) {
     main {
-        padding: 1rem;
         margin-left: 0;
-    }
+        width: 100%;
+        padding: 1rem;
+        box-sizing: border-box;
+      }
 
     .detail p,
     .company-experience p {
