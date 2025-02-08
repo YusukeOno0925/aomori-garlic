@@ -124,56 +124,103 @@ canvas {
     display: inline;
 }
 
-/* コメントセクションのスタイル */
 #comments-section {
     margin-top: 3rem;
 }
-
 #comment-list {
     margin-bottom: 1rem;
 }
 
+/* 新規追加: 大枠 */
+.comment-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+/* 新規追加: 投稿フォーム */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+.comment-form textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    resize: vertical;
+}
+.comment-form button {
+    align-self: flex-end;
+    background-color: var(--main-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.comment-form button:hover {
+    background-color: var(--accent-color);
+}
+
+/* 新規追加: コメント一覧の余白調整 */
+.comment-list {
+    margin-top: 1rem;
+}
+
+/* 既存: .comment-item */
 .comment-item {
     border: 1px solid #ddd;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
     background-color: #fff;
+    /* カード風に影を付けるなら: */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* 既存: コメントヘッダー */
 .comment-header {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
-
 .comment-header img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
 }
-
 .comment-header .username {
     font-weight: bold;
     margin-right: 10px;
 }
-
 .comment-header .timestamp {
     color: #999;
     font-size: 12px;
 }
 
+/* 既存: コメント本文 */
 .comment-content {
     margin-bottom: 5px;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
+/* 既存+修正: ボタン行を右揃え */
 .comment-actions {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 0.5rem;
 }
 
 .reply-list {

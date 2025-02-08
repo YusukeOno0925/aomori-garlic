@@ -86,12 +86,17 @@
             <div class="accordion-item">
                 <div class="accordion-header">コメント一覧<span class="accordion-icon">＞</span></div>
                 <div class="accordion-content" id="comments-section">
-                    <div id="comment-list">
-                        <!-- JavaScriptでコメントを動的に生成 -->
+                    <div class="comment-section">
+                        <div class="comment-form">
+                          <textarea id="comment-text" placeholder="コメントを追加"></textarea>
+                          <button id="submit-comment">新しいコメントを投稿</button>
+                        </div>
+                  
+                        <div class="comment-list" id="comment-list"></div>
+                  
+                        <div id="pagination"></div>
+                  
                     </div>
-                    <div id="pagination"></div>
-                    <textarea id="comment-text" placeholder="コメントを追加"></textarea>
-                    <button id="submit-comment">新しいコメントを投稿</button>
                 </div>
             </div>
 
