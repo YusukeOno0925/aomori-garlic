@@ -135,6 +135,12 @@ function createStoryCard(story) {
     // オンラインステータスの取得
     const activityStatus = story.activity_status || 'inactive';
 
+    let careerTypeHTML = "";
+    if (story.career_type) {
+        careerTypeHTML = `<p>今後: ${story.career_type}</p>`;
+        // 例: 「将来のキャリア: お金軸：給与をもっと上げたい」
+    }
+
     const cardHeader = `
         <div class="card-header">
             <h3>${story.name} (${age}歳)
@@ -142,6 +148,7 @@ function createStoryCard(story) {
             </h3>
             <p>職業: ${story.profession}</p>
             <p>年収: ${latestIncome}</p>
+            ${careerTypeHTML}
         </div>
     `;
 

@@ -234,7 +234,7 @@ main {
     background: var(--card-background-color);
     border: 1px solid var(--card-border-color);
     border-radius: 8px;
-    padding: 0.8rem;
+    padding: 1rem 1.2rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
     overflow: hidden;
@@ -256,7 +256,12 @@ main {
     margin-bottom: 1rem;
   }
   .card-header {
+    text-align: left;
     margin-bottom: 0.5rem;
+  }
+  .card-header p {
+    margin: 0.2rem 0;  /* デフォルトより小さめに */
+    line-height: 1.4;  /* 必要に応じて */
   }
   .career-path-svg {
     width: 100%;
