@@ -12,11 +12,13 @@ async def get_career_overview():
         query = """
         SELECT u.id, u.username, u.birthdate, e.institution, e.education_start, e.hide_institution,
                j.company_name, j.industry, j.job_category, j.salary, j.work_start_period, j.is_private,
-               IFNULL(pv.view_count, 0) AS view_count  -- 閲覧回数を取得
+               IFNULL(pv.view_count, 0) AS view_count,
+               ca.type AS career_type
         FROM users u
         LEFT JOIN education e ON u.id = e.user_id
         LEFT JOIN job_experiences j ON u.id = j.user_id
-        LEFT JOIN profile_views pv ON u.id = pv.user_id  -- 閲覧回数を結合
+        LEFT JOIN profile_views pv ON u.id = pv.user_id
+        LEFT JOIN career_aspirations ca ON u.id = ca.user_id
         """
         cursor = db.cursor(dictionary=True)
         cursor.execute(query)
@@ -36,7 +38,8 @@ async def get_career_overview():
                     "income": [],
                     "careerStages": [],
                     "companies": [],
-                    "view_count": row['view_count']  # 閲覧回数を追加
+                    "view_count": row['view_count'],
+                    "career_type": row['career_type'] or ""
                 }
 
                 # 学歴の公開設定

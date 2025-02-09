@@ -65,6 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
         
                         const listItem = document.createElement('li');
                         listItem.className = 'career-card';
+
+                        // 将来のキャリアが登録されていれば表示
+                        let futureCareerHTML = "";
+                        if (career.career_type) {
+                            futureCareerHTML = `<p>今後: ${career.career_type}</p>`;
+                        }
         
                         // カードをクリックすると閲覧回数をインクリメント
                         listItem.addEventListener('click', function () {
@@ -106,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <h2>${career.name || '不明'} (${age}歳) ${statusDot}</h2>  <!-- 名前が不明な場合 -->
                                 <p>職業: ${career.profession || '不明'}</p>  <!-- 職業が不明な場合 -->
                                 <p>年収: ${career.income[career.income.length - 1]?.income || '不明'}</p>  <!-- 年収が不明な場合 -->
+                                <p>${futureCareerHTML}</p>
                             </div>
                             <div class="career-path" id="career-path-${career.id}">
                                 <!-- ここにD3.jsで描画されるキャリアパスの図が入る -->
