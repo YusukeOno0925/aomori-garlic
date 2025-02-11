@@ -26,6 +26,7 @@ from scripts.online_status import update_last_active  # ミドルウェア関数
 from scripts.password_reset import router as password_reset_router
 from scripts.auth import router as auth_router
 from scripts.career_path import router as career_path_router
+from scripts.announcements import router as announcements_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -57,6 +58,7 @@ app.include_router(online_status_router)
 app.include_router(auth_router)
 app.include_router(password_reset_router)
 app.include_router(career_path_router)
+app.include_router(announcements_router)
 
 # CORSの設定
 app.add_middleware(
@@ -200,6 +202,11 @@ async def career_detail():
 @app.get("/Career_path.html")
 async def career_path():
     return FileResponse("Career_path.html")
+
+# お知らせページへのエンドポイント
+@app.get("/Announcements.html")
+async def announcements_page():
+    return FileResponse("Announcements.html")
 
 # コンタクトページへのエンドポイント
 @app.get("/Contact.html")

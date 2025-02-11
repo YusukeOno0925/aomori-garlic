@@ -1,0 +1,64 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+}
+
+main {
+    padding: 1rem;
+}
+
+.announcements-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.announcement-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.announcement-card:hover {
+    transform: translateY(-2px);
+}
+
+.announcement-card .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #574637; /* メインカラーなど */
+    margin-bottom: 0.5rem;
+}
+
+.announcement-card .timestamp {
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 0.5rem;
+}
+
+.announcement-card .content {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #333;
+}
+
+/* レスポンシブ: 768px以下で調整 */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.4rem;  /* タイトル少し小さめ */
+    }
+
+    .announcement-card {
+        padding: 0.8rem;
+    }
+    .announcement-card .title {
+        font-size: 1rem;
+    }
+    .announcement-card .content {
+        font-size: 0.95rem;
+    }
+}
