@@ -342,11 +342,16 @@ button:hover {
         width: 100%;
         padding: 1rem;
         box-sizing: border-box;
-      }
+    }
+
+    .company-experience h3 {
+        font-size: 16px; /* お好みのサイズ(14pxとかでも可) */
+        line-height: 1.2; 
+    }
 
     .detail p,
     .company-experience p {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .comment-actions {
@@ -369,7 +374,7 @@ button:hover {
     }
 
     .accordion-header {
-        font-size: 14px; /* お好みのサイズ */
+        font-size: 15px; /* お好みのサイズ */
         padding: 10px;   /* パディングも少し狭める */
     }
 }
