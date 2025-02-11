@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentEl.textContent = item.content;
 
                 // カードに要素を追加
-                card.appendChild(titleEl);
                 card.appendChild(timestampEl);
+                card.appendChild(titleEl);
                 card.appendChild(contentEl);
 
                 container.appendChild(card);
