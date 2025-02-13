@@ -115,7 +115,7 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
 
         # career_achievements テーブルから情報取得
         cursor.execute("""
-            SELECT achievement_id, proudest_achievement, failure_experience, lesson_learned
+            SELECT achievement_id, proudest_achievement, failure_experience, lesson_learned, concerns
             FROM career_achievements 
             WHERE user_id = %s
         """, (current_user.id,))
@@ -125,6 +125,7 @@ async def get_user_info(current_user: User = Depends(get_current_user), include_
             user_info["proudest_achievement"] = achievement_info["proudest_achievement"]
             user_info["failure_experience"] = achievement_info["failure_experience"]
             user_info["lesson_learned"] = achievement_info["lesson_learned"]
+            user_info["concerns"] = achievement_info["concerns"]
         
         # クエリの結果を消費してから次のクエリを実行
         cursor.fetchall()

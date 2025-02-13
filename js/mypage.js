@@ -307,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('proudest_achievement').value = data.proudest_achievement || '';
                     document.getElementById('failure_experience').value = data.failure_experience || '';
                     document.getElementById('lesson_learned').value = data.lesson_learned || '';
+                    document.getElementById('concerns').value = data.concerns || '';
 
                     // 学びと成長
                     document.getElementById('skill').value = data.skill || '';
@@ -407,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         proudest_achievement: formData.get('proudest_achievement') || '',
                         failure_experience: formData.get('failure_experience') || '',
                         lesson_learned: formData.get('lesson_learned') || '',
+                        concerns: formData.get('concerns') || '',
 
                         skill: formData.get('skill') || '',
                         growth_description: formData.get('growth_description') || '',

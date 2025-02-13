@@ -112,15 +112,15 @@ async def update_user_info(
     if 'achievement_id' in data and data['achievement_id']:  # IDが存在すれば更新
         cursor.execute("""
             UPDATE career_achievements SET 
-                proudest_achievement = %s, failure_experience = %s, lesson_learned = %s
+                proudest_achievement = %s, failure_experience = %s, lesson_learned = %s, concerns = %s
             WHERE achievement_id = %s AND user_id = %s
         """, (data.get('proudest_achievement'), data.get('failure_experience'), 
-              data.get('lesson_learned'), data['achievement_id'], current_user.id))
+              data.get('lesson_learned'), data.get('concerns'), data['achievement_id'], current_user.id))
     else:  # IDが存在しなければ新規追加
         cursor.execute("""
-            INSERT INTO career_achievements (user_id, proudest_achievement, failure_experience, lesson_learned)
-            VALUES (%s, %s, %s, %s)
-        """, (current_user.id, data.get('proudest_achievement'), data.get('failure_experience'), data.get('lesson_learned')))
+            INSERT INTO career_achievements (user_id, proudest_achievement, failure_experience, lesson_learned, concerns)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (current_user.id, data.get('proudest_achievement'), data.get('failure_experience'), data.get('lesson_learned'), data.get('concerns')))
 
     # 学びと成長情報の処理
     if 'growth_id' in data and data['growth_id']:  # IDが存在すれば更新
