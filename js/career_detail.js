@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 { title: '仕事のフィードバック', content: careerExperiences.job_experience_feedback },
                 { title: '最も誇りに思う達成', content: careerExperiences.proudest_achievement },
                 { title: '失敗経験', content: careerExperiences.failure_experience },
-                { title: '学んだこと', content: careerExperiences.lesson_learned }
+                { title: '学んだこと', content: careerExperiences.lesson_learned },
+                { title: '現在の悩み・不安', content: careerExperiences.concerns }
             ];
 
             // 各項目をループして表示

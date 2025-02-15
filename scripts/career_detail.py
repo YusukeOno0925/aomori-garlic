@@ -28,7 +28,7 @@ async def get_career_detail(career_id: int):
                 j.satisfaction_level, j.work_start_period, j.work_end_period, j.is_private,
                 c.start_reason, c.first_job_feedback, t.transition_type, t.transition_story,
                 t.reason_for_job_change, t.job_experience_feedback,
-                a.proudest_achievement, a.failure_experience, a.lesson_learned
+                a.proudest_achievement, a.failure_experience, a.lesson_learned, a.concerns
             FROM users u
             JOIN job_experiences j ON u.id = j.user_id
             LEFT JOIN career_start_point c ON u.id = c.user_id
@@ -71,7 +71,8 @@ async def get_career_detail(career_id: int):
                 "job_experience_feedback": career_data[0]["job_experience_feedback"],
                 "proudest_achievement": career_data[0]["proudest_achievement"],
                 "failure_experience": career_data[0]["failure_experience"],
-                "lesson_learned": career_data[0]["lesson_learned"]
+                "lesson_learned": career_data[0]["lesson_learned"],
+                "concerns": career_data[0]["concerns"] 
             },
             "companies": [
                 {
