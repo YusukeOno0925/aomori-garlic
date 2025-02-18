@@ -5,7 +5,11 @@ from passlib.context import CryptContext
 from config import db_host, db_user, db_password, db_name, db_port
 
 # パスワードハッシュのコンテキスト
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=10
+)
 
 # データベース接続
 def get_db_connection():

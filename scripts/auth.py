@@ -22,7 +22,11 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 # パスワードハッシュのコンテキスト
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=10
+)
 
 # OAuth2の設定
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
