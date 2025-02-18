@@ -86,7 +86,6 @@ async def read_root_head():
 # ユーザー登録のエンドポイント
 @app.post("/register/")
 async def register_user(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
-    print(f"Received data - username: {username}, email: {email}")
     try:
         # ユーザー情報をデータベースに登録する
         register_user_to_db(username, email, password)
@@ -264,7 +263,6 @@ async def get_environment():
 async def increment_profile_view(user_id: int):
     db = get_db_connection()  # データベース接続を取得
     try:
-        print(f"Incrementing view count for user_id: {user_id}")
         cursor = db.cursor()
         
         # profile_viewsテーブルに挿入/更新
