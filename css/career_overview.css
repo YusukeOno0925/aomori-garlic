@@ -92,7 +92,7 @@ li.career-card p {
 
 /* ページネーションボタンのスタイル */
 .pagination button {
-    background-color: #8ba141; /* ブランドカラーに合わせた背景色 */
+    background-color: var(--main-color); /* ブランドカラーに合わせた背景色 */
     color: #ffffff; /* ボタンの文字色を白にして読みやすく */
     border: none; /* ボーダーを削除してすっきりとした見た目に */
     padding: 0.8rem 1.5rem; /* ボタンのサイズを大きくして押しやすく */
@@ -104,7 +104,7 @@ li.career-card p {
 }
 
 .pagination button:hover {
-    background-color: #6e8c35; /* ホバー時に少し濃い色に変更 */
+    background-color: var(--accent-color);  /* ホバー時に少し濃い色に変更 */
     transform: translateY(-2px); /* ホバー時に少し浮き上がる効果を追加 */
 }
 
