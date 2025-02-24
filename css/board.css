@@ -364,11 +364,11 @@ main {
       padding: 1rem;
     }
     .post-title {
-      font-size: 1rem;
+      font-size: 0.85rem;
       white-space: normal; /* 改行を許可 */
     }
     .post-content {
-      font-size: 0.9rem; /* 小さめフォント */
+      font-size: 0.8rem; /* 小さめフォント */
     }
     .ask-question-button {
       max-width: 100%;
