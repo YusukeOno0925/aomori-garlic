@@ -1,134 +1,115 @@
 // リプライの追加、リプライフォームの表示/非表示切り替え、リプライの取得を行います
 
-// グローバルスコープで関数を定義
-window.fetchReplies = async function(postId) {
-    try {
-        const response = await fetch(`/replies/${postId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+let currentReplyPostId = null;
+let isUserLoggedIn = false;
+let loggedInUsername = "ゲストユーザ";
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`リプライの取得に失敗しました: ${errorData.detail}`);
-        }
+// 初期化
+window.initReplySystem = function(isLoggedIn, username) {
+  isUserLoggedIn = isLoggedIn;
+  loggedInUsername = username || "ゲストユーザ";
 
-        const data = await response.json();
-        const repliesContainer = document.getElementById(`replies-${postId}`);
-        repliesContainer.innerHTML = '';
+  const replyModal = document.getElementById('reply-modal');
+  const closeReplyModalBtn = document.querySelector('.close-reply-modal');
+  const replySubmitBtn = document.getElementById('reply-submit-btn');
 
-        data.replies.forEach(reply => {
-            const replyElement = document.createElement('div');
-            replyElement.classList.add('reply');
-
-            let replyContent = reply.content;
-            let isLongContent = false;
-            const maxLength = 100; // 最大表示文字数
-
-            if (replyContent.length > maxLength) {
-                isLongContent = true;
-                replyContent = replyContent.substring(0, maxLength) + '...';
-            }
-
-            replyElement.innerHTML = `
-                <div class="reply-date">${reply.created_at}</div>
-                <div class="reply-author">${reply.author}</div>
-                <div class="reply-content">${replyContent}</div>
-            `;
-
-            if (isLongContent) {
-                const readMoreLink = document.createElement('a');
-                readMoreLink.href = '#';
-                readMoreLink.textContent = '続きを読む';
-                readMoreLink.classList.add('read-more-link');
-                replyElement.appendChild(readMoreLink);
-
-                readMoreLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // フルテキストを表示
-                    const fullContent = document.createElement('div');
-                    fullContent.classList.add('reply-content-full');
-                    fullContent.textContent = reply.content;
-                    replyElement.replaceChild(fullContent, replyElement.querySelector('.reply-content'));
-                    readMoreLink.style.display = 'none';
-                });
-            }
-
-            repliesContainer.appendChild(replyElement);
-        });
-
-        // リプライフォームを確実に生成する
-        generateReplyForm(postId);
-    } catch (error) {
-        console.error('リプライの取得に失敗しました:', error);
+  // 閉じる
+  closeReplyModalBtn.addEventListener('click', () => {
+    replyModal.style.display = 'none';
+  });
+  // 背景クリック
+  window.addEventListener('click', (e) => {
+    if (e.target === replyModal) {
+      replyModal.style.display = 'none';
     }
-}
+  });
 
-window.generateReplyForm = function(postId) {
-    const postDetails = document.getElementById(`post-details-${postId}`);
-    if (postDetails.querySelector('.reply-form')) return; // 既にフォームがある場合は生成しない
+  // リプライ送信
+  replySubmitBtn.addEventListener('click', async () => {
+    if (!isUserLoggedIn) {
+      alert('リプライにはログインが必要です。');
+      window.location.href = '/Login.html';
+      return;
+    }
+    const contentField = document.getElementById('reply-content-field');
+    const contentVal = contentField.value.trim();
+    if (!contentVal) {
+      alert('リプライ内容を入力してください。');
+      return;
+    }
+    try {
+      const res = await fetch('/reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          post_id: currentReplyPostId,
+          author: loggedInUsername,
+          content: contentVal
+        })
+      });
+      if (!res.ok) {
+        throw new Error('リプライ送信に失敗');
+      }
+      alert('リプライが投稿されました。');
+      contentField.value = '';
+      replyModal.style.display = 'none';
+      // 再取得(新しい順)
+      window.fetchReplies(currentReplyPostId, true);
+    } catch (err) {
+      console.error(err);
+      alert('リプライに失敗しました。');
+    }
+  });
+};
 
-    const replyForm = document.createElement('div');
-    replyForm.classList.add('reply-form');
-    replyForm.innerHTML = `
-        <input type="text" id="reply-author-${postId}" placeholder="名前（50文字以内）" required maxlength="50">
-        <textarea id="reply-content-${postId}" placeholder="リプライ内容（100文字以内）" required maxlength="100"></textarea>
-        <button class="reply-submit-button" data-post-id="${postId}">送信</button>
-    `;
-    postDetails.appendChild(replyForm);
+// リプライモーダルを開く
+window.showReplyModal = function(postId) {
+  if (!isUserLoggedIn) {
+    alert('リプライするにはログインが必要です。');
+    window.location.href = '/Login.html';
+    return;
+  }
+  currentReplyPostId = postId;
+  const replyModal = document.getElementById('reply-modal');
+  replyModal.style.display = 'block';
+};
 
-    // リプライ送信ボタンのイベントリスナーを追加
-    const replySubmitButton = replyForm.querySelector('.reply-submit-button');
-    replySubmitButton.addEventListener('click', function() {
-        addReply(postId);
+// リプライ一覧を取得して表示
+window.fetchReplies = async function(postId, descending=false) {
+  try {
+    const resp = await fetch(`/replies/${postId}`, { method: 'GET' });
+    if (!resp.ok) {
+      const errData = await resp.json();
+      throw new Error(`リプライ取得失敗: ${errData.detail}`);
+    }
+    const data = await resp.json();
+    const container = document.getElementById(`post-details-${postId}`);
+    if (!container) return;
+
+    // リプライを "降順(最新が上)" にソート
+    let replies = data.replies;
+    if (descending) {
+      replies = replies.sort((a,b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+    }
+
+    let html = `<div class="reply-list">`;
+    replies.forEach(reply => {
+      html += `
+        <div class="reply-item">
+          <div class="reply-author-date">
+            <span class="reply-author">${reply.author}</span> |
+            <span class="reply-date">${reply.created_at}</span>
+          </div>
+          <div class="reply-content">${reply.content}</div>
+        </div>
+      `;
     });
-}
+    html += `</div>`;
 
-window.addReply = async function(postId) {
-    const authorInput = document.getElementById(`reply-author-${postId}`);
-    const contentInput = document.getElementById(`reply-content-${postId}`);
-    const author = authorInput.value.trim();
-    const content = contentInput.value.trim();
-
-    // フロントエンドでのバリデーション
-    if (author.length === 0) {
-        alert('名前を入力してください。');
-        return;
-    }
-    if (author.length > 50) {
-        alert('名前は50文字以内で入力してください。');
-        return;
-    }
-    if (content.length === 0) {
-        alert('リプライ内容を入力してください。');
-        return;
-    }
-    if (content.length > 100) {
-        alert('リプライ内容は100文字以内で入力してください。');
-        return;
-    }
-
-    try {
-        const response = await fetch('/reply', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ post_id: postId, author, content }),
-        });
-
-        if (response.ok) {
-            await fetchReplies(postId);
-            authorInput.value = '';
-            contentInput.value = '';
-        } else {
-            const errorData = await response.json();
-            console.error('リプライ失敗:', errorData);
-            alert('リプライの追加に失敗しました。');
-        }
-    } catch (error) {
-        console.error('リプライの追加に失敗しました:', error);
-    }
-}
+    container.innerHTML = html;
+  } catch (err) {
+    console.error(err);
+  }
+};
