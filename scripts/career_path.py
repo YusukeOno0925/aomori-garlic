@@ -78,6 +78,19 @@ async def get_career_path_data(university: str = Query(None), industry: str = Qu
 
         careers = list(career_dict.values())
         
+        # === ★★ 修正箇所：同一ユーザー内で “業界の往復” を除外するロジックを追加 ===
+        for career in careers:
+            visited = set()
+            filtered_companies = []
+            for comp in career["companies"]:
+                ind = comp["industry"]
+                if ind in visited:
+                    # 二度目以降の同じ業界はスキップ
+                    continue
+                visited.add(ind)
+                filtered_companies.append(comp)
+            career["companies"] = filtered_companies
+
         # ユニークな大学と業界のリストを取得
         query_universities = """
             SELECT DISTINCT institution
