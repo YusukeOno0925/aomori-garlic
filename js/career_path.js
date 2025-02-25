@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         .text(function(txt) { return txt; });
                 });
 
-            // アイコン
+            // アイコン（最後の会社にアイコンを表示）
             if (stages.length > 0) {
                 svg.append("g")
                     .selectAll("text.icon")
@@ -229,32 +229,24 @@ document.addEventListener('DOMContentLoaded', function () {
             // Sankey用リンクを一時的に保持する配列
             var links = [];
 
-            // ツールチップ参照（既存の tooltip 変数を使うことを想定）
-            // 例: const tooltip = d3.select("body").append("div")... など
-
             // =========================================
             // 1) 大学を集計し、「上位12校 + その他大学」に集約する
             // =========================================
-            // 大学ごとのユーザ数をカウント
             var universityCount = {};
             filteredCareers.forEach(function(career) {
-                // 会社があるユーザーだけカウント（会社0件はSankeyに出てこない想定）
+                // 会社があるユーザーだけカウント
                 if (!career.companies || career.companies.length === 0) {
                     return;
                 }
-
                 var edu = career.education;
-                if (!edu) {
-                    edu = "不明大学"; // educationがnullの場合は"不明大学"扱い
-                }
-
+                if (!edu) edu = "不明大学";
                 if (!universityCount[edu]) {
                     universityCount[edu] = 0;
                 }
                 universityCount[edu]++;
             });
 
-            // 出現数が多い順に並べ替え、上位12校のみ残す
+            // 出現数が多い順に並べて上位12校のみ残す
             var sortedUniversities = Object.keys(universityCount).sort(function(a, b) {
                 return universityCount[b] - universityCount[a];
             });
@@ -264,8 +256,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var otherUniversities = sortedUniversities.slice(topN);
 
             // =========================================
-            // 2) links（大学→業界）を生成する
-            //    大学がtopUniversities以外なら「その他大学」に置き換え
+            // 2) リンク（大学→業界, 業界→業界）を生成する
+            //    大学が topUniversities に含まれなければ「その他大学」に置き換える
             // =========================================
             function addSankeyLink(src, tgt) {
                 var existing = links.find(function(x) {
@@ -279,40 +271,51 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             filteredCareers.forEach(function(career) {
-                // 会社がない場合はリンク不要
+                // 会社がない場合はスキップ
                 if (!career.companies || career.companies.length === 0) {
                     return;
                 }
 
-                // 大学名が undefined / null の場合は "不明大学" とする
                 var edu = career.education || "不明大学";
-
-                // 上位12校に含まれなければ「その他大学」
                 if (!topUniversities.includes(edu)) {
                     edu = "その他大学";
                 }
 
-                // 1社目：大学→業界
+                // 最初の会社
                 var firstCompany = career.companies[0];
                 var firstInd = (firstCompany && firstCompany.industry) ? firstCompany.industry : "不明";
 
-                // 大学→最初の業界 へのリンク
+                // 大学→最初の業界
                 addSankeyLink(edu, firstInd);
 
-                // 2社目以降： 前の業界 → 次の業界
+                // ★★★【修正ポイント】往復防止のために visitedIndustries を使用 ★★★
+                let visitedIndustries = new Set();
+                visitedIndustries.add(firstInd);
+
+                // 2社目以降: (前の業界) → (新しい業界)
                 for (var i = 1; i < career.companies.length; i++) {
                     var prevInd = career.companies[i - 1].industry || "不明";
                     var currInd = career.companies[i].industry || "不明";
-                    if (prevInd !== currInd) {
-                        addSankeyLink(prevInd, currInd);
+
+                    // 同じ業界ならリンク不要
+                    if (prevInd === currInd) {
+                        continue;
                     }
+
+                    // もし既に visitedIndustries に含まれていれば = 往復とみなしてスキップ
+                    if (visitedIndustries.has(currInd)) {
+                        console.warn("【往復回避】ユーザー", career.id, ":", prevInd, "→", currInd, "をスキップ");
+                        continue;
+                    }
+
+                    addSankeyLink(prevInd, currInd);
+                    visitedIndustries.add(currInd);
                 }
             });
 
             // =========================================
             // 3) 業界を既存の「上位数件 + その他」に集約
             // =========================================
-            // 業界出現頻度を計測（リンクのターゲット側のみ）
             var industryCount = {};
             links.forEach(function(ln) {
                 if (!industryCount[ln.target]) {
@@ -325,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
             var screenWidth = window.innerWidth;
             var maxIndustries = (screenWidth < 600) ? 4 : 5;
 
-            // 業界を出現頻度が多い順で上位を抽出
             var sortedIndustries = Object.keys(industryCount).sort(function(a, b) {
                 return industryCount[b] - industryCount[a];
             });
@@ -371,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return { name: name };
             });
 
-            // ノード名→インデックス 変換テーブル
+            // ノード名→インデックス 変換
             var nodeMap = {};
             nodesArray.forEach(function(n, i) {
                 nodeMap[n.name] = i;
@@ -403,10 +405,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // =========================================
             // 5) SVG要素をクリアして再描画
             // =========================================
-            // 既存の内容をクリア
             careerGraph.innerHTML = '';
 
-            // 横スクロール用に幅を決定
             var containerWidth = careerGraph.clientWidth || 800;
             var svgWidth = (containerWidth < 1200) ? 1200 : containerWidth; // 最低1200px
             var svgHeight;
@@ -418,24 +418,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 svgHeight = 600;
             }
 
-            // SVGを生成
             var svg = d3.select("#career-path-graph")
                 .append("svg")
                 .attr("width", svgWidth)
                 .attr("height", svgHeight)
-                .style("min-width", "1200px"); // 小さい画面でもスクロールが出るように
-            
-            console.log("===== Sankey Data (nodes) =====");
-            console.log(JSON.stringify(sankeyData.nodes, null, 2));
-        
-            console.log("===== Sankey Data (links) =====");
-            console.log(JSON.stringify(sankeyData.links, null, 2));
+                .style("min-width", "1200px"); // 小さい画面でも横スクロール
 
             // Sankeyレイアウト設定
             var sankey = d3.sankey()
                 .nodeWidth(15)
                 .nodePadding(10)
-                .nodeAlign(d3.sankeyLeft)  // 大学を左端に合わせる
+                .nodeAlign(d3.sankeyLeft)
                 .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
 
             var sankeyResult;
@@ -452,8 +445,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // =========================================
             // 6) Sankey のリンク & ノードを描画
             // =========================================
-
-            // リンク描画
             const linkColor = "#b0a299";
             svg.append("g")
                 .attr("class", "links")
@@ -483,7 +474,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     tooltip.transition().duration(200).style("opacity", 0);
                 });
 
-            // ノード描画
             const nodeColorScale = d3.scaleOrdinal()
                 .range(["#8ba141","#88c1d0","#fcb25f","#e67676","#af84db"]);
 
@@ -518,11 +508,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     tooltip.transition().duration(200).style("opacity", 0);
                 });
 
-            // ノードラベル
             node.append("text")
                 .style("font-size", "12px")
                 .attr("x", function(d) {
-                    // 左側(幅の半分より左)なら右側に配置、右側なら左側に配置
+                    // 左側なら右側に配置、右側なら左側に配置
                     return (d.x0 < svgWidth / 2) ? (d.x1 + 6) : (d.x0 - 6);
                 })
                 .attr("y", function(d) {
@@ -571,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// 循環リンクを除外する関数
+// 循環リンクを除外する関数（既存そのまま）
 function removeCircularLinks(linksArray, nodeCount) {
     var adjList = [];
     for (var i = 0; i < nodeCount; i++) {
