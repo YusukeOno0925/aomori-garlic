@@ -430,6 +430,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 .nodePadding(10)
                 .nodeAlign(d3.sankeyLeft)
                 .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
+            
+            console.log("===== Sankey Data (nodes) =====", sankeyData.nodes);
+            console.log("===== Sankey Data (links) =====", sankeyData.links);
 
             var sankeyResult;
             try {
