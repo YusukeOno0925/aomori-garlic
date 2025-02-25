@@ -424,6 +424,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 .attr("width", svgWidth)
                 .attr("height", svgHeight)
                 .style("min-width", "1200px"); // 小さい画面でもスクロールが出るように
+            
+            console.log("===== Sankey Data (nodes) =====");
+            console.log(JSON.stringify(sankeyData.nodes, null, 2));
+        
+            console.log("===== Sankey Data (links) =====");
+            console.log(JSON.stringify(sankeyData.links, null, 2));
 
             // Sankeyレイアウト設定
             var sankey = d3.sankey()
