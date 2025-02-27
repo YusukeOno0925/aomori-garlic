@@ -324,7 +324,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 industryCount[ln.target] += ln.value;
             });
 
-            // 画面幅で業界表示数を 4 or 5 に
             var screenWidth = window.innerWidth;
             var maxIndustries = (screenWidth < 600) ? 4 : 5;
 
@@ -334,12 +333,10 @@ document.addEventListener('DOMContentLoaded', function () {
             var topIndustries = sortedIndustries.slice(0, maxIndustries);
             var otherIndustries = sortedIndustries.slice(maxIndustries);
 
-            // 「その他」業界を追加
             if (otherIndustries.length > 0) {
                 topIndustries.push("その他");
             }
 
-            // 新しいリンク配列を作成し、上位業界以外は "その他" に集約
             var newLinks = [];
             function addOrInc(s, t) {
                 var ex = newLinks.find(function(x) {
@@ -360,6 +357,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            // === ★★ 修正箇所: 相互リンク(A→B,B→A)を片方消す関数 & 呼び出し ★★
+            function removeMutualLinks(links) {
+                var seen = new Set();
+                var toRemove = [];
+
+                links.forEach(function(ln) {
+                    var forward = ln.source + "->" + ln.target;
+                    var backward = ln.target + "->" + ln.source;
+                    if (seen.has(backward)) {
+                        // 相互リンク発見 → 片方削除
+                        toRemove.push(ln);
+                    } else {
+                        seen.add(forward);
+                    }
+                });
+
+                return links.filter(function(ln) {
+                    return !toRemove.includes(ln);
+                });
+            }
+
+            // ★★ 相互リンクを除去してからノード配列を作る
+            newLinks = removeMutualLinks(newLinks);
+
             // =========================================
             // 4) 最終ノード配列を構築 (大学/その他大学 + 業界/その他)
             // =========================================
@@ -373,13 +394,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 return { name: name };
             });
 
-            // ノード名→インデックス 変換
             var nodeMap = {};
             nodesArray.forEach(function(n, i) {
                 nodeMap[n.name] = i;
             });
 
-            // Sankey用リンク配列（source / target をインデックスに置き換え）
             var linksArray = newLinks.map(function(l) {
                 return {
                     source: nodeMap[l.source],
@@ -387,14 +406,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     value: l.value
                 };
             }).filter(function(x) {
-                // NaN除外
                 if (isNaN(x.source) || isNaN(x.target)) {
                     return false;
                 }
                 return true;
             });
 
-            // 循環リンクを排除
+            // 循環リンクを排除（既存のremoveCircularLinks）
             var cleanedLinksArray = removeCircularLinks(linksArray, nodesArray.length);
 
             var sankeyData = {
@@ -422,15 +440,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 .append("svg")
                 .attr("width", svgWidth)
                 .attr("height", svgHeight)
-                .style("min-width", "1200px"); // 小さい画面でも横スクロール
+                .style("min-width", "1200px");
 
-            // Sankeyレイアウト設定
             var sankey = d3.sankey()
                 .nodeWidth(15)
                 .nodePadding(10)
                 .nodeAlign(d3.sankeyLeft)
                 .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
-            
+
             console.log("===== Sankey Data (nodes) =====", sankeyData.nodes);
             console.log("===== Sankey Data (links) =====", sankeyData.links);
 
@@ -514,7 +531,6 @@ document.addEventListener('DOMContentLoaded', function () {
             node.append("text")
                 .style("font-size", "12px")
                 .attr("x", function(d) {
-                    // 左側なら右側に配置、右側なら左側に配置
                     return (d.x0 < svgWidth / 2) ? (d.x1 + 6) : (d.x0 - 6);
                 })
                 .attr("y", function(d) {
