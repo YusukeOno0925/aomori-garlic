@@ -304,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // もし既に visitedIndustries に含まれていれば = 往復とみなしてスキップ
                     if (visitedIndustries.has(currInd)) {
-                        console.warn("【往復回避】ユーザー", career.id, ":", prevInd, "→", currInd, "をスキップ");
                         continue;
                     }
 
@@ -447,9 +446,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .nodePadding(10)
                 .nodeAlign(d3.sankeyLeft)
                 .extent([[40, 20], [svgWidth - 40, svgHeight - 20]]);
-
-            console.log("===== Sankey Data (nodes) =====", sankeyData.nodes);
-            console.log("===== Sankey Data (links) =====", sankeyData.links);
 
             var sankeyResult;
             try {
