@@ -1,4 +1,5 @@
 import logging
+import time
 
 import os
 from dotenv import load_dotenv
@@ -120,20 +121,41 @@ class EmailPasswordRequestForm:
 # トークン取得のエンドポイント（ログイン処理）
 @app.post("/login/")
 async def login_for_access_token(form_data: EmailPasswordRequestForm = Depends()):
+    start_time = time.time()
+    db_start = time.time()
     db = get_db_connection()
+    db_end = time.time()
+    print(f"[LOGIN] DB接続にかかった時間: {db_end - db_start:.3f}秒")
+
+    auth_start = time.time()
     user = await authenticate_user(db, email=form_data.email, password=form_data.password)
+    auth_end = time.time()
+    print(f"[LOGIN] authenticate_user() にかかった時間: {auth_end - auth_start:.3f}秒")
     if not user:
         raise HTTPException(
             status_code=400,
             detail="メールアドレスまたはパスワードが正しくありません。",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    token_start = time.time()
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
+    token_end = time.time()
+    print(f"[LOGIN] トークン作成にかかった時間: {token_end - token_start:.3f}秒")
+
+    resp_start = time.time()
+
     response = RedirectResponse(url="/Home.html", status_code=303)
     response.set_cookie(key="access_token", value=access_token, httponly=True)
+
+    resp_end = time.time()
+    print(f"[LOGIN] リダイレクトレスポンス生成にかかった時間: {resp_end - resp_start:.3f}秒")
+
+    total_end = time.time()
+    print(f"[LOGIN] /login/ 全体の処理時間: {total_end - start_time:.3f}秒")
     return response
 
 @app.get("/check-login-status/")
