@@ -8,6 +8,10 @@ main {
     margin-top: 100px; /* ヘッダー分のマージンを追加 */
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 input#search, select#filter-industry {
     margin-bottom: 1rem;
     padding: 0.5rem;
@@ -159,6 +163,11 @@ li.career-card p {
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
+    h1{
+        font-size: 1.2rem;
+        margin-top: -20px;
+    }
+
     li.career-card {
         flex-direction: column; /* グラフが下に来るように縦並びにする */
     }

@@ -19,6 +19,10 @@ main {
     margin-bottom: 0;
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -84,6 +88,13 @@ button:hover {
 
     textarea {
         height: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    h1{
+        font-size: 1.2rem;
+        margin-top: 0px;
     }
 }
 

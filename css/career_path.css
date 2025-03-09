@@ -10,6 +10,10 @@ main {
     padding: 1rem;
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 /* サーチセクション */
 #search-section {
     padding: 20px;
@@ -107,6 +111,21 @@ svg text {
     transition: opacity 0.2s ease;
     z-index: 9999;
   }
+
+@media (max-width: 768px) {
+    h1{
+        font-size: 1.2rem;
+        margin-top: -20px;
+    }
+
+    #career-visualization h2 {
+        font-size: 1.0rem;
+    }
+
+    #career-visualization p {
+        font-size: 0.8rem;
+    }
+}
 
 /* 450px以下 */
 @media (max-width: 450px) {

@@ -7,6 +7,10 @@ main {
     padding: 1rem;
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 .announcements-container {
     display: flex;
     flex-direction: column;
@@ -48,8 +52,9 @@ main {
 
 /* レスポンシブ: 768px以下で調整 */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 1.4rem;  /* タイトル少し小さめ */
+    h1{
+        font-size: 1.2rem;
+        margin-top: -20px;
     }
 
     .announcement-card {

@@ -12,6 +12,10 @@ main {
     margin-left: 220px;
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 h2 {
     text-align: center;
 }
@@ -342,6 +346,11 @@ button:hover {
         width: 100%;
         padding: 1rem;
         box-sizing: border-box;
+    }
+
+    h1{
+        font-size: 1.2rem;
+        margin-top: -20px;
     }
 
     .company-experience h3 {

@@ -7,6 +7,10 @@ main {
     padding: 0rem;
 }
 
+h1 {
+    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+}
+
 /* コンテナ周り */
 .content-wrapper {
     max-width: 800px;
@@ -352,62 +356,80 @@ main {
   
   /* ====== レスポンシブ ====== */
   @media (max-width: 768px) {
+    h1{
+        font-size: 1.2rem;
+        margin-top: -20px;
+    }
+
     .content-wrapper {
       margin: 20px auto;
       padding: 1rem;
     }
+
     h2 {
       font-size: 0.95rem; /* 文字サイズをやや小さめ */
       margin-bottom: 1rem;
     }
+
     .popular-post-card {
       padding: 1rem;
     }
+
     .post-title {
       font-size: 0.85rem;
       white-space: normal; /* 改行を許可 */
     }
+
     .post-content {
       font-size: 0.8rem; /* 小さめフォント */
     }
+
     .ask-question-button {
       max-width: 100%;
       font-size: 0.9rem;
       padding: 0.8rem;
     }
+
     .modal-content {
       margin: 10% auto;
       width: 90%;
       max-width: 350px;
       padding: 1.5rem;
     }
+
     .discussion-actions {
         flex-direction: column; /* 縦に積む */
         align-items: stretch;
     }
+
     .secondary-button,
     .primary-button {
         font-size: 0.85rem;
         padding: 0.5rem 1rem;
         width: 100%; /* 全幅にすると分かりやすい */
     }
+
     .reply-modal-open-btn {
       font-size: 0.85rem;
       padding: 0.3rem 0.6rem;
     }
+
     .reply-modal-content {
         margin: 10% auto;
         width: 90%;
         max-width: 400px;
         padding: 1.5rem;
     }
+
     .reply-modal-title {
         font-size: 1rem;
     }
+
     .reply-textarea {
         font-size: 0.9rem;
         min-height: 80px;
     }
+
     .reply-modal-submit-button {
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
