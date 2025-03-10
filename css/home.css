@@ -44,12 +44,12 @@ main {
   
   /* ヒーロー内の文言 */
   .hero-content h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 1rem;
   }
   
   .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 1.5rem;
   }
   
@@ -551,11 +551,11 @@ main {
       padding: 0.5rem;
     }
     .hero-content h1 {
-      font-size: 1.2rem;
+      font-size: 1.0rem;
       margin: 0.1rem 0;
     }
     .hero-content p {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       line-height: 1.2;
     }
     .cta-button {
