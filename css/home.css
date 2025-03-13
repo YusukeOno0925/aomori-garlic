@@ -49,7 +49,7 @@ main {
   }
   
   .hero-content p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 1.5rem;
   }
   
@@ -177,7 +177,7 @@ main {
     color: #574637;
   }
   .step p {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #666;
     line-height: 1.4;
   }
@@ -205,10 +205,6 @@ main {
     overflow-x: auto;
     overflow-y: auto;
   }
-  /* svg {
-    width: 100%;
-    height: auto;
-  } */
   
   /* ===== 最近のキャリアストーリー/人気のキャリアストーリー共通 ===== */
   .recentstories-section{
@@ -334,7 +330,7 @@ main {
     margin-bottom: 1rem;
   }
   .feature-description p {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     color: #666;
     line-height: 1.6;
   }
@@ -429,6 +425,24 @@ main {
     font-size: 13px;
     transition: opacity 0.2s ease;
     z-index: 9999; /* 前面に */
+  }
+
+  .section-description {
+    font-size: 1.0rem; 
+    color: #666;
+    max-width: 600px; 
+    margin: 0.5rem auto 1rem; 
+    text-align: center; 
+    line-height: 1.4;
+  }
+
+  #life-path p {
+    font-size: 1.0rem; 
+    color: #666;
+    max-width: 600px; 
+    margin: 0.5rem auto 1rem; 
+    text-align: center; 
+    line-height: 1.4;
   }
   
   /* =========================
@@ -581,6 +595,15 @@ main {
       text-align: left;
       margin-left: 1rem;
       margin-right: 1rem;
+    }
+
+    .section-description {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin: 0.5rem 0;
+        text-align: left;
+        margin-left: 1rem;
+        margin-right: 1rem;
     }
   
     /* さらに本文サイズを小さく */
