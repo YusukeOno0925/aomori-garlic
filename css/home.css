@@ -517,6 +517,9 @@ main {
       text-align: center;
       margin-bottom: 2rem;
     }
+    #site-features .feature-section .feature-description {
+        text-align: left; 
+    }
     #site-features .feature-section .feature-image,
     #site-features .feature-section .feature-description {
       width: 100%;
