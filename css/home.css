@@ -23,7 +23,7 @@ main {
   }
   
   .text-overlay {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 2rem;
     width: 100%;
     max-width: 100%;
@@ -75,6 +75,89 @@ main {
     margin-top: -10px; 
     top: -10px; 
     margin-bottom: -3rem; 
+  }
+
+  /* ===== 登録のメリットセクション ===== */
+  .why-register-section {
+    background-color: #f2eee9;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-top: 1rem; /* お好みで */
+  }
+  .why-register-section .section-title {
+    margin-bottom: 1.5rem;
+  }
+  
+  .why-register-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .why-register-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    flex-wrap: wrap; 
+    margin-bottom: 1.5rem;
+  }
+  
+  /* 各メリットカード */
+  .benefit-card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 
+    0 1px 2px rgba(0,0,0,0.08),  /* うっすら */
+    0 2px 4px rgba(0,0,0,0.08);  /* 少しだけ深め */
+    flex: 0 0 calc((100% / 3) - 1rem); /* PCで3カラム */
+    padding: 1.5rem;                  /* 十分な内側余白を確保 */
+    text-align: center;
+    /* 高さはautoにしておき、自然に高さが揃うようにする */
+    /* align-items: stretch 等で親コンテナが対応できるならベター */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* カード内容を中央寄せ */
+    box-sizing: border-box;
+    transition: transform 0.2s;
+  }
+  
+  .benefit-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600; /* やや太字 */
+    color: #333;      /* もう少し濃い色 */
+    margin-bottom: 0.8rem;
+  }
+  
+  .benefit-card p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* アイコンのサイズは別途 .benefit-icon で指定 */
+  .benefit-icon {
+    fill: #574637;
+    width: 36px; 
+    height: 36px;
+    margin: 0 auto 1rem; /* 上は0、下は1rem、左右は中央寄せ */
+    display: block;
+  }
+  
+  /* CTAボタン */
+  .cta-wrap {
+    text-align: center;
+  }
+  .register-now {
+    background-color: #746302;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .register-now:hover {
+    background-color: #a34705;
   }
   
   /* ===== 各セクションの余白と中央寄せ ===== */
@@ -152,10 +235,12 @@ main {
     margin: 0 auto;
   }
   .step {
-    background-color: #f9f9f9;
-    border-radius: 8px;
+    background-color: #f9f7f4;
+    border-radius: 4px;
     padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 
+    0 1px 2px rgba(0,0,0,0.08),  /* うっすら */
+    0 2px 4px rgba(0,0,0,0.08);  /* 少しだけ深め */
     width: 300px; 
     text-align: center;
     position: relative;
@@ -172,9 +257,10 @@ main {
     margin-bottom: 1rem;
   }
   .step h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: #574637;
+    font-size: 1.1rem;
+    font-weight: 600; /* やや太字 */
+    color: #333;      /* もう少し濃い色 */
+    margin-bottom: 0.8rem;
   }
   .step p {
     font-size: 1rem;
@@ -451,6 +537,41 @@ main {
   
   /* 768px 以下 */
   @media (max-width: 768px) {
+    #hero {
+        height: 40vh;
+    }
+
+    .hero-content h1 {
+        font-size: 1.2rem;
+        margin: 0.1rem 0;
+    }
+    .hero-content p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .why-register-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .benefit-card {
+        width: 90%;
+        margin-bottom: 1rem;
+    }
+    .benefit-card h3 {
+        font-size: 1rem; 
+    }
+    .benefit-card p {
+        font-size: 0.9rem; 
+    }
+    
+    .benefit-icon {
+        width: 36px;  /* 小さくする */
+        height: 36px;
+        margin-bottom: 0.8rem;
+    }
+
     .howto-section h2 {
         font-size: 1.4rem;
     }

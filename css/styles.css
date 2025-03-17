@@ -34,12 +34,16 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* ヘッダー内部の配置 */
 .header-content {
     display: flex;
-    justify-content: space-between; /* 左右に要素を配置 */
+    justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto; /* コンテンツを中央に寄せる */
 }
 
+/* ロゴリンク */
 .logo-link {
     display: flex;
     align-items: center;
@@ -47,26 +51,29 @@ header {
     color: inherit;
 }
 
+/* ロゴ画像 */
 .logo-image {
-    height: 40px;
+    height: 40px;  /* 適切なサイズ */
     width: auto;
 }
 
-.header-content .logo {
+/* テキストロゴ */
+.logo {
     color: var(--main-color);
     margin-left: 1rem;
+    font-size: 1.3rem;
+    font-weight: 700;
 }
 
-.header-content .lead-text {
+/* キャッチコピー（lead-text） */
+.lead-text {
     color: var(--main-color);
     margin-left: 2rem;
     font-size: 1rem;
+    flex-grow: 1; /* 余白としても機能させる */
 }
 
-.login-button-container {
-    margin-left: auto;
-}
-
+/* ログインボタン */
 .login-button {
     background-color: var(--main-color);
     color: #fff;
@@ -79,6 +86,14 @@ header {
 
 .login-button:hover {
     background-color: var(--accent-color);
+}
+
+/* ハンバーガーメニュー（モバイル用） */
+.hamburger-menu {
+    display: none;  /* 初期は非表示、メディアクエリで表示 */
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--main-color);
 }
 
 /* メインメニューのスタイル */
@@ -203,6 +218,26 @@ footer {
 
 /* モバイルサイズ用 */
 @media (max-width: 768px) {
+    .header-content {
+        width: 100%;
+        padding: 0 1rem;
+        justify-content: space-between; /* 左右に要素を配置 */
+    }
+
+    /* ログインボタンコンテナを右端に配置 */
+    .login-button-container {
+        margin-left: auto;  /* これにより、左側のロゴとの間に自動余白が入り、右端に配置 */
+    }
+
+    .logo {
+        font-size: 1.0rem;
+    }
+
+    .logo-image {
+        height: 28px;  /* 例: 28pxに縮小 */
+        width: auto;
+    }
+
     main {
         margin-left: 0;
         padding: 1rem; /* モバイルサイズでも余白を適切に保持 */
@@ -257,15 +292,16 @@ footer {
 /* 450px以下の画面サイズに対応 */
 @media (max-width: 450px) {
     .header-content .logo {
-        font-size: 1.0rem; /* ロゴのフォントサイズを小さくする */
+        font-size: 0.8rem; /* ロゴのフォントサイズを小さくする */
+        margin-left: 0.5rem;
     }
 
     .logo-image {
-        height: 20px; /* ロゴ画像の高さを小さくする */
+        height: 24px; /* ロゴ画像の高さを小さくする */
     }
 
     .login-button {
-        font-size: 0.8rem; /* フォントサイズを小さく設定 */
-        padding: 0.4rem 0.8rem; /* ボタン自体のサイズも調整 */
+        font-size: 0.7rem; /* フォントサイズを小さく設定 */
+        padding: 0.4rem 0.6rem; /* ボタン自体のサイズも調整 */
     }
 }
