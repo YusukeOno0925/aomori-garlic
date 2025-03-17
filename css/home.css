@@ -674,6 +674,17 @@ main {
     #popular-stories-indicators {
       display: none;
     }
+
+    .feature-section .feature-image {
+        width: 45%;  /* 例: 以前は50%だった部分をやや小さめに */
+        max-width: 450px; /* 画像の最大幅を450pxなどに制限しておくとより安定 */
+        object-fit: cover; /* 画像の縦横比を維持しつつ適切に収める */
+      }
+    
+      .feature-section .feature-description {
+        width: 50%;  /* 残りのスペースをテキストに */
+        padding: 1rem 2rem; /* テキスト側の余白を増やして読みやすく */
+      }
   }
   
   /* 450px以下 */
