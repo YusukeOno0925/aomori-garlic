@@ -64,7 +64,9 @@ main {
     transition: background-color 0.3s;
   }
   .cta-button:hover {
-    background-color: #a34705;
+    transform: translateY(-2px); /* ちょっと浮く */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
+    background-color: #a34705; /* 色はすでにあるので同じ */
   }
   
   .hero-note {
