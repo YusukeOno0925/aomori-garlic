@@ -106,6 +106,7 @@ button:hover {
     input, textarea, button {
         font-size: 12px;
         padding: 6px;
+        min-height: 38px;
     }
 
     textarea {
