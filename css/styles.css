@@ -168,7 +168,7 @@ footer {
     background-color: var(--accent-color); /* アクセントカラー */
     color: white; /* テキスト色 */
     text-align: center; /* テキストを中央揃え */
-    padding: 1rem 0; /* 上下のパディングを増やす */
+    padding: 0.8rem 0; /* 上下のパディングを増やす */
     position: relative;
     width: 100%;
     bottom: 0;
@@ -277,6 +277,10 @@ footer {
     .main-menu .icon {
         display: inline-block;
         text-align: right;
+    }
+    
+    footer{
+        padding: 0.4rem 0;
     }
 
     .footer-content {
