@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const experiences = [
                 { title: '職業を選んだ理由', content: careerExperiences.start_reason },
                 { title: '初めての仕事のフィードバック', content: careerExperiences.first_job_feedback },
-                { title: '転職タイプ', content: careerExperiences.transition_type },
+                { title: 'キャリアの転機となった理由', content: careerExperiences.transition_type },
                 { title: '転職の詳細', content: careerExperiences.transition_story },
                 { title: '転職理由', content: careerExperiences.reason_for_job_change },
                 { title: '仕事のフィードバック', content: careerExperiences.job_experience_feedback },
