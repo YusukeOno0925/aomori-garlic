@@ -68,16 +68,6 @@ main {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
     background-color: #a34705; /* 色はすでにあるので同じ */
   }
-  
-  .hero-note {
-    font-size: 0.9rem;
-    padding-bottom: 2em;
-    color: #666;
-    position: relative;
-    margin-top: -10px; 
-    top: -10px; 
-    margin-bottom: -3rem; 
-  }
 
   /* ===== 登録のメリットセクション ===== */
   .why-register-section {
@@ -176,6 +166,7 @@ main {
     background-color: #ffffff;
     padding: 2rem 1rem;
     text-align: center;
+    margin-top: -3rem !important;
     margin-bottom: -3rem;
   }
   .overview-container {
@@ -713,10 +704,6 @@ main {
     .cta-button {
       font-size: 0.8rem;
       padding: 0.6rem 1rem;
-    }
-    .hero-note {
-      font-size: 0.65rem;
-      padding-bottom: 1rem;
     }
   
     .lifepath-section{
