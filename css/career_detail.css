@@ -390,6 +390,10 @@ button:hover {
 
 /* 画面幅が450px以下の場合のスタイル */
 @media (max-width: 450px) {
+    #career-chart-container {
+        margin-bottom: 1rem; /* 3rem → 1rem に減らす */
+    }
+
     /* ボタン内のテキストを非表示にする */
     .button-text {
         display: none;
