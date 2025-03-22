@@ -233,8 +233,8 @@ function drawChart(companies) {
                 {
                     label: '年収',
                     data: income,
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 150, 0, 0.8)',
+                    borderColor: 'rgba(255, 99, 0, 1)',
                     borderWidth: 1,
                     yAxisID: 'y'
                 },
@@ -242,8 +242,9 @@ function drawChart(companies) {
                     label: '満足度',
                     type: 'line',
                     data: satisfaction,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.3)',  // 塗りつぶし部分
+                    borderColor: 'rgba(54, 162, 235, 1)',        // ライン色
                     borderWidth: 2,
                     yAxisID: 'y1',
                     spanGaps: true
