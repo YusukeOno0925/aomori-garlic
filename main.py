@@ -284,13 +284,3 @@ async def increment_profile_view(user_id: int):
     finally:
         cursor.close()
         db.close()
-
-@app.get("/debug-routes")
-async def debug_routes():
-    routes = []
-    for route in app.routes:
-        routes.append({
-            "path": route.path,
-            "methods": list(route.methods)
-        })
-    return JSONResponse(routes)
