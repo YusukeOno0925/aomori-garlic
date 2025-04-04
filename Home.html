@@ -183,6 +183,22 @@
             </div>
         </section>
 
+
+        <section id="similar-stories" class="similarstories-section">
+            <h2 class="section-title">あなたと近しい<strong>キャリアストーリー</strong></h2>
+            <p class="section-description" id="similar-stories-description">
+                <!-- ログインしている場合: 業界/職種が近いユーザーのストーリーを表示 -->
+                <!-- 未ログインの場合: ログインを促すCTA を表示 -->
+            </p>
+            <div class="card-container" id="similar-stories-list" style="display: none;">
+                <!-- JavaScriptで似たユーザのキャリアストーリーを動的に生成 -->
+            </div>
+            <!-- インジケータ（スマホ閲覧用のスライドドット） -->
+            <div id="similar-stories-indicators" class="carousel-indicators" style="display: none;">
+                <!-- JSで動的に生成するインジケータ -->
+            </div>
+        </section>
+
         <!-- オンラインステータスの凡例を表示 -->
         <div id="status-legend" class="status-legend">
             <span class="status-dot online"></span> ログイン中
@@ -247,6 +263,7 @@
     <script src="js/lifePath.js"></script>
     <script src="js/recent-stories.js"></script>
     <script src="js/popular-stories.js"></script>
+    <script src="js/similar-stories.js"></script>
     <script src="js/feedback.js"></script>
     <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
 

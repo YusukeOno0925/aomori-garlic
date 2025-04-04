@@ -160,13 +160,6 @@ function initializeAccordion() {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
         header.addEventListener('click', async function() {
-            // ログインチェック
-            const isLoggedIn = await checkLoginStatus();
-            if (!isLoggedIn) {
-                alert('この情報を閲覧するにはログインが必要です。');
-                window.location.href = '/Login.html';
-                return;
-            }
             // ログイン済み → アコーディオン開閉
             const item = this.parentElement;
             item.classList.toggle('active');
@@ -185,7 +178,16 @@ function initializeReadMore() {
         if (section) {
             const readMoreLinks = section.querySelectorAll('.read-more-link');
             readMoreLinks.forEach(link => {
-                link.addEventListener('click', function() {
+                // クリック時にログイン判定
+                link.addEventListener('click', async function() {
+                    const isLoggedIn = await checkLoginStatus();
+                    if (!isLoggedIn) {
+                        alert('この情報を閲覧するにはログインが必要です。');
+                        window.location.href = '/Login.html'; 
+                        return;
+                    }
+
+                    // ログイン済みなら全文表示
                     const detail = this.closest('.detail') || this.closest('.company-experience');
                     detail.querySelector('.short-text').style.display = 'none';
                     detail.querySelector('.read-more-content').style.display = 'block';

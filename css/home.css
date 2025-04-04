@@ -294,6 +294,10 @@ main {
     border-top: 1px solid #ddd;
   }
 
+  .similarstories-section {
+    border-top: 1px solid #ddd;
+  }
+
   .card-container {
     display: flex;
     flex-wrap: nowrap;
@@ -605,13 +609,15 @@ main {
   
     /* インジケータを表示 */
     #recent-stories-indicators,
-    #popular-stories-indicators {
+    #popular-stories-indicators,
+    #similar-stories-indicators {
       display: flex;
       justify-content: center;
       margin-top: 10px;
     }
     #recent-stories-indicators .indicator,
-    #popular-stories-indicators .indicator {
+    #popular-stories-indicators .indicator,
+    #similar-stories-indicators .indicator {
       width: 10px;
       height: 10px;
       margin: 0 5px;
@@ -621,7 +627,8 @@ main {
       transition: background-color 0.3s;
     }
     #recent-stories-indicators .indicator.active,
-    #popular-stories-indicators .indicator.active {
+    #popular-stories-indicators .indicator.active,
+    #similar-stories-indicators .indicator.active {
       background-color: #8ba141;
     }
   

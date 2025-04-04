@@ -16,6 +16,7 @@ from fastapi.responses import JSONResponse
 from scripts.email_config import fast_mail, EmailSchema
 from scripts.recent_stories import router as recent_stories_router
 from scripts.popular_stories import router as popular_stories_router
+from scripts.similar_stories import router as similar_stories_router
 from scripts.career_overview import router as career_overview_router
 from scripts.career_detail import router as career_detail_router
 from scripts.board import router as board_router
@@ -49,6 +50,7 @@ app.include_router(get_user_info_router)
 app.include_router(update_user_info_router)
 app.include_router(recent_stories_router)
 app.include_router(popular_stories_router)
+app.include_router(similar_stories_router)
 app.include_router(career_overview_router)
 app.include_router(career_detail_router)
 app.include_router(board_router)
