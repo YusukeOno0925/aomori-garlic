@@ -64,10 +64,40 @@ async def get_similar_users(
         base_industry = base_user["latest_industry"] or ""
         base_job_category = base_user["latest_job_category"] or ""
 
+        # 別クエリで出身大学（education.institution）を取得（例：最初に入学したレコード）
+        cursor.execute("""
+            SELECT institution 
+            FROM education 
+            WHERE user_id = %s 
+            ORDER BY education_start ASC 
+            LIMIT 1
+        """, (base_user_id,))
+        edu_row = cursor.fetchone()
+        base_institution = edu_row["institution"] if edu_row and edu_row["institution"] else ""
+
+        # 別クエリで最新の会社名（job_experiences）を取得
+        cursor.execute("""
+            SELECT company_name 
+            FROM job_experiences 
+            WHERE user_id = %s AND work_end_period IS NULL 
+            ORDER BY work_start_period DESC 
+            LIMIT 1
+        """, (base_user_id,))
+        comp_row = cursor.fetchone()
+        base_company = comp_row["company_name"] if comp_row and comp_row["company_name"] else ""
+
+        # 別クエリでキャリア志向（career_aspirations.type）を取得
+        cursor.execute("""
+            SELECT type 
+            FROM career_aspirations 
+            WHERE user_id = %s 
+            LIMIT 1
+        """, (base_user_id,))
+        asp_row = cursor.fetchone()
+        base_aspiration = asp_row["type"] if asp_row and asp_row["type"] else ""
+
         # `baseYear` を定義 — もし age が None の場合は 9999 を仮に設定
         baseYear = date.today().year - (age if age is not None else 9999)
-
-        logger.debug(f"計算結果: age={age}, baseYear={baseYear}, industry='{base_industry}', job_category='{base_job_category}'")
 
         # --- カーソルを再生成して未読結果をクリアする ---
         cursor.close()
@@ -96,30 +126,55 @@ async def get_similar_users(
         query = """
             SELECT 
                 u.id AS user_id,
-                u.username,
-                u.birthdate,
-                j.industry,
-                j.job_category,
+                ANY_VALUE(u.username) AS username,
+                ANY_VALUE(u.birthdate) AS birthdate,
+                ANY_VALUE(j.industry) AS industry,
+                ANY_VALUE(j.job_category) AS job_category,
+                ANY_VALUE(e.institution) AS institution,
+                ANY_VALUE(lc.company_name) AS current_company,
                 (
-                    (CASE WHEN j.industry = %s THEN 40 ELSE 0 END)
-                + (CASE WHEN j.job_category = %s THEN 40 ELSE 0 END)
-                + (CASE WHEN u.birthdate IS NOT NULL
-                        AND YEAR(u.birthdate) BETWEEN 1900 AND 2100
-                        AND YEAR(u.birthdate) BETWEEN %s - 5 AND %s + 5
-                    THEN 20 ELSE 0 END)
+                (CASE WHEN ANY_VALUE(e.institution) = %s THEN 50 ELSE 0 END)
+                + (CASE WHEN ANY_VALUE(lc.company_name) = %s THEN 40 ELSE 0 END)
+                + (CASE WHEN ANY_VALUE(j.industry) = %s THEN 20 ELSE 0 END)
+                + (CASE WHEN ANY_VALUE(j.job_category) = %s THEN 20 ELSE 0 END)
+                + (CASE WHEN ANY_VALUE(u.birthdate) IS NOT NULL
+                        AND YEAR(ANY_VALUE(u.birthdate)) BETWEEN 1900 AND 2100
+                        AND YEAR(ANY_VALUE(u.birthdate)) BETWEEN %s - 5 AND %s + 5
+                    THEN 5 ELSE 0 END)
+                + (CASE WHEN ANY_VALUE(ca.type) = %s THEN 20 ELSE 0 END)
                 ) AS similarity_score
             FROM users u
             LEFT JOIN job_experiences j 
-                ON u.id = j.user_id
-                AND j.work_end_period IS NULL
+                ON u.id = j.user_id AND j.work_end_period IS NULL
+            LEFT JOIN education e 
+                ON u.id = e.user_id
+            LEFT JOIN (
+                SELECT j1.user_id, j1.company_name
+                FROM job_experiences j1
+                INNER JOIN (
+                    SELECT user_id, MAX(work_start_period) AS max_start
+                    FROM job_experiences
+                    GROUP BY user_id
+                ) j2 ON j1.user_id = j2.user_id AND j1.work_start_period = j2.max_start
+            ) lc ON u.id = lc.user_id
+            LEFT JOIN career_aspirations ca 
+                ON u.id = ca.user_id
             WHERE u.id != %s
+            GROUP BY u.id
             HAVING similarity_score > 0
             ORDER BY similarity_score DESC
-            LIMIT 5
+            LIMIT 5;
         """
-        # パラメータのタプルを作成（同じ baseYear を2回渡す）
-        params = (base_industry, base_job_category, baseYear, baseYear, base_user_id)
-        logger.debug(f"similar_career_storiesクエリ実行パラメータ: {params}")
+        params = (
+            base_institution,   # 1. 出身大学
+            base_company,       # 2. 最新の会社名
+            base_industry,      # 3. 業界
+            base_job_category,  # 4. 職種
+            baseYear,           # 5. 年齢補正（基準年：1回目）
+            baseYear,           # 6. 年齢補正（基準年：2回目）
+            base_aspiration,    # 7. キャリア志向（type）
+            base_user_id        # 8. 自分自身のID（除外）
+        )
         
         # クエリを1回だけ実行する
         cursor.execute(query, params)
