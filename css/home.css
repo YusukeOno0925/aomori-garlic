@@ -378,6 +378,32 @@ main {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
   }
+  /* 未ログイン時のカードにぼかし効果を適用 */
+.preview-blur .card-header,
+.preview-blur svg,  /* D3で描画されるSVGにも適用 */
+.preview-blur .card-footer {
+    filter: blur(3px);
+    transition: filter 0.3s;
+}
+/* カード全体に対するオーバーレイ（未ログイン状態） */
+.card.preview-blur {
+    position: relative;
+}
+
+.card.preview-blur .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #333;
+    pointer-events: none;
+}
   
   /* ===== サイト機能紹介( feature-section ) ===== */
   #site-features {
@@ -711,6 +737,9 @@ main {
     .cta-button {
       font-size: 1rem;
       padding: 0.8rem 1.5rem;
+    }
+    .card.preview-blur .overlay {
+      font-size: 1.0rem;
     }
   
     .lifepath-section{
