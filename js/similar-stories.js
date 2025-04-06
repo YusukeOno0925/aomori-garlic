@@ -114,7 +114,7 @@ function fetchSimilarCareerStories(isLoggedIn) {
             }
         ];
         listContainer.style.display = 'flex';
-        desc.textContent = "ログインすると詳細が見れます。";
+        desc.textContent = "あなたの業界/職種/年齢帯等が近いユーザのストーリーを表示しています。";
         dummyStories.forEach(story => {
             const card = createSimilarStoryCard(story, false);
             listContainer.appendChild(card);
