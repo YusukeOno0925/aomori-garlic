@@ -727,11 +727,11 @@ main {
       padding: 0.5rem;
     }
     .hero-content h1 {
-      font-size: 1.0rem;
+      font-size: 1.2rem;
       margin: 0.1rem 0;
     }
     .hero-content p {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       line-height: 1.2;
     }
     .cta-button {
