@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // 各項目をループして表示
             careerExperiencesSection.innerHTML = experiences.map(exp => {
                 if (exp.content) {
-                    const truncatedText = truncateText(exp.content, 100);
+                    const truncatedText = truncateText(exp.content, 50);
                     return `
                         <div class="detail">
                             <p><strong>${escapeHTML(exp.title)}:</strong></p>
                             <p class="short-text">
                                 ${escapeHTML(truncatedText)}
-                                ${exp.content.length > 100 ? `<span class="read-more-link">続きを読む</span>` : ''}
+                                ${exp.content.length > 50 ? `<span class="read-more-link">続きを読む</span>` : ''}
                             </p>
                             <p class="read-more-content">
                                 ${escapeHTML(exp.content)} 
