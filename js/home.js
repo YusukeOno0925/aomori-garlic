@@ -53,3 +53,19 @@ function fetchAnnouncements() {
             console.error('Error fetching announcements on Home:', error);
         });
 }
+
+
+// "登録すると何ができる？"のアコーディオン対応
+function openWhyRegister() {
+    // 折りたたみを非表示
+    document.getElementById('whyRegisterCollapsed').style.display = 'none';
+    // 展開を表示
+    document.getElementById('whyRegisterExpanded').style.display = 'block';
+}
+  
+  function closeWhyRegister() {
+    // 展開を非表示
+    document.getElementById('whyRegisterExpanded').style.display = 'none';
+    // 折りたたみを表示
+    document.getElementById('whyRegisterCollapsed').style.display = 'flex'; 
+}

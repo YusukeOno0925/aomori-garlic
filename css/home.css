@@ -72,9 +72,15 @@ main {
   /* ===== 登録のメリットセクション ===== */
   .why-register-section {
     background-color: #f2eee9;
-    padding: 2rem 1rem;
+    display: flex;               /* flexレイアウト */
+    flex-direction: column;      /* 縦に積む */
+    justify-content: center;     /* 縦方向に中央寄せ */
+    align-items: center;         /* 横方向も中央寄せ */
+    
+    min-height: 300px;           /* 全体の高さを確保（お好みで） */
+    padding: 0 1rem;             /* 上下のpaddingは0にして、min-heightで高さを担保 */
+    margin-top: 1rem;
     text-align: center;
-    margin-top: 1rem; /* お好みで */
   }
   .why-register-section .section-title {
     margin-bottom: 1.5rem;
@@ -554,6 +560,165 @@ main {
     text-align: center; 
     line-height: 1.4;
   }
+
+  .why-register-collapsed {
+    display: flex;                 /* 横並びで h2 / ボタン */
+    align-items: center;
+    justify-content: center;       /* タイトルを中央揃え */
+    position: relative;            /* ボタンを絶対配置するなら */
+    
+    background-color: #f2eee9;
+    padding: 0.8rem 2rem;         /* お好みで上下左右の余白を少なめに */
+    margin: 2rem 0;               /* セクション上下マージン */
+    text-align: center;
+  }
+  
+  .why-register-collapsed h2 {
+    font-size: 1.6rem;
+    margin: 0 auto;               /* 真ん中 */
+  }
+  
+  #whyRegisterOpenBtn {
+    position: absolute;
+    right: 2rem;                  /* 右端からちょっと左 */
+    /* 中央寄せ: top: 50% + transform */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #746302;
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+  }
+  #whyRegisterOpenBtn:hover {
+    background-color: #a34705;
+    transform: translateY(-50%) scale(1.05);
+  }
+  
+  /* 折りたたみ時の「＋」アイコン */
+  #whyRegisterOpenBtn i {
+    font-size: 1.2rem;
+  }
+  
+  /* ▼ 展開時: タイトル＋コンテンツ全体を薄黄色背景で覆う */
+  .why-register-expanded {
+    background-color: #f2eee9;
+    padding: 1rem 2rem;           /* 展開時はやや広めに */
+    margin: 2rem 0;
+    text-align: center;
+    position: relative;
+  }
+  
+  /* 展開時のタイトル */
+  .why-register-expanded h2 {
+    font-size: 1.6rem;
+    margin: 0 0 1rem;
+    position: relative;  /* マイナスボタンをabsolute配置にするなら */
+    padding-right: 50px; /* 右側にボタンがかぶらない余白 */
+  }
+  
+  /* 右上に−ボタンを置くならposition:absoluteで調整してもOK。
+     ここではタイトル右上あたりに埋め込み。 */
+  .minus-toggle-button {
+    position: absolute;
+    right: 0; 
+    top: 50%;
+    transform: translateY(-50%);
+    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #746302;
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+  }
+  .minus-toggle-button:hover {
+    background-color: #a34705;
+    transform: translateY(-50%) scale(1.05);
+  }
+  .minus-toggle-button i {
+    font-size: 1.2rem;
+  }
+  
+  /* ▼ 展開時の中身（カードなど） */
+  .why-register-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  /* カードたちなどは今まで通り */
+  .why-register-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  
+  .benefit-card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.08);
+    flex: 0 0 calc((100% / 3) - 1rem);
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+  }
+  .benefit-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.8rem;
+  }
+  .benefit-card p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+  .benefit-icon {
+    fill: #574637;
+    width: 36px; 
+    height: 36px;
+    margin: 0 auto 1rem;
+    display: block;
+  }
+  
+  /* 登録ボタンなど */
+  .cta-wrap {
+    text-align: center;
+  }
+  .register-now {
+    background-color: #746302;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .register-now:hover {
+    background-color: #a34705;
+  }
   
   /* =========================
      レスポンシブデザイン
@@ -690,6 +855,29 @@ main {
     .step {
       width: 90%;
       margin-bottom: 1.5rem;
+    }
+
+    .why-register-collapsed h2 {
+      font-size: 1.4rem;
+    }
+    #whyRegisterOpenBtn {
+      right: 1rem; /* さらに右端に寄せたいなら0.5remなど */
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
+    }
+  
+    .why-register-expanded {
+      padding: 1rem;
+    }
+    .why-register-expanded h2 {
+      font-size: 1.4rem;
+      padding-right: 36px; /* ボタン分だけ余白 */
+    }
+    .minus-toggle-button {
+      width: 36px;
+      height: 36px;
+      font-size: 1.1rem;
     }
   }
   
@@ -833,5 +1021,35 @@ main {
     .detail-button {
       font-size: 0.8rem;
       padding: 0.4rem 1rem;
+    }
+
+    .why-register-collapsed h2 {
+      font-size: 1.2rem;
+    }
+    #whyRegisterOpenBtn {
+      right: 0.5rem;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+    }
+  
+    .why-register-expanded {
+      padding: 0.5rem;
+      margin: 1rem 0;
+    }
+    .why-register-expanded h2 {
+      font-size: 1.2rem;
+      padding-right: 32px;
+    }
+    .minus-toggle-button {
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+    }
+    .benefit-card h3 {
+      font-size: 1rem;
+    }
+    .benefit-card p {
+      font-size: 0.9rem;
     }
   }
