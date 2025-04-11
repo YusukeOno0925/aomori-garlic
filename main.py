@@ -220,10 +220,8 @@ async def mypage(request: Request):
     try:
         # トークンをデバッグ用にログに出力
         token = await get_token_from_request(request)
-        logger.debug(f"トークンを取得しました: {token}")
 
         current_user = await get_current_user(token=token)
-        logger.debug(f"取得したユーザー情報: {current_user}")
 
     except HTTPException as e:
         logger.error(f"認証エラー: {e.detail}")

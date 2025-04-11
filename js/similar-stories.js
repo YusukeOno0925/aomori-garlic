@@ -138,18 +138,49 @@ function fetchSimilarCareerStories(isLoggedIn) {
                 desc.textContent = "あなたの業界/職種/年齢帯等が近いユーザのストーリーを表示しています。";
                 listContainer.style.display = 'flex';
                 indicatorsContainer.removeAttribute('style');
-                data.careers.forEach(story => {
-                    const card = createSimilarStoryCard(story, true);
-                    listContainer.appendChild(card);
+
+                // ユーザーIDの配列を作成
+                const userIds = data.careers.map(story => story.id);
+                // オンラインステータスの取得
+                fetch('/users-status/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userIds)
+                })
+                .then(response => response.json())
+                .then(statusData => {
+                    if (!statusData || !statusData.statuses) {
+                        console.error('オンラインステータスの取得に失敗しました');
+                        return;
+                    }
+                    // 各ストーリーにオンラインステータスを設定する
+                    data.careers.forEach((story) => {
+                        story.activity_status = statusData.statuses[story.id] || 'inactive';
+                    });
+                    // カードを生成して表示する
+                    data.careers.forEach(story => {
+                        const card = createSimilarStoryCard(story, true);
+                        listContainer.appendChild(card);
+                    });
+                    setupIndicators('similar-stories', 'similar-stories-list');
+                })
+                .catch(error => {
+                    console.error('オンラインステータス取得中にエラー:', error);
+                    // エラー時はデフォルトのステータスでカードを生成
+                    data.careers.forEach(story => {
+                        story.activity_status = 'inactive';
+                        const card = createSimilarStoryCard(story, true);
+                        listContainer.appendChild(card);
+                    });
+                    setupIndicators('similar-stories', 'similar-stories-list');
                 });
-                setupIndicators('similar-stories', 'similar-stories-list');
             })
             .catch(error => {
                 console.error('Error fetching similar career stories:', error);
                 desc.textContent = "エラーが発生しました。";
             });
+        }
     }
-}
 
 function createSimilarStoryCard(story, isLoggedIn) {
     const card = document.createElement('div');
@@ -158,6 +189,9 @@ function createSimilarStoryCard(story, isLoggedIn) {
     card.setAttribute('data-story-id', story.id);
 
     const age = story.birthYear ? calculateAge(story.birthYear) : "不明";
+    const latestIncome = story.income && story.income.length > 0 
+                            ? story.income[story.income.length - 1].income 
+                            : "不明";
 
     // カードの内部HTMLを構築（XSS対策として escapeHTML() を利用）
     card.innerHTML = `
@@ -166,7 +200,7 @@ function createSimilarStoryCard(story, isLoggedIn) {
           <span class="status-dot ${escapeHTML(story.activity_status || 'inactive')}"></span>
         </h3>
         <p>職業: ${escapeHTML(story.profession || '不明')}</p>
-        <p>年収: ${escapeHTML(story.latestIncome || '不明')}</p>
+        <p>年収: ${escapeHTML(String(latestIncome))}</p>
         ${story.career_type ? `<p>今後: ${escapeHTML(story.career_type)}</p>` : ''}
       </div>
       ${drawCareerPathD3(story.careerStages, window.innerWidth)}
