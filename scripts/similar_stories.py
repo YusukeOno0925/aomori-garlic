@@ -10,6 +10,19 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+def normalize_name(name):
+    """文字列を小文字にし、前後の余分な空白と特定キーワードを除去する。
+       対象キーワード: '株式会社', '有限会社', '大学', '大學' など
+    """
+    if not name:
+        return ""
+    # 小文字化、前後の空白削除
+    norm = name.strip().lower()
+    # 除去したい文字列を繰り返し除去（必要に応じてキーワードを追加）
+    for keyword in ["株式会社", "有限会社", "大学", "大學", "大学院", "大学大学院"]:
+        norm = norm.replace(keyword, "")
+    return norm
+
 @router.get("/similar-career-stories/")
 async def get_similar_users(
     target_user_id: int = Query(None),
@@ -86,6 +99,10 @@ async def get_similar_users(
         comp_row = cursor.fetchone()
         base_company = comp_row["company_name"] if comp_row and comp_row["company_name"] else ""
 
+        # 正規化を実施（ここで base_company, base_institution は既に定義済み）
+        base_company_norm = normalize_name(base_company)
+        base_institution_norm = normalize_name(base_institution)
+
         # 別クエリでキャリア志向（career_aspirations.type）を取得
         cursor.execute("""
             SELECT type 
@@ -133,8 +150,8 @@ async def get_similar_users(
                 ANY_VALUE(e.institution) AS institution,
                 ANY_VALUE(lc.company_name) AS current_company,
                 (
-                (CASE WHEN ANY_VALUE(e.institution) = %s THEN 50 ELSE 0 END)
-                + (CASE WHEN ANY_VALUE(lc.company_name) = %s THEN 40 ELSE 0 END)
+                (CASE WHEN REPLACE(REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(e.institution))), '大学', ''), '大学院', ''), '大學', '') = %s THEN 50 ELSE 0 END)
+                + (CASE WHEN REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(lc.company_name))), '株式会社', ''), '有限会社', '') = %s THEN 40 ELSE 0 END)
                 + (CASE WHEN ANY_VALUE(j.industry) = %s THEN 20 ELSE 0 END)
                 + (CASE WHEN ANY_VALUE(j.job_category) = %s THEN 20 ELSE 0 END)
                 + (CASE WHEN ANY_VALUE(u.birthdate) IS NOT NULL
@@ -166,8 +183,8 @@ async def get_similar_users(
             LIMIT 5;
         """
         params = (
-            base_institution,   # 1. 出身大学
-            base_company,       # 2. 最新の会社名
+            base_institution_norm,   # 1. 出身大学
+            base_company_norm,       # 2. 最新の会社名
             base_industry,      # 3. 業界
             base_job_category,  # 4. 職種
             baseYear,           # 5. 年齢補正（基準年：1回目）

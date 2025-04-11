@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+function calculateAge(birthYear) {
+    if (!birthYear) return "不明";
+    const currentYear = new Date().getFullYear();
+    return currentYear - birthYear;
+}
+
 function checkLoginStatus() {
     return fetch('/check-login-status/', { credentials: 'include' })
         .then(response => {
@@ -151,10 +157,12 @@ function createSimilarStoryCard(story, isLoggedIn) {
     card.className = isLoggedIn ? 'card' : 'card preview-blur';
     card.setAttribute('data-story-id', story.id);
 
+    const age = story.birthYear ? calculateAge(story.birthYear) : "不明";
+
     // カードの内部HTMLを構築（XSS対策として escapeHTML() を利用）
     card.innerHTML = `
       <div class="card-header">
-        <h3>${escapeHTML(story.name)} (${escapeHTML(String(story.age))}歳)
+        <h3>${escapeHTML(story.name)} (${age}歳)
           <span class="status-dot ${escapeHTML(story.activity_status || 'inactive')}"></span>
         </h3>
         <p>職業: ${escapeHTML(story.profession || '不明')}</p>
