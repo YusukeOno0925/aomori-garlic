@@ -150,7 +150,7 @@ async def get_similar_users(
                 ANY_VALUE(e.institution) AS institution,
                 ANY_VALUE(lc.company_name) AS current_company,
                 (
-                (CASE WHEN REPLACE(REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(e.institution))), '大学', ''), '大学院', ''), '大學', '') = %s THEN 50 ELSE 0 END)
+                (CASE WHEN REPLACE(REPLACE(REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(e.institution))), '大学', ''), '大学院', ''), '大學', ''), '大学大学院', '') = %s THEN 50 ELSE 0 END)
                 + (CASE WHEN REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(lc.company_name))), '株式会社', ''), '有限会社', '') = %s THEN 40 ELSE 0 END)
                 + (CASE WHEN ANY_VALUE(j.industry) = %s THEN 20 ELSE 0 END)
                 + (CASE WHEN ANY_VALUE(j.job_category) = %s THEN 20 ELSE 0 END)
