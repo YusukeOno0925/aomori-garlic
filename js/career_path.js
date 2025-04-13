@@ -389,7 +389,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 finalNodesSet.add(l.target);
             });
 
-            var nodesArray = Array.from(finalNodesSet).map(function(name) {
+            // 大学ノードを優先的に左側に配置するためソートする
+            var nodesArray = Array.from(finalNodesSet).sort(function(a, b) {
+                // 大学かどうかを判断：文字列に "大学" が含まれているか、または "その他大学" の場合
+                var isAUniversity = a.indexOf("大学") !== -1 || a === "その他大学";
+                var isBUniversity = b.indexOf("大学") !== -1 || b === "その他大学";
+                if (isAUniversity && !isBUniversity) return -1;
+                if (!isAUniversity && isBUniversity) return 1;
+                // それ以外はアルファベット順（または適当な順序）でソート
+                return a.localeCompare(b);
+            }).map(function(name) {
                 return { name: name };
             });
 
