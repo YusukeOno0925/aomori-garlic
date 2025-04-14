@@ -389,14 +389,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 finalNodesSet.add(l.target);
             });
 
-            // 大学ノードを優先的に左側に配置するためソートする
+            // 教育系のノードとして扱うキーワードのリスト
+            var educationKeywords = ["大学", "大学院", "大学大学院", "その他大学", "その他大学院"];
+
+            // 大学や大学院（教育情報）のノードを優先的に左側に配置するためソートする
             var nodesArray = Array.from(finalNodesSet).sort(function(a, b) {
-                // 大学かどうかを判断：文字列に "大学" が含まれているか、または "その他大学" の場合
-                var isAUniversity = a.indexOf("大学") !== -1 || a === "その他大学";
-                var isBUniversity = b.indexOf("大学") !== -1 || b === "その他大学";
-                if (isAUniversity && !isBUniversity) return -1;
-                if (!isAUniversity && isBUniversity) return 1;
-                // それ以外はアルファベット順（または適当な順序）でソート
+                // ノード a, b が教育系のキーワードを含むかどうかをチェック
+                var isAEducation = educationKeywords.some(function(keyword) {
+                    return a.indexOf(keyword) !== -1;
+                });
+                var isBEducation = educationKeywords.some(function(keyword) {
+                    return b.indexOf(keyword) !== -1;
+                });
+                
+                // 教育ノードがある場合は左側に来るようにソート
+                if (isAEducation && !isBEducation) return -1;
+                if (!isAEducation && isBEducation) return 1;
+                
+                // 両方とも教育系の場合、またはそうでない場合はアルファベット順でソート
                 return a.localeCompare(b);
             }).map(function(name) {
                 return { name: name };
