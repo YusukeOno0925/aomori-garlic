@@ -281,34 +281,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     edu = "その他大学";
                 }
 
-                // 最初の会社
+                // 最初の会社：連番 "1" を付与
                 var firstCompany = career.companies[0];
-                var firstInd = (firstCompany && firstCompany.industry) ? firstCompany.industry : "不明";
+                var firstInd = (firstCompany && firstCompany.industry) ? firstCompany.industry + "_1" : "不明_1";
 
-                // 大学→最初の業界
+                // 大学 → キャリア1（1社目の業界）
                 addSankeyLink(edu, firstInd);
 
-                // ★★★【修正ポイント】往復防止のために visitedIndustries を使用 ★★★
-                let visitedIndustries = new Set();
-                visitedIndustries.add(firstInd);
-
-                // 2社目以降: (前の業界) → (新しい業界)
+                // 2社目以降：各ステージ毎に連番を付与（ステージ番号は i+1 とする）
                 for (var i = 1; i < career.companies.length; i++) {
-                    var prevInd = career.companies[i - 1].industry || "不明";
-                    var currInd = career.companies[i].industry || "不明";
-
-                    // 同じ業界ならリンク不要
-                    if (prevInd === currInd) {
-                        continue;
-                    }
-
-                    // もし既に visitedIndustries に含まれていれば = 往復とみなしてスキップ
-                    if (visitedIndustries.has(currInd)) {
-                        continue;
-                    }
-
+                    var prevCompany = career.companies[i - 1];
+                    var currCompany = career.companies[i];
+                    var prevInd = prevCompany.industry ? prevCompany.industry + "_" + (i) : "不明_" + i;
+                    var currInd = currCompany.industry ? currCompany.industry + "_" + (i + 1) : "不明_" + (i + 1);
                     addSankeyLink(prevInd, currInd);
-                    visitedIndustries.add(currInd);
                 }
             });
 
@@ -317,10 +303,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // =========================================
             var industryCount = {};
             links.forEach(function(ln) {
-                if (!industryCount[ln.target]) {
-                    industryCount[ln.target] = 0;
+                // ln.target は文字列 (例："金融_2") として想定
+                var baseIndustry = ln.target.split("_")[0]; // 連番除去
+                if (!industryCount[baseIndustry]) {
+                    industryCount[baseIndustry] = 0;
                 }
-                industryCount[ln.target] += ln.value;
+                industryCount[baseIndustry] += ln.value;
             });
 
             var screenWidth = window.innerWidth;
@@ -349,7 +337,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             links.forEach(function(ln) {
-                if (topIndustries.includes(ln.target)) {
+                var targetBase = ln.target.split("_")[0];
+                if (topIndustries.includes(targetBase)) {
                     newLinks.push(ln);
                 } else {
                     addOrInc(ln.source, "その他");
