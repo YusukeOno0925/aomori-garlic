@@ -3,6 +3,8 @@ function truncateText(text, maxLength) {
     return text.length > maxLength ? text.slice(0, maxLength - 3) + '...' : text;
 }
 
+var globalEducationKeywords = ["大学", "大学院", "大学大学院", "その他大学", "その他大学院", "非公開大学"];
+
 document.addEventListener('DOMContentLoaded', function () {
     // ツールチップの作成
     const tooltip = d3.select("body")
@@ -277,7 +279,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 var edu = career.education || "不明大学";
-                if (!topUniversities.includes(edu)) {
+                if (edu === "非公開") {
+                    edu = "非公開大学";
+                } else if (!topUniversities.includes(edu)) {
                     edu = "その他大学";
                 }
 
@@ -321,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var otherIndustries = sortedIndustries.slice(maxIndustries);
 
             if (otherIndustries.length > 0) {
-                topIndustries.push("その他");
+                topIndustries.push("【業界】その他");
             }
 
             var newLinks = [];
@@ -338,10 +342,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             links.forEach(function(ln) {
                 var targetBase = ln.target.split("_")[0];
-                if (topIndustries.includes(targetBase)) {
+                // ここで、ソースが教育系の場合はリンクはそのまま保持
+                var isSourceEducation = globalEducationKeywords.some(function(keyword) {
+                    return ln.source.indexOf(keyword) !== -1;
+                });
+                if (isSourceEducation) {
                     newLinks.push(ln);
                 } else {
-                    addOrInc(ln.source, "その他");
+                    if (topIndustries.includes(targetBase)) {
+                        newLinks.push(ln);
+                    } else {
+                        addOrInc(ln.source, "【業界】その他");
+                    }
                 }
             });
 
@@ -378,24 +390,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 finalNodesSet.add(l.target);
             });
 
-            // 教育系のノードとして扱うキーワードのリスト
-            var educationKeywords = ["大学", "大学院", "大学大学院", "その他大学", "その他大学院"];
-
-            // 大学や大学院（教育情報）のノードを優先的に左側に配置するためソートする
             var nodesArray = Array.from(finalNodesSet).sort(function(a, b) {
-                // ノード a, b が教育系のキーワードを含むかどうかをチェック
-                var isAEducation = educationKeywords.some(function(keyword) {
-                    return a.indexOf(keyword) !== -1;
-                });
-                var isBEducation = educationKeywords.some(function(keyword) {
-                    return b.indexOf(keyword) !== -1;
-                });
-                
-                // 教育ノードがある場合は左側に来るようにソート
-                if (isAEducation && !isBEducation) return -1;
-                if (!isAEducation && isBEducation) return 1;
-                
-                // 両方とも教育系の場合、またはそうでない場合はアルファベット順でソート
+                function getGroup(nodeName) {
+                    // 教育系ならグループ 0、それ以外はグループ 1
+                    for (var i = 0; i < globalEducationKeywords.length; i++) {
+                        if (nodeName.indexOf(globalEducationKeywords[i]) !== -1) {
+                            return 0;
+                        }
+                    }
+                    return 1;
+                }
+                var groupA = getGroup(a);
+                var groupB = getGroup(b);
+                if (groupA !== groupB) {
+                    return groupA - groupB;
+                }
                 return a.localeCompare(b);
             }).map(function(name) {
                 return { name: name };
