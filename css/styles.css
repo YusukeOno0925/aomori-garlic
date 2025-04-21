@@ -73,6 +73,27 @@ header {
     flex-grow: 1; /* 余白としても機能させる */
 }
 
+/* 1. ボタンを横一列に並べる */
+.login-button-container {
+    display: flex;
+    gap: 0.5rem;          /* ボタン間のスペース */
+    align-items: center;  /* 縦方向中央揃え */
+  }
+  
+  /* 2. 新規登録ボタンの見た目をログインボタンに合わせる */
+  .header-register-btn {
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+  }
+  .header-register-btn:hover {
+    background-color: var(--accent-color);
+  }
+
 /* ログインボタン */
 .login-button {
     background-color: var(--main-color);
@@ -301,10 +322,23 @@ footer {
     }
 
     .logo-image {
+        margin-right: -6px;
         height: 24px; /* ロゴ画像の高さを小さくする */
     }
 
-    .login-button {
+    .logo-link {
+        display: flex;            /* 元々flexなら不要ですが念のため */
+        flex-direction: column;   /* 縦並びに */
+        align-items: center;      /* 真ん中揃え */
+    }
+    /* 文字の余白を少し上に */
+    .logo {
+        text-align: center;
+        margin: 0.25rem 0 0;      /* 上に余白を入れる */
+    }
+
+    .login-button,
+    .header-register-btn {
         font-size: 0.7rem; /* フォントサイズを小さく設定 */
         padding: 0.4rem 0.6rem; /* ボタン自体のサイズも調整 */
     }
