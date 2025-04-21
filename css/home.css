@@ -719,6 +719,50 @@ main {
   .register-now:hover {
     background-color: #a34705;
   }
+
+  .metrics-section {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin: 2.5rem 0;
+    flex-wrap: wrap;
+  }
+  .metric-card {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f2f0ec, #e1ddcf);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  }
+  
+  .metric-icon {
+    font-size: 1.8rem;
+    color: #8ba141;
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-number {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #574637;
+    line-height: 1;
+  }
+  
+  .metric-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.25rem;
+    text-align: center;
+  }
   
   /* =========================
      レスポンシブデザイン
@@ -878,6 +922,17 @@ main {
       width: 36px;
       height: 36px;
       font-size: 1.1rem;
+    }
+
+    .metrics-section {
+      gap: 1.5rem;
+    }
+    .metric-card {
+      width: 120px;
+      height: 120px;
+    }
+    .metric-number {
+      font-size: 1.6rem;
     }
   }
   
@@ -1051,5 +1106,19 @@ main {
     }
     .benefit-card p {
       font-size: 0.9rem;
+    }
+
+    .metrics-section {
+      gap: 1.0rem;
+    }
+    .metric-card {
+      width: 90px;
+      height: 90px;
+    }
+    .metric-number {
+      font-size: 1.0rem;
+    }
+    .metric-label {
+      font-size: 0.5rem;
     }
   }

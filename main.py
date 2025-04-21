@@ -28,6 +28,7 @@ from scripts.password_reset import router as password_reset_router
 from scripts.auth import router as auth_router
 from scripts.career_path import router as career_path_router
 from scripts.announcements import router as announcements_router
+from scripts.metrics import router as metrics_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -61,6 +62,7 @@ app.include_router(auth_router)
 app.include_router(password_reset_router)
 app.include_router(career_path_router)
 app.include_router(announcements_router)
+app.include_router(metrics_router)
 
 # CORSの設定
 app.add_middleware(
