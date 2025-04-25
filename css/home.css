@@ -11,7 +11,7 @@ main {
 #hero {
     background: url('../images/hero-image.jpg') no-repeat center center;
     background-size: cover;
-    height: 50vh; /* 画像の高さを指定 */
+    height: 70vh; /* 画像の高さを指定 */
     position: relative;
     display: flex;
     align-items: center;
@@ -32,6 +32,7 @@ main {
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
+    padding: 2rem;
   }
   
   .hero-content {
@@ -720,28 +721,29 @@ main {
     background-color: #a34705;
   }
 
-  .metrics-section {
+  .metrics-overlay {
     display: flex;
     justify-content: center;
-    gap: 3rem;
-    margin: 2.5rem 0;
-    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 2rem 0;     /* テキストとの余白調整 */
   }
+  
   .metric-card {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f2f0ec, #e1ddcf);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform .3s, box-shadow .3s;
   }
+  
   .metric-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
   }
   
   .metric-icon {
@@ -751,7 +753,7 @@ main {
   }
   
   .metric-number {
-    font-size: 2.2rem;
+    font-size: 2.0rem;
     font-weight: bold;
     color: #574637;
     line-height: 1;
@@ -763,6 +765,16 @@ main {
     margin-top: 0.25rem;
     text-align: center;
   }
+
+  .mobile-br {
+    display: none;
+  }
+
+  /* metrics-overlay 内のカードリンクの下線を消して、色も継承させる */
+  .metrics-overlay a.metric-card {
+    text-decoration: none;  /* 下線を消す */
+    color: inherit;         /* 親要素の文字色を使う */
+  }
   
   /* =========================
      レスポンシブデザイン
@@ -771,7 +783,7 @@ main {
   /* 768px 以下 */
   @media (max-width: 768px) {
     #hero {
-        height: 40vh;
+        height: 60vh;
     }
 
     .hero-content h1 {
@@ -923,16 +935,54 @@ main {
       height: 36px;
       font-size: 1.1rem;
     }
-
-    .metrics-section {
-      gap: 1.5rem;
+    .cta-button {
+      margin-top: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.8rem;
     }
+
+    .metrics-overlay {
+      display: flex;
+      flex-wrap: nowrap;           /* 折り返さず１行に */
+      justify-content: center;     /* 丸を中央寄せ */
+      align-items: center;
+      gap: 1rem;                   /* 丸どうしの間隔 */
+      padding: 1rem 0;             /* 上下の余白 */
+      overflow-x: auto;            /* はみ出してもスクロール */
+    }
+  
     .metric-card {
-      width: 120px;
-      height: 120px;
+      flex: 0 0 auto;              /* 固定サイズ */
+      width: 100px;                 /* お好みのサイズに */
+      height: 100px;                /* 幅＝高さ に固定 */
+      aspect-ratio: 1;             /* 縦横比 1:1 をキープ */
+      border-radius: 50%;          /* 完全な円 */
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+  
+    .metric-icon {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
     }
     .metric-number {
       font-size: 1.6rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      line-height: 1.2;
+      text-align: center;
     }
   }
   
@@ -963,14 +1013,14 @@ main {
     }
   
     #hero {
-      height: 30vh;
+      height: 55vh;
     }
     .hero-content {
       height: calc(50vh / 3);
       padding: 0.5rem;
     }
     .hero-content h1 {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       margin: 0.1rem 0;
     }
     .hero-content p {
@@ -1108,17 +1158,79 @@ main {
       font-size: 0.9rem;
     }
 
-    .metrics-section {
-      gap: 1.0rem;
+    .metrics-overlay {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
+      padding: 0.8rem 0; /* 上下の余白 */
+      overflow-x: auto;
     }
     .metric-card {
-      width: 90px;
-      height: 90px;
+      width: 75px;          /* 小振りに */
+      height: 75px;
+      aspect-ratio: 1;      /* 必ず真円に */
+      border-radius: 50%;
+    }
+    .metric-icon {
+      font-size: 1.2rem;    /* アイコンサイズ調整 */
+      margin-bottom: 0.3rem;
     }
     .metric-number {
-      font-size: 1.0rem;
+      font-size: 1.4rem;    /* 数字サイズ調整 */
     }
     .metric-label {
-      font-size: 0.5rem;
+      font-size: 0.5rem;    /* ラベルも少し小さく */
+      line-height: 1.2;
+    }
+
+    .mobile-br {
+      display: inline; /* または block でもOK */
+    }
+  }
+
+  @media (max-width: 360px) {
+    #hero {
+      height: 55vh;
+    }
+
+    .hero-content h1 {
+      font-size: 1.1rem;
+      margin: 0.1rem 0;
+    }
+    .hero-content p {
+      font-size: 0.7rem;
+    }
+    .cta-button {
+      font-size: 0.9rem;
+      padding: 0.8rem 1.5rem;
+    }
+
+    .metrics-overlay {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
+      padding: 0.8rem 0; /* 上下の余白 */
+      overflow-x: auto;
+    }
+    .metric-card {
+      width: 65px;          /* 小振りに */
+      height: 65px;
+      aspect-ratio: 1;      /* 必ず真円に */
+      border-radius: 50%;
+    }
+    .metric-icon {
+      font-size: 1.0rem;    /* アイコンサイズ調整 */
+      margin-bottom: 0.3rem;
+    }
+    .metric-number {
+      font-size: 1.2rem;    /* 数字サイズ調整 */
+    }
+    .metric-label {
+      font-size: 0.5rem;    /* ラベルも少し小さく */
+      line-height: 1.2;
     }
   }
