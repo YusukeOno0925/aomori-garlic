@@ -1009,7 +1009,7 @@ main {
   /* 450px以下 */
   @media (max-width: 450px) {
     .howto-section h2 {
-        font-size: 1.2rem;
+      font-size: 1.2rem;
     }
   
     #hero {
@@ -1164,7 +1164,7 @@ main {
       justify-content: center;
       align-items: center;
       gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
-      padding: 0.8rem 0; /* 上下の余白 */
+      padding: 0rem 0; /* 上下の余白 */
       overflow-x: auto;
     }
     .metric-card {
@@ -1188,11 +1188,15 @@ main {
     .mobile-br {
       display: inline; /* または block でもOK */
     }
+
+    .text-overlay {
+      padding: 1rem;       /* デフォルトは2remなので半分に */
+    }
   }
 
   @media (max-width: 360px) {
     #hero {
-      height: 55vh;
+      height: 45vh;
     }
 
     .hero-content h1 {
@@ -1203,8 +1207,8 @@ main {
       font-size: 0.7rem;
     }
     .cta-button {
-      font-size: 0.9rem;
-      padding: 0.8rem 1.5rem;
+      font-size: 0.8rem;
+      padding: 0.7rem 1.5rem;
     }
 
     .metrics-overlay {
@@ -1213,7 +1217,7 @@ main {
       justify-content: center;
       align-items: center;
       gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
-      padding: 0.8rem 0; /* 上下の余白 */
+      padding: -0.2rem 0; /* 上下の余白 */
       overflow-x: auto;
     }
     .metric-card {
@@ -1232,5 +1236,9 @@ main {
     .metric-label {
       font-size: 0.5rem;    /* ラベルも少し小さく */
       line-height: 1.2;
+    }
+
+    .text-overlay {
+      padding: 0.2rem;       /* デフォルトは2remなので半分に */
     }
   }
