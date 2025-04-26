@@ -1026,10 +1026,13 @@ main {
     .hero-content p {
       font-size: 0.9rem;
       line-height: 1.2;
+      margin-bottom: -1rem;
     }
     .cta-button {
       font-size: 1rem;
       padding: 0.8rem 1.5rem;
+      margin-top: -1rem;
+      margin-bottom: 0.5rem;
     }
     .card.preview-blur .overlay {
       font-size: 1.0rem;
