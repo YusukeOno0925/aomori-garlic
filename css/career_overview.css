@@ -125,40 +125,30 @@ li.career-card p {
 }
 
 /* オンラインステータスのドットのスタイル */
-.status-dot {
+.status-badge {
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-left: 5px;
-    vertical-align: middle; /* テキストと垂直方向を揃える */
-}
-
-.status-dot.online {
-    background-color: green;
-}
-
-.status-dot.recently_active {
-    background-color: yellow;
-}
-
-.status-dot.inactive {
-    background-color: red;
-}
-
-/* ステータス凡例のスタイル */
-.status-legend {
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.status-legend .status-dot {
+    font-size: 0.65rem;
+    line-height: 1;
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
     vertical-align: middle;
-    margin-right: 5px;
+    margin-left: 0.3rem;
+    opacity: 0.8;
 }
-
-.status-legend span {
-    margin-right: 15px;
+.status-badge.online {
+    background: transparent;
+    color: #8ba141;
+    border: 1px solid #8ba141;
+}
+.status-badge.recently_active {
+    background: transparent;
+    color: #f0c419;
+    border: 1px solid #f0c419;
+}
+.status-badge.inactive {
+    background: transparent;
+    color: #da3e3f;
+    border: 1px solid #da3e3f;
 }
 
 /* レスポンシブ対応 */
@@ -190,4 +180,12 @@ li.career-card p {
         font-size: 0.9rem; /* または0.85remなど */
         line-height: 1.3;  /* 少し詰めてもいい */
     }
+
+    /* バッジだけを右上に */
+    li.career-card .status-badge {
+        position: absolute;  /* カードの相対位置基準で */
+        top: 0.5rem;         /* お好みで微調整 */
+        right: 0.5rem;       /* お好みで微調整 */
+        margin-left: 0;      /* inline時の余白をリセット */
+      }
 }

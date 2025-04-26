@@ -103,13 +103,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         `;
 
-                        // オンラインステータスの取得
+                        // オンラインステータスの取得（在席中／最近活動／お休み中 の文字付きバッジに変更）
                         const activityStatus = career.activity_status || 'inactive';
-                        const statusDot = `<span class="status-dot ${activityStatus}"></span>`;
+                        const statusText = activityStatus === 'online'
+                            ? '在席中'
+                            : activityStatus === 'recently_active'
+                                ? '最近活動'
+                                : 'お休み中';
+                        const statusBadge = `<span class="status-badge ${activityStatus}">${statusText}</span>`;
         
                         listItem.innerHTML = `
                             <div class="career-info">
-                                <h2>${career.name || '不明'} (${age}歳) ${statusDot}</h2>  <!-- 名前が不明な場合 -->
+                            <h2>${career.name || '不明'} (${age}歳) ${statusBadge}</h2>
                                 <p>職業: ${career.profession || '不明'}</p>  <!-- 職業が不明な場合 -->
                                 <p>年収: ${career.income[career.income.length - 1]?.income || '不明'}</p>  <!-- 年収が不明な場合 -->
                                 <p>${futureCareerHTML}</p>
