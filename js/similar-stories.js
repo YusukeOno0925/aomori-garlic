@@ -1,3 +1,10 @@
+// ─── ステータスごとの日本語ラベル ───
+const STATUS_LABELS = {
+    online:         '在席中',
+    recently_active:'最近活動',
+    inactive:       'お休み中'
+  };
+
 document.addEventListener('DOMContentLoaded', function () {
     // ログイン状態をチェックして、似たキャリアストーリーを取得する
     checkLoginStatus().then(isLoggedIn => {
@@ -194,21 +201,27 @@ function createSimilarStoryCard(story, isLoggedIn) {
                             : "不明";
 
     // カードの内部HTMLを構築（XSS対策として escapeHTML() を利用）
+    const status = story.activity_status || 'inactive';
     card.innerHTML = `
-      <div class="card-header">
-        <h3>${escapeHTML(story.name)} (${age}歳)
-          <span class="status-dot ${escapeHTML(story.activity_status || 'inactive')}"></span>
-        </h3>
-        <p>職業: ${escapeHTML(story.profession || '不明')}</p>
-        <p>年収: ${escapeHTML(String(latestIncome))}</p>
-        ${story.career_type ? `<p>今後: ${escapeHTML(story.career_type)}</p>` : ''}
-      </div>
-      ${drawCareerPathD3(story.careerStages, window.innerWidth)}
-      <div class="card-footer">
-        <img src="images/eye-icon.png" alt="View Icon" class="view-icon">
-        <span class="view-count">${escapeHTML(String(story.view_count || 0))} 回</span>
-      </div>
-      ${!isLoggedIn ? '<div class="overlay">ログインすると詳細が見れます</div>' : ''}
+        <div class="card-header">
+            <h3 class="card-title">
+                <span class="card-title-text">
+                    ${escapeHTML(story.name)} (${age}歳)
+                </span>
+                <span class="status-badge ${status}">
+                    ${STATUS_LABELS[status]}
+                </span>
+            </h3>
+            <p>職業: ${escapeHTML(story.profession || '不明')}</p>
+            <p>年収: ${escapeHTML(String(latestIncome))}</p>
+            ${story.career_type ? `<p>今後: ${escapeHTML(story.career_type)}</p>` : ''}
+        </div>
+        ${drawCareerPathD3(story.careerStages, window.innerWidth)}
+        <div class="card-footer">
+            <img src="images/eye-icon.png" alt="View Icon" class="view-icon">
+            <span class="view-count">${escapeHTML(String(story.view_count || 0))} 回</span>
+        </div>
+        ${!isLoggedIn ? '<div class="overlay">ログインすると詳細が見れます</div>' : ''}
     `;
 
     // カードクリック時の処理

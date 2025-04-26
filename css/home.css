@@ -497,37 +497,6 @@ main {
   #feedback-form button:hover {
     background-color: var(--accent-color);
   }
-  
-  /* ===== ステータス凡例のスタイル ===== */
-  .status-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-left: 5px;
-    vertical-align: middle;
-  }
-  .status-dot.online {
-    background-color: green;
-  }
-  .status-dot.recently_active {
-    background-color: yellow;
-  }
-  .status-dot.inactive {
-    background-color: red;
-  }
-  .status-legend {
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-align: center;
-  }
-  .status-legend .status-dot {
-    vertical-align: middle;
-    margin-right: 5px;
-  }
-  .status-legend span {
-    margin-right: 15px;
-  }
 
   .tooltip {
     position: absolute;
@@ -774,6 +743,49 @@ main {
   .metrics-overlay a.metric-card {
     text-decoration: none;  /* 下線を消す */
     color: inherit;         /* 親要素の文字色を使う */
+  }
+
+  .card-header h3.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* ─── タイトルテキスト側 （必要なら余白調整） ─── */
+  .card-title-text {
+    /* 例えば折り返し防止したければ */
+    white-space: nowrap;
+  }
+  
+  /* ─── バッヂの基本スタイル（抑えめ版） ─── */
+  .status-badge {
+    display: inline-block;
+    font-size: 0.65rem;          /* 小さめに */
+    line-height: 1;
+    padding: 0.1em 0.3em;        /* 余白を削減 */
+    border-radius: 0.25rem;
+    vertical-align: middle;
+    margin-left: 0.3rem;         /* アイコンとの間隔も控えめに */
+    opacity: 0.8;                /* 少し透かす */
+  }
+
+  /* ─── 状態別：背景ではなく細い枠線＋文字色 ─── */
+  .status-badge.online {
+    background: transparent;
+    color: #8ba141;
+    border: 1px solid #8ba141;
+  }
+
+  .status-badge.recently_active {
+    background: transparent;
+    color: #f0c419;
+    border: 1px solid #f0c419;
+  }
+
+  .status-badge.inactive {
+    background: transparent;
+    color: #da3e3f;
+    border: 1px solid #da3e3f;
   }
   
   /* =========================

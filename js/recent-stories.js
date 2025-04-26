@@ -143,8 +143,15 @@ function createStoryCard(story) {
 
     const cardHeader = `
         <div class="card-header">
-            <h3>${story.name} (${age}歳)
-                <span class="status-dot ${activityStatus}"></span>
+            <h3 class="card-title">
+                <span class="card-title-text">
+                    ${story.name} (${age}歳)
+                </span>
+                <span class="status-badge ${activityStatus}">
+                    ${activityStatus === 'online' ? '在席中' 
+                    : activityStatus === 'recently_active' ? '最近活動' 
+                    : 'お休み中'}
+                </span>
             </h3>
             <p>職業: ${story.profession}</p>
             <p>年収: ${latestIncome}</p>
