@@ -209,9 +209,9 @@ main {
   .what-is__node--logo img {
     font-size: 2rem;
     color: #874e1f;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 0.5rem;
+    width: 60px;
+    height: 60px;
+    margin-bottom: -1.0rem;
   }
   
   /* ロゴノードだけ大きめ */
@@ -220,7 +220,7 @@ main {
     flex: 0 0 20%;    /* ロゴは10% */
   }
   .what-is__node--logo img {
-    width: 80px;
+    width: 100px;
     height: auto;
   }
   .what-is__node--logo p {
@@ -1088,8 +1088,9 @@ main {
     .what-is__node i,
     .what-is__node--logo img {
       font-size: 1.5rem;
-      width: 32px;
-      height: 32px;
+      width: 80px;
+      height: 80px;
+      margin-bottom: -2.0rem;
     }
     .what-is__node p {
       font-size: 0.8rem;
@@ -1333,8 +1334,8 @@ main {
     .what-is__node i,
     .what-is__node--logo img {
       font-size: 1.2rem;
-      width: 24px;
-      height: 24px;
+      width: 60px;
+      height: 60px;
     }
     .what-is__band {
       padding: 0.3rem 0.8rem;
@@ -1342,6 +1343,9 @@ main {
     .what-is__arrow svg {
       width: 16px;
       height: 16px;
+    }
+    .what-is__node p {
+      font-size: 0.6rem;
     }
   }
 
