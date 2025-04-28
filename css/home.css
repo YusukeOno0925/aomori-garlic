@@ -169,48 +169,113 @@ main {
   }
   
   /* ===== overview-section (インノーマルとは？) ===== */
-  .overview-section {
-    background-color: #ffffff;
-    padding: 2rem 1rem;
+  .what-is {
     text-align: center;
+    padding: 3rem 1rem;
+    font-family: 'Roboto', sans-serif;
     margin-top: -3rem !important;
-    margin-bottom: -3rem;
+    margin-bottom: -5rem;
   }
-  .overview-container {
-    max-width: 800px;
-    margin: 0 auto;
+  .what-is__title {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 2rem;
   }
-  .overview-container h2 {
-    font-size: 1.6rem;
-    color: #4e3d12;
-    margin-bottom: 1.2rem;
-  }
-  .overview-container p {
+  .what-is__description {
+    max-width: 600px;
+    margin: 0.5rem auto 2rem;
     font-size: 1rem;
-    color: #666;
+    color: #555;
     line-height: 1.6;
-    margin-bottom: 1.2rem;
-    text-align: left; /* PCでは左寄せに変更して読みやすく */
   }
   
-  /* リスト（箇条書き）のデザイン */
-  .highlight-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem auto;
-    text-align: left; 
-    max-width: 600px;
+  /* ─── フローチャート ─── */
+  .what-is__diagram {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* 要素間を等間隔に */
+    gap: 0rem;
+    flex-wrap: nowrap; /* 折り返し禁止 */
+    margin-bottom: 2rem;
   }
-  .highlight-list li {
-    position: relative;
+  .what-is__node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 96px;
+    flex: 0 0 20%;    /* 全体の20%ずつ */
+  }
+  .what-is__node i,
+  .what-is__node--logo img {
+    font-size: 2rem;
+    color: #874e1f;
+    width: 48px;
+    height: 48px;
     margin-bottom: 0.5rem;
-    padding-left: 1.5rem;
   }
-  .highlight-list li::before {
-    content: '✔';
-    color: #8ba141;
-    position: absolute;
-    left: 0;
+  .what-is__node p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.2;
+  }
+  
+  /* ロゴノードだけ大きめ */
+  .what-is__node--logo {
+    width: 120px;
+    flex: 0 0 20%;    /* ロゴは10% */
+  }
+  .what-is__node--logo img {
+    width: 80px;
+    height: auto;
+  }
+  .what-is__node--logo p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #574637;
+  }
+  
+  /* 矢印＋登録ラベル */
+  .what-is__arrow {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #4d2104;
+    flex: 0 0 10%;    /* 全体の10%ずつ */
+  }
+  .what-is__arrow span {
+    margin: 0 0.5rem;
+  }
+  .what-is__arrow svg {
+    width: 24px;
+    height: 24px;
+    color: #4d2104;
+  }
+  
+  /* 逆向き矢印用 */
+  .what-is__arrow--reverse {
+    flex-direction: row-reverse;
+  }
+  .what-is__arrow--reverse svg {
+    /* SVG 自体を 180° 回転させて向きを反転 */
+    transform: rotate(180deg);
+  }
+  
+  /* ─── 下段バンド ─── */
+  .what-is__band {
+    display: inline-flex;
+    align-items: center;
+    background: #f2eee9;
+    padding: 0.6rem 1.8rem;
+    border-radius: 4px;
+  }
+  .what-is__band i {
+    margin-right: 0.5rem;
+    color: #574637;
+  }
+  .what-is__band span {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #574637;
   }
 
   /* ===== howto-section ===== */
@@ -248,7 +313,7 @@ main {
   .step-number {
     display: inline-block;
     font-size: 2rem;
-    background-color: #8ba141;
+    background-color: #874e1f;
     color: #ffffff;
     border-radius: 50%;
     width: 48px;
@@ -996,6 +1061,59 @@ main {
       line-height: 1.2;
       text-align: center;
     }
+
+    .what-is {
+      padding: 2rem 1rem;
+    }
+    .what-is__title {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    .what-is__description {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    /* 横並び→縦積み */
+    .what-is__diagram {
+      display: flex;          /* 横並び */
+      flex-direction: row;    /* nowrap はデフォルト */
+      align-items: center;    /* 縦方向を中央揃え */
+      justify-content: space-between;
+      gap: 0.5rem;            /* お好みで調整 */
+    }
+    /* ノードも矢印も等しく伸びるように */
+    .what-is__diagram > * {
+      flex: 1 1 0;      /* 幅を等分 */
+      min-width: 0;     /* 子要素が長くてもはみ出さない */
+      text-align: center;
+    }
+    .what-is__node {
+      width: auto;
+    }
+    .what-is__node i,
+    .what-is__node--logo img {
+      font-size: 1.5rem;
+      width: 32px;
+      height: 32px;
+    }
+    .what-is__node p {
+      font-size: 0.8rem;
+    }
+    .what-is__arrow {
+      position: relative;
+      justify-content: center;
+      z-index: 10;
+    }
+    /* 下段バンドは少し余白を詰める */
+    .what-is__band {
+      margin-top: 1rem;
+      padding: 0.4rem 1rem;
+    }
+    /* 矢印も少し縮小 */
+    .what-is__arrow svg {
+      width: 20px;
+      height: 20px;
+    }
   }
   
   /* 769px以上 */
@@ -1207,6 +1325,32 @@ main {
     .text-overlay {
       padding: 1rem;       /* デフォルトは2remなので半分に */
     }
+
+    .what-is {
+      padding: 1.5rem 0.5rem;
+    }
+    .what-is__title {
+      font-size: 1.4rem;
+    }
+    .what-is__description {
+      font-size: 0.8rem;
+    }
+    .what-is__node i,
+    .what-is__node--logo img {
+      font-size: 1.2rem;
+      width: 24px;
+      height: 24px;
+    }
+    .what-is__node p {
+      font-size: 0.75rem;
+    }
+    .what-is__band {
+      padding: 0.3rem 0.8rem;
+    }
+    .what-is__arrow svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   @media (max-width: 360px) {
@@ -1255,5 +1399,12 @@ main {
 
     .text-overlay {
       padding: 0.2rem;       /* デフォルトは2remなので半分に */
+    }
+
+    .what-is__description {
+      font-size: 0.7rem;
+    }
+    .what-is__node p {
+      font-size: 0.6rem;
     }
   }
