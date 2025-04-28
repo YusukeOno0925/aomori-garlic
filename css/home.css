@@ -213,11 +213,6 @@ main {
     height: 48px;
     margin-bottom: 0.5rem;
   }
-  .what-is__node p {
-    font-size: 0.85rem;
-    color: #666;
-    line-height: 1.2;
-  }
   
   /* ロゴノードだけ大きめ */
   .what-is__node--logo {
@@ -1341,9 +1336,6 @@ main {
       width: 24px;
       height: 24px;
     }
-    .what-is__node p {
-      font-size: 0.75rem;
-    }
     .what-is__band {
       padding: 0.3rem 0.8rem;
     }
@@ -1403,8 +1395,5 @@ main {
 
     .what-is__description {
       font-size: 0.7rem;
-    }
-    .what-is__node p {
-      font-size: 0.6rem;
     }
   }
