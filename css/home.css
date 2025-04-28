@@ -867,6 +867,10 @@ main {
         line-height: 1.4;
     }
 
+    #why-register {
+      margin-top: 4rem;
+    }
+
     .why-register-grid {
         flex-direction: column;
         align-items: center;
