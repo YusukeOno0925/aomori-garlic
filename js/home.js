@@ -71,10 +71,13 @@ function openWhyRegister() {
 }
 
 // ホーム画面上部をスワイプした時に画面が更新される
-PullToRefresh.init({
-    mainElement: 'body',
-    onRefresh() {
-      window.location.reload();
-    },
-    resistance: 2.5
-  });
+function initPullToRefresh() {
+    PullToRefresh.init({
+    mainElement: '#hero',
+    onRefresh() { window.location.reload() },
+    resistance: 2.5,
+    });
+}
+if (location.pathname.endsWith('Home.html') || location.pathname === '/' ) {
+    initPullToRefresh();
+}
