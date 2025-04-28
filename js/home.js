@@ -69,12 +69,3 @@ function openWhyRegister() {
     // 折りたたみを表示
     document.getElementById('whyRegisterCollapsed').style.display = 'flex'; 
 }
-
-// ホーム画面上部をスワイプした時に画面が更新される
-document.addEventListener('DOMContentLoaded', () => {
-    PullToRefresh.init({
-    mainElement: '#hero',
-    onRefresh() { window.location.reload(); },
-    resistance: 2.5
-    });
-});
