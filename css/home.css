@@ -1,3 +1,7 @@
+html, body {
+  overscroll-behavior-y: none;  /* ページ全体のプル・トゥ・リフレッシュ抑制 */
+}
+
 body {
     background-color: #ffffff;
     font-family: 'Roboto', sans-serif;
@@ -18,8 +22,11 @@ main {
     justify-content: center;
     color: #ffffff;
     text-align: center;
-    overflow: hidden;
+    /* overflow: hidden; */
     width: 100%;
+    overflow-y: auto;           
+    -webkit-overflow-scrolling: touch;  /* iOS のスムーズスクロール用 */
+    overscroll-behavior-y: contain;     /* この要素内だけバウンスを許可 */
   }
   
   .text-overlay {
