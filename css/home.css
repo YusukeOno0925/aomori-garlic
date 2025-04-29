@@ -1094,7 +1094,12 @@ main {
       font-size: 1.5rem;
       width: 80px;
       height: 80px;
+    }
+    .what-is__node i {
       margin-bottom: -2.0rem;
+    }
+    .what-is__node--logo img {
+      margin-bottom: 0rem;
     }
     .what-is__node p {
       font-size: 0.8rem;
