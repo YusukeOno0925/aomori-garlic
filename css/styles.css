@@ -53,7 +53,7 @@ header {
 
 /* ロゴ画像 */
 .logo-image {
-    height: 40px;  /* 適切なサイズ */
+    height: 80px;  /* 適切なサイズ */
     width: auto;
 }
 
@@ -255,7 +255,7 @@ footer {
     }
 
     .logo-image {
-        height: 28px;  /* 例: 28pxに縮小 */
+        height: 45px;
         width: auto;
     }
 
@@ -323,7 +323,7 @@ footer {
 
     .logo-image {
         margin-right: -6px;
-        height: 24px; /* ロゴ画像の高さを小さくする */
+        height: 40px; /* ロゴ画像の高さを小さくする */
     }
 
     .logo-link {
