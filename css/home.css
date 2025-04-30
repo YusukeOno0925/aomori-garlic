@@ -1,1412 +1,1107 @@
+/*--------------------------------------------------
+Global Styles
+--------------------------------------------------*/
 body {
-    background-color: #ffffff;
-    font-family: 'Roboto', sans-serif;
+  background-color: #ffffff;
+  font-family: 'Roboto', sans-serif;
 }
 
 main {
-    padding: 1rem;
+  padding: 1rem;
 }
 
-/* ===== ヒーローセクション ===== */
+section {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+h2.section-title {
+  color: var(--main-color);
+}
+
+/*--------------------------------------------------
+Hero Section (#hero)
+HTML: <section id="hero">…</section>
+--------------------------------------------------*/
 #hero {
-    background: url('../images/hero-image.jpg') no-repeat center center;
-    background-size: cover;
-    height: 70vh; /* 画像の高さを指定 */
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    text-align: center;
-    overflow: hidden;
-    width: 100%;
-  }
-  
-  .text-overlay {
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 2rem;
-    width: 100%;
-    max-width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    padding: 2rem;
-  }
-  
-  .hero-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-  }
-  
-  /* ヒーロー内の文言 */
-  .hero-content h1 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  
-  .hero-content p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .cta-button {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background-color: #746302;
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    transition: background-color 0.3s;
-  }
-  .cta-button:hover {
-    transform: translateY(-2px); /* ちょっと浮く */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
-    background-color: #a34705; /* 色はすでにあるので同じ */
-  }
-
-  /* ===== 登録のメリットセクション ===== */
-  .why-register-section {
-    background-color: #f2eee9;
-    display: flex;               /* flexレイアウト */
-    flex-direction: column;      /* 縦に積む */
-    justify-content: center;     /* 縦方向に中央寄せ */
-    align-items: center;         /* 横方向も中央寄せ */
-    
-    min-height: 300px;           /* 全体の高さを確保（お好みで） */
-    padding: 0 1rem;             /* 上下のpaddingは0にして、min-heightで高さを担保 */
-    margin-top: 1rem;
-    text-align: center;
-  }
-  .why-register-section .section-title {
-    margin-bottom: 1.5rem;
-  }
-  
-  .why-register-container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  .why-register-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 1rem;
-    flex-wrap: wrap; 
-    margin-bottom: 1.5rem;
-  }
-  
-  /* 各メリットカード */
-  .benefit-card {
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 
-    0 1px 2px rgba(0,0,0,0.08),  /* うっすら */
-    0 2px 4px rgba(0,0,0,0.08);  /* 少しだけ深め */
-    flex: 0 0 calc((100% / 3) - 1rem); /* PCで3カラム */
-    padding: 1.5rem;                  /* 十分な内側余白を確保 */
-    text-align: center;
-    /* 高さはautoにしておき、自然に高さが揃うようにする */
-    /* align-items: stretch 等で親コンテナが対応できるならベター */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* カード内容を中央寄せ */
-    box-sizing: border-box;
-    transition: transform 0.2s;
-  }
-  
-  .benefit-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600; /* やや太字 */
-    color: #333;      /* もう少し濃い色 */
-    margin-bottom: 0.8rem;
-  }
-  
-  .benefit-card p {
-    font-size: 0.95rem;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* アイコンのサイズは別途 .benefit-icon で指定 */
-  .benefit-icon {
-    fill: #574637;
-    width: 36px; 
-    height: 36px;
-    margin: 0 auto 1rem; /* 上は0、下は1rem、左右は中央寄せ */
-    display: block;
-  }
-  
-  /* CTAボタン */
-  .cta-wrap {
-    text-align: center;
-  }
-  .register-now {
-    background-color: #746302;
-    color: #fff;
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-  .register-now:hover {
-    background-color: #a34705;
-  }
-  
-  /* ===== 各セクションの余白と中央寄せ ===== */
-  section {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  h2.section-title {
-    color: var(--main-color);
-  }
-  
-  /* ===== overview-section (インノーマルとは？) ===== */
-  .what-is {
-    text-align: center;
-    padding: 3rem 1rem;
-    font-family: 'Roboto', sans-serif;
-    margin-top: -3rem !important;
-    margin-bottom: -5rem;
-  }
-  .what-is__title {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 2rem;
-  }
-  .what-is__description {
-    max-width: 600px;
-    margin: 0.5rem auto 2rem;
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.6;
-  }
-  
-  /* ─── フローチャート ─── */
-  .what-is__diagram {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;  /* 要素間を等間隔に */
-    gap: 0rem;
-    flex-wrap: nowrap; /* 折り返し禁止 */
-    margin-bottom: 2rem;
-  }
-  .what-is__node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 96px;
-    flex: 0 0 20%;    /* 全体の20%ずつ */
-  }
-  .what-is__node i,
-  .what-is__node--logo img {
-    font-size: 2rem;
-    color: #874e1f;
-    width: 60px;
-    height: 60px;
-    margin-bottom: -1.0rem;
-  }
-  
-  /* ロゴノードだけ大きめ */
-  .what-is__node--logo {
-    width: 120px;
-    flex: 0 0 20%;    /* ロゴは10% */
-  }
-  .what-is__node--logo img {
-    width: 100px;
-    height: auto;
-  }
-  .what-is__node--logo p {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: #574637;
-  }
-  
-  /* 矢印＋登録ラベル */
-  .what-is__arrow {
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #4d2104;
-    flex: 0 0 10%;    /* 全体の10%ずつ */
-  }
-  .what-is__arrow span {
-    margin: 0 0.5rem;
-  }
-  .what-is__arrow svg {
-    width: 24px;
-    height: 24px;
-    color: #4d2104;
-  }
-  
-  /* 逆向き矢印用 */
-  .what-is__arrow--reverse {
-    flex-direction: row-reverse;
-  }
-  .what-is__arrow--reverse svg {
-    /* SVG 自体を 180° 回転させて向きを反転 */
-    transform: rotate(180deg);
-  }
-  
-  /* ─── 下段バンド ─── */
-  .what-is__band {
-    display: inline-flex;
-    align-items: center;
-    background: #f2eee9;
-    padding: 0.6rem 1.8rem;
-    border-radius: 4px;
-  }
-  .what-is__band i {
-    margin-right: 0.5rem;
-    color: #574637;
-  }
-  .what-is__band span {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #574637;
-  }
-
-  /* ===== howto-section ===== */
-  .howto-section {
-    padding: 2rem 1rem;
-    background-color: #fff; 
-    text-align: center;
-    margin-bottom: -2rem;
-    border-top: 1px solid #ddd;
-  }
-  .howto-section h2 {
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
-    color: #4e3d12;
-  }
-  .howto-steps {
-    display: flex;
-    justify-content: space-around;
-    gap: 1.5rem;
-    flex-wrap: wrap; 
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .step {
-    background-color: #f9f7f4;
-    border-radius: 4px;
-    padding: 1.5rem;
-    box-shadow: 
-    0 1px 2px rgba(0,0,0,0.08),  /* うっすら */
-    0 2px 4px rgba(0,0,0,0.08);  /* 少しだけ深め */
-    width: 300px; 
-    text-align: center;
-    position: relative;
-  }
-  .step-number {
-    display: inline-block;
-    font-size: 2rem;
-    background-color: #874e1f;
-    color: #ffffff;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
-    margin-bottom: 1rem;
-  }
-  .step h3 {
-    font-size: 1.1rem;
-    font-weight: 600; /* やや太字 */
-    color: #333;      /* もう少し濃い色 */
-    margin-bottom: 0.8rem;
-  }
-  .step p {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.4;
-  }
-  
-  /* ===== ライフパス可視化セクション ===== */
-  .lifepath-section{
-    margin-top: 5rem;
-    border-top: 1px solid #ddd;
-  }
-
-  #career-path-visualization {
-    position: relative;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    background-color: #ffffff;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-    overflow-x: auto;
-    overflow-y: auto;
-  }
-  
-  /* ===== 最近のキャリアストーリー/人気のキャリアストーリー共通 ===== */
-  .recentstories-section{
-    border-top: 1px solid #ddd;
-  }
-
-  .popularstories-section{
-    border-top: 1px solid #ddd;
-  }
-
-  .similarstories-section {
-    border-top: 1px solid #ddd;
-  }
-
-  .card-container {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto; 
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  .card {
-    flex: 0 0 calc((100% / 3) - 1rem);
-    scroll-snap-align: center;
-    box-sizing: border-box;
-    background: var(--card-background-color);
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-  }
-  .card h3 {
-    margin-top: 0;
-  }
-  .card p {
-    margin-bottom: 0.5rem;
-  }
-  .card p:last-child {
-    margin-bottom: 0;
-  }
-  .card p:last-of-type {
-    margin-bottom: 1rem;
-  }
-  .card-header {
-    text-align: left;
-    margin-bottom: 0.5rem;
-  }
-  .card-header p {
-    margin: 0.2rem 0;  /* デフォルトより小さめに */
-    line-height: 1.4;  /* 必要に応じて */
-  }
-  .career-path-svg {
-    width: 100%;
-    height: 60px;
-    overflow: visible;
-    margin: 0 auto;
-    margin-bottom: 1rem;
-    white-space: pre-line;
-    word-wrap: break-word;
-  }
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: auto;
-    margin-top: 0.5rem;
-  }
-  .card-footer .view-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-  }
-  .card-footer .view-count {
-    font-size: 0.9rem;
-    color: #666;
-  }
-  .card .arrow-symbol {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: #000;
-  }
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
-  }
-  /* 未ログイン時のカードにぼかし効果を適用 */
-.preview-blur .card-header,
-.preview-blur svg,  /* D3で描画されるSVGにも適用 */
-.preview-blur .card-footer {
-    filter: blur(3px);
-    transition: filter 0.3s;
+  background: url('../images/hero-image.jpg') no-repeat center center;
+  background-size: cover;
+  height: 70vh; /* 画像の高さを指定 */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
 }
-/* カード全体に対するオーバーレイ（未ログイン状態） */
+
+.text-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  max-width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 2rem;
+}
+
+.hero-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+}
+
+/* ヒーロー内の文言 */
+.hero-content h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #746302;
+  color: #ffffff;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+.cta-button:hover {
+  transform: translateY(-2px); /* ちょっと浮く */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
+  background-color: #a34705; /* 色はすでにあるので同じ */
+}
+
+/* Hero 内のメトリクスカード */
+.metrics-overlay {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;     /* テキストとの余白調整 */
+}
+
+.metric-card {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform .3s, box-shadow .3s;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.metric-icon {
+  font-size: 1.8rem;
+  color: #8ba141;
+  margin-bottom: 0.5rem;
+}
+
+.metric-number {
+  font-size: 2.0rem;
+  font-weight: bold;
+  color: #574637;
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.metrics-overlay a.metric-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*--------------------------------------------------
+Registration Benefits Section
+「登録するとできること」
+HTML: <section id="why-register" class="why-register">…</section>
+--------------------------------------------------*/
+.benefit-slider {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 2rem;
+  max-width:1000px;
+  margin:0 auto;
+  margin-bottom: 2rem;
+}
+
+/* カード共通 */
+.benefit-card {
+  background:#fff;
+  border-radius:8px;
+  padding:2rem 1.5rem;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  text-align:center;
+  transition:transform .2s,box-shadow .2s;
+}
+.benefit-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+}
+
+.benefit-icon {
+  font-size: 48px;       /* アイコンサイズ */
+  color: #874e1f;        /* インノーマルの焦茶 */
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.benefit-title {
+  font-size:1.1rem;
+  margin-bottom:.5rem;
+  color:#333;
+}
+
+.benefit-desc {
+  font-size:.95rem;
+  color:#666;
+  line-height:1.4;
+}
+
+.cta-wrap {
+  text-align: center;
+}
+
+/*--------------------------------------------------
+Overview Section
+「インノーマルとは？」
+HTML: <section class="what-is">…</section>
+--------------------------------------------------*/
+.what-is {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  margin-top: -3rem;
+  margin-bottom: -3rem;
+}
+
+.what-is__title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.what-is__description {
+  max-width: 600px;
+  margin: 0.5rem auto 2rem;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ─── フローチャート ─── */
+.what-is__diagram {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* 要素間を等間隔に */
+  gap: 0rem;
+  flex-wrap: nowrap; /* 折り返し禁止 */
+  margin-bottom: 2rem;
+}
+
+.what-is__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 96px;
+  flex: 0 0 20%;    /* 全体の20%ずつ */
+}
+
+.what-is__node i,
+.what-is__node--logo img {
+  font-size: 2rem;
+  color: #874e1f;
+  width: 60px;
+  height: 60px;
+  margin-bottom: -1.0rem;
+}
+
+/* ロゴノードだけ大きめ */
+.what-is__node--logo {
+  width: 120px;
+  flex: 0 0 20%;    /* ロゴは10% */
+}
+.what-is__node--logo img {
+  width: 100px;
+  height: auto;
+}
+.what-is__node--logo p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #574637;
+}
+
+/* 矢印＋登録ラベル */
+.what-is__arrow {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #4d2104;
+  flex: 0 0 10%;    /* 全体の10%ずつ */
+}
+.what-is__arrow span {
+  margin: 0 0.5rem;
+}
+.what-is__arrow svg {
+  width: 24px;
+  height: 24px;
+  color: #4d2104;
+}
+
+/* 逆向き矢印用 */
+.what-is__arrow--reverse {
+  flex-direction: row-reverse;
+}
+.what-is__arrow--reverse svg {
+  transform: rotate(180deg);
+}
+
+/* ─── 下段バンド ─── */
+.what-is__band {
+  display: inline-flex;
+  align-items: center;
+  background: #f2eee9;
+  padding: 0.6rem 1.8rem;
+  border-radius: 4px;
+}
+.what-is__band i {
+  margin-right: 0.5rem;
+  color: #574637;
+}
+.what-is__band span {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #574637;
+}
+
+/*--------------------------------------------------
+Howto Section
+「ご利用の流れ」
+HTML: <section id="how-to-use" class="howto-section">…</section>
+--------------------------------------------------*/
+.howto-section {
+  padding: 2rem 1rem;
+  background-color: #fff; 
+  text-align: center;
+  margin-bottom: -2rem;
+  border-top: 1px solid #ddd;
+}
+
+.howto-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  color: #4e3d12;
+}
+
+.howto-steps {
+  display: flex;
+  justify-content: space-around;
+  gap: 1.5rem;
+  flex-wrap: wrap; 
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step {
+  background-color: #f9f7f4;
+  border-radius: 4px;
+  padding: 1.5rem;
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.08),
+    0 2px 4px rgba(0,0,0,0.08);
+  width: 300px; 
+  text-align: center;
+  position: relative;
+}
+
+.step-number {
+  display: inline-block;
+  font-size: 2rem;
+  background-color: #874e1f;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  margin-bottom: 1rem;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.8rem;
+}
+
+.step p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/*--------------------------------------------------
+Life Path Section
+「ライフパスの可視化」
+HTML: <section id="life-path" class="lifepath-section">…</section>
+--------------------------------------------------*/
+.lifepath-section {
+  margin-top: 5rem;
+  border-top: 1px solid #ddd;
+}
+
+#career-path-visualization {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/*--------------------------------------------------
+Stories Sections
+「最近のキャリアストーリー」「人気のキャリアストーリー」「あなたと近いキャリアストーリー」
+HTML: <section class="recentstories-section">…</section> 他
+--------------------------------------------------*/
+.recentstories-section,
+.popularstories-section,
+.similarstories-section {
+  border-top: 1px solid #ddd;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card {
+  flex: 0 0 calc((100% / 3) - 1rem);
+  scroll-snap-align: center;
+  box-sizing: border-box;
+  background: var(--card-background-color);
+  border: 1px solid var(--card-border-color);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p {
+  margin-bottom: 0.5rem;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+.card p:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.card-header p {
+  margin: 0.2rem 0;
+  line-height: 1.4;
+}
+
+.career-path-svg {
+  width: 100%;
+  height: 60px;
+  overflow: visible;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.card-footer .view-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.card-footer .view-count {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.card .arrow-symbol {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #000;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 未ログイン時のぼかし */
+.preview-blur .card-header,
+.preview-blur svg,
+.preview-blur .card-footer {
+  filter: blur(3px);
+  transition: filter 0.3s;
+}
+
 .card.preview-blur {
-    position: relative;
+  position: relative;
 }
 
 .card.preview-blur .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #333;
-    pointer-events: none;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #333;
+  pointer-events: none;
 }
-  
-  /* ===== サイト機能紹介( feature-section ) ===== */
-  #site-features {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  .feature-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    justify-content: space-between;
-    text-align: left;
-  }
-  .feature-section.left-image {
-    flex-direction: row;
-  }
-  .feature-section.right-image {
-    flex-direction: row-reverse;
-  }
-  .feature-image {
-    width: 50%;
-    height: auto;
-    border-radius: 8px;
-  }
-  .feature-description {
-    width: 50%;
-    padding: 1rem;
-  }
-  .feature-description h3 {
-    font-size: 1.5rem;
-    color: #4e3d12;
-    margin-bottom: 1rem;
-  }
-  .feature-description p {
-    font-size: 1.0rem;
-    color: #666;
-    line-height: 1.6;
-  }
-  .detail-button {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.7rem 2rem;
-    background-color: #574637;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 1.1rem;
-  }
-  .detail-button:hover {
-    background-color: var(--accent-color);
-  }
-  
-  /* ===== お知らせ / フィードバック ===== */
-  .announcement-item,
-  .feedback-item {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--card-border-color);
-  }
-  #feedback-form {
-    text-align: center;
-    margin-top: 2rem;
-  }
-  #feedback-text {
-    width: 80%;
-    padding: 1rem;
-    border: 1px solid var(--card-border-color);
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  #feedback-form button {
-    margin-top: 1rem;
-    padding: 0.5rem 2rem;
-    background-color: var(--main-color);
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  #feedback-form button:hover {
-    background-color: var(--accent-color);
+
+/* ─── バッヂの基本スタイル ─── */
+.status-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  line-height: 1;
+  padding: 0.1em 0.3em;
+  border-radius: 0.25rem;
+  vertical-align: middle;
+  margin-left: 0.3rem;
+  opacity: 0.8;
+}
+/* ─── 状態別カラーリング ─── */
+.status-badge.online {
+  background: transparent;
+  color: #8ba141;
+  border: 1px solid #8ba141;
+}
+.status-badge.recently_active {
+  background: transparent;
+  color: #f0c419;
+  border: 1px solid #f0c419;
+}
+.status-badge.inactive {
+  background: transparent;
+  color: #da3e3f;
+  border: 1px solid #da3e3f;
+}
+
+/* ─── カードヘッダ／タイトル＋バッジ横並び ─── */
+.card-header h3.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-title-text {
+  white-space: nowrap;
+}
+
+/*--------------------------------------------------
+Site Features Section
+「サイトの機能紹介」
+HTML: <section id="site-features">…</section>
+--------------------------------------------------*/
+#site-features {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.feature-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  justify-content: space-between;
+  text-align: left;
+}
+.feature-section.left-image {
+  flex-direction: row;
+}
+.feature-section.right-image {
+  flex-direction: row-reverse;
+}
+
+.feature-image {
+  width: 50%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.feature-description {
+  width: 50%;
+  padding: 1rem;
+}
+
+.feature-description h3 {
+  font-size: 1.5rem;
+  color: #4e3d12;
+  margin-bottom: 1rem;
+}
+
+.feature-description p {
+  font-size: 1.0rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.detail-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.7rem 2rem;
+  background-color: #574637;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1.1rem;
+}
+.detail-button:hover {
+  background-color: var(--accent-color);
+}
+
+/*--------------------------------------------------
+Announcements & Feedback
+HTML: <section id="announcements">…</section>, <section id="user-feedback">…</section>
+--------------------------------------------------*/
+.announcement-item,
+.feedback-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--card-border-color);
+}
+
+#feedback-form {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+#feedback-text {
+  width: 80%;
+  padding: 1rem;
+  border: 1px solid var(--card-border-color);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#feedback-form button {
+  margin-top: 1rem;
+  padding: 0.5rem 2rem;
+  background-color: var(--main-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+#feedback-form button:hover {
+  background-color: var(--accent-color);
+}
+
+/*--------------------------------------------------
+Utility / Misc
+--------------------------------------------------*/
+.tooltip {
+  position: absolute;
+  /* デフォルトで隠す */
+  opacity: 0;
+  pointer-events: none;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: opacity 0.2s ease;
+  z-index: 9999;
+}
+
+.section-description {
+  font-size: 1.0rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0.5rem auto 1rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.mobile-br {
+  display: none;
+}
+
+
+
+/*--------------------------------------------------
+レスポンシブ：768px 以下
+--------------------------------------------------*/
+@media (max-width: 768px) {
+  h2.section-title {
+    font-size: 1.4rem;
   }
 
-  .tooltip {
-    position: absolute;
-    /* デフォルトで隠す */
-    opacity: 0;
-    pointer-events: none; 
-    /* レイアウト */
-    padding: 8px 12px;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    border-radius: 6px;
-    font-size: 13px;
-    transition: opacity 0.2s ease;
-    z-index: 9999; /* 前面に */
+  /* ===== ヒーローセクション ===== */
+  #hero {
+      height: 60vh;
   }
-
-  .section-description {
-    font-size: 1.0rem; 
-    color: #666;
-    max-width: 600px; 
-    margin: 0.5rem auto 1rem; 
-    text-align: center; 
-    line-height: 1.4;
+  .hero-content h1 {
+      font-size: 1.2rem;
+      margin: 0.1rem 0;
   }
-
-  #life-path p {
-    font-size: 1.0rem; 
-    color: #666;
-    max-width: 600px; 
-    margin: 0.5rem auto 1rem; 
-    text-align: center; 
-    line-height: 1.4;
-  }
-
-  .why-register-collapsed {
-    display: flex;                 /* 横並びで h2 / ボタン */
-    align-items: center;
-    justify-content: center;       /* タイトルを中央揃え */
-    position: relative;            /* ボタンを絶対配置するなら */
-    
-    background-color: #f2eee9;
-    padding: 0.8rem 2rem;         /* お好みで上下左右の余白を少なめに */
-    margin: 2rem 0;               /* セクション上下マージン */
-    text-align: center;
-  }
-  
-  .why-register-collapsed h2 {
-    font-size: 1.6rem;
-    margin: 0 auto;               /* 真ん中 */
-  }
-  
-  #whyRegisterOpenBtn {
-    position: absolute;
-    right: 2rem;                  /* 右端からちょっと左 */
-    /* 中央寄せ: top: 50% + transform */
-    top: 50%;
-    transform: translateY(-50%);
-    
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #746302;
-    color: #fff;
-    border: none;
-    font-size: 1.2rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s;
-  }
-  #whyRegisterOpenBtn:hover {
-    background-color: #a34705;
-    transform: translateY(-50%) scale(1.05);
-  }
-  
-  /* 折りたたみ時の「＋」アイコン */
-  #whyRegisterOpenBtn i {
-    font-size: 1.2rem;
-  }
-  
-  /* ▼ 展開時: タイトル＋コンテンツ全体を薄黄色背景で覆う */
-  .why-register-expanded {
-    background-color: #f2eee9;
-    padding: 1rem 2rem;           /* 展開時はやや広めに */
-    margin: 2rem 0;
-    text-align: center;
-    position: relative;
-  }
-  
-  /* 展開時のタイトル */
-  .why-register-expanded h2 {
-    font-size: 1.6rem;
-    margin: 0 0 1rem;
-    position: relative;  /* マイナスボタンをabsolute配置にするなら */
-    padding-right: 50px; /* 右側にボタンがかぶらない余白 */
-  }
-  
-  /* 右上に−ボタンを置くならposition:absoluteで調整してもOK。
-     ここではタイトル右上あたりに埋め込み。 */
-  .minus-toggle-button {
-    position: absolute;
-    right: 0; 
-    top: 50%;
-    transform: translateY(-50%);
-    
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #746302;
-    color: #fff;
-    border: none;
-    font-size: 1.2rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s;
-  }
-  .minus-toggle-button:hover {
-    background-color: #a34705;
-    transform: translateY(-50%) scale(1.05);
-  }
-  .minus-toggle-button i {
-    font-size: 1.2rem;
-  }
-  
-  /* ▼ 展開時の中身（カードなど） */
-  .why-register-container {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  /* カードたちなどは今まで通り */
-  .why-register-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
-  
-  .benefit-card {
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.08);
-    flex: 0 0 calc((100% / 3) - 1rem);
-    padding: 1.5rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-sizing: border-box;
-    transition: transform 0.2s;
-  }
-  .benefit-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.8rem;
-  }
-  .benefit-card p {
-    font-size: 0.95rem;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 0.5rem;
-  }
-  .benefit-icon {
-    fill: #574637;
-    width: 36px; 
-    height: 36px;
-    margin: 0 auto 1rem;
-    display: block;
-  }
-  
-  /* 登録ボタンなど */
-  .cta-wrap {
-    text-align: center;
-  }
-  .register-now {
-    background-color: #746302;
-    color: #fff;
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-  .register-now:hover {
-    background-color: #a34705;
-  }
-
-  .metrics-overlay {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin: 2rem 0;     /* テキストとの余白調整 */
-  }
-  
-  .metric-card {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: transform .3s, box-shadow .3s;
-  }
-  
-  .metric-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-  }
-  
-  .metric-icon {
-    font-size: 1.8rem;
-    color: #8ba141;
-    margin-bottom: 0.5rem;
-  }
-  
-  .metric-number {
-    font-size: 2.0rem;
-    font-weight: bold;
-    color: #574637;
-    line-height: 1;
-  }
-  
-  .metric-label {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 0.25rem;
-    text-align: center;
-  }
-
-  .mobile-br {
-    display: none;
-  }
-
-  /* metrics-overlay 内のカードリンクの下線を消して、色も継承させる */
-  .metrics-overlay a.metric-card {
-    text-decoration: none;  /* 下線を消す */
-    color: inherit;         /* 親要素の文字色を使う */
-  }
-
-  .card-header h3.card-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* ─── タイトルテキスト側 （必要なら余白調整） ─── */
-  .card-title-text {
-    /* 例えば折り返し防止したければ */
-    white-space: nowrap;
-  }
-  
-  /* ─── バッヂの基本スタイル（抑えめ版） ─── */
-  .status-badge {
-    display: inline-block;
-    font-size: 0.65rem;          /* 小さめに */
-    line-height: 1;
-    padding: 0.1em 0.3em;        /* 余白を削減 */
-    border-radius: 0.25rem;
-    vertical-align: middle;
-    margin-left: 0.3rem;         /* アイコンとの間隔も控えめに */
-    opacity: 0.8;                /* 少し透かす */
-  }
-
-  /* ─── 状態別：背景ではなく細い枠線＋文字色 ─── */
-  .status-badge.online {
-    background: transparent;
-    color: #8ba141;
-    border: 1px solid #8ba141;
-  }
-
-  .status-badge.recently_active {
-    background: transparent;
-    color: #f0c419;
-    border: 1px solid #f0c419;
-  }
-
-  .status-badge.inactive {
-    background: transparent;
-    color: #da3e3f;
-    border: 1px solid #da3e3f;
-  }
-  
-  /* =========================
-     レスポンシブデザイン
-     ========================= */
-  
-  /* 768px 以下 */
-  @media (max-width: 768px) {
-    #hero {
-        height: 60vh;
-    }
-
-    .hero-content h1 {
-        font-size: 1.2rem;
-        margin: 0.1rem 0;
-    }
-    .hero-content p {
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
-
-    #why-register {
-      margin-top: 4rem;
-    }
-
-    .why-register-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .benefit-card {
-        width: 90%;
-        margin-bottom: 1rem;
-    }
-    .benefit-card h3 {
-        font-size: 1rem; 
-    }
-    .benefit-card p {
-        font-size: 0.9rem; 
-    }
-    
-    .benefit-icon {
-        width: 36px;  /* 小さくする */
-        height: 36px;
-        margin-bottom: 0.8rem;
-    }
-
-    .howto-section h2 {
-        font-size: 1.4rem;
-    }
-  
-    /* 見出し・本文サイズのやや小型化 */
-    section h2.section-title {
-      font-size: 1.4rem;
-    }
-    section p,
-    .feature-description p,
-    .overview-container p {
-      font-size: 0.95rem; 
-    }
-    .highlight-list li,
-    .step p {
+  .hero-content p {
       font-size: 0.9rem;
-    }
-    .highlight-list li {
-        font-size: 0.9rem;
-    }
-  
-    /* カードを1列表示に */
-    .card {
-      flex: 0 0 100%;
-      scroll-snap-align: center;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .card-footer {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-top: 0.5rem;
-    }
-  
-    /* インジケータを表示 */
-    #recent-stories-indicators,
-    #popular-stories-indicators,
-    #similar-stories-indicators {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    #recent-stories-indicators .indicator,
-    #popular-stories-indicators .indicator,
-    #similar-stories-indicators .indicator {
-      width: 10px;
-      height: 10px;
-      margin: 0 5px;
-      background-color: #ccc;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    #recent-stories-indicators .indicator.active,
-    #popular-stories-indicators .indicator.active,
-    #similar-stories-indicators .indicator.active {
-      background-color: #8ba141;
-    }
-  
-    /* サイト機能紹介 */
-    #site-features .feature-section {
-      display: block;
-      width: 100%;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    #site-features .feature-section .feature-description {
-        text-align: left; 
-    }
-    #site-features .feature-section .feature-image,
-    #site-features .feature-section .feature-description {
-      width: 100%;
-      margin: 0 auto;
-    }
-    #site-features .feature-section .feature-image {
-      margin-bottom: 1rem;
-    }
-    #site-features .feature-section .feature-description {
-      padding: 1rem 0;
-    }
-    .feature-description h3 {
-      font-size: 1.3rem;
-    }
-  
-    /* howtoセクションでのカード幅を小さく */
-    .howto-steps {
-      justify-content: center;
-    }
-    .step {
-      width: 90%;
-      margin-bottom: 1.5rem;
-    }
+      line-height: 1.4;
+  }
 
-    .why-register-collapsed h2 {
-      font-size: 1.4rem;
-    }
-    #whyRegisterOpenBtn {
-      right: 1rem; /* さらに右端に寄せたいなら0.5remなど */
-      width: 36px;
-      height: 36px;
-      font-size: 1.1rem;
-    }
-  
-    .why-register-expanded {
-      padding: 1rem;
-    }
-    .why-register-expanded h2 {
-      font-size: 1.4rem;
-      padding-right: 36px; /* ボタン分だけ余白 */
-    }
-    .minus-toggle-button {
-      width: 36px;
-      height: 36px;
-      font-size: 1.1rem;
-    }
-    .cta-button {
+  /* ヒーロー内 CTA ボタン */
+  .cta-button {
       margin-top: 0.5rem;
       padding: 0.75rem 1.5rem;
       font-size: 0.8rem;
-    }
-
-    .metrics-overlay {
-      display: flex;
-      flex-wrap: nowrap;           /* 折り返さず１行に */
-      justify-content: center;     /* 丸を中央寄せ */
-      align-items: center;
-      gap: 1rem;                   /* 丸どうしの間隔 */
-      padding: 1rem 0;             /* 上下の余白 */
-      overflow-x: auto;            /* はみ出してもスクロール */
-    }
-  
-    .metric-card {
-      flex: 0 0 auto;              /* 固定サイズ */
-      width: 100px;                 /* お好みのサイズに */
-      height: 100px;                /* 幅＝高さ に固定 */
-      aspect-ratio: 1;             /* 縦横比 1:1 をキープ */
-      border-radius: 50%;          /* 完全な円 */
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: transform .3s, box-shadow .3s;
-    }
-    .metric-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
-  
-    .metric-icon {
-      font-size: 1.2rem;
-      margin-bottom: 0.3rem;
-    }
-    .metric-number {
-      font-size: 1.6rem;
-      font-weight: bold;
-      line-height: 1;
-    }
-    .metric-label {
-      font-size: 0.8rem;
-      line-height: 1.2;
-      text-align: center;
-    }
-
-    .what-is {
-      padding: 2rem 1rem;
-    }
-    .what-is__title {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-    }
-    .what-is__description {
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-    /* 横並び→縦積み */
-    .what-is__diagram {
-      display: flex;          /* 横並び */
-      flex-direction: row;    /* nowrap はデフォルト */
-      align-items: center;    /* 縦方向を中央揃え */
-      justify-content: space-between;
-      gap: 0.5rem;            /* お好みで調整 */
-    }
-    /* ノードも矢印も等しく伸びるように */
-    .what-is__diagram > * {
-      flex: 1 1 0;      /* 幅を等分 */
-      min-width: 0;     /* 子要素が長くてもはみ出さない */
-      text-align: center;
-    }
-    .what-is__node {
-      width: auto;
-    }
-    .what-is__node i,
-    .what-is__node--logo img {
-      font-size: 1.5rem;
-      width: 80px;
-      height: 80px;
-    }
-    .what-is__node i {
-      margin-bottom: -2.0rem;
-    }
-    .what-is__node--logo img {
-      margin-bottom: 0rem;
-    }
-    .what-is__node p {
-      font-size: 0.8rem;
-    }
-    .what-is__arrow {
-      position: relative;
-      justify-content: center;
-      z-index: 10;
-    }
-    /* 下段バンドは少し余白を詰める */
-    .what-is__band {
-      margin-top: 1rem;
-      padding: 0.4rem 1rem;
-    }
-    /* 矢印も少し縮小 */
-    .what-is__arrow svg {
-      width: 20px;
-      height: 20px;
-    }
   }
-  
-  /* 769px以上 */
-  @media (min-width: 769px) {
-    /* PCの場合、インジケータは不要なので非表示 */
-    #recent-stories-indicators,
-    #popular-stories-indicators {
-      display: none;
-    }
 
-    .feature-section .feature-image {
-        width: 45%;  /* 例: 以前は50%だった部分をやや小さめに */
-        max-width: 450px; /* 画像の最大幅を450pxなどに制限しておくとより安定 */
-        object-fit: cover; /* 画像の縦横比を維持しつつ適切に収める */
-      }
-    
-      .feature-section .feature-description {
-        width: 50%;  /* 残りのスペースをテキストに */
-        padding: 1rem 2rem; /* テキスト側の余白を増やして読みやすく */
-      }
+  /* ===== 登録のメリットセクション =====
+     Grid → 横スクロールスライダー化 */
+  .benefit-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
   }
-  
-  /* 450px以下 */
-  @media (max-width: 450px) {
-    .howto-section h2 {
-      font-size: 1.2rem;
-    }
-  
-    #hero {
-      height: 55vh;
-    }
-    .hero-content {
-      height: calc(50vh / 3);
-      padding: 0.5rem;
-    }
-    .hero-content h1 {
-      font-size: 1.3rem;
-      margin: 0.1rem 0;
-    }
-    .hero-content p {
-      font-size: 0.9rem;
-      line-height: 1.2;
-      margin-bottom: -1rem;
-    }
-    .cta-button {
-      font-size: 1rem;
-      padding: 0.8rem 1.5rem;
-      margin-top: -1rem;
-      margin-bottom: 0.5rem;
-    }
-    .card.preview-blur .overlay {
-      font-size: 1.0rem;
-    }
-  
-    .lifepath-section{
-        margin-top: 1rem;
-    }
-    #life-path h2.section-title {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-    }
-    #life-path p {
-      font-size: 0.8rem;
-      line-height: 1.4;
-      margin: 0.5rem 0;
-      text-align: left;
-      margin-left: 1rem;
-      margin-right: 1rem;
-    }
+  .benefit-card {
+    flex: 0 0 80%;
+    scroll-snap-align: center;
+    margin: 0 .5rem;
+  }
 
-    .section-description {
-        font-size: 0.8rem;
-        line-height: 1.4;
-        margin: 0.5rem 0;
-        text-align: left;
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
-  
-    /* さらに本文サイズを小さく */
-    section h2.section-title {
-      font-size: 1.2rem;
-    }
-    section p,
-    .feature-description p,
-    .overview-container p {
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-    .highlight-list li,
-    .step p {
-      font-size: 0.8rem;
-    }
-    .highlight-list li {
-        font-size: 0.8rem;
-    }
-  
-    /* カードのレイアウト微調整 */
-    .card {
-      flex: 0 0 100%;
-      padding: 0.5rem;
-      padding-bottom: 1rem; 
-    }
-    .card-footer {
-      position: relative; 
-      right: 0;
-      bottom: 0;
-      margin-top: 0.5rem;
-      align-self: flex-end;
-    }
-    .card-header {
-      margin-bottom: 0.2rem;
-    }
-    .career-path-svg {
-      max-height: 80px;
-      margin-bottom: 1rem;
-    }
-    #career-path-visualization text {
-      font-size: 0.7rem;
-    }
-    #career-path-visualization tspan {
-      font-size: 0.8rem;
-    }
-    #career-path-visualization .university-label {
-      font-size: 1rem;
-    }
-    #career-path-visualization line {
-      stroke-width: 1px;
-    }
-    .career-path-svg text {
-      letter-spacing: -0.5px;
-    }
-    .career-path-svg g {
-      transform: translateX(-1120px);
-    }
-    .feature-description h3 {
-      font-size: 1.2rem;
-    }
-    .feature-description p {
-      font-size: 0.8rem;
-      line-height: 1.2;
-    }
-    .detail-button {
-      font-size: 0.8rem;
-      padding: 0.4rem 1rem;
-    }
-
-    .why-register-collapsed h2 {
-      font-size: 1.2rem;
-    }
-    #whyRegisterOpenBtn {
-      right: 0.5rem;
-      width: 32px;
-      height: 32px;
-      font-size: 1rem;
-    }
-  
-    .why-register-expanded {
-      padding: 0.5rem;
-      margin: 1rem 0;
-    }
-    .why-register-expanded h2 {
-      font-size: 1.2rem;
-      padding-right: 32px;
-    }
-    .minus-toggle-button {
-      width: 32px;
-      height: 32px;
-      font-size: 1rem;
-    }
-    .benefit-card h3 {
-      font-size: 1rem;
-    }
-    .benefit-card p {
-      font-size: 0.9rem;
-    }
-
-    .metrics-overlay {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-      align-items: center;
-      gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
-      padding: 0rem 0; /* 上下の余白 */
-      overflow-x: auto;
-    }
-    .metric-card {
-      width: 75px;          /* 小振りに */
-      height: 75px;
-      aspect-ratio: 1;      /* 必ず真円に */
-      border-radius: 50%;
-    }
-    .metric-icon {
-      font-size: 1.2rem;    /* アイコンサイズ調整 */
-      margin-bottom: 0.3rem;
-    }
-    .metric-number {
-      font-size: 1.4rem;    /* 数字サイズ調整 */
-    }
-    .metric-label {
-      font-size: 0.5rem;    /* ラベルも少し小さく */
-      line-height: 1.2;
-    }
-
-    .mobile-br {
-      display: inline; /* または block でもOK */
-    }
-
-    .text-overlay {
-      padding: 1rem;       /* デフォルトは2remなので半分に */
-    }
-
-    .what-is {
-      padding: 1.5rem 0.5rem;
-    }
-    .what-is__title {
+  /* ===== ご利用の流れ (Howto) ===== */
+  .howto-section h2 {
       font-size: 1.4rem;
-    }
-    .what-is__description {
-      font-size: 0.8rem;
-    }
-    .what-is__node i,
-    .what-is__node--logo img {
-      font-size: 1.2rem;
-      width: 60px;
-      height: 60px;
-    }
-    .what-is__band {
-      padding: 0.3rem 0.8rem;
-    }
-    .what-is__arrow svg {
-      width: 16px;
-      height: 16px;
-    }
-    .what-is__node p {
-      font-size: 0.6rem;
-    }
   }
-
-  @media (max-width: 360px) {
-    #hero {
-      height: 45vh;
-    }
-
-    .hero-content h1 {
-      font-size: 1.1rem;
-      margin: 0.1rem 0;
-    }
-    .hero-content p {
-      font-size: 0.7rem;
-    }
-    .cta-button {
-      font-size: 0.8rem;
-      padding: 0.7rem 1.5rem;
-    }
-
-    .metrics-overlay {
-      display: flex;
-      flex-wrap: nowrap;
+  .howto-steps {
       justify-content: center;
-      align-items: center;
-      gap: 0.8rem;      /* 丸同士の隙間を少し狭め */
-      padding: -0.2rem 0; /* 上下の余白 */
-      overflow-x: auto;
-    }
-    .metric-card {
-      width: 65px;          /* 小振りに */
-      height: 65px;
-      aspect-ratio: 1;      /* 必ず真円に */
-      border-radius: 50%;
-    }
-    .metric-icon {
-      font-size: 1.0rem;    /* アイコンサイズ調整 */
-      margin-bottom: 0.3rem;
-    }
-    .metric-number {
-      font-size: 1.2rem;    /* 数字サイズ調整 */
-    }
-    .metric-label {
-      font-size: 0.5rem;    /* ラベルも少し小さく */
-      line-height: 1.2;
-    }
-
-    .text-overlay {
-      padding: 0.2rem;       /* デフォルトは2remなので半分に */
-    }
-
-    .what-is__description {
-      font-size: 0.7rem;
-    }
   }
+  .step {
+      width: 90%;
+      margin-bottom: 1.5rem;
+  }
+
+  /* ===== 最近／人気／近いキャリアストーリー =====
+     カードを1列表示 */
+  .card {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+
+  /* ストーリーインジケータを表示 */
+  #recent-stories-indicators,
+  #popular-stories-indicators,
+  #similar-stories-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  #recent-stories-indicators .indicator,
+  #popular-stories-indicators .indicator,
+  #similar-stories-indicators .indicator {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+  #recent-stories-indicators .indicator.active,
+  #popular-stories-indicators .indicator.active,
+  #similar-stories-indicators .indicator.active {
+    background-color: #8ba141;
+  }
+
+  /* ===== サイト機能紹介 =====
+     横並び → 縦積みレイアウト */
+  #site-features .feature-section {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  #site-features .feature-section .feature-image,
+  #site-features .feature-section .feature-description {
+    width: 100%;
+    margin: 0 auto;
+  }
+  #site-features .feature-section .feature-image {
+    margin-bottom: 1rem;
+  }
+  #site-features .feature-section .feature-description {
+    padding: 1rem 0;
+  }
+  .feature-description h3 {
+    font-size: 1.3rem;
+  }
+
+  /* ===== ヒーロー内メトリクス ===== */
+  .metrics-overlay {
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  .metric-card {
+    width: 100px;
+    height: 100px;
+  }
+  .metric-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+  .metric-number {
+    font-size: 1.6rem;
+  }
+  .metric-label {
+    font-size: 0.8rem;
+  }
+
+  /* ===== インノーマルとは？ (Overview) ===== */
+  .what-is {
+    padding: 2rem 1rem;
+  }
+  .what-is__title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  .what-is__description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .what-is__diagram {
+    gap: 0.5rem;
+  }
+  .what-is__diagram > * {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+  }
+  .what-is__node i,
+  .what-is__node--logo img {
+    font-size: 1.5rem;
+    width: 80px;
+    height: 80px;
+  }
+  .what-is__node i {
+    margin-bottom: -2.0rem;
+  }
+  .what-is__node--logo img {
+    margin-bottom: 0rem;
+  }
+  .what-is__node p {
+    font-size: 0.8rem;
+  }
+  .what-is__arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+  .what-is__band {
+    margin-top: 1rem;
+    padding: 0.4rem 1rem;
+  }
+}
+
+/*--------------------------------------------------
+レスポンシブ：450px 以下
+--------------------------------------------------*/
+@media (max-width: 450px) {
+  h2.section-title {
+    font-size: 1.2rem;
+  }
+
+  /* ===== ヒーローセクション ===== */
+  #hero {
+    height: 55vh;
+  }
+  .hero-content {
+    height: calc(50vh / 3);
+    padding: 0.5rem;
+  }
+  .hero-content h1 {
+    font-size: 1.3rem;
+    margin: 0.1rem 0;
+  }
+  .hero-content p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-bottom: -1rem;
+  }
+  .cta-button {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    margin-top: -1rem;
+    margin-bottom: 0.5rem;
+  }
+  .card.preview-blur .overlay {
+    font-size: 1rem;
+  }
+
+  /* ===== ライフパス可視化 ===== */
+  .lifepath-section {
+    margin-top: 1rem;
+  }
+  #life-path p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0.5rem 1rem;
+    text-align: left;
+  }
+
+  /* ===== セクション説明文 ===== */
+  .section-description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0.5rem 1rem;
+    text-align: left;
+  }
+
+  /* ===== 見出し・本文共通 ===== */
+  section p,
+  .feature-description p,
+  .overview-container p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .step p {
+    font-size: 0.8rem;
+  }
+
+  /* ===== キャリアストーリーカード ===== */
+  .card {
+    flex: 0 0 100%;
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+  }
+  .card-footer {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    margin-top: 0.5rem;
+    align-self: flex-end;
+  }
+  .card-header {
+    margin-bottom: 0.2rem;
+  }
+  .career-path-svg {
+    max-height: 80px;
+    margin-bottom: 1rem;
+  }
+  #career-path-visualization text {
+    font-size: 0.7rem;
+  }
+  #career-path-visualization tspan {
+    font-size: 0.8rem;
+  }
+  #career-path-visualization .university-label {
+    font-size: 1rem;
+  }
+  #career-path-visualization line {
+    stroke-width: 1px;
+  }
+  .career-path-svg text {
+    letter-spacing: -0.5px;
+  }
+  .career-path-svg g {
+    transform: translateX(-1120px);
+  }
+
+  /* ===== サイト機能紹介 ===== */
+  .feature-description h3 {
+    font-size: 1.2rem;
+  }
+  .feature-description p {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+  .detail-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
+
+  /* ===== 登録のメリットカード内テキスト ===== */
+  .benefit-card h3 {
+    font-size: 1rem;
+  }
+  .benefit-card p {
+    font-size: 0.9rem;
+  }
+
+  /* ===== ヒーロー内メトリクス（さらに小さく） ===== */
+  .metrics-overlay {
+    gap: 0.8rem;
+    padding: 0;
+  }
+  .metric-card {
+    width: 75px;
+    height: 75px;
+  }
+  .metric-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+  .metric-number {
+    font-size: 1.4rem;
+  }
+  .metric-label {
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+
+  /* ===== モバイル改行（br） ===== */
+  .mobile-br {
+    display: inline;
+  }
+
+  /* ===== ヒーロー内テキストオーバーレイ余白 ===== */
+  .text-overlay {
+    padding: 1rem;
+  }
+
+  /* ===== インノーマルとは？（Overview）微調整 ===== */
+  .what-is {
+    padding: 1.5rem 0.5rem;
+  }
+  .what-is__title {
+    font-size: 1.4rem;
+  }
+  .what-is__description {
+    font-size: 0.8rem;
+  }
+  .what-is__node i,
+  .what-is__node--logo img {
+    font-size: 1.2rem;
+    width: 60px;
+    height: 60px;
+  }
+  .what-is__band {
+    padding: 0.3rem 0.8rem;
+  }
+  .what-is__arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+  .what-is__node p {
+    font-size: 0.6rem;
+  }
+
+  /* ===== ご利用の流れ (Howto) ===== */
+  .howto-section h2 {
+    font-size: 1.2rem;
+  }
+}
+
+/*--------------------------------------------------
+レスポンシブ：360px 以下
+--------------------------------------------------*/
+@media (max-width: 360px) {
+
+  /* ===== ヒーローセクション ===== */
+  #hero {
+    height: 45vh;
+  }
+  .hero-content h1 {
+    font-size: 1.1rem;
+    margin: 0.1rem 0;
+  }
+  .hero-content p {
+    font-size: 0.7rem;
+  }
+  .cta-button {
+    font-size: 0.8rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  /* ===== メトリクスカード（最小） ===== */
+  .metrics-overlay {
+    gap: 0.8rem;
+    padding: -0.2rem 0;
+  }
+  .metric-card {
+    width: 65px;
+    height: 65px;
+  }
+  .metric-icon {
+    font-size: 1.0rem;
+    margin-bottom: 0.3rem;
+  }
+  .metric-number {
+    font-size: 1.2rem;
+  }
+  .metric-label {
+    font-size: 0.5rem;
+    line-height: 1.2;
+  }
+
+  /* ===== ヒーロー内テキストオーバーレイ（最小余白） ===== */
+  .text-overlay {
+    padding: 0.2rem;
+  }
+
+  /* ===== インノーマルとは？（Overview：最小） ===== */
+  .what-is__description {
+    font-size: 0.7rem;
+  }
+}

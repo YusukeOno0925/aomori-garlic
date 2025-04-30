@@ -136,49 +136,28 @@
             </div>
         </section>
 
-        <section id="why-register">
-
-            <!-- ▼ 折りたたみ時に表示されるバー -->
-            <div id="whyRegisterCollapsed" class="why-register-collapsed">
-              <h2 class="section-title">登録すると何ができる？</h2>
-              <button id="whyRegisterOpenBtn" class="plus-toggle-button" onclick="openWhyRegister()">
-                <i class="fa-solid fa-plus"></i>
-              </button>
-            </div>
-          
-            <!-- ▼ 展開時に表示される全体(見出し+コンテンツ) -->
-            <div id="whyRegisterExpanded" class="why-register-expanded" style="display: none;">
-              <h2 class="section-title">
-                登録すると何ができる？
-                <button id="whyRegisterCloseBtn" class="minus-toggle-button" onclick="closeWhyRegister()">
-                  <i class="fa-solid fa-minus"></i>
-                </button>
-              </h2>
-          
-              <div class="why-register-container">
-                <div class="why-register-grid">
-                  <div class="benefit-card">
-                      <img src="images/icon-detailed.png" alt="詳細閲覧アイコン" class="benefit-icon">
-                      <h3>事例をもっと詳しく</h3>
-                      <p>登録しないと見られない<br>その職業を選んだ理由や失敗経験など、具体的な情報を閲覧可能</p>
-                  </div>
-                  <div class="benefit-card">
-                      <img src="images/icon-community.png" alt="コミュニティアイコン" class="benefit-icon">
-                      <h3>リアルなQ&A交流</h3>
-                      <p>匿名で先輩に質問！<br>登録後すぐに、実践的なアドバイスが受けられます</p>
-                  </div>
-                  <div class="benefit-card">
-                      <img src="images/icon-profile.png" alt="プロフィールアイコン" class="benefit-icon">
-                      <h3>簡単プロフィール作成</h3>
-                      <p>必要な入力は、ユーザ名・メール・パスワードだけ！<br>わずか数秒であなた専用のキャリアページが完成</p>
-                  </div>
+        <section id="why-register" class="why-register">
+            <h2 class="section-title">登録するとできること</h2>
+            <div class="benefit-slider">
+                <div class="benefit-card">
+                    <i class="fas fa-search benefit-icon"></i>
+                    <h3 class="benefit-title">事例をもっと詳しく</h3>
+                    <p class="benefit-desc">成功理由や失敗談など、深掘り情報を閲覧可能</p>
                 </div>
-                <div class="cta-wrap">
-                  <a href="Register.html" class="cta-button register-now">今すぐ無料登録</a>
+                <div class="benefit-card">
+                    <i class="fas fa-comments benefit-icon"></i>
+                    <h3 class="benefit-title">リアルなQ&A交流</h3>
+                    <p class="benefit-desc">匿名で先輩に質問、実践的アドバイスが受けられる</p>
                 </div>
-              </div>
+                <div class="benefit-card">
+                    <i class="fas fa-user-circle benefit-icon"></i>
+                    <h3 class="benefit-title">簡単プロフィール作成</h3>
+                    <p class="benefit-desc">数秒で自分のキャリアページを完成できる</p>
+                </div>
             </div>
-          
+            <div class="cta-wrap">
+            <a href="Register.html" class="cta-button">今すぐ無料登録</a>
+            </div>
         </section>
 
         <section id="how-to-use" class="howto-section">
