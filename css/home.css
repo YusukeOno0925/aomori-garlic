@@ -77,11 +77,30 @@ HTML: <section id="hero">…</section>
   text-decoration: none;
   font-size: 1.2rem;
   transition: background-color 0.3s;
+  position: relative;
 }
 .cta-button:hover {
   transform: translateY(-2px); /* ちょっと浮く */
   box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
   background-color: #a34705; /* 色はすでにあるので同じ */
+}
+/* 疑似要素で丸いバッジを作る */
+.cta-button::after {
+  content: "30秒";
+  position: absolute;
+  top: -0.6rem;      /* ボタンの上端から少しはみ出す */
+  right: -0.6rem;    /* ボタンの右端から少しはみ出す */
+  width: 2.2rem;     /* 円の大きさ */
+  height: 2.2rem;
+  background: #ffffff;
+  border: 2px solid #746302;  /* ボタンの色に合わせても◎ */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: #746302;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 /* Hero 内のメトリクスカード */
