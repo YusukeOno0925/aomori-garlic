@@ -316,6 +316,10 @@ HTML: <section class="what-is">…</section>
   font-weight: bold;
   color: #574637;
 }
+.what-is__subcopy {
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
 
 /*--------------------------------------------------
 Howto Section
@@ -1041,6 +1045,7 @@ Utility / Misc
 
   /* ===== インノーマルとは？（Overview）微調整 ===== */
   .what-is {
+    margin-bottom: -1.0rem;
     padding: 1.5rem 0.5rem;
   }
   .what-is__title {
@@ -1064,6 +1069,9 @@ Utility / Misc
   }
   .what-is__node p {
     font-size: 0.6rem;
+  }
+  .what-is__subcopy {
+    font-size: 0.8rem;
   }
 
   /* ===== ご利用の流れ (Howto) ===== */
@@ -1120,7 +1128,7 @@ Utility / Misc
   }
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
-  .what-is__description {
-    font-size: 0.7rem;
+  .what-is__node p {
+    font-size: 0.5rem;
   }
 }
