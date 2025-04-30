@@ -323,7 +323,7 @@ footer {
 
     .logo-image {
         margin-right: -6px;
-        height: 40px; /* ロゴ画像の高さを小さくする */
+        height: 60px; /* ロゴ画像の高さを小さくする */
     }
 
     .logo-link {
@@ -331,10 +331,10 @@ footer {
         flex-direction: column;   /* 縦並びに */
         align-items: center;      /* 真ん中揃え */
     }
-    /* 文字の余白を少し上に */
+    
+    /* ロゴ下の文字削除 */
     .logo {
-        text-align: center;
-        margin: 0.25rem 0 0;      /* 上に余白を入れる */
+        display: none;
     }
 
     .login-button,
