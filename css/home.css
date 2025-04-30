@@ -725,7 +725,7 @@ Utility / Misc
     -webkit-overflow-scrolling: touch;
     gap: 1rem;
     padding-bottom: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
   .benefit-card {
     flex: 0 0 80%;
