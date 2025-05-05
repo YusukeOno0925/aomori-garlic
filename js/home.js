@@ -1,5 +1,33 @@
 document.addEventListener('DOMContentLoaded', function() {
     fetchAnnouncements();
+
+    // ─── CTAクリックを計測 ───
+   document.querySelectorAll('.cta-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+        gtag('event', 'click_register_cta', {
+            event_category: 'engagement',
+            event_label: 'ホームCTA'
+        });
+        });
+    });
+    
+    // ─── スクロール深度の計測 (25% / 50% / 75% / 100%) ───
+    const depths = [25,50,75,100];
+    const tracked = {};
+    window.addEventListener('scroll', () => {
+        const scrollPct = Math.min(100,
+        (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
+        );
+        depths.forEach(p => {
+        if (scrollPct >= p && !tracked[p]) {
+            tracked[p] = true;
+            gtag('event', `scroll_${p}`, {
+            event_category: 'engagement',
+            event_label: `ホームスクロール${p}%`
+            });
+        }
+        });
+    });
 });
 
 function fetchAnnouncements() {
@@ -52,20 +80,4 @@ function fetchAnnouncements() {
         .catch(error => {
             console.error('Error fetching announcements on Home:', error);
         });
-}
-
-
-// "登録すると何ができる？"のアコーディオン対応
-function openWhyRegister() {
-    // 折りたたみを非表示
-    document.getElementById('whyRegisterCollapsed').style.display = 'none';
-    // 展開を表示
-    document.getElementById('whyRegisterExpanded').style.display = 'block';
-}
-  
-  function closeWhyRegister() {
-    // 展開を非表示
-    document.getElementById('whyRegisterExpanded').style.display = 'none';
-    // 折りたたみを表示
-    document.getElementById('whyRegisterCollapsed').style.display = 'flex'; 
 }
