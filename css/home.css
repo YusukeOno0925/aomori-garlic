@@ -1127,7 +1127,8 @@ Utility / Misc
   .what-is__node i,
   .what-is__node--logo img {
     font-size: 1.2rem;
-    width: 60px;
+    max-width: 100%;
+    max-height: 100%;
   }
   .what-is__band {
     padding: 0.3rem 0.8rem;
