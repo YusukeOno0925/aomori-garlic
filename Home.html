@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <!-- 既存の検索アイコン -->
-    <symbol id="icon-search" viewBox="0 0 24 24">
-      <path d="M10.5 3a7.5 7.5 0 015.95 12.12l4.19 4.2-1.06 1.06-4.2-4.19A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/>
-    </symbol>
-  
-    <!-- 既存の矢印アイコン -->
-    <symbol id="icon-arrow" viewBox="0 0 24 24">
-      <path d="M2 12h18M18 8l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/>
-    </symbol>
-  
-    <!-- 新：FontAwesome 本家の chalkboard-teacher -->
-    <symbol id="icon-chalkboard-teacher" viewBox="0 0 640 512">
-      <path d="M192 128c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64zm320 0c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64z
-               M624 144H16C7.2 144 0 151.2 0 160v16c0 8.8 7.2 16 16 16h608c8.8 0 16-7.2 16-16v-16c0-8.8-7.2-16-16-16z
-               M0 336c0 35.3 28.7 64 64 64h512c35.3 0 64-28.7 64-64v-48c0-8.8-7.2-16-16-16H16c-8.8 0-16 7.2-16 16v48z"/>
-    </symbol>
-  </svg>
-
 <head>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <!-- 検索アイコン -->
+        <symbol id="icon-search" viewBox="0 0 24 24">
+            <path d="M10.5 3a7.5 7.5 0 015.95 12.12l4.19 4.2-1.06 1.06-4.2-4.19A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/>
+        </symbol>
+        <!-- 矢印アイコン -->
+        <symbol id="icon-arrow" viewBox="0 0 24 24">
+            <path d="M2 12h18M18 8l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/>
+        </symbol>
+        <!-- FontAwesome 本家の chalkboard-teacher -->
+        <symbol id="icon-chalkboard-teacher" viewBox="0 0 640 512">
+            <path d="M192 128c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64zm320 0c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64z
+                    M624 144H16C7.2 144 0 151.2 0 160v16c0 8.8 7.2 16 16 16h608c8.8 0 16-7.2 16-16v-16c0-8.8-7.2-16-16-16z
+                    M0 336c0 35.3 28.7 64 64 64h512c35.3 0 64-28.7 64-64v-48c0-8.8-7.2-16-16-16H16c-8.8 0-16 7.2-16 16v48z"/>
+        </symbol>
+        <!-- コメントアイコン -->
+        <symbol id="icon-comments" viewBox="0 0 512 512">
+            <path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.1 95.1 56 129V480l101.7-55.6C185.3 434.8 220.2 444 256 444c141.4 0 256-93.1 256-208S397.4 32 256 32z"/>
+        </symbol>
+        <!-- ユーザーアイコン -->
+        <symbol id="icon-user-circle" viewBox="0 0 496 512">
+            <path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96a88 88 0 1088 88 88 88 0 00-88-88zm0 368c-59.6 0-112.7-29.8-145.6-75.2 7.8-47.7 48-83.8 97.1-83.8h96.9c49.1 0 89.3 36.1 97.1 83.8C360.7 442.2 307.6 472 248 472z"/>
+        </symbol>
+    </svg>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>【転職成功事例多数】キャリアチェンジ・キャリアパスを可視化し未来を創る - インノーマル</title>
@@ -122,7 +127,7 @@
             <p class="what-is__description">
                 インノーマルは、豊富な転職成功事例と<br class="mobile-br">
                 キャリアパスを簡単に可視化し、<br class="mobile-br">
-                “本音”ベースで経験を共有・相談できる<br>
+                “本音”ベースで経験を共有・相談できる<br class="mobile-br">
                 日本初のキャリアコミュニティです。
             </p>
         
@@ -175,19 +180,25 @@
             <h2 class="section-title">登録するとできること</h2>
             <div class="benefit-slider">
                 <div class="benefit-card">
-                    <i class="fas fa-search benefit-icon"></i>
-                    <h3 class="benefit-title">事例をもっと詳しく</h3>
-                    <p class="benefit-desc">成功理由や失敗談など、深掘り情報を閲覧可能</p>
+                    <svg class="benefit-icon" aria-hidden="true">
+                        <use xlink:href="#icon-search"></use>
+                    </svg>
+                    <h3 class="benefit-title">詳細な事例分析</h3>
+                    <p class="benefit-desc">成功・失敗の背景まで深掘りし、具体的な理由を知ることができます。</p>
                 </div>
                 <div class="benefit-card">
-                    <i class="fas fa-comments benefit-icon"></i>
-                    <h3 class="benefit-title">リアルなQ&A交流</h3>
-                    <p class="benefit-desc">匿名で先輩に質問、実践的アドバイスが受けられる</p>
+                    <svg class="benefit-icon" aria-hidden="true">
+                        <use xlink:href="#icon-comments"></use>
+                    </svg>
+                    <h3 class="benefit-title">リアルタイムQ&amp;A</h3>
+                    <p class="benefit-desc">匿名で先輩に質問し、実践的なアドバイスをすぐに受け取れます。</p>
                 </div>
                 <div class="benefit-card">
-                    <i class="fas fa-user-circle benefit-icon"></i>
-                    <h3 class="benefit-title">簡単プロフィール作成</h3>
-                    <p class="benefit-desc">数秒で自分のキャリアページを完成できる</p>
+                    <svg class="benefit-icon" aria-hidden="true">
+                        <use xlink:href="#icon-user-circle"></use>
+                    </svg>
+                    <h3 class="benefit-title">プロフィール自動作成</h3>
+                    <p class="benefit-desc">シンプルな入力だけで、あなた専用のキャリアページを瞬時に生成。</p>
                 </div>
             </div>
             <div class="cta-wrap">
