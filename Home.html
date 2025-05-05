@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <!-- 既存の検索アイコン -->
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <path d="M10.5 3a7.5 7.5 0 015.95 12.12l4.19 4.2-1.06 1.06-4.2-4.19A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/>
+    </symbol>
+  
+    <!-- 既存の矢印アイコン -->
+    <symbol id="icon-arrow" viewBox="0 0 24 24">
+      <path d="M2 12h18M18 8l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+  
+    <!-- 新：FontAwesome 本家の chalkboard-teacher -->
+    <symbol id="icon-chalkboard-teacher" viewBox="0 0 640 512">
+      <path d="M192 128c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64zm320 0c35.3 0 64-28.7 64-64s-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64z
+               M624 144H16C7.2 144 0 151.2 0 160v16c0 8.8 7.2 16 16 16h608c8.8 0 16-7.2 16-16v-16c0-8.8-7.2-16-16-16z
+               M0 336c0 35.3 28.7 64 64 64h512c35.3 0 64-28.7 64-64v-48c0-8.8-7.2-16-16-16H16c-8.8 0-16 7.2-16 16v48z"/>
+    </symbol>
+  </svg>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,32 +127,42 @@
             </p>
         
             <!-- 図解フロー -->
-            <div class="what-is__diagram">
-                <!-- 左ノード -->
-                <div class="what-is__node">
-                    <i class="fas fa-search"></i>
-                    <p>転職事例を<br class="mobile-br">探す人</p>
-                </div>
-            
-                <!-- 左→中央 矢印 -->
-                <div class="what-is__arrow">
-                    <svg viewBox="0 0 24 24"><path d="M2,12 H20 M18,10 L22,12 L18,14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-                </div>
-            
-                <!-- 中央ロゴ -->
-                <div class="what-is__node what-is__node--logo">
-                    <img src="images/company-logo.jpg" alt="インノーマル ロゴ">
-                </div>
-            
-                <!-- 右→中央 矢印（逆向き）-->
-                <div class="what-is__arrow what-is__arrow--reverse">
-                    <svg viewBox="0 0 24 24"><path d="M2,12 H20 M18,10 L22,12 L18,14" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-                </div>
-            
-                <!-- 右ノード -->
-                <div class="what-is__node">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <p>経験を<br class="mobile-br">共有したい人</p>
+            <div class="what-is__diagram-band">
+                <div class="what-is__diagram">
+                    <!-- 左ノード -->
+                    <div class="what-is__node">
+                        <svg class="what-is__icon" aria-hidden="true">
+                            <use xlink:href="#icon-search"></use>
+                        </svg>
+                            <p>転職事例を<br class="mobile-br">探したい</p>
+                    </div>
+                
+                    <!-- 左→中央 矢印 -->
+                    <div class="what-is__arrow">
+                        <svg class="what-is__arrow-icon" aria-hidden="true">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>
+                    </div>
+                
+                    <!-- 中央ロゴ -->
+                    <div class="what-is__node what-is__node--logo">
+                        <img src="images/company-logo.jpg" alt="インノーマル ロゴ">
+                    </div>
+                
+                    <!-- 右→中央 矢印（逆向き）-->
+                    <div class="what-is__arrow what-is__arrow--reverse">
+                        <svg class="what-is__arrow-icon" aria-hidden="true">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>
+                    </div>
+                
+                    <!-- 右ノード -->
+                    <div class="what-is__node">
+                        <svg class="what-is__icon" aria-hidden="true">
+                            <use xlink:href="#icon-chalkboard-teacher"></use>
+                        </svg>
+                        <p>経験を<br class="mobile-br">共有したい</p>
+                    </div>
                 </div>
             </div>
 

@@ -212,10 +212,10 @@ HTML: <section class="what-is">…</section>
 --------------------------------------------------*/
 .what-is {
   text-align: center;
-  padding: 3rem 1rem;
-  font-family: 'Roboto', sans-serif;
-  margin-top: -3rem;
-  margin-bottom: -3rem;
+  padding: 4rem 1rem;
+  margin: 3rem 0;
+  margin-top: -5.0rem;
+  margin-bottom: -3.0rem;
 }
 
 .what-is__title {
@@ -232,6 +232,13 @@ HTML: <section class="what-is">…</section>
   line-height: 1.6;
 }
 
+/* 図解部分だけをブランドライトカラーのバンドで囲む */
+.what-is__diagram-band {
+  background: rgba(135,78,31,0.1);
+  padding: 2rem 0;
+  border-radius: 8px;
+}
+
 /* ─── フローチャート ─── */
 .what-is__diagram {
   display: flex;
@@ -239,48 +246,63 @@ HTML: <section class="what-is">…</section>
   justify-content: space-between;  /* 要素間を等間隔に */
   gap: 0rem;
   flex-wrap: nowrap; /* 折り返し禁止 */
-  margin-bottom: 2rem;
 }
 
+/* ── ノードを「箱化」 ── */
 .what-is__node {
+  box-sizing: border-box;
+  width: 140px;
+  aspect-ratio: 1 / 1;
+  min-height: 0; 
+  padding: 1rem;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 96px;
-  flex: 0 0 20%;    /* 全体の20%ずつ */
+  justify-content: space-between;
+  gap: 0.1rem;
 }
 
-.what-is__node i,
-.what-is__node--logo img {
-  font-size: 2rem;
-  color: #874e1f;
-  width: 60px;
-  height: 60px;
-  margin-bottom: -1.0rem;
+/* ─── アイコンは円の中央～上寄せで大きく ─── */
+.what-is__icon {
+  flex-shrink: 0;
+  width: 50%;     /* 円内の50%幅まで拡大 */
+  height: auto;   /* 縦横比を保つ */
 }
 
-/* ロゴノードだけ大きめ */
+/* ── ロゴノードは同じ大きさの箱にアイコン画像をフィット ── */
 .what-is__node--logo {
-  width: 120px;
-  flex: 0 0 20%;    /* ロゴは10% */
+  box-sizing: border-box;
+  width: 140px;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  padding: 1rem;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .what-is__node--logo img {
-  width: 100px;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
-.what-is__node--logo p {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+.what-is__node p {
+  font-size: 0.8rem;
   color: #574637;
 }
 
 /* 矢印＋登録ラベル */
 .what-is__arrow {
-  display: flex;
+  flex: 1 1 auto;    /* 隣のノード⇔ノード間のスペースを吸収 */
+  display: flex;     /* 中身を flex-box */
   align-items: center;
-  font-size: 0.9rem;
-  color: #4d2104;
-  flex: 0 0 10%;    /* 全体の10%ずつ */
+  justify-content: center; 
 }
 .what-is__arrow span {
   margin: 0 0.5rem;
@@ -710,6 +732,45 @@ Utility / Misc
 }
 
 
+/* ─────────────────────────────── */
+/* SVGアイコン＋矢印の共通アニメーション */
+/* ─────────────────────────────── */
+.what-is__icon,
+.what-is__arrow-icon {
+  width: 60px;
+  height: 60px;
+  fill: #874e1f;                /* ブランド色 */
+  color: #4d2104;               /* 矢印の stroke 用 */
+  transition: transform 0.3s ease,
+              fill      0.3s ease,
+              color     0.3s ease;
+  transform-origin: center center;
+}
+
+/* ノードアイコン：ホバーで拡大＋アクセント色 */
+.what-is__icon:hover {
+  transform: scale(1.1);
+  fill: #8ba141;                /* アクセント色 */
+}
+
+/* 矢印 */
+.what-is__arrow-icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* 矢印ホバー：左右にスライド＋色変化 */
+.what-is__arrow:hover .what-is__arrow-icon {
+  transform: translateX(6px);
+  color: #8ba141;
+}
+.what-is__arrow--reverse:hover .what-is__arrow-icon {
+  transform: translateX(-6px);
+  color: #8ba141;
+}
+
 
 /*--------------------------------------------------
 レスポンシブ：768px 以下
@@ -845,6 +906,8 @@ Utility / Misc
   /* ===== インノーマルとは？ (Overview) ===== */
   .what-is {
     padding: 2rem 1rem;
+    margin-top: -3.0rem;
+    margin-bottom: -1.5rem;
   }
   .what-is__title {
     font-size: 1.6rem;
@@ -856,17 +919,6 @@ Utility / Misc
   }
   .what-is__diagram {
     gap: 0.5rem;
-  }
-  .what-is__diagram > * {
-    flex: 1 1 0;
-    min-width: 0;
-    text-align: center;
-  }
-  .what-is__node i,
-  .what-is__node--logo img {
-    font-size: 1.5rem;
-    width: 80px;
-    height: 80px;
   }
   .what-is__node i {
     margin-bottom: -2.0rem;
@@ -885,7 +937,26 @@ Utility / Misc
     margin-top: 1rem;
     padding: 0.4rem 1rem;
   }
+  .what-is__icon {
+    width: 48px;
+    height: 48px;
+  }
 }
+
+
+/*--------------------------------------------------
+レスポンシブ：550px 以下
+--------------------------------------------------*/
+@media (max-width: 550px) {
+  .what-is__node p {
+    margin-top: 0.5rem;  /* アイコン下の余白を縮める */
+  }
+  .what-is__icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 
 /*--------------------------------------------------
 レスポンシブ：450px 以下
@@ -1045,7 +1116,6 @@ Utility / Misc
 
   /* ===== インノーマルとは？（Overview）微調整 ===== */
   .what-is {
-    margin-bottom: -1.0rem;
     padding: 1.5rem 0.5rem;
   }
   .what-is__title {
@@ -1058,7 +1128,6 @@ Utility / Misc
   .what-is__node--logo img {
     font-size: 1.2rem;
     width: 60px;
-    height: 60px;
   }
   .what-is__band {
     padding: 0.3rem 0.8rem;
@@ -1072,6 +1141,10 @@ Utility / Misc
   }
   .what-is__subcopy {
     font-size: 0.8rem;
+  }
+  .what-is__icon {
+    width: 25px;
+    height: 25px;
   }
 
   /* ===== ご利用の流れ (Howto) ===== */
@@ -1128,7 +1201,12 @@ Utility / Misc
   }
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
+  .what-is__icon {
+    width: 20px;
+    height: 20px;
+  }
   .what-is__node p {
-    font-size: 0.5rem;
+    font-size: 0.45rem;
+    margin-top: 0.2rem;  /* アイコン下の余白を縮める */
   }
 }
