@@ -678,6 +678,55 @@ HTML: <section id="announcements">…</section>, <section id="user-feedback">…
   border-bottom: 1px solid var(--card-border-color);
 }
 
+.announcements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.announcement-item {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 1rem;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.announcement-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 日付・タイトル・本文のスタイル */
+.announcement-item .date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+.announcement-item .title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+.announcement-item .snippet {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+/* 「続きを読む」リンク */
+.announcement-item .read-more {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--main-color);
+  text-decoration: none;
+}
+.announcement-item .read-more:hover {
+  text-decoration: underline;
+}
+
 #feedback-form {
   text-align: center;
   margin-top: 2rem;
@@ -1151,6 +1200,18 @@ Utility / Misc
   /* ===== ご利用の流れ (Howto) ===== */
   .howto-section h2 {
     font-size: 1.2rem;
+  }
+
+  /* ===== お知らせ ===== */
+  .announcement-item .date {
+    font-size: 0.75rem;
+  }
+  .announcement-item .title {
+    font-size: 1rem;
+  }
+  .announcement-item .snippet {
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 }
 
