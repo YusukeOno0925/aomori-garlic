@@ -56,11 +56,14 @@ document.addEventListener('DOMContentLoaded', function () {
             nodesArray.forEach((node, i) => nodeMap[node.name] = i);
 
             // リンクのソース・ターゲットをインデックスに変換
-            const linksArray = links.map(link => ({
+            let linksArray = links.map(link => ({
                 source: nodeMap[link.source],
                 target: nodeMap[link.target],
                 value: link.value
             }));
+                
+            // ── ここで循環リンクを除去 ──
+            linksArray = removeCircularLinks(linksArray, nodesArray.length);
 
             // サンキーデータ準備
             const sankeyData = { nodes: nodesArray, links: linksArray };
@@ -236,3 +239,39 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(err => console.error("Error fetching career-path-data:", err));
 });
+
+
+function removeCircularLinks(linksArray, nodeCount) {
+    const adj = Array.from({ length: nodeCount }, () => []);
+    linksArray.forEach(l => {
+    if (l.source >= 0 && l.source < nodeCount && l.target >= 0 && l.target < nodeCount) {
+        adj[l.source].push(l.target);
+    }
+    });
+
+    const visited = new Array(nodeCount).fill(false);
+    const stack = new Array(nodeCount).fill(false);
+    const circular = [];
+
+    function dfs(u) {
+    visited[u] = true;
+    stack[u] = true;
+    for (const v of adj[u]) {
+        if (!visited[v] && dfs(v)) return true;
+        if (stack[v]) {
+        circular.push({ source: u, target: v });
+        return true;
+        }
+    }
+    stack[u] = false;
+    return false;
+    }
+
+    for (let i = 0; i < nodeCount; i++) {
+    if (!visited[i]) dfs(i);
+    }
+
+    return linksArray.filter(l =>
+    !circular.some(c => c.source === l.source && c.target === l.target)
+    );
+}
