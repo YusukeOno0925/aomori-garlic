@@ -29,11 +29,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: formData,
                 })
                 .then(response => {
-                    if (response.ok) {
-                        // ホーム画面にリダイレクト
-                        window.location.href = '/Home.html';
-                    } else {
+                    if (!response.ok) {
+                        // エラー処理はそのまま
                         return response.json().then(data => { throw new Error(data.message || '登録に失敗しました'); });
+                    }
+                
+                    // ─── ここで sign_up イベントを GA4 に送信 ───
+                    if (typeof gtag === 'function') {
+                        // event_callback を使って “確実に送信してから” リダイレクト
+                        gtag('event', 'sign_up', {
+                            method: 'form',      // 任意。後で UA／GA4 で属性として使えます
+                            event_callback: function() {
+                                window.location.href = '/Home.html';
+                            }
+                        });
+                        // タイムアウト対策（万一 callback 呼ばれなければ 1秒後に遷移）
+                        setTimeout(function() {
+                            window.location.href = '/Home.html';
+                        }, 1000);
+                    } else {
+                        // gtag が定義されていない場合は即リダイレクト
+                        window.location.href = '/Home.html';
                     }
                 })
                 .catch(error => {
