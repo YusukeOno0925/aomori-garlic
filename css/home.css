@@ -37,16 +37,18 @@ HTML: <section id="hero">…</section>
   width: 100%;
 }
 
-.text-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
-  width: 100%;
-  max-width: 100%;
+#hero::before {
+  content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-sizing: border-box;
-  padding: 2rem;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);  /* 透過度はお好みで */
+  z-index: 1;
+}
+
+/* テキスト・CTA はオーバーレイより前面に */
+#hero .hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-content {
@@ -1159,11 +1161,6 @@ Utility / Misc
     display: inline;
   }
 
-  /* ===== ヒーロー内テキストオーバーレイ余白 ===== */
-  .text-overlay {
-    padding: 1rem;
-  }
-
   /* ===== インノーマルとは？（Overview）微調整 ===== */
   .what-is {
     padding: 1.5rem 0.5rem;
@@ -1255,11 +1252,6 @@ Utility / Misc
   .metric-label {
     font-size: 0.5rem;
     line-height: 1.2;
-  }
-
-  /* ===== ヒーロー内テキストオーバーレイ（最小余白） ===== */
-  .text-overlay {
-    padding: 0.2rem;
   }
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
