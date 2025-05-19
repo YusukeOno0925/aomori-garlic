@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const labels = topList.map(item => item.industry);
             const values = topList.map(item => item.count);
 
+            const total = values.reduce((sum, v) => sum + v, 0);
+
             // カラーパレット
             const colors = [
                 '#6AA84F', // グリーン
@@ -69,6 +71,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 '#D46A6A', // ダルコーラル
                 '#CCCCCC'  // ライトグレー
             ];
+
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw(chart) {
+                const { ctx, chartArea: { left, top, width, height } } = chart;
+                ctx.save();
+                ctx.font = 'bold 20px Roboto';           // フォント・サイズはお好みで
+                ctx.fillStyle = '#ffffff';               // テキスト色
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(
+                    `${total.toLocaleString()}人`,         // 描きたい文字列
+                    left + width / 2,                      // X座標：キャンバス中央
+                    top  + height / 2                      // Y座標：キャンバス中央
+                );
+                ctx.restore();
+                }
+            };
 
             // Chart.js でドーナツグラフを描画（ネイティブツールチップは無効化）
             const ctx = document.getElementById('industry-pie').getContext('2d');
@@ -87,9 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     cutout: '60%',
                     plugins: {
                         legend: { display: false },
-                        tooltip: { enabled: false }
+                        tooltip: { enabled: false },
+
+                        // プラグイン用のセクションに空オブジェクトを置くだけで有効化
+                        centerText: {}
                     }
-                }
+                },
+                // このチャートにだけプラグインを適用
+                plugins: [ centerTextPlugin ]
             });
 
             // HTML 凡例を自前で生成
