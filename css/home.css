@@ -186,7 +186,7 @@ CTA ボタン
   width: 7.5rem;
   margin-top: 0.5rem;
   padding: 0.25rem 0.75rem;
-  background-color: #ffffff;
+  background-color: rgba(255,255,255,0.9);
   color: #574637;
   font-size: 0.85rem;
   border-radius: 9999px;           /* pill 形状 */
