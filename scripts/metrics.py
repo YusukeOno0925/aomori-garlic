@@ -40,3 +40,41 @@ async def get_metrics():
     finally:
         cursor.close()
         db.close()
+
+# ホーム画面のヒーローセクションで使う業界グラフ
+@router.get("/metrics/industry/")
+async def get_industry_metrics():
+    """
+    ・業界ごとの現職者数を集計して返します
+      (job_experiences.industry 列をグルーピング)
+    """
+    db = get_db_connection()
+    # 辞書型で取得できるカーソルにする
+    cursor = db.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            /*
+              最新 (現職) の職歴だけをユーザーごとに1件、
+              同一ユーザーは重複カウントしない
+            */
+            SELECT
+              je.industry,
+              COUNT(DISTINCT je.user_id) AS count
+            FROM job_experiences AS je
+            /* 現職：終了日が未設定または未来 */
+            WHERE je.industry IS NOT NULL
+              AND je.industry <> ''
+              AND (je.work_end_period IS NULL
+                   OR je.work_end_period >= CURDATE())
+            GROUP BY je.industry
+            ORDER BY count DESC;
+        """)
+        results = cursor.fetchall()
+        # 返り値例: [ { "industry": "金融", "count": 42 }, ... ]
+        return JSONResponse(results)
+    except Exception:
+        logger.error("/metrics/industry/ 取得中に例外発生", exc_info=True)
+        raise HTTPException(status_code=500, detail="業界メトリクスの取得に失敗しました")
+    finally:
+        cursor.close()
+        db.close()

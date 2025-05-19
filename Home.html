@@ -90,31 +90,53 @@
     <main>
         <!-- ヒーローセクション（サービス理念） -->
         <section id="hero">
-            <div class="hero-content">
-                <h1>リアルな“キャリア体験”を<br class="mobile-br">丸ごと見よう！</h1>
-                <p>先輩の具体的な経験・転職軌跡を共有。<br class="mobile-br">あなたの次の１歩をこの実例から</p>
-
-                <!-- ★ ここから metrics-overlay を貼り付け -->
-                <div class="metrics-overlay">
-                    <a href="Career_overview.html" class="metric-card">
-                        <i class="fa fa-users metric-icon"></i>
-                        <div class="metric-number" id="user-count">0</div>
-                        <div class="metric-label">メンバー<br>登録数</div>
-                    </a>
-                    <a href="Career_overview.html" class="metric-card">
-                        <i class="fa fa-briefcase metric-icon"></i>
-                        <div class="metric-number" id="story-count">0</div>
-                        <div class="metric-label">掲載事例数</div>
-                    </a>
-                    <a href="Board.html" class="metric-card">
-                        <i class="fa fa-comments metric-icon"></i>
-                        <div class="metric-number" id="qa-count">0</div>
-                        <div class="metric-label">Q&A 投稿数</div>
-                    </a>
+            <div class="hero-wrapper">
+                <!-- 左カラム：キャッチ＋説明＋CTA -->
+                <div class="hero-left">
+                    <h1>リアルな“キャリア体験”を<br>丸ごと見よう！</h1>
+                    <p class="hero-lead">
+                    先輩の具体的な経験・転職軌跡を共有。<br>
+                    あなたの次の１歩をこの実例から
+                    </p>
+                    <a href="Register.html" class="cta-button">今すぐ新規登録（無料）</a>
                 </div>
-                <!-- ★ metrics-overlay ここまで -->
-
-                <a href="Register.html" class="cta-button">今すぐ新規登録（無料）</a>
+            
+                <!-- 右カラム：メトリクス縦積み、グラフ＋説明 -->
+                <div class="hero-right">
+                    <!-- メトリクス -->
+                    <div class="metrics-overlay">
+                        <a href="Career_overview.html" class="metric-card">
+                            <div class="metric-circle">
+                                <i class="fa fa-users metric-icon"></i>
+                                <div class="metric-number" id="user-count">0</div>
+                            </div>
+                            <div class="metric-label">メンバー登録数</div>
+                        </a>
+                        <a href="Career_overview.html" class="metric-card">
+                            <div class="metric-circle">
+                                <i class="fa fa-briefcase metric-icon"></i>
+                                <div class="metric-number" id="story-count">0</div>
+                            </div>
+                            <div class="metric-label">掲載事例数</div>
+                        </a>
+                        <a href="Board.html" class="metric-card">
+                            <div class="metric-circle">
+                                <i class="fa fa-comments metric-icon"></i>
+                                <div class="metric-number" id="qa-count">0</div>
+                            </div>
+                            <div class="metric-label">Q&amp;A投稿数</div>
+                        </a>
+                    </div>
+            
+                    <!-- グラフ説明＋Chart.js 円グラフ -->
+                    <div class="chart-block">
+                        <p class="chart-desc">登録者の現職業界(分布)を示しています。</p>
+                        <div class="industry-chart-container">
+                            <canvas id="industry-pie" width="180" height="180"></canvas>
+                            <ul id="industry-legend" class="industry-legend"></ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 

@@ -24,52 +24,59 @@ Hero Section (#hero)
 HTML: <section id="hero">…</section>
 --------------------------------------------------*/
 #hero {
-  background: url('../images/hero-image.jpg') no-repeat center center;
-  background-size: cover;
-  height: 70vh; /* 画像の高さを指定 */
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  text-align: center;
-  overflow: hidden;
   width: 100%;
+  height: 70vh; /* 画面高さに応じて調整 */
+  background: url('../images/hero-image.jpg') no-repeat center/cover;
+  overflow: visible;
 }
 
+/* 半透明オーバーレイ */
 #hero::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);  /* 透過度はお好みで */
+  background: rgba(0,0,0,0.6);
   z-index: 1;
 }
 
-/* テキスト・CTA はオーバーレイより前面に */
-#hero .hero-content {
-  position: relative;
+/* ヒーロー内全体ラッパー */
+.hero-wrapper {
+  position: relative; /* オーバーレイより手前 */
   z-index: 2;
-}
-
-.hero-content {
-  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center;
+  justify-content: center;
+  align-items: center; /* 縦方向中央揃え */
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 0.1rem; /* 十分な左右余白 */
 }
 
-/* ヒーロー内の文言 */
-.hero-content h1 {
-  font-size: 1.8rem;
+/*--------------------------------------------------
+左カラム
+--------------------------------------------------*/
+.hero-left {
+  width: 45%;           /* 左右バランス調整 */
+  padding: 1rem 2rem;   /* 内側余白 */
+  text-align: left;
+}
+.hero-left h1 {
+  font-size: 2.2rem;
+  line-height: 1.2;
   margin-bottom: 1rem;
+  color: #ffffff;
+}
+.hero-lead {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #f0f0f0;
 }
 
-.hero-content p {
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-}
-
+/*--------------------------------------------------
+CTA ボタン
+--------------------------------------------------*/
 .cta-button {
   display: inline-block;
   padding: 1rem 2rem;
@@ -78,7 +85,7 @@ HTML: <section id="hero">…</section>
   border-radius: 5px;
   text-decoration: none;
   font-size: 1.2rem;
-  transition: background-color 0.3s;
+  transition: transform .3s, box-shadow .3s, background-color .3s;
   position: relative;
 }
 .cta-button:hover {
@@ -86,7 +93,7 @@ HTML: <section id="hero">…</section>
   box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
   background-color: #a34705; /* 色はすでにあるので同じ */
 }
-/* 疑似要素で丸いバッジを作る */
+/* 疑似要素バッジ */
 .cta-button::after {
   content: "30秒";
   position: absolute;
@@ -95,7 +102,7 @@ HTML: <section id="hero">…</section>
   width: 2.2rem;     /* 円の大きさ */
   height: 2.2rem;
   background: #ffffff;
-  border: 2px solid #746302;  /* ボタンの色に合わせても◎ */
+  border: 2px solid #746302;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -105,19 +112,45 @@ HTML: <section id="hero">…</section>
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* Hero 内のメトリクスカード */
-.metrics-overlay {
+/*--------------------------------------------------
+右カラム
+--------------------------------------------------*/
+.hero-right {
+  width: 45%;
   display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin: 2rem 0;     /* テキストとの余白調整 */
+  flex-direction: column;
+  justify-content: center; /* 縦中央揃え */
+  align-items: flex-end;    /* 右寄せはそのまま */
+  gap: 2.5rem;
+  padding: 1rem 2rem;
 }
 
+/*--------------------------------------------------
+メトリクスカード（縦積み）
+--------------------------------------------------*/
+.metrics-overlay {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* カード全体：円とラベルを縦に並べる */
 .metric-card {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 円形部分：アイコン＋数字だけ */
+.metric-circle {
+  width: 100px;
+  height: 100px;
   background: rgba(255,255,255,0.9);
+  border-radius: 50%;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
@@ -126,34 +159,103 @@ HTML: <section id="hero">…</section>
   transition: transform .3s, box-shadow .3s;
 }
 
-.metric-card:hover {
+/* ホバー時に円だけ持ち上げる */
+.metric-circle:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
+/* 円内のアイコン */
 .metric-icon {
   font-size: 1.8rem;
   color: #8ba141;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
+/* 円内の数字 */
 .metric-number {
-  font-size: 2.0rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #574637;
   line-height: 1;
 }
 
+/* 円の下に出すラベル */
 .metric-label {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.25rem;
+  display: inline-block;
+  width: 7.5rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #ffffff;
+  color: #574637;
+  font-size: 0.85rem;
+  border-radius: 9999px;           /* pill 形状 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   text-align: center;
+  white-space: nowrap;
 }
 
-.metrics-overlay a.metric-card {
-  text-decoration: none;
-  color: inherit;
+/*--------------------------------------------------
+グラフブロック
+--------------------------------------------------*/
+.chart-block {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.chart-desc {
+  max-width: 120px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+/*--------------------------------------------------
+業界分布チャート
+--------------------------------------------------*/
+.industry-chart-container {
+  background: transparent;
+  padding: 0;
+  margin-left: 0;
+  border-radius: 0;
+  box-shadow: none;
+  width: auto;      /* 必要に応じて固定幅は外しておく */
+  text-align: center;
+  overflow: visible; /* はみ出し防止 */
+}
+.industry-chart-container > canvas {
+  background: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: block;
+  margin: 0 auto;   /* コンテナ内で中央配置 */
+}
+.industry-chart-title {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #574637;
+}
+/* js/metrics.js で使う HTML 凡例 */
+.industry-legend {
+  list-style: none;
+  margin: 0.5rem 0 0 0;
+  padding: 0;
+  text-align: left;       /* 左寄せ */
+}
+.industry-legend li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem; /* 行間 */
+  color: #ffffff;         /* 必要に応じて */
+  font-size: 0.85rem;
+}
+.industry-legend .legend-box {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 0.5rem;
+  border-radius: 2px;
 }
 
 /*--------------------------------------------------
@@ -837,22 +939,130 @@ Utility / Misc
 
   /* ===== ヒーローセクション ===== */
   #hero {
-      height: 60vh;
-  }
-  .hero-content h1 {
-      font-size: 1.2rem;
-      margin: 0.1rem 0;
-  }
-  .hero-content p {
-      font-size: 0.9rem;
-      line-height: 1.4;
+    height: auto;            /* 固定高さをやめる */
+    padding: 1.5rem 0;       /* 上下の余白だけ確保 */
   }
 
-  /* ヒーロー内 CTA ボタン */
+  .hero-left h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+  .hero-lead {
+    font-size: 1.0rem;
+    line-height: 1.5;
+  }
+
+  .hero-wrapper {
+    display: flex;
+    flex-direction: column;  /* 縦積み */
+    justify-content: flex-start;
+    align-items: stretch;    /* 子要素を横幅いっぱいに */
+    text-align: center;
+    padding: 0;              /* 横パディングは子要素側で調整 */
+  }
+
+  /* ——— 見出し・リード・CTA を画面幅いっぱいに ——— */
+  .hero-left,
+  .hero-right {
+    width: 100%;
+    padding: 0 0.75rem;      /* ← 余白を 1rem⇒0.75rem に減らして行長を伸ばす */
+    margin: 0;
+  }
+  .hero-left {
+    order: 1;
+    /* inline-block のボタンを中央寄せするために text-align: center */
+    text-align: center;
+  }
+  .hero-left h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .hero-lead {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ===== CTA ボタン ===== */
   .cta-button {
-      margin-top: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 0.8rem;
+    display: inline-block;      /* 幅をコンテンツサイズに */
+    margin-bottom: 1.5rem;      /* 下マージンだけ確保 */
+    padding: 0.75rem 1.5rem;     /* 必要に応じて微調整 */
+    font-size: 1rem;
+    max-width: 260px;           /* これ以上横に伸びすぎないように */
+    width: 80%;                 /* 幅は親の80％まで（max-width が優先） */
+    box-sizing: border-box;
+  }
+
+  /* ——— メトリクス＆グラフを同じく画面幅いっぱいに ——— */
+  .hero-right {
+    order: 2;
+    margin-top: 1rem;
+  }
+
+  /* —— メトリクスを一行に —— */
+  .metrics-overlay {
+    display: flex;
+    flex-wrap: nowrap;           /* 折り返し禁止 */
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 0.75rem;          /* リードと同じ左右余白 */
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+  }
+  .metric-card {
+    flex: 0 0 33.333%;           /* 幅の3分の1 */
+    max-width: 33.333%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .metric-circle {
+    width: 80px;
+    height: 80px;
+  }
+  .metric-icon {   font-size: 1.2rem; }
+  .metric-number { font-size: 1.4rem; }
+  .metric-label {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .metric-label{
+    width: 6.0rem;
+  }
+
+  /* —— ドーナツ＋凡例を横並びに —— */
+  .industry-chart-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 0.75rem;          /* 同じ左右余白 */
+    margin-top: 1rem;
+    gap: 1rem;
+    box-sizing: border-box;
+  }
+  .industry-chart-container > canvas {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* ===== チャート説明＆凡例の文字サイズ調整 ===== */
+  .chart-desc {
+    font-size: 0.8rem;           /* 説明文を少し小さく */
+    line-height: 1.3;
+  }
+  .industry-legend {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.7rem;           /* 凡例をさらに小さく */
+  }
+  .industry-legend li {
+    margin-bottom: 0.25rem;
   }
 
   /* ===== 登録のメリットセクション =====
@@ -938,26 +1148,6 @@ Utility / Misc
     font-size: 1.3rem;
   }
 
-  /* ===== ヒーロー内メトリクス ===== */
-  .metrics-overlay {
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-  .metric-card {
-    width: 100px;
-    height: 100px;
-  }
-  .metric-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.3rem;
-  }
-  .metric-number {
-    font-size: 1.6rem;
-  }
-  .metric-label {
-    font-size: 0.8rem;
-  }
-
   /* ===== インノーマルとは？ (Overview) ===== */
   .what-is {
     padding: 2rem 1rem;
@@ -1019,30 +1209,133 @@ Utility / Misc
   }
 
   /* ===== ヒーローセクション ===== */
-  #hero {
-    height: 55vh;
+  .hero-right {
+    width: 100%;
+    padding: 0;
+    margin-top: 1rem;
+    gap: 1.0rem;
   }
-  .hero-content {
-    height: calc(50vh / 3);
-    padding: 0.5rem;
+  .hero-left h1 {
+    font-size: 1.6rem;
+    line-height: 1.3;
   }
-  .hero-content h1 {
-    font-size: 1.3rem;
-    margin: 0.1rem 0;
-  }
-  .hero-content p {
-    font-size: 0.9rem;
-    line-height: 1.2;
-    margin-bottom: -1rem;
+  .hero-lead {
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
   .cta-button {
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
-    margin-top: -1rem;
-    margin-bottom: 0.5rem;
+    display: inline-block;
+    margin-bottom: 1.2rem;       /* 下マージンを少し詰める */
+    padding: 0.6rem 1.2rem;       /* 左右パディングを縮小 */
+    max-width: 220px;             /* これ以上広がらない */
+    width: 85%;                   /* 親の85%まで */
+    box-sizing: border-box;
   }
-  .card.preview-blur .overlay {
+
+  /* ===== メトリクスをセンター１行に詰める ===== */
+  .metrics-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    margin-bottom: 0.25rem;
+    box-sizing: border-box;
+  }
+  .metric-card {
+    flex: 0 0 auto;
+    text-align: center;
+  }
+  .metric-circle {
+    width: 60px;
+    height: 60px;
+  }
+  .metric-icon {
     font-size: 1rem;
+  }
+  .metric-number {
+    font-size: 1.2rem;
+  }
+  .metric-label {
+    width: 5.5rem;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.3rem;
+  }
+
+  /* ===== チャート説明を上に１行で中央表示 ===== */
+  .chart-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-bottom: -1.0rem;
+    box-sizing: border-box;
+  }
+  .chart-desc {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+
+    /* 幅は左右パディングを除いた画面幅いっぱい */
+    width: calc(100% - 1rem);
+    max-width: none;
+
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: center;
+    color: #ffffff;
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  /* ===== 円グラフと凡例を左右並び ===== */
+  .industry-chart-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 左右中央揃え */
+    gap: 3.5rem;
+    width: auto;             /* 幅を自動に */
+    margin: 0 auto 1rem;     /* 上下マージン、左右自動センタリング */
+    padding: 0;              /* パディングをリセット */
+    box-sizing: border-box;
+  }
+
+  /* ===== 円グラフを左に寄せ、固定サイズに ===== */
+  .industry-chart-container > canvas {
+    width: 90px  !important;
+    height: 90px !important;
+    margin: 0;               /* 余計なマージンを消す */
+  }
+
+  /* ===== 凡例を縦リスト＆テキスト省略 ===== */
+  .industry-legend {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;         /* 自動で幅を確保 */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;        /* テキストは左寄せ */
+  }
+  .industry-legend li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+  }
+  .legend-box {
+    width: 10px;
+    height: 10px;
+    margin-right: 0.3rem;
+    flex-shrink: 0;
+  }
+  .legend-text {
+    font-size: 0.65rem;
+    line-height: 1.2;
+    max-width: 100px;         /* 約10文字分 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* ===== ライフパス可視化 ===== */
@@ -1135,27 +1428,6 @@ Utility / Misc
     font-size: 0.8rem;
   }
 
-  /* ===== ヒーロー内メトリクス（さらに小さく） ===== */
-  .metrics-overlay {
-    gap: 0.8rem;
-    padding: 0;
-  }
-  .metric-card {
-    width: 75px;
-    height: 75px;
-  }
-  .metric-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.3rem;
-  }
-  .metric-number {
-    font-size: 1.4rem;
-  }
-  .metric-label {
-    font-size: 0.5rem;
-    line-height: 1.2;
-  }
-
   /* ===== モバイル改行（br） ===== */
   .mobile-br {
     display: inline;
@@ -1216,42 +1488,72 @@ Utility / Misc
 レスポンシブ：360px 以下
 --------------------------------------------------*/
 @media (max-width: 360px) {
-
   /* ===== ヒーローセクション ===== */
-  #hero {
-    height: 45vh;
+  .hero-left h1 {
+    font-size: 1.4rem;
+    line-height: 1.3;
   }
-  .hero-content h1 {
-    font-size: 1.1rem;
-    margin: 0.1rem 0;
-  }
-  .hero-content p {
-    font-size: 0.7rem;
-  }
-  .cta-button {
+  .hero-lead {
     font-size: 0.8rem;
-    padding: 0.7rem 1.5rem;
+    line-height: 1.3;
   }
 
-  /* ===== メトリクスカード（最小） ===== */
-  .metrics-overlay {
-    gap: 0.8rem;
-    padding: -0.2rem 0;
+  /* ===== チャート説明 ===== */
+  .chart-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
-  .metric-card {
-    width: 65px;
-    height: 65px;
+  .chart-desc {
+    font-size: 0.7rem;
+    line-height: 1.3;
+    text-align: center;
+    margin: 0 0 0.5rem;
   }
-  .metric-icon {
-    font-size: 1.0rem;
-    margin-bottom: 0.3rem;
+
+  /* ===== 円グラフ＋凡例を左右並び ===== */
+  .industry-chart-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.0rem;                         /* 間隔をやや広めに */
+    margin: 0 auto 1rem;
+    padding: 0;
+    box-sizing: border-box;
   }
-  .metric-number {
-    font-size: 1.2rem;
+  .industry-chart-container > canvas {
+    width: 60px !important;
+    height: 60px !important;
+    aspect-ratio: 1 / 1;               /* 常に正円 */
+    display: block;
   }
-  .metric-label {
-    font-size: 0.5rem;
+  .industry-legend {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.6rem;
     line-height: 1.2;
+    text-align: left;
+  }
+  .industry-legend li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+  }
+  .industry-legend .legend-box {
+    width: 8px;
+    height: 8px;
+    margin-right: 0.3rem;
+  }
+  .industry-legend .legend-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.6rem;
   }
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
