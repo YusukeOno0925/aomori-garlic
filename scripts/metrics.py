@@ -65,9 +65,10 @@ async def get_industry_metrics():
             WHERE je.industry IS NOT NULL
               AND je.industry <> ''
               AND (je.work_end_period IS NULL
-                   OR je.work_end_period >= CURDATE())
+                   OR CAST(je.work_end_period AS CHAR) = '0000-00-00'
+                   )
             GROUP BY je.industry
-            ORDER BY count DESC;
+            ORDER BY count DESC
         """)
         results = cursor.fetchall()
         # 返り値例: [ { "industry": "金融", "count": 42 }, ... ]
