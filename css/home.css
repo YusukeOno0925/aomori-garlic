@@ -1209,6 +1209,9 @@ Utility / Misc
   }
 
   /* ===== ヒーローセクション ===== */
+  .hero-wrapper {
+    margin-top: -1.0rem;
+  }
   .hero-right {
     width: 100%;
     padding: 0;
