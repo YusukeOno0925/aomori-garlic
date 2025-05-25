@@ -1219,6 +1219,9 @@ Utility / Misc
     gap: 1.0rem;
   }
   .hero-left h1 {
+    text-align: left;
+    max-width: none;      /* 幅制限を外す */
+    padding: 0 1rem;
     font-size: 1.6rem;
     line-height: 1.3;
   }
