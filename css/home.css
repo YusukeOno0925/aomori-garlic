@@ -207,7 +207,7 @@ CTA ボタン
   max-width: 120px;
   font-size: 0.9rem;
   line-height: 1.4;
-  color: #ffffff;
+  color: #555;
   opacity: 0.85;
 }
 
@@ -333,8 +333,8 @@ HTML: <section class="what-is">…</section>
 }
 
 .what-is__description {
-  max-width: 600px;
-  margin: 0.5rem auto 2rem;
+  text-align: left;
+  margin: 0.5rem 1rem 2rem;
   font-size: 1rem;
   color: #555;
   line-height: 1.6;
@@ -539,6 +539,18 @@ HTML: <section id="life-path" class="lifepath-section">…</section>
   margin-right: auto;
   overflow-x: auto;
   overflow-y: auto;
+}
+
+/* ライフパス冒頭の説明は左寄せ */
+#life-path > p:first-of-type {
+  text-align: left;
+  margin: 0.5rem 1rem 2rem;
+}
+
+/* ライフパス末尾の案内リンクは中央寄せ */
+#life-path > p:last-of-type {
+  text-align: center;
+  margin: 0.5rem 1rem 2rem; /* 左右 auto にしてもOK */
 }
 
 /*--------------------------------------------------
@@ -877,7 +889,7 @@ Utility / Misc
 
 .section-description {
   font-size: 1.0rem;
-  color: #666;
+  color: #555;
   max-width: 600px;
   margin: 0.5rem auto 1rem;
   text-align: center;
