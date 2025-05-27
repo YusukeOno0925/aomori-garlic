@@ -198,17 +198,34 @@ CTA ボタン
 /*--------------------------------------------------
 グラフブロック
 --------------------------------------------------*/
-.chart-block {
+/* １．chart-block を横いっぱい使う */
+.hero-right .chart-block {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+
+  /* グラフ説明とグラフを左右に広げる */
+  width: 100%;
+  align-self: flex-start;  /* 親コンテナの右寄せ設定を打ち消し */
 }
-.chart-desc {
-  max-width: 120px;
+
+/* ２．説明テキストの最大幅を広げ、折り返しを柔軟に */
+.hero-right .chart-desc {
+  max-width: 200px;          /* デフォルト120px → 200px に拡大 */
+  /* 必要ならさらに大きくしてOK */
   font-size: 0.9rem;
   line-height: 1.4;
   color: #ffffff;
   opacity: 0.85;
+
+  text-align: left;          /* 左寄せのまま */
+  word-break: break-word;    /* 単語途中でも折り返し可 */
+  margin: 0;                 /* 上下余白はお好みで調整 */
+}
+
+/* ３．円グラフだけを右詰めに */
+.hero-right .industry-chart-container {
+  margin-left: auto;         /* 左マージン自動＝右寄せ */
 }
 
 /*--------------------------------------------------
@@ -1061,7 +1078,7 @@ Utility / Misc
   }
 
   /* ===== チャート説明＆凡例の文字サイズ調整 ===== */
-  .chart-desc {
+  .hero-right .chart-desc {
     font-size: 0.8rem;           /* 説明文を少し小さく */
     line-height: 1.3;
   }
@@ -1293,7 +1310,7 @@ Utility / Misc
     margin-bottom: -1.0rem;
     box-sizing: border-box;
   }
-  .chart-desc {
+  .hero-right .chart-desc {
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
@@ -1527,7 +1544,7 @@ Utility / Misc
     padding: 0 0.5rem;
     box-sizing: border-box;
   }
-  .chart-desc {
+  .hero-right .chart-desc {
     font-size: 0.7rem;
     line-height: 1.3;
     text-align: center;
