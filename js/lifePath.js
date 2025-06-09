@@ -3,6 +3,22 @@ function truncateText(text, maxLength) {
     return text.length > maxLength ? text.slice(0, maxLength - 3) + '...' : text;
 }
 
+// ──相互リンク(A→B と B→A)を除去する関数──
+function removeMutualLinks(links) {
+    const seen = new Set();
+    const toRemove = new Set();
+    links.forEach(l => {
+    const f = l.source + '→' + l.target;
+    const b = l.target + '→' + l.source;
+    if (seen.has(b)) {
+        toRemove.add(f);
+    } else {
+        seen.add(f);
+    }
+    });
+    return links.filter(l => !toRemove.has(l.source + '→' + l.target));
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('career-path-visualization');
 
@@ -62,7 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 value: link.value
             }));
                 
-            // ── ここで循環リンクを除去 ──
+            // ── (A) まず相互リンクを除去 ──
+            linksArray = removeMutualLinks(linksArray);
+
+            // ── (B) 次に既存の循環除去を適用 ──
             linksArray = removeCircularLinks(linksArray, nodesArray.length);
 
             // サンキーデータ準備
@@ -110,8 +129,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 .nodeWidth(15)
                 .nodePadding(30)
                 .extent([[40, 20], [sankeyWidth, sankeyHeight]]);
+            
+            let sankeyResult;
+            try {
+                sankeyResult = sankey(sankeyData);
+            } catch (e) {
+                console.warn('Sankey レイアウト生成エラー:', e);
+                return;  // グラフ描画処理を中断
+            }
 
-            const {nodes, links: sankeyLinks} = sankey(sankeyData);
+            const { nodes, links: sankeyLinks } = sankeyResult;
 
             const nodeColorScale = d3.scaleOrdinal()
                .range(["#8ba141","#88c1d0","#fcb25f","#e67676","#af84db"]);
