@@ -25,34 +25,41 @@ function animateCount(targetId, targetValue) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 🐾 ①：掲載事例数を一時保持する変数を用意
+    let storyCount = 0;
+
     // ① 数値メトリクス (会員数・掲載数・Q&A数) のカウントアップ取得
     fetch('/metrics/')
         .then(res => res.json())
         .then(({ users, stories, qa }) => {
+            // アニメーションはこれまでどおり
             animateCount('user-count', users);
             animateCount('story-count', stories);
             animateCount('qa-count', qa);
+
+            // 🐾 取得した stories を保持
+            storyCount = stories;
+
+            // 🐾 続けて業界データを取得する
+            return fetch('/metrics/industry/');
         })
-        .catch(err => console.error('メトリクス取得エラー:', err));
-
-    // ② カスタムツールチップ用の要素を body に追加
-    const tooltipEl = document.createElement('div');
-    tooltipEl.className = 'tooltip';
-    document.body.appendChild(tooltipEl);
-
-    // ③ 業界別メトリクスの取得 → Chart.js でドーナツグラフ描画
-    fetch('/metrics/industry/')
         .then(res => res.json())
         .then(industryData => {
+            // ② カスタムツールチップ用の要素を body に追加
+            const tooltipEl = document.createElement('div');
+            tooltipEl.className = 'tooltip';
+            document.body.appendChild(tooltipEl);
+
             // （念のため）降順ソート
             industryData.sort((a, b) => b.count - a.count);
 
-            // 上位3件を抜き出し、残りを「その他」へ集約
+            // 上位3件を抜き出し
             const TOP_N = 3;
             const topList = industryData.slice(0, TOP_N);
-            const otherCount = industryData
-                .slice(TOP_N)
-                .reduce((sum, item) => sum + item.count, 0);
+
+            // 🐾 “その他” は storyCount − 上位3件の合計で算出
+            const sumTop = topList.reduce((sum, item) => sum + item.count, 0);
+            const otherCount = storyCount - sumTop;
 
             if (otherCount > 0) {
                 topList.push({ industry: 'その他', count: otherCount });
@@ -62,7 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const labels = topList.map(item => item.industry);
             const values = topList.map(item => item.count);
 
-            const total = values.reduce((sum, v) => sum + v, 0);
+            // 🐾 中央表示用 total も storyCount を使う
+            const total = storyCount;
 
             // カラーパレット
             const colors = [
@@ -75,18 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerTextPlugin = {
                 id: 'centerText',
                 beforeDraw(chart) {
-                const { ctx, chartArea: { left, top, width, height } } = chart;
-                ctx.save();
-                ctx.font = 'bold 20px Roboto';           // フォント・サイズはお好みで
-                ctx.fillStyle = '#ffffff';               // テキスト色
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(
-                    `${total.toLocaleString()}人`,         // 描きたい文字列
-                    left + width / 2,                      // X座標：キャンバス中央
-                    top  + height / 2                      // Y座標：キャンバス中央
-                );
-                ctx.restore();
+                    const { ctx, chartArea: { left, top, width, height } } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 20px Roboto';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(
+                        `${total.toLocaleString()}人`,   // 🐾 storyCount を表示
+                        left + width / 2,
+                        top  + height / 2
+                    );
+                    ctx.restore();
                 }
             };
 
@@ -108,18 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     plugins: {
                         legend: { display: false },
                         tooltip: { enabled: false },
-
-                        // プラグイン用のセクションに空オブジェクトを置くだけで有効化
-                        centerText: {}
+                        centerText: {}  // プラグイン有効化
                     }
                 },
-                // このチャートにだけプラグインを適用
                 plugins: [ centerTextPlugin ]
             });
 
             // HTML 凡例を自前で生成
             const legendEl = document.getElementById('industry-legend');
-            const MAX_LEN = 10;  // 10文字を超えたら…
+            const MAX_LEN = 10;
             legendEl.innerHTML = labels.map((fullLabel, i) => {
                 const shortLabel = fullLabel.length > MAX_LEN
                     ? fullLabel.slice(0, MAX_LEN) + '…'
@@ -141,39 +146,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     tooltipEl.style.opacity = 0;
                     return;
                 }
-
-                // ラベルと人数をセット
                 const idx = points[0].index;
                 const label = chart.data.labels[idx];
                 const value = chart.data.datasets[0].data[idx];
                 tooltipEl.textContent = `${label}: ${value}人`;
 
-                // 一度位置リセットして幅・高さを測る
                 tooltipEl.style.left = '0px';
                 tooltipEl.style.top  = '0px';
                 tooltipEl.style.opacity = 1;
                 const ttRect = tooltipEl.getBoundingClientRect();
 
-                const margin = 8;  // カーソルとの隙間
-                let left = e.pageX + margin;
-                let top  = e.pageY + margin;
-
-                // 右にはみ出す場合は左側に
-                if (left + ttRect.width > window.pageXOffset + window.innerWidth) {
-                    left = e.pageX - ttRect.width - margin;
+                const margin = 8;
+                let leftPos = e.pageX + margin;
+                let topPos  = e.pageY + margin;
+                if (leftPos + ttRect.width > window.pageXOffset + window.innerWidth) {
+                    leftPos = e.pageX - ttRect.width - margin;
                 }
-                // 下にはみ出す場合は上側に
-                if (top + ttRect.height > window.pageYOffset + window.innerHeight) {
-                    top = e.pageY - ttRect.height - margin;
+                if (topPos + ttRect.height > window.pageYOffset + window.innerHeight) {
+                    topPos = e.pageY - ttRect.height - margin;
                 }
-
-                tooltipEl.style.left = `${left}px`;
-                tooltipEl.style.top  = `${top}px`;
+                tooltipEl.style.left = `${leftPos}px`;
+                tooltipEl.style.top  = `${topPos}px`;
             });
 
-            // グラフからマウスが離れたらツールチップを隠す
             document.getElementById('industry-pie').addEventListener('mouseleave', () => {
-                tooltipEl.style.opacity = 0;
+                document.querySelector('.tooltip').style.opacity = 0;
             });
         })
         .catch(err => console.error('業界メトリクス取得エラー:', err));
