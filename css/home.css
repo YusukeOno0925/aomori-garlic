@@ -859,6 +859,29 @@ HTML: <section id="announcements">…</section>, <section id="user-feedback">…
 .announcement-item .read-more:hover {
   text-decoration: underline;
 }
+#announcements-list {
+  /* 既に grid レイアウトがかかっている前提 */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+#announcements-list > a.read-more {
+  /* グリッドの 1 列目から最終列までを占有 */
+  grid-column: 1 / -1;
+  /* セル内で中央に寄せる */
+  justify-self: center;
+  /* インラインブロック化して文字幅に合わせる */
+  display: inline-block;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+  color: #6a0dad;
+  text-decoration: none;
+}
+
+#announcements-list > a.read-more:hover {
+  text-decoration: underline;
+}
 
 #feedback-form {
   text-align: center;
