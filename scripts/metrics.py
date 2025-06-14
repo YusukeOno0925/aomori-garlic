@@ -21,8 +21,13 @@ async def get_metrics():
         cursor.execute("SELECT COUNT(id) FROM users")
         user_count = cursor.fetchone()[0] or 0
 
-        # 掲載事例数 ← education_id をカウント
-        cursor.execute("SELECT COUNT(education_id) FROM education")
+        #  job_experiences テーブルに 1 件以上のレコードがある user_id を DISTINCT 集計
+        cursor.execute("""
+            SELECT COUNT(DISTINCT user_id)
+            FROM job_experiences
+            WHERE company_name IS NOT NULL
+              AND company_name <> ''
+        """)
         story_count = cursor.fetchone()[0] or 0
 
         # Q&A 投稿数
