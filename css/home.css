@@ -1,6 +1,10 @@
 /*--------------------------------------------------
 Global Styles
 --------------------------------------------------*/
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #ffffff;
   font-family: 'Roboto', sans-serif;
@@ -202,7 +206,7 @@ CTA ボタン
 .hero-right .chart-block {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
 
   /* グラフ説明とグラフを左右に広げる */
   width: 100%;
@@ -274,6 +278,44 @@ CTA ボタン
   margin-right: 0.5rem;
   border-radius: 2px;
 }
+
+.scroll-down {
+  position: absolute;
+  bottom: 2rem;               /* ヒーローセクション下からの距離 */
+  left: 50%;                  /* 横中央 */
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  color: #ffffff;             /* 白文字 */
+  text-decoration: none;      /* 下線消し */
+  font-size: 0.9rem;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  z-index: 2;                 /* オーバーレイの前面に */
+}
+.scroll-down:hover {
+  opacity: 1;
+}
+
+/* 矢印部分 */
+.scroll-down .arrow {
+  font-size: 1.4rem;
+  margin-right: 0.4rem;
+  animation: bounce 1.5s infinite;
+}
+
+/* 矢印のバウンスアニメーション */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+/* テキスト部分 */
+.scroll-down .text {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 
 /*--------------------------------------------------
 Registration Benefits Section
@@ -1322,6 +1364,11 @@ Utility / Misc
     font-size: 0.7rem;
     padding: 0.15rem 0.3rem;
   }
+  .scroll-down {
+    bottom: 0.4rem;
+    font-size: 0.7rem; /* 文字も少し小さくしておくとバランス良し */
+  }
+
 
   /* ===== チャート説明を上に１行で中央表示 ===== */
   .chart-block {
@@ -1615,6 +1662,10 @@ Utility / Misc
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.6rem;
+  }
+  .scroll-down {
+    bottom: 0.1rem;
+    font-size: 0.6rem; /* 文字も少し小さくしておくとバランス良し */
   }
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
