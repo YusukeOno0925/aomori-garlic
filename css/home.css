@@ -83,19 +83,20 @@ CTA ボタン
 --------------------------------------------------*/
 .cta-button {
   display: inline-block;
-  padding: 1rem 2rem;
-  background-color: #746302;
+  padding: 1.2rem 2.5rem;
+  background-color: #8ba141;
   color: #ffffff;
-  border-radius: 5px;
+  border-radius: 6px;
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   transition: transform .3s, box-shadow .3s, background-color .3s;
   position: relative;
+  z-index: 3;
 }
 .cta-button:hover {
-  transform: translateY(-2px); /* ちょっと浮く */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 少し強め */
-  background-color: #a34705; /* 色はすでにあるので同じ */
+  transform: translateY(-3px); /* ちょっと浮く */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25); /* 少し強め */
+  background-color: #6b8330; /* 色はすでにあるので同じ */
 }
 /* 疑似要素バッジ */
 .cta-button::after {
