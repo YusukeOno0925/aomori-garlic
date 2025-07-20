@@ -1180,12 +1180,18 @@ Utility / Misc
   .howto-section h2 {
       font-size: 1.4rem;
   }
+  /* ステップを横並びにしてスクロール可能に */
   .howto-steps {
-      justify-content: center;
+    flex-wrap: nowrap;               /* 折り返し禁止 */
+    overflow-x: auto;                /* 横スクロールを許可 */
+    scroll-snap-type: x mandatory;   /* スナップ動作 */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1rem;            /* 下に余白 */
+    gap: 1rem;                       /* カード間隔 */
   }
-  .step {
-      width: 90%;
-      margin-bottom: 1.5rem;
+  .howto-steps .step {
+    flex: 0 0 90%;
+    scroll-snap-align: center;       /* 真ん中で止まる */
   }
 
   /* ===== 最近／人気／近いキャリアストーリー =====
