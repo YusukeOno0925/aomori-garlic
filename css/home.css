@@ -282,27 +282,41 @@ CTA ボタン
 
 .scroll-down {
   position: absolute;
-  bottom: 2rem;               /* ヒーローセクション下からの距離 */
-  left: 50%;                  /* 横中央 */
+  bottom: 2rem;
+  left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  color: #ffffff;             /* 白文字 */
-  text-decoration: none;      /* 下線消し */
-  font-size: 0.9rem;
+  color: #ffffff;                   /* 文字は白 */
+  text-decoration: none;
+  font-size: 1rem;                  /* 少し大きく */
   opacity: 0.8;
-  transition: opacity 0.3s;
-  z-index: 2;                 /* オーバーレイの前面に */
+  z-index: 2;
+  transition: opacity 0.3s, transform 0.3s;
+  animation: pulseScroll 2.5s infinite;
+  /* 白縁取り */
+  text-shadow:
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+     -1px  1px 0 #000,
+      1px  1px 0 #000;
 }
 .scroll-down:hover {
   opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
 }
 
 /* 矢印部分 */
 .scroll-down .arrow {
-  font-size: 1.4rem;
+  font-size: 1.6rem;                /* 矢印を大きめに */
   margin-right: 0.4rem;
   animation: bounce 1.5s infinite;
+  /* 矢印にも白縁取り＆シャドウ */
+  text-shadow:
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+     -1px  1px 0 #000,
+      1px  1px 0 #000;
 }
 
 /* 矢印のバウンスアニメーション */
