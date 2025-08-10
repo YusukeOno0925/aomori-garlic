@@ -23,6 +23,11 @@ h2.section-title {
   color: var(--main-color);
 }
 
+:root{
+  --hero-rail: clamp(320px, 92vw, 680px);
+  --hero-gutter: .75rem;
+}
+
 /*--------------------------------------------------
 Hero Section (#hero)
 HTML: <section id="hero">…</section>
@@ -30,7 +35,7 @@ HTML: <section id="hero">…</section>
 #hero {
   position: relative;
   width: 100%;
-  height: 70vh; /* 画面高さに応じて調整 */
+  height: 60vh; /* 画面高さに応じて調整 */
   background: url('../images/hero-image.jpg') no-repeat center/cover;
   overflow: visible;
 }
@@ -128,11 +133,54 @@ CTA ボタン
   align-items: flex-end;    /* 右寄せはそのまま */
   gap: 2.5rem;
   padding: 1rem 2rem;
+
+  --hero-rail: clamp(320px, 92vw, 680px);
 }
 
 /*--------------------------------------------------
-メトリクスカード（縦積み）
+トラスト＋メトリクスカード（縦積み）
 --------------------------------------------------*/
+.hero-right .trust-wrap{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;     /* PCは右寄せのまま */
+}
+
+.hero-right .trust-badges{
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 常に3分割 */
+  gap: 1.5rem;
+  width: 100%;
+  max-width: var(--hero-rail);  /* レール幅を固定してメトリクスと“並び幅”を合わせる */
+  justify-items: stretch;        /* 各セルを等幅に */
+  align-items: center;
+}
+
+.hero-right .trust-badge{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  min-height: 44px;
+  padding: .42rem .8rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,.95);
+  color: #574637;
+  border: 1px solid rgba(87,70,55,.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  white-space: nowrap;
+}
+.hero-right .trust-badge i{
+  color: #8ba141;
+  font-size: .95rem;
+}
+.hero-right .metrics-overlay{
+  max-width: var(--hero-rail);  /* ← これだけで左右端が揃う */
+  width: 100%;
+  justify-content: space-between; /* 3つを等間隔に */
+}
+
 .metrics-overlay {
   display: flex;
   flex-direction: row;
@@ -140,7 +188,6 @@ CTA ボタン
   align-items: center;
   gap: 1.5rem;
 }
-
 /* カード全体：円とラベルを縦に並べる */
 .metric-card {
   display: flex;
@@ -149,7 +196,6 @@ CTA ボタン
   text-decoration: none;
   color: inherit;
 }
-
 /* 円形部分：アイコン＋数字だけ */
 .metric-circle {
   width: 100px;
@@ -163,20 +209,17 @@ CTA ボタン
   justify-content: center;
   transition: transform .3s, box-shadow .3s;
 }
-
 /* ホバー時に円だけ持ち上げる */
 .metric-circle:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
-
 /* 円内のアイコン */
 .metric-icon {
   font-size: 1.8rem;
   color: #8ba141;
   margin-bottom: 0.25rem;
 }
-
 /* 円内の数字 */
 .metric-number {
   font-size: 1.8rem;
@@ -184,7 +227,6 @@ CTA ボタン
   color: #574637;
   line-height: 1;
 }
-
 /* 円の下に出すラベル */
 .metric-label {
   display: inline-block;
@@ -198,86 +240,6 @@ CTA ボタン
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   text-align: center;
   white-space: nowrap;
-}
-
-/*--------------------------------------------------
-グラフブロック
---------------------------------------------------*/
-/* １．chart-block を横いっぱい使う */
-.hero-right .chart-block {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  /* グラフ説明とグラフを左右に広げる */
-  width: 100%;
-  align-self: flex-start;  /* 親コンテナの右寄せ設定を打ち消し */
-}
-
-/* ２．説明テキストの最大幅を広げ、折り返しを柔軟に */
-.hero-right .chart-desc {
-  max-width: 200px;          /* デフォルト120px → 200px に拡大 */
-  /* 必要ならさらに大きくしてOK */
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: #ffffff;
-  opacity: 0.85;
-
-  text-align: left;          /* 左寄せのまま */
-  word-break: break-word;    /* 単語途中でも折り返し可 */
-  margin: 0;                 /* 上下余白はお好みで調整 */
-}
-
-/* ３．円グラフだけを右詰めに */
-.hero-right .industry-chart-container {
-  margin-left: auto;         /* 左マージン自動＝右寄せ */
-}
-
-/*--------------------------------------------------
-業界分布チャート
---------------------------------------------------*/
-.industry-chart-container {
-  background: transparent;
-  padding: 0;
-  margin-left: 0;
-  border-radius: 0;
-  box-shadow: none;
-  width: auto;      /* 必要に応じて固定幅は外しておく */
-  text-align: center;
-  overflow: visible; /* はみ出し防止 */
-}
-.industry-chart-container > canvas {
-  background: transparent;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: block;
-  margin: 0 auto;   /* コンテナ内で中央配置 */
-}
-.industry-chart-title {
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #574637;
-}
-/* js/metrics.js で使う HTML 凡例 */
-.industry-legend {
-  list-style: none;
-  margin: 0.5rem 0 0 0;
-  padding: 0;
-  text-align: left;       /* 左寄せ */
-}
-.industry-legend li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.25rem; /* 行間 */
-  color: #ffffff;         /* 必要に応じて */
-  font-size: 0.85rem;
-}
-.industry-legend .legend-box {
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-right: 0.5rem;
-  border-radius: 2px;
 }
 
 .scroll-down {
@@ -305,7 +267,6 @@ CTA ボタン
   opacity: 1;
   transform: translateX(-50%) translateY(-4px);
 }
-
 /* 矢印部分 */
 .scroll-down .arrow {
   font-size: 1.6rem;                /* 矢印を大きめに */
@@ -318,17 +279,81 @@ CTA ボタン
      -1px  1px 0 #000,
       1px  1px 0 #000;
 }
-
 /* 矢印のバウンスアニメーション */
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(6px); }
 }
-
 /* テキスト部分 */
 .scroll-down .text {
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+
+/*--------------------------------------------------
+業界分布チャートSection
+--------------------------------------------------*/
+.industry-section { 
+  --donut: 260px;         /* ドーナツ直径（ここだけ変えれば全サイズ調整） */
+  border-top: 1px solid #ddd;
+}
+
+.industry-section .chart-block{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  padding:1.25rem 1.25rem 1rem;
+  text-align:center;
+  max-width: 960px;
+  margin: 0 auto 2rem;
+}
+
+/* ドーナツ左・凡例右 */
+.industry-section .industry-chart-container{
+  display: grid;
+  grid-template-columns: var(--donut) minmax(180px, max-content);
+  align-items: center;
+  justify-content: center;
+  column-gap: 1.25rem;
+  row-gap: .5rem;
+}
+
+/* canvas は CSS でサイズ管理（JSは responsive に） */
+#industry-pie{
+  width: var(--donut);
+  height: var(--donut);
+  display: block;
+  background: transparent;
+}
+
+.industry-section .industry-legend{
+  list-style: none; margin:0; padding:0;
+  font-size: .92rem; color:#333; text-align: left;
+}
+.industry-section .industry-legend .legend-box{
+  width:12px; height:12px; border-radius:2px; flex:0 0 auto;
+}
+/* —— 業界分布 凡例：パーセント列を右で揃える —— */
+.industry-section .industry-legend li{
+  /* ここだけ flex → grid に */
+  display: grid;
+  grid-template-columns: 12px 1fr 4ch; /* [色箱][ラベル可変][％は4文字幅] */
+  align-items: center;
+  column-gap: .5rem;
+}
+.industry-section .industry-legend .legend-text{
+  min-width: 0;                 /* 省略時のはみ出し防止 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.industry-section .industry-legend .legend-pct{
+  justify-self: end;            /* 右端に寄せる */
+  width: 4ch;                   /* 文字幅ベースで固定。例: "100%" までOK */
+  text-align: right;
+  font-variant-numeric: tabular-nums; /* 桁幅を揃える（既存指定でもOK） */
 }
 
 
@@ -401,7 +426,7 @@ HTML: <section class="what-is">…</section>
 }
 
 .what-is__title {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #333;
   margin-bottom: 2rem;
 }
@@ -633,7 +658,6 @@ Stories Sections
 HTML: <section class="recentstories-section">…</section> 他
 --------------------------------------------------*/
 .recentstories-section,
-.popularstories-section,
 .similarstories-section {
   border-top: 1px solid #ddd;
 }
@@ -1104,75 +1128,76 @@ Utility / Misc
     box-sizing: border-box;
   }
 
-  /* ——— メトリクス＆グラフを同じく画面幅いっぱいに ——— */
-  .hero-right {
+  .hero-right{
     order: 2;
     margin-top: 1rem;
+    padding-inline: var(--hero-gutter); /* ← ここにだけ余白を集約 */
+    align-items: stretch;                /* 右寄せの名残を解除 */
   }
 
-  /* —— メトリクスを一行に —— */
-  .metrics-overlay {
-    display: flex;
-    flex-wrap: nowrap;           /* 折り返し禁止 */
-    justify-content: space-between;
+  .hero-right .trust-wrap{ justify-content: center; }
+
+  /* コンテナ設定を統一：幅=100%、上限なし、内側余白なし（＝二重パディング解消） */
+  .hero-right .metrics-overlay,
+  .hero-right .trust-badges{
     width: 100%;
-    padding: 0 0.75rem;          /* リードと同じ左右余白 */
-    margin-bottom: 1rem;
+    max-width: none;     /* ← 680px の上限を外す */
+    margin: 0;
+    padding: 0;          /* ← 子側パディングをゼロに */
     box-sizing: border-box;
+    margin-bottom: 1rem;
+    gap: var(--hero-gutter);
   }
-  .metric-card {
-    flex: 0 0 33.333%;           /* 幅の3分の1 */
-    max-width: 33.333%;
+
+  /* 3 等分で完全揃え（両者とも同じレイアウト手法に） */
+  .hero-right .metrics-overlay{
+    display: grid; /* baseの display:flex を上書き */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: initial; /* base の space-between を無効化 */
+  }
+  .hero-right .trust-badges{
+    display: grid; /* flex にしない。等幅セルで安定 */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: stretch; /* バッジをセルいっぱいに */
+  }
+
+  /* アイテム側の幅指定は不要（念のため打ち消し） */
+  .metric-card{
+    flex: initial;
+    max-width: none;
     text-align: center;
     box-sizing: border-box;
   }
-  .metric-circle {
-    width: 80px;
-    height: 80px;
-  }
-  .metric-icon {   font-size: 1.2rem; }
-  .metric-number { font-size: 1.4rem; }
-  .metric-label {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
-  }
 
-  .metric-label{
-    width: 6.0rem;
-  }
+  /* 視覚サイズは現状に合わせて維持 */
+  .metric-circle{ width: 80px; height: 80px; }
+  .metric-icon{   font-size: 1.2rem; }
+  .metric-number{ font-size: 1.4rem; }
+  .metric-label{  width: 6rem; font-size: .75rem; padding: .2rem .4rem; }
 
-  /* —— ドーナツ＋凡例を横並びに —— */
-  .industry-chart-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .hero-right .trust-badge{
     width: 100%;
-    padding: 0 0.75rem;          /* 同じ左右余白 */
-    margin-top: 1rem;
-    gap: 1rem;
-    box-sizing: border-box;
-  }
-  .industry-chart-container > canvas {
-    width: 140px !important;
-    height: 140px !important;
+    justify-content: center;
+    font-size: .85rem;
   }
 
-  /* ===== チャート説明＆凡例の文字サイズ調整 ===== */
-  .hero-right .chart-desc {
-    font-size: 0.8rem;           /* 説明文を少し小さく */
-    line-height: 1.3;
+
+  /* ===== 業界分布セクション ===== */
+  .industry-section {
+    --donut: 220px;
   }
-  .industry-legend {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.7rem;           /* 凡例をさらに小さく */
+  .industry-section .industry-legend{
+    font-size:.88rem;
   }
-  .industry-legend li {
-    margin-bottom: 0.25rem;
+  .industry-section .industry-legend .legend-text{
+    max-width:16ch;
   }
+  .industry-section .industry-chart-container{
+    grid-template-columns: var(--donut) minmax(180px, 28ch);
+    justify-content: center;
+    column-gap: 1rem; /* 少しだけ間隔を詰める（任意） */
+  }
+  
 
   /* ===== 登録のメリットセクション =====
      Grid → 横スクロールスライダー化 */
@@ -1331,7 +1356,7 @@ Utility / Misc
     width: 100%;
     padding: 0;
     margin-top: 0.2rem;
-    gap: 1.0rem;
+    gap: 0.5rem;
   }
   .hero-left h1 {
     text-align: left;
@@ -1385,87 +1410,33 @@ Utility / Misc
     font-size: 0.7rem;
     padding: 0.15rem 0.3rem;
   }
+  .hero-right .trust-badge{
+    font-size: 0.7rem;
+  }
   .scroll-down {
     bottom: 0.4rem;
     font-size: 0.7rem; /* 文字も少し小さくしておくとバランス良し */
   }
 
 
-  /* ===== チャート説明を上に１行で中央表示 ===== */
-  .chart-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 0 0.5rem;
-    margin-bottom: -1.0rem;
-    box-sizing: border-box;
+  /* ===== 業界分布セクション ===== */
+  .industry-section{
+    --donut: 140px;
   }
-  .hero-right .chart-desc {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
-
-    /* 幅は左右パディングを除いた画面幅いっぱい */
-    width: calc(100% - 1rem);
-    max-width: none;
-
-    font-size: 0.85rem;
-    line-height: 1.4;
-    text-align: center;
-    color: #ffffff;
-    opacity: 0.85;
-    margin: 0;
+  /* ここは “同じ” セレクタ強度で上書きするのがポイント */
+  .industry-section .industry-chart-container{
+    display: grid;
+    grid-template-columns: 1fr;   /* 縦積み */
+    justify-items: center;
+    gap: .75rem;
   }
-
-  /* ===== 円グラフと凡例を左右並び ===== */
-  .industry-chart-container {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 左右中央揃え */
-    gap: 3.5rem;
-    width: auto;             /* 幅を自動に */
-    margin: 0 auto 1rem;     /* 上下マージン、左右自動センタリング */
-    padding: 0;              /* パディングをリセット */
-    box-sizing: border-box;
+  .industry-section .industry-legend{
+    font-size: 0.8rem;
   }
-
-  /* ===== 円グラフを左に寄せ、固定サイズに ===== */
-  .industry-chart-container > canvas {
-    width: 90px  !important;
-    height: 90px !important;
-    margin: 0;               /* 余計なマージンを消す */
+  .industry-section .industry-legend .legend-text{
+    max-width: 22ch;
   }
-
-  /* ===== 凡例を縦リスト＆テキスト省略 ===== */
-  .industry-legend {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 auto;         /* 自動で幅を確保 */
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-align: left;        /* テキストは左寄せ */
-  }
-  .industry-legend li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.25rem;
-  }
-  .legend-box {
-    width: 10px;
-    height: 10px;
-    margin-right: 0.3rem;
-    flex-shrink: 0;
-  }
-  .legend-text {
-    font-size: 0.65rem;
-    line-height: 1.2;
-    max-width: 100px;         /* 約10文字分 */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  
 
   /* ===== ライフパス可視化 ===== */
   .lifepath-section {
@@ -1626,68 +1597,17 @@ Utility / Misc
     font-size: 0.8rem;
     line-height: 1.3;
   }
-
-  /* ===== チャート説明 ===== */
-  .chart-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 0.5rem;
-    box-sizing: border-box;
-  }
-  .hero-right .chart-desc {
-    font-size: 0.7rem;
-    line-height: 1.3;
-    text-align: center;
-    margin: 0 0 0.5rem;
-  }
-
-  /* ===== 円グラフ＋凡例を左右並び ===== */
-  .industry-chart-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2.0rem;                         /* 間隔をやや広めに */
-    margin: 0 auto 1rem;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  .industry-chart-container > canvas {
-    width: 60px !important;
-    height: 60px !important;
-    aspect-ratio: 1 / 1;               /* 常に正円 */
-    display: block;
-  }
-  .industry-legend {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.6rem;
-    line-height: 1.2;
-    text-align: left;
-  }
-  .industry-legend li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.2rem;
-  }
-  .industry-legend .legend-box {
-    width: 8px;
-    height: 8px;
-    margin-right: 0.3rem;
-  }
-  .industry-legend .legend-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.6rem;
-  }
   .scroll-down {
     bottom: 0.1rem;
     font-size: 0.6rem; /* 文字も少し小さくしておくとバランス良し */
   }
+
+
+  /* ===== 業界分布セクション ===== */
+  .industry-section {
+    --donut: 110px;
+  }
+
 
   /* ===== インノーマルとは？（Overview：最小） ===== */
   .what-is__icon {

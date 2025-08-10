@@ -19,6 +19,7 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"></script>
     <script>
@@ -122,8 +123,17 @@
                     <a href="Register.html" class="cta-button">今すぐ新規登録（無料）</a>
                 </div>
             
-                <!-- 右カラム：メトリクス縦積み、グラフ＋説明 -->
+                <!-- 右カラム：トラスト、メトリクス縦積み -->
                 <div class="hero-right">
+                    <!-- トラスト -->
+                    <div class="trust-wrap" aria-label="ご利用上の安心ポイント">
+                        <ul class="trust-badges" role="list">
+                        <li class="trust-badge"><i class="fa fa-user-secret"></i><span>匿名OK</span></li>
+                        <li class="trust-badge"><i class="fa fa-check"></i><span>登録無料</span></li>
+                        <li class="trust-badge"><i class="fa fa-stopwatch"></i><span>登録30秒</span></li>
+                        </ul>
+                    </div>
+
                     <!-- メトリクス -->
                     <div class="metrics-overlay">
                         <a href="Career_overview.html" class="metric-card">
@@ -148,22 +158,85 @@
                             <div class="metric-label">Q&amp;A投稿数</div>
                         </a>
                     </div>
-            
-                    <!-- グラフ説明＋Chart.js 円グラフ -->
-                    <div class="chart-block">
-                        <p class="chart-desc">登録者の現職業界(分布)を示しています。</p>
-                        <div class="industry-chart-container">
-                            <canvas id="industry-pie" width="180" height="180"></canvas>
-                            <ul id="industry-legend" class="industry-legend"></ul>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <a href="#popular-stories" class="scroll-down" aria-label="下へスクロール">
+            <a href="#what-is" class="scroll-down" aria-label="下へスクロール">
                 <span class="arrow">⌄</span>
-                <span class="text">事例を先に見る</span>
+                <span class="text">Imnormalとは？</span>
             </a>
         </section>
+
+        <section id="popular-stories" class="popularstories-section">
+            <h2 class="section-title">人気の<strong>キャリアストーリー</strong></h2>
+            <p class="section-description">
+                閲覧数が多い人気のキャリアストーリーです。<br>
+                各カードをクリックすることで各人の詳細を閲覧できます。
+            </p>
+            <div class="card-container" id="popular-stories-list">
+                <!-- JavaScriptで人気のキャリアストーリーを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="popular-stories-indicators" class="carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+        <section id="recent-stories" class="recentstories-section">
+            <h2 class="section-title">最近の<strong>キャリアストーリー</strong></h2>
+            <p class="section-description">
+                最近登録されたキャリアストーリーの一覧です。<br>
+                各カードをクリックすることで各人の詳細を閲覧できます。
+            </p>
+            <div class="card-container" id="recent-stories-list">
+                <!-- JavaScriptでキャリアストーリーハイライトを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="recent-stories-indicators" class="carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+        <section id="similar-stories" class="similarstories-section">
+            <h2 class="section-title">あなたと近い<strong>キャリアストーリー</strong></h2>
+            <p class="section-description" id="similar-stories-description">
+                <!-- ログインしている場合: 業界/職種が近いユーザーのストーリーを表示 -->
+                <!-- 未ログインの場合: ログインを促すCTA を表示 -->
+            </p>
+            <div class="card-container" id="similar-stories-list" style="display: none;">
+                <!-- JavaScriptで似たユーザのキャリアストーリーを動的に生成 -->
+            </div>
+            <!-- インジケータ（スマホ閲覧用のスライドドット） -->
+            <div id="similar-stories-indicators" class="carousel-indicators" style="display: none;">
+                <!-- JSで動的に生成するインジケータ -->
+            </div>
+        </section>
+
+
+         <!-- 業界分布（％のみ） -->
+        <section id="industry" class="industry-section" aria-labelledby="industry-title">
+            <h2 id="industry-title" class="section-title">業界分布</h2>
+            <div class="chart-block">
+                <p class="chart-desc">登録者の現職業界(分布)を示しています。</p>
+                <div class="industry-chart-container">
+                    <canvas id="industry-pie"></canvas>
+                    <ul id="industry-legend" class="industry-legend"></ul>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="life-path" class="lifepath-section">
+            <h2 class="section-title">ライフパスの可視化</h2>
+            <p>
+                このグラフでは、データベースに基づき、登録者の上位3校の出身者がどのようなキャリアを歩んできたかを視覚化しています。
+            </p>
+            <div id="career-path-visualization" style="width: 100%; height: 400px;"></div>
+            <p>
+                すべてのキャリアパスを見たい方は
+                <a href="Career_path.html">こちら</a>
+            </p>
+        </section>
+
 
         <section id="what-is" class="what-is">
             <h2 class="what-is__title section-title">インノーマルとは？</h2>
@@ -267,64 +340,6 @@
                 <h3>フィードバック と Q&A</h3>
                 <p>コメント機能や掲示板を活用し、疑問や悩みを相談してみましょう。</p>
               </div>
-            </div>
-        </section>
-
-        <section id="life-path" class="lifepath-section">
-            <h2 class="section-title">ライフパスの可視化</h2>
-            <p>
-                このグラフでは、データベースに基づき、登録者の上位3校の出身者がどのようなキャリアを歩んできたかを視覚化しています。
-            </p>
-            <div id="career-path-visualization" style="width: 100%; height: 400px;"></div>
-            <p>
-                すべてのキャリアパスを見たい方は
-                <a href="Career_path.html">こちら</a>
-            </p>
-        </section>
-
-        <section id="recent-stories" class="recentstories-section">
-            <h2 class="section-title">最近の<strong>キャリアストーリー</strong></h2>
-            <p class="section-description">
-                最近登録されたキャリアストーリーの一覧です。<br>
-                各カードをクリックすることで各人の詳細を閲覧できます。
-            </p>
-            <div class="card-container" id="recent-stories-list">
-                <!-- JavaScriptでキャリアストーリーハイライトを動的に生成 -->
-            </div>
-            <!-- インジケータを追加 -->
-            <div id="recent-stories-indicators" class="carousel-indicators">
-                <!-- インジケータはJavaScriptで動的に生成 -->
-            </div>
-        </section>
-
-        <section id="popular-stories" class="popularstories-section">
-            <h2 class="section-title">人気の<strong>キャリアストーリー</strong></h2>
-            <p class="section-description">
-                閲覧数が多い人気のキャリアストーリーです。<br>
-                各カードをクリックすることで各人の詳細を閲覧できます。
-            </p>
-            <div class="card-container" id="popular-stories-list">
-                <!-- JavaScriptで人気のキャリアストーリーを動的に生成 -->
-            </div>
-            <!-- インジケータを追加 -->
-            <div id="popular-stories-indicators" class="carousel-indicators">
-                <!-- インジケータはJavaScriptで動的に生成 -->
-            </div>
-        </section>
-
-
-        <section id="similar-stories" class="similarstories-section">
-            <h2 class="section-title">あなたと近い<strong>キャリアストーリー</strong></h2>
-            <p class="section-description" id="similar-stories-description">
-                <!-- ログインしている場合: 業界/職種が近いユーザーのストーリーを表示 -->
-                <!-- 未ログインの場合: ログインを促すCTA を表示 -->
-            </p>
-            <div class="card-container" id="similar-stories-list" style="display: none;">
-                <!-- JavaScriptで似たユーザのキャリアストーリーを動的に生成 -->
-            </div>
-            <!-- インジケータ（スマホ閲覧用のスライドドット） -->
-            <div id="similar-stories-indicators" class="carousel-indicators" style="display: none;">
-                <!-- JSで動的に生成するインジケータ -->
             </div>
         </section>
 
