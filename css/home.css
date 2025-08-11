@@ -60,6 +60,7 @@ HTML: <section id="hero">…</section>
   height: 100%;
   margin: 0 auto;
   padding: 0 0.1rem; /* 十分な左右余白 */
+  margin-top: -1.0rem;
 }
 
 /*--------------------------------------------------
@@ -1092,6 +1093,7 @@ Utility / Misc
     align-items: stretch;    /* 子要素を横幅いっぱいに */
     text-align: center;
     padding: 0;              /* 横パディングは子要素側で調整 */
+    margin-top: -1.5rem;
   }
 
   /* ——— 見出し・リード・CTA を画面幅いっぱいに ——— */
