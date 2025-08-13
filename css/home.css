@@ -35,7 +35,7 @@ HTML: <section id="hero">…</section>
 #hero {
   position: relative;
   width: 100%;
-  height: 60vh; /* 画面高さに応じて調整 */
+  height: 60vh;
   background: url('../images/hero-image.jpg') no-repeat center/cover;
   overflow: visible;
 }
@@ -127,13 +127,15 @@ CTA ボタン
 右カラム
 --------------------------------------------------*/
 .hero-right {
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 縦中央揃え */
-  align-items: flex-end;    /* 右寄せはそのまま */
-  gap: 2.5rem;
-  padding: 1rem 2rem;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.10);
+  padding: 16px 18px;
+  gap: 14px;
+  align-items: stretch;     /* 子をパネル幅にフィット */
+  max-width: 560px;         /* 45%でも広くなり過ぎない制御 */
+  box-sizing: border-box;
 
   --hero-rail: clamp(320px, 92vw, 680px);
 }
@@ -156,8 +158,12 @@ CTA ボタン
   max-width: var(--hero-rail);  /* レール幅を固定してメトリクスと“並び幅”を合わせる */
   justify-items: stretch;        /* 各セルを等幅に */
   align-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
 }
-
 .hero-right .trust-badge{
   display: inline-flex;
   align-items: center;
@@ -177,17 +183,15 @@ CTA ボタン
   font-size: .95rem;
 }
 .hero-right .metrics-overlay{
-  max-width: var(--hero-rail);  /* ← これだけで左右端が揃う */
-  width: 100%;
-  justify-content: space-between; /* 3つを等間隔に */
-}
-
-.metrics-overlay {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  justify-items: center;
+  gap: 12px;           /* アイテム間 */
+  margin-top: 14px;    /* トラスト行との距離 */
+  padding-top: 4px;    /* ほんの少しだけ呼吸 */
+  background: transparent;
+  box-shadow: none;
+  border: 0;
 }
 /* カード全体：円とラベルを縦に並べる */
 .metric-card {
@@ -199,48 +203,38 @@ CTA ボタン
 }
 /* 円形部分：アイコン＋数字だけ */
 .metric-circle {
-  width: 100px;
-  height: 100px;
-  background: rgba(255,255,255,0.9);
+  width: 84px;                /* 100px → 84px */
+  height: 84px;
+  background: rgba(255,255,255,.96);
   border-radius: 50%;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,.06);  /* 線でエッジを出す */
+  box-shadow: none;                   /* 影はオフ（好みで 0 2px 6px rgba(0,0,0,.06) に） */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: transform .3s, box-shadow .3s;
 }
-/* ホバー時に円だけ持ち上げる */
-.metric-circle:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
 /* 円内のアイコン */
 .metric-icon {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   color: #8ba141;
   margin-bottom: 0.25rem;
 }
 /* 円内の数字 */
 .metric-number {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  color: #574637;
-  line-height: 1;
 }
 /* 円の下に出すラベル */
 .metric-label {
-  display: inline-block;
-  width: 7.5rem;
-  margin-top: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  background-color: rgba(255,255,255,0.9);
-  color: #574637;
-  font-size: 0.85rem;
-  border-radius: 9999px;           /* pill 形状 */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  text-align: center;
-  white-space: nowrap;
+  background: transparent;            /* ピル背景を外して軽量化 */
+  border: 0;
+  box-shadow: none;
+  color: #6b5a4c;
+  margin-top: .35rem;
+  padding: .18rem .6rem;
+  font-size: .8rem;
 }
 
 .scroll-down {
@@ -425,6 +419,8 @@ HTML: <section class="what-is">…</section>
   margin-top: -5.0rem;
   margin-bottom: -3.0rem;
 }
+
+#what-is-title { scroll-margin-top: 152px; }  /* 例: 72px + 80px = 152px */
 
 .what-is__title {
   font-size: 1.5rem;
@@ -1074,7 +1070,7 @@ Utility / Misc
   /* ===== ヒーローセクション ===== */
   #hero {
     height: auto;            /* 固定高さをやめる */
-    padding: 1.5rem 0;       /* 上下の余白だけ確保 */
+    padding: 1.5rem 0 4.5rem;       /* 上下の余白だけ確保 */
   }
 
   .hero-left h1 {
@@ -1085,7 +1081,6 @@ Utility / Misc
     font-size: 1.0rem;
     line-height: 1.5;
   }
-
   .hero-wrapper {
     display: flex;
     flex-direction: column;  /* 縦積み */
@@ -1095,7 +1090,6 @@ Utility / Misc
     padding: 0;              /* 横パディングは子要素側で調整 */
     margin-top: -1.5rem;
   }
-
   /* ——— 見出し・リード・CTA を画面幅いっぱいに ——— */
   .hero-left,
   .hero-right {
@@ -1118,7 +1112,6 @@ Utility / Misc
     line-height: 1.4;
     margin-bottom: 1.5rem;
   }
-
   /* ===== CTA ボタン ===== */
   .cta-button {
     display: inline-block;      /* 幅をコンテンツサイズに */
@@ -1129,16 +1122,13 @@ Utility / Misc
     width: 80%;                 /* 幅は親の80％まで（max-width が優先） */
     box-sizing: border-box;
   }
-
   .hero-right{
     order: 2;
     margin-top: 1rem;
     padding-inline: var(--hero-gutter); /* ← ここにだけ余白を集約 */
     align-items: stretch;                /* 右寄せの名残を解除 */
   }
-
   .hero-right .trust-wrap{ justify-content: center; }
-
   /* コンテナ設定を統一：幅=100%、上限なし、内側余白なし（＝二重パディング解消） */
   .hero-right .metrics-overlay,
   .hero-right .trust-badges{
@@ -1150,7 +1140,6 @@ Utility / Misc
     margin-bottom: 1rem;
     gap: var(--hero-gutter);
   }
-
   /* 3 等分で完全揃え（両者とも同じレイアウト手法に） */
   .hero-right .metrics-overlay{
     display: grid; /* baseの display:flex を上書き */
@@ -1162,7 +1151,6 @@ Utility / Misc
     grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-items: stretch; /* バッジをセルいっぱいに */
   }
-
   /* アイテム側の幅指定は不要（念のため打ち消し） */
   .metric-card{
     flex: initial;
@@ -1170,18 +1158,35 @@ Utility / Misc
     text-align: center;
     box-sizing: border-box;
   }
-
   /* 視覚サイズは現状に合わせて維持 */
   .metric-circle{ width: 80px; height: 80px; }
   .metric-icon{   font-size: 1.2rem; }
   .metric-number{ font-size: 1.4rem; }
   .metric-label{  width: 6rem; font-size: .75rem; padding: .2rem .4rem; }
-
   .hero-right .trust-badge{
     width: 100%;
     justify-content: center;
     font-size: .85rem;
   }
+  .hero-wrapper{
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;                 /* ← ここが効く */
+    margin-top: -1.5rem;
+  }
+  .scroll-down{
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 2;          /* #hero::before(=1) より上に */
+    color: #fff;         /* 白のまま */
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000,
+                 -1px  1px 0 #000, 1px  1px 0 #000;
+  }
+  .scroll-down:hover {
+    transform: translateX(-50%) translateY(-4px);
+  }
+
 
 
   /* ===== 業界分布セクション ===== */
@@ -1296,6 +1301,7 @@ Utility / Misc
     margin-top: -3.0rem;
     margin-bottom: -1.5rem;
   }
+  #what-is-title { scroll-margin-top: 112px; } /* 例: 64px + 48px */
   .what-is__title {
     font-size: 1.6rem;
     margin-bottom: 1rem;
@@ -1351,6 +1357,9 @@ Utility / Misc
   }
 
   /* ===== ヒーローセクション ===== */
+  #hero {
+    padding: 1.5rem 0 2.5rem; 
+  }
   .hero-wrapper {
     margin-top: -2.0rem;
   }
@@ -1376,7 +1385,7 @@ Utility / Misc
   }
   .cta-button {
     display: inline-block;
-    margin-bottom: 1.2rem;       /* 下マージンを少し詰める */
+    margin-bottom: 0.5rem;       /* 下マージンを少し詰める */
     padding: 0.6rem 1.2rem;       /* 左右パディングを縮小 */
     max-width: 220px;             /* これ以上広がらない */
     width: 85%;                   /* 親の85%まで */
@@ -1539,6 +1548,7 @@ Utility / Misc
   .what-is {
     padding: 1.5rem 0.5rem;
   }
+  #what-is-title { scroll-margin-top: 104px; } /* 例: 56px + 48px */
   .what-is__title {
     font-size: 1.4rem;
   }
