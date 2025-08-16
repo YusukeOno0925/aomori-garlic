@@ -1393,33 +1393,36 @@ Utility / Misc
   }
 
   /* ===== メトリクスをセンター１行に詰める ===== */
-  .metrics-overlay {
+  .hero-right .metrics-overlay {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0 0.5rem;
-    margin-bottom: 0.25rem;
+    gap: .35rem;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-top: .25rem;
+    margin-bottom: 0;
     box-sizing: border-box;
   }
-  .metric-card {
+  .hero-right .metric-card {
     flex: 0 0 auto;
     text-align: center;
   }
-  .metric-circle {
+  .hero-right .metric-circle {
     width: 60px;
     height: 60px;
   }
-  .metric-icon {
+  .hero-right .metric-icon {
     font-size: 1rem;
   }
-  .metric-number {
+  .hero-right .metric-number {
     font-size: 1.2rem;
   }
-  .metric-label {
+  .hero-right .metric-label {
     width: 5.5rem;
     font-size: 0.7rem;
     padding: 0.15rem 0.3rem;
+    margin-top: .2rem;
   }
   .hero-right .trust-badge{
     font-size: 0.7rem;
@@ -1612,16 +1615,6 @@ Utility / Misc
   .scroll-down {
     bottom: 0.1rem;
     font-size: 0.6rem; /* 文字も少し小さくしておくとバランス良し */
-  }
-  .hero-right .metrics-overlay{
-    padding-left: 2px;
-    padding-right: 2px;   /* 横の白余白も少し詰める */
-    gap: .35rem;          /* カード間の隙間も少しだけ縮める */
-    margin-bottom: 0;     /* ← これが“オレンジ線”の正体なので0に */
-    margin-top: .25rem;   /* 上側も詰めたいなら（任意） */
-  }
-  .metric-label{
-    margin-top: .2rem;    /* 円とラベルの縦距離を少し詰める（任意） */
   }
 
 
