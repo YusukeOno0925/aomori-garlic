@@ -1613,6 +1613,16 @@ Utility / Misc
     bottom: 0.1rem;
     font-size: 0.6rem; /* 文字も少し小さくしておくとバランス良し */
   }
+  .hero-right .metrics-overlay{
+    padding-left: 2px;
+    padding-right: 2px;   /* 横の白余白も少し詰める */
+    gap: .35rem;          /* カード間の隙間も少しだけ縮める */
+    margin-bottom: 0;     /* ← これが“オレンジ線”の正体なので0に */
+    margin-top: .25rem;   /* 上側も詰めたいなら（任意） */
+  }
+  .metric-label{
+    margin-top: .2rem;    /* 円とラベルの縦距離を少し詰める（任意） */
+  }
 
 
   /* ===== 業界分布セクション ===== */
