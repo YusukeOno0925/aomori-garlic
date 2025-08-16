@@ -177,6 +177,8 @@ CTA ボタン
   border: 1px solid rgba(87,70,55,.15);
   box-shadow: 0 2px 6px rgba(0,0,0,.08);
   white-space: nowrap;
+  text-decoration: none;     /* 下線を消す */
+  cursor: pointer;
 }
 .hero-right .trust-badge i{
   color: #8ba141;
