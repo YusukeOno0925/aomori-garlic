@@ -577,7 +577,7 @@ HTML: <section id="how-to-use" class="howto-section">…</section>
 .howto-section h2 {
   font-size: 1.6rem;
   margin-bottom: 1.5rem;
-  color: #4e3d12;
+  color: var(--main-color);
 }
 
 .howto-steps {
@@ -590,15 +590,19 @@ HTML: <section id="how-to-use" class="howto-section">…</section>
 }
 
 .step {
-  background-color: #f9f7f4;
-  border-radius: 4px;
-  padding: 1.5rem;
-  box-shadow: 
-    0 1px 2px rgba(0,0,0,0.08),
-    0 2px 4px rgba(0,0,0,0.08);
-  width: 300px; 
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  padding: 1.25rem 1rem;
+  width: 300px;                /* 既存レイアウトを維持 */
   text-align: center;
   position: relative;
+  transition: transform .2s, box-shadow .2s;
+}
+.step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.12); /* benefit-card と同等の浮き */
 }
 
 .step-number {
