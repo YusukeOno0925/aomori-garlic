@@ -1,5 +1,11 @@
+:root{
+    --line-soft: rgba(87,70,55,.10);
+    --radius: 12px;
+    --shadow-1: 0 8px 24px rgba(0,0,0,.06);
+}
+
 body {
-    background-color: #ffffff;
+    background-color: #FBFAF7;
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
@@ -7,15 +13,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-/* ヘッダーの下に境界線を追加する */
-header::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 2px; /* 境界線の高さ */
-    background-color: #ddd; /* 境界線の色 */
 }
 
 main {
@@ -27,11 +24,15 @@ main {
     width: 100%;
     max-width: 400px;
     padding: 2rem;
-    background-color: #f7f8fa;
-    border-radius: 8px;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-    margin: 1rem auto;
-}
+  
+    /* 白カード化 */
+    background-color: #fff;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+  
+    margin: 1.5rem auto; /* 余白を少しだけ広げる（任意） */
+  }
 
 form {
     display: flex;
