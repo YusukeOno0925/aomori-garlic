@@ -97,9 +97,9 @@ document.addEventListener('DOMContentLoaded', function () {
         
                         // 閲覧回数の表示を追加
                         const viewCountSection = `
-                        <div class="card-footer" style="position: absolute; right: 10px; bottom: 10px;">
-                            <img src="images/eye-icon.png" alt="View Icon" style="width: 16px; height: 16px; vertical-align: middle;">
-                            <span class="view-count">${career.view_count || 0} 回</span>
+                        <div class="card-footer">
+                            <img src="images/eye-icon.png" alt="閲覧数" class="view-icon">
+                            <span class="view-count" aria-label="閲覧回数">${career.view_count || 0} 回</span>
                         </div>
                         `;
 
