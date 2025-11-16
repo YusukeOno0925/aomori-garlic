@@ -20,10 +20,33 @@ h2 {
     text-align: center;
 }
 
-#career-chart-container {
-    display: flex;
-    justify-content: center;
+/* グラフ全体のブロック */
+.chart-section {
     margin-bottom: 3rem;
+}
+
+/* グラフカード */
+#career-chart-container {
+    max-width: 900px;
+    margin: 0 auto 3rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+/* グラフの説明テキスト */
+.chart-subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.8rem;
+}
+
+/* Chart.js に高さを任せる用 */
+#career-chart-container canvas {
+    width: 100% !important;
+    height: 260px !important;  /* PCでの高さを固定 */
 }
 
 canvas {
@@ -339,6 +362,135 @@ button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+
+/* ============================
+   キャリア詳細：サマリーエリア
+   ============================ */
+
+.career-summary-card {
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.summary-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ここを追加：イニシャル入りの丸アイコン */
+.avatar-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #999;
+}
+
+.summary-icon i {
+    font-size: 64px;
+    color: #ddd;
+}
+
+.summary-main {
+    margin-top: 0.5rem;
+}
+
+.summary-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.summary-copy {
+    font-size: 0.95rem;
+    color: #666;
+    min-height: 1.2em;      /* 中身が空でも高さを保つ */
+    margin-bottom: 0.75rem;
+}
+
+/* タグ #ITエンジニア #20代後半 など */
+.summary-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.tag-pill {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background-color: #f1f1f1;
+    color: #555;
+}
+
+/* 指標チップ（現在の職種／年収レンジなど） */
+.summary-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.chip {
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    background-color: #FFF6E3;
+    border: 1px solid #F0D9A4;
+    font-size: 0.8rem;
+}
+
+.chip-label {
+    font-weight: 700;
+    margin-right: 0.25rem;
+}
+
+.summary-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.secondary-btn {
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+}
+
+.secondary-btn {
+    background-color: #fff;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+}
+
+.secondary-btn:hover {
+    opacity: 0.9;
+}
+/* ============================ */
+
 /* レスポンシブデザイン */
 @media (max-width: 767px) {
     main {
@@ -351,6 +503,63 @@ button:hover {
     h1{
         font-size: 1.2rem;
         margin-top: -20px;
+    }
+
+    .career-summary-card {
+        margin-bottom: 3.5rem;
+        flex-direction: row;      /* 念のため明示しておく */
+        align-items: flex-start;
+        padding: 1.2rem;
+        gap: 1rem;
+    }
+
+    .summary-icon {
+        justify-content: center;  /* 丸アイコンは中央に */
+        margin-right: 0.75rem;    /* 右に少し余白 */
+    }
+
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+    }
+
+    /* テキスト側がきちんと折り返せるように */
+    .summary-main {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .summary-name {
+        font-size: 1.2rem;
+    }
+
+    .summary-copy {
+        font-size: 0.9rem;
+    }
+
+    .summary-tags {
+        gap: 0.3rem;
+    }
+
+    .tag-pill {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .summary-chips {
+        gap: 0.5rem;
+    }
+
+    .chip {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.7rem;
+    }
+
+    .summary-cta {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .company-experience h3 {
@@ -392,6 +601,39 @@ button:hover {
 @media (max-width: 450px) {
     #career-chart-container {
         margin-bottom: 1rem; /* 3rem → 1rem に減らす */
+    }
+
+    .career-summary-card {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    .summary-name {
+        font-size: 1.1rem;
+    }
+
+    .summary-copy {
+        font-size: 0.85rem;
+    }
+
+    .tag-pill {
+        font-size: 0.65rem;
+    }
+
+    .chip {
+        font-size: 0.7rem;
+        padding: 0.35rem 0.6rem;
+    }
+
+    /* CTAボタンは横幅いっぱいにすると押しやすい */
+    .summary-cta {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .secondary-btn {
+        width: 100%;
+        text-align: center;
     }
 
     /* ボタン内のテキストを非表示にする */

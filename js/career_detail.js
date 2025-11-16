@@ -39,6 +39,99 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             // ================================
+            // (A-0) サマリーエリアへの反映
+            // ※ マイページの項目は増やさず、
+            //    既存データから一文・タグ・チップを自動生成
+            // ================================
+            const usernameEl = document.getElementById('career-username');
+            const taglineEl  = document.getElementById('career-tagline');
+            const tagsEl     = document.getElementById('career-tags');
+            const chipsEl    = document.getElementById('career-chips');
+            const avatarEl   = document.getElementById('career-avatar');
+
+            // 会社リストと最新の会社（共通で使う）
+            const companies = data.companies || [];
+            const latestCompany = companies.length > 0 ? companies[companies.length - 1] : null;
+
+            // イニシャルアイコン
+            if (avatarEl && data.name) {
+                const trimmed = String(data.name).trim();
+                const firstChar = trimmed.charAt(0).toUpperCase();  // 先頭1文字
+                avatarEl.textContent = firstChar || '?';
+            }
+
+            // 名前（username）
+            if (usernameEl) {
+                // data.name は career_detail.py で username を入れている
+                const ageText = (data.age && data.age !== 'N/A') ? `（${data.age}歳）` : '';
+                usernameEl.textContent = (data.name || 'ユーザー') + ageText;
+            }
+
+            // 一行サマリー：「職種・年代・所属」を既存データから合成
+            if (taglineEl) {
+                const parts = [];
+
+                if (data.profession) {
+                    parts.push(data.profession);  // 例：ITエンジニア
+                }
+
+                if (data.age && data.age !== 'N/A') {
+                    const decade = Math.floor(data.age / 10) * 10;  // 27歳 → 20
+                    parts.push(`${decade}代`);
+                }
+
+                taglineEl.textContent = parts.length > 0
+                    ? parts.join('・')
+                    : '';  // データが少ない場合は空にしてカードを軽く見せる
+            }
+
+            // タグ（#年代, #経験社数）
+            if (tagsEl) {
+                const tags = [];
+
+                if (data.age && data.age !== 'N/A') {
+                    const decade = Math.floor(data.age / 10) * 10;
+                    tags.push(`#${decade}代`);
+                }
+
+                if (data.companies && data.companies.length > 0) {
+                    tags.push(`#経験社数${data.companies.length}社`);
+                }
+
+                tagsEl.innerHTML = tags.map(t =>
+                    `<span class="tag-pill">${escapeHTML(t)}</span>`
+                ).join('');
+            }
+
+            // チップ（現在の職種・最新勤務先・年収レンジ・満足度）
+            if (chipsEl) {
+                const chips = [];
+
+                if (data.profession) {
+                    chips.push({ label: '現在の職種', value: data.profession });
+                }
+
+                if (latestCompany) {
+                    if (latestCompany.name) {
+                        chips.push({ label: '最新の勤務先', value: latestCompany.name });
+                    }
+                    if (latestCompany.salary && latestCompany.salary !== 'N/A') {
+                        chips.push({ label: '現在の年収レンジ', value: latestCompany.salary });
+                    }
+                    if (latestCompany.satisfaction_level && latestCompany.satisfaction_level !== 'N/A') {
+                        chips.push({ label: '現在の満足度', value: latestCompany.satisfaction_level });
+                    }
+                }
+
+                chipsEl.innerHTML = chips.map(c => `
+                    <div class="chip">
+                        <span class="chip-label">${escapeHTML(c.label)}:</span>
+                        <span class="chip-value">${escapeHTML(String(c.value))}</span>
+                    </div>
+                `).join('');
+            }
+
+            // ================================
             // (A) 取得したデータを画面に反映
             // ================================
             // プロフィール情報
@@ -216,6 +309,7 @@ function truncateText(text, length) {
 // グラフ描画関数
 function drawChart(companies) {
     const ctx = document.getElementById('income-satisfaction-chart').getContext('2d');
+
     const labels = companies.map(c => c.name);
     const income = companies.map(c => calculateMedianIncome(c.salary));
     const maxIncome = Math.max(...income.filter(v => !isNaN(v) && v !== null));
@@ -224,8 +318,12 @@ function drawChart(companies) {
     const yAxisMaxIncomeWithPadding = yAxisMaxIncome + incomePadding;
     const incomeStepSize = yAxisMaxIncome / 5;
 
-    const satisfaction = companies.map(c => c.satisfaction_level !== null ? c.satisfaction_level : NaN);
-    const showXAxisLabels = companies.length <= 2;
+    const satisfaction = companies.map(c =>
+        c.satisfaction_level !== null ? c.satisfaction_level : NaN
+    );
+
+    // フォントをサイト全体に合わせる
+    Chart.defaults.font.family = "'Roboto', 'Noto Sans JP', sans-serif";
 
     new Chart(ctx, {
         type: 'bar',
@@ -233,20 +331,24 @@ function drawChart(companies) {
             labels: labels,
             datasets: [
                 {
-                    label: '年収',
+                    label: '年収（中央値）',
                     data: income,
-                    backgroundColor: 'rgba(255, 150, 0, 0.8)',
-                    borderColor: 'rgba(255, 99, 0, 1)',
+                    backgroundColor: 'rgba(220, 146, 64, 0.8)', // 焦げ黄色寄り
+                    borderColor: '#574637',
                     borderWidth: 1,
+                    borderRadius: 4,
                     yAxisID: 'y'
                 },
                 {
-                    label: '満足度',
+                    label: '仕事の満足度',
                     type: 'line',
                     data: satisfaction,
-                    fill: true,
-                    backgroundColor: 'rgba(54, 162, 235, 0.3)',  // 塗りつぶし部分
-                    borderColor: 'rgba(54, 162, 235, 1)',        // ライン色
+                    fill: false, // 面塗りをやめてスッキリ
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    backgroundColor: '#8ba141',
+                    borderColor: '#8ba141',
                     borderWidth: 2,
                     yAxisID: 'y1',
                     spanGaps: true
@@ -254,18 +356,56 @@ function drawChart(companies) {
             ]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,   // 親要素の高さを使う
+            layout: {
+                padding: {
+                    top: 10,
+                    right: 10,
+                    bottom: 0,
+                    left: 0
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 16
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.parsed.y;
+                            if (context.dataset.yAxisID === 'y') {
+                                // 年収側
+                                return label + ': ' + (isNaN(value) ? 'データなし' : value + '万円');
+                            } else {
+                                // 満足度側
+                                return label + ': ' + (isNaN(value) ? 'データなし' : value + '点');
+                            }
+                        }
+                    }
+                }
+            },
             scales: {
                 x: {
-                    display: showXAxisLabels,
+                    display: true,
+                    grid: {
+                        display: false    // x軸のグリッド線は消す
+                    },
                     ticks: {
-                        callback: function(value, index) {
-                            const label = this.getLabelForValue(index);
-                            return label.length > 9 ? label.substring(0, 9) + '...' : label;
-                        },
                         maxRotation: 0,
                         minRotation: 0,
-                        font: { size: 12 },
-                        autoSkip: false
+                        font: { size: 11 },
+                        autoSkip: true,
+                        autoSkipPadding: 10,
+                        callback: function(value, index) {
+                            const label = this.getLabelForValue(index);
+                            return label.length > 8 ? label.substring(0, 8) + '…' : label;
+                        }
                     }
                 },
                 y: {
@@ -273,7 +413,7 @@ function drawChart(companies) {
                     max: yAxisMaxIncomeWithPadding,
                     ticks: {
                         stepSize: incomeStepSize,
-                        font: { size: window.innerWidth <= 450 ? 8 : 10 },
+                        font: { size: 10 },
                         callback: function(value) {
                             if (value <= yAxisMaxIncome) {
                                 return value + '万円';
@@ -284,8 +424,8 @@ function drawChart(companies) {
                     position: 'left',
                     grid: {
                         drawTicks: true,
-                        drawBorder: true,
-                        color: 'rgba(0, 0, 0, 0.1)'
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.04)'
                     }
                 },
                 y1: {
@@ -293,7 +433,7 @@ function drawChart(companies) {
                     max: 5.5,
                     ticks: {
                         stepSize: 1,
-                        font: { size: window.innerWidth <= 450 ? 8 : 10 },
+                        font: { size: 10 },
                         callback: function(value) {
                             if (value <= 5) {
                                 return value + '点';
@@ -303,24 +443,8 @@ function drawChart(companies) {
                     },
                     position: 'right',
                     grid: {
-                        color: function(context) {
-                            if (context.tick.value > 5) {
-                                return 'rgba(0,0,0,0)';
-                            }
-                            return 'rgba(0, 0, 0, 0.1)';
-                        },
-                        drawBorder: false
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.dataset.label || '';
-                            const value = context.parsed.y;
-                            return label + ': ' + (isNaN(value) ? 'データなし' : value);
-                        }
+                        drawBorder: false,
+                        color: 'rgba(0,0,0,0.02)'
                     }
                 }
             }

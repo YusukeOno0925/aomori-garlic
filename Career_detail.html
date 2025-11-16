@@ -89,11 +89,43 @@
     </aside>
 
     <main>
+        <section class="career-summary-card">
+            <div class="summary-header">
+                <div class="summary-icon">
+                    <div class="avatar-circle" id="career-avatar">?</div>
+                </div>
+                <!-- 名前（username) -->
+                <p class="summary-name" id="career-username">ユーザー名</p>
+            </div>
+            <div class="summary-main">                
+                <!-- 自動生成の一行サマリー（職種／年齢／所属）
+                     ※マイページに専用項目は作らず、既存データからJSで生成 -->
+                <p class="summary-copy" id="career-tagline"></p>
+    
+                <!-- #職種 #年代 #経験社数 などのタグ -->
+                <div class="summary-tags" id="career-tags"></div>
+    
+                <!-- 現在の職種／最新勤務先／年収レンジ／満足度のチップ -->
+                <div class="summary-chips" id="career-chips"></div>
+    
+                <!-- CTAボタン（挙動は後で実装） -->
+                <div class="summary-cta">
+                    <a href="/Register.html" class="secondary-btn" id="favorite-btn">
+                        この人のキャリア詳細を登録して確認する
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- 年収と満足度のグラフ -->
         <h1>年収と満足度の推移</h1>
-        <div id="career-chart-container"> 
-            <canvas id="income-satisfaction-chart"></canvas>
-        </div>
+        <p class="chart-subtitle">これまで在籍した会社ごとの年収レンジと仕事満足度の変化です。</p>
+
+        <section class="chart-section">
+            <div id="career-chart-container">
+                <canvas id="income-satisfaction-chart"></canvas>
+            </div>
+        </section>
 
         <!-- アコーディオンコンテナ -->
         <div class="accordion">
