@@ -139,6 +139,10 @@ button:hover {
         max-width: 90%;
     }
 
+    main h2 {
+        font-size: 1.3rem;   /* PCの1.4remより少し小さく */
+    }
+
     input, textarea, button {
         font-size: 14px;
         padding: 8px;
@@ -147,6 +151,11 @@ button:hover {
 
 /* 450px以下の画面サイズに対応 */
 @media (max-width: 450px) {
+    main h2 {
+        font-size: 1.15rem;
+        line-height: 1.4;    /* 2行になった時も読みやすく */
+    }
+    
     input, textarea, button {
         font-size: 12px;
         padding: 6px;
