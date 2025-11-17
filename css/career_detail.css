@@ -139,45 +139,33 @@ canvas {
     margin-bottom: 1rem;
 }
 
-/* 新規追加: 大枠 */
+/* コメント全体の枠：カード感を出す */
 .comment-section {
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 1.5rem;
     margin-top: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
-/* 新規追加: 投稿フォーム */
+/* 投稿フォーム */
 .comment-form {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     margin-bottom: 1rem;
 }
+
 .comment-form textarea {
     width: 100%;
     min-height: 80px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.6rem 0.7rem;
+    font-size: 0.9rem;
     line-height: 1.4;
     resize: vertical;
-}
-.comment-form button {
-    align-self: flex-end;
-    background-color: var(--main-color);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.comment-form button:hover {
-    background-color: var(--accent-color);
 }
 
 /* 新規追加: コメント一覧の余白調整 */
@@ -185,22 +173,23 @@ canvas {
     margin-top: 1rem;
 }
 
-/* 既存: .comment-item */
+/* 各コメント：軽めのバッジ感に */
 .comment-item {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    border: 1px solid #eee;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
     background-color: #fff;
-    /* カード風に影を付けるなら: */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: none;
 }
 
-/* 既存: コメントヘッダー */
+/* コメントヘッダー：名前＋日時 */
 .comment-header {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
 }
 .comment-header img {
     width: 40px;
@@ -232,10 +221,16 @@ canvas {
 }
 
 .reply-list {
-    margin-left: 5px;
-    margin-top: 10px;
-    border-left: 2px solid #ddd;
+    margin-left: 12px;
+    margin-top: 8px;
     padding-left: 10px;
+    border-left: 2px solid #eee;
+}
+
+/* ネストコメントは少し背景を変える */
+.reply-list .comment-item {
+    background-color: #faf9f5;
+    border-color: #eee;
 }
 
 /* 返信フォームのスタイル */
@@ -245,26 +240,16 @@ canvas {
 
 .reply-text {
     width: 100%;
-    height: 80px;
+    min-height: 80px;
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     resize: vertical;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .submit-reply {
-    margin-top: 8px;
-    background-color: var(--main-color);
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-reply:hover {
-    background-color: var(--accent-color);
+    margin-top: 6px;
 }
 
 /* ボタンの基本スタイル */
@@ -293,6 +278,38 @@ button:hover {
 
 .button-text {
     display: inline;
+}
+
+/* コメントエリア内のボタンはアウトライン＋小さめに */
+.comment-section button {
+    background-color: #fff;
+    color: var(--main-color);
+    padding: 4px 10px;
+    border: 1px solid var(--main-color);
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+/* コメントエリアの hover */
+.comment-section button:hover {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+/* 返信・いいねボタンはさらに柔らかめの色に */
+.comment-actions button {
+    border-color: #d9c2a0;
+}
+
+.reply-button,
+.like-button {
+    background-color: #fff;
+}
+
+.reply-button:hover,
+.like-button:hover {
+    background-color: #FFF6E3;
+    color: var(--main-color);
 }
 
 /* メッセージボックスのスタイル */
@@ -629,5 +646,32 @@ button:hover {
     /* アイコンのサイズを調整 */
     .comment-actions i {
         font-size: 16px;
+    }
+
+    /* コメント全体のベースを13pxに */
+    .comment-item {
+        font-size: 13px;
+    }
+
+    /* 名前＋日時は少しだけ小さめ（情報量多いので） */
+    .comment-header {
+        font-size: 12px;
+    }
+
+    /* 本文は13pxで読みやすさ優先 */
+    .comment-content {
+        font-size: 13px;
+    }
+
+    /* 入力欄・返信欄も13pxに合わせる */
+    .comment-form textarea,
+    .reply-text {
+        font-size: 13px;
+    }
+
+    /* コメントエリア内のボタンは少しだけ小さめに */
+    .comment-section button {
+        font-size: 11px;
+        padding: 4px 8px;
     }
 }
