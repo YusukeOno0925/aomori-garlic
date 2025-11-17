@@ -478,6 +478,7 @@ button:hover {
     transition: opacity 0.2s;
     text-decoration: none;
     display: inline-flex;
+    justify-content: center;
 }
 
 .secondary-btn {
