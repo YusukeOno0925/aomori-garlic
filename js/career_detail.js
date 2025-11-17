@@ -680,6 +680,7 @@ function handleComments(careerId, isLoggedIn) {
     } else {
         submitComment.addEventListener('click', function () {
             alert('コメントを投稿するにはログインが必要です。');
+            window.location.href = '/Login.html';
         });
     }
 
