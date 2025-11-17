@@ -131,20 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 `).join('');
             }
 
-            // ================================
-            // (A) 取得したデータを画面に反映
-            // ================================
-            // プロフィール情報
-            const profileSection = document.getElementById('profile-section');
-            profileSection.innerHTML = `
-                <div class="detail">
-                    <p><strong>名前:</strong> ${escapeHTML(data.name)} 
-                        ${data.age !== undefined ? `(${data.age}歳)` : ''}
-                    </p>
-                    <p><strong>職業:</strong> ${escapeHTML(data.profession)}</p>
-                </div>
-            `;
-
             // キャリア体験情報
             const careerExperiencesSection = document.getElementById('career-experiences-section');
             const careerExperiences = data.career_experiences;
@@ -216,11 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 handleComments(careerId, isLoggedIn);
             });
 
-            // ================================
-            // (D) アコーディオン初期化（後述修正）
-            // ================================
-            initializeAccordion();
-
             // 「続きを読む」機能初期化
             initializeReadMore();
         })
@@ -244,19 +225,6 @@ function checkLoginStatus() {
     .catch(error => {
         console.error('ログイン状態の確認中にエラーが発生しました:', error);
         return false;
-    });
-}
-
-// ---------------------------------------------
-// ★ 修正ポイント：アコーディオンをクリックしたらログインチェックする ★
-function initializeAccordion() {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    accordionHeaders.forEach(header => {
-        header.addEventListener('click', async function() {
-            // ログイン済み → アコーディオン開閉
-            const item = this.parentElement;
-            item.classList.toggle('active');
-        });
     });
 }
 
