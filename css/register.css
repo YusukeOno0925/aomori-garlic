@@ -9,29 +9,23 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 main {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    align-items: stretch;          /* フォームを横幅いっぱいに */
+
     width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-  
-    /* 白カード化 */
+    max-width: 560px;
+    padding: 2rem 2rem 2.4rem;
     background-color: #fff;
     border: 1px solid var(--line-soft);
     border-radius: var(--radius);
     box-shadow: var(--shadow-1);
-  
-    margin: 1.5rem auto; /* 余白を少しだけ広げる（任意） */
+
+    /* ヘッダーの高さ分 + α の余白を確保（上が重要） */
+    margin: 100px auto 32px;       /* 上100px / 下32px */
   }
 
 form {
@@ -89,6 +83,55 @@ button:hover {
     z-index: 1000;
 }
 
+/* リード文 */
+.register-lead {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: left;
+    width: 100%;
+}
+
+/* ベネフィット箇条書き */
+.register-benefits {
+    width: 100%;
+    margin: 0 0 1.5rem;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+    color: #555;
+}
+.register-benefits li {
+    margin-bottom: 0.4rem;
+}
+
+/* ラベル周り */
+.field-label {
+    display: block;
+    margin: 0.5rem 0 0.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+}
+.field-note {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #888;
+    margin-top: 0.15rem;
+}
+
+/* 既存ユーザー向けのテキスト */
+.register-footer-text {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #555;
+    text-align: center;
+}
+.register-footer-text a {
+    color: var(--main-color);
+    text-decoration: underline;
+}
+
 /* レスポンシブデザイン対応 */
 @media (max-width: 768px) {
     main {
@@ -112,5 +155,18 @@ button:hover {
 
     textarea {
         height: 80px;
+    }
+
+    .register-lead {
+        font-size: 0.85rem;
+    }
+    .register-benefits {
+        font-size: 0.8rem;
+    }
+    .field-label {
+        font-size: 0.85rem;
+    }
+    .field-note {
+        font-size: 0.7rem;
     }
 }

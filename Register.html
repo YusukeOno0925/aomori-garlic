@@ -30,15 +30,56 @@
         </div>
     </header>
     <main>
-        <h2>新規登録</h2>
+        <h2>無料会員登録（30秒）</h2>
+    
+        <!-- ① リードコピー -->
+        <p class="register-lead">
+            他の人のリアルなキャリア体験を、
+            <strong>全文閲覧・コメント</strong>できるようになります。<br>
+            年収と満足度の推移グラフも見放題です。
+        </p>
+    
+        <!-- ② ベネフィット（箇条書き） -->
+        <ul class="register-benefits">
+            <li>気になるキャリアの「職業を選んだ理由」「転職理由」まで読める</li>
+            <li>年収レンジと満足度のグラフで、自分の立ち位置がわかる</li>
+            <li>匿名のニックネームでコメント・質問ができる（本名は公開されません）</li>
+        </ul>
+    
+        <!-- ③ 登録フォーム -->
         <form id="register-form" method="post">
-            <input type="text" name="username" placeholder="ユーザ名" required>
-            <input type="email" name="email" placeholder="Emailアドレス" required>
-            <input type="password" name="password" placeholder="パスワード" required>
-            <button type="submit" id="register-button">登録</button>
+            <label class="field-label">
+                ユーザ名
+                <span class="field-note">※ ニックネームでOKです。本名は公開されません。</span>
+            </label>
+            <input type="text" name="username" placeholder="例）career.imnormal" required>
+    
+            <label class="field-label">
+                Emailアドレス
+                <span class="field-note">ログインに使用します。広告メールは送りません。</span>
+            </label>
+            <input type="email" name="email" placeholder="mail@example.com" required>
+    
+            <label class="field-label">
+                パスワード
+                <span class="field-note">8文字以上を推奨しています。</span>
+            </label>
+            <input type="password" name="password" placeholder="パスワードを入力" required>
+    
+            <button type="submit" id="register-button">
+                無料で登録してキャリア体験を読む
+            </button>
         </form>
+    
+        <!-- ④ 既存ユーザー向けリンク -->
+        <p class="register-footer-text">
+            すでにアカウントをお持ちの方は
+            <a href="Login.html">こちらからログイン</a>
+        </p>
+    
+        <!-- ⑤ ローディングポップアップ（IDだけ合わせる） -->
         <div id="loading-popup" class="loading-popup" style="display: none;">
-            <p>登録中です、お待ちください...</p>
+            <p>登録中です。少々お待ちください…</p>
         </div>
     </main>
     <footer>
