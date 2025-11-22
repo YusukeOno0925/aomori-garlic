@@ -4,12 +4,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // ─── CTAクリックを計測 ───
    document.querySelectorAll('.cta-button').forEach(btn => {
         btn.addEventListener('click', () => {
-        gtag('event', 'click_register_cta', {
-            event_category: 'engagement',
-            event_label: 'ホームCTA'
-        });
+            if (typeof gtag === 'function') {
+                gtag('event', 'click_register_cta', {
+                    event_category: 'engagement',
+                    event_label: 'ホームCTA'
+                });
+            }
         });
     });
+
+    // ヘッダーの新規登録ボタン
+    const headerRegister = document.querySelector('.header-register-btn');
+    if (headerRegister) {
+        headerRegister.addEventListener('click', () => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'click_register_cta_header', {
+            event_category: 'engagement',
+            event_label: 'header_register'
+            });
+        }
+        });
+    }
     
     // ─── スクロール深度の計測 (25% / 50% / 75% / 100%) ───
     const depths = [25,50,75,100];
@@ -19,13 +34,15 @@ document.addEventListener('DOMContentLoaded', function() {
         (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
         );
         depths.forEach(p => {
-        if (scrollPct >= p && !tracked[p]) {
-            tracked[p] = true;
-            gtag('event', `scroll_${p}`, {
-            event_category: 'engagement',
-            event_label: `ホームスクロール${p}%`
-            });
-        }
+            if (scrollPct >= p && !tracked[p]) {
+                tracked[p] = true;
+                if (typeof gtag === 'function') {
+                    gtag('event', `scroll_${p}`, {
+                    event_category: 'engagement',
+                    event_label: `ホームスクロール${p}%`
+                    });
+                }
+            }
         });
     });
 });
