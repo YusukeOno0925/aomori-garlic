@@ -255,13 +255,7 @@ CTA ボタン
   inset: -2px;
   border-radius: 50%;
   padding: 2px;
-  background: conic-gradient(
-    from 180deg,
-    #8ba141,
-    #bf8f3a,
-    #e67676,
-    #8ba141
-  );
+  background: conic-gradient(#8ba141, #8ba141);
 }
 
 /* アイコン＋数字は一段だけ前に出す */
