@@ -249,14 +249,14 @@ CTA ボタン
 }
 
 /* 外側の「光るリング」 */
-.metric-circle::before {
+/* .metric-circle::before {
   content: "";
   position: absolute;
   inset: -2px;
   border-radius: 50%;
   padding: 2px;
   background: conic-gradient(#8ba141, #8ba141);
-}
+} */
 
 /* アイコン＋数字は一段だけ前に出す */
 .metric-icon {
