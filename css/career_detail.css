@@ -108,18 +108,39 @@ canvas {
 .locked-body {
     margin-bottom: 0.75rem;
     line-height: 1.6;
+    position: relative;
+    max-height: 4.8em;      /* 約3行ぶんだけ表示 */
+    overflow: hidden;       /* それより下はそもそも見せない */
+}
+
+/* 下に行くほど薄くなるフェード */
+.locked-body::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.6em;
+    /* detail の背景色 (#fafafa) に合わせる */
+    background: linear-gradient(
+        to bottom,
+        rgba(250, 250, 250, 0),
+        rgba(250, 250, 250, 1)
+    );
 }
 
 /* 最初の数十文字は普通に表示 */
 .locked-visible {
-    display: inline;
+    position: relative;
+    z-index: 1;
 }
 
 /* 後半はぼかしで読めるけど判読しにくくする */
 .locked-blur {
-    display: inline;
-    filter: blur(3px);
-    opacity: 0.85;
+    position: relative;
+    z-index: 1;
+    filter: blur(2px);
+    opacity: 0.9;
 }
 
 /* 下側に「無料登録」の案内（テキストと被らないように明確に分離） */
