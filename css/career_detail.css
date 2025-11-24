@@ -109,7 +109,7 @@ canvas {
     margin-bottom: 0.75rem;
     line-height: 1.6;
     position: relative;
-    max-height: 4.8em;      /* 約3行ぶんだけ表示 */
+    max-height: 6em;      /* 約4行ぶんだけ表示 */
     overflow: hidden;       /* それより下はそもそも見せない */
 }
 
@@ -139,8 +139,8 @@ canvas {
 .locked-blur {
     position: relative;
     z-index: 1;
-    filter: blur(2px);
-    opacity: 0.9;
+    filter: blur(4px);
+    opacity: 0.7;
 }
 
 /* 下側に「無料登録」の案内（テキストと被らないように明確に分離） */
