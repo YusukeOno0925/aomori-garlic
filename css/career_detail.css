@@ -83,6 +83,106 @@ canvas {
     background-color: #fafafa;
 }
 
+/* ▼ キャリア体験：共通のカード */
+.detail {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fafafa;
+}
+
+.detail p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #333;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.detail p strong {
+    color: var(--main-color);
+}
+
+/* 本文（見える部分＋ぼかし部分） */
+.locked-body {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+/* 最初の数十文字は普通に表示 */
+.locked-visible {
+    display: inline;
+}
+
+/* 後半はぼかしで読めるけど判読しにくくする */
+.locked-blur {
+    display: inline;
+    filter: blur(3px);
+    opacity: 0.85;
+}
+
+/* 下側に「無料登録」の案内（テキストと被らないように明確に分離） */
+.locked-footer {
+    padding-top: 0.7rem;
+    margin-top: 0.4rem;
+    border-top: none;
+    background: linear-gradient(
+        to bottom,
+        rgba(251, 250, 247, 0),
+        rgba(251, 250, 247, 0.85)
+    );
+    text-align: center;
+}
+
+.locked-message {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.locked-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* ▼ ここから2つのボタン共通スタイルに変更する */
+.locked-cta,
+.locked-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 1.2rem;      /* 両方同じ */
+    border-radius: 999px;
+    font-size: 0.85rem;          /* 両方同じ */
+    min-width: 220px;            /* 横幅を揃える（お好みで 200〜240px くらい） */
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* 色だけを個別指定 */
+.locked-cta {
+    background-color: var(--main-color);
+    color: #fff;
+    border: 1px solid var(--main-color);
+}
+
+.locked-secondary {
+    background-color: #fff;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+}
+
+.locked-cta:hover {
+    opacity: 0.9;
+}
+
+.locked-secondary:hover {
+    background-color: #FFF6E3;
+}
+
 .detail p {
     margin-bottom: 10px;
     line-height: 1.6;
@@ -673,5 +773,19 @@ button:hover {
     .comment-section button {
         font-size: 11px;
         padding: 4px 8px;
+    }
+
+    .blur-message {
+        font-size: 0.8rem;
+    }
+
+    .blur-buttons {
+        flex-direction: column;
+    }
+
+    .blur-cta,
+    .blur-secondary {
+        width: 100%;
+        padding: 0.45rem 0.8rem;
     }
 }

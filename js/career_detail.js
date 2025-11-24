@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // キャリア体験情報
             const careerExperiencesSection = document.getElementById('career-experiences-section');
-            const careerExperiences = data.career_experiences;
+            const careerExperiences = data.career_experiences || {};
 
             // 表示用の配列を作成
             const experiences = [
@@ -149,26 +149,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 { title: '現在の悩み・不安', content: careerExperiences.concerns }
             ];
 
-            // 各項目をループして表示
-            careerExperiencesSection.innerHTML = experiences.map(exp => {
-                if (exp.content) {
-                    const truncatedText = truncateText(exp.content, 50);
-                    return `
-                        <div class="detail">
-                            <p><strong>${escapeHTML(exp.title)}:</strong></p>
-                            <p class="short-text">
-                                ${escapeHTML(truncatedText)}
-                                ${exp.content.length > 50 ? `<span class="read-more-link">続きを読む</span>` : ''}
-                            </p>
-                            <p class="read-more-content">
-                                ${escapeHTML(exp.content)} 
-                                <span class="read-less-link">閉じる</span>
-                            </p>
-                        </div>
-                    `;
-                }
-                return '';
-            }).join('');
+            // ▼ログイン状態に応じて描画を変える
+            checkLoginStatus().then(isLoggedIn => {
+                renderCareerExperiences(careerExperiencesSection, experiences, isLoggedIn);
+                // コメント機能の初期化もここでログイン情報を共有する
+                handleComments(careerId, isLoggedIn);
+            });
 
             // 会社ごとの経験
             const companyExperiencesSection = document.getElementById('company-experiences-section');
@@ -194,16 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 console.error('会社データが見つかりませんでした。');
             }
-
-            // ================================
-            // (C) コメント機能の初期化
-            // ================================
-            checkLoginStatus().then(isLoggedIn => {
-                handleComments(careerId, isLoggedIn);
-            });
-
-            // 「続きを読む」機能初期化
-            initializeReadMore();
         })
         .catch(error => {
             console.error('キャリア詳細の取得中にエラーが発生しました:', error);
@@ -225,45 +201,6 @@ function checkLoginStatus() {
     .catch(error => {
         console.error('ログイン状態の確認中にエラーが発生しました:', error);
         return false;
-    });
-}
-
-// ---------------------------------------------
-// 「続きを読む」機能
-function initializeReadMore() {
-    const sections = [
-        document.getElementById('career-experiences-section'),
-        document.getElementById('company-experiences-section')
-    ];
-    sections.forEach(section => {
-        if (section) {
-            const readMoreLinks = section.querySelectorAll('.read-more-link');
-            readMoreLinks.forEach(link => {
-                // クリック時にログイン判定
-                link.addEventListener('click', async function() {
-                    const isLoggedIn = await checkLoginStatus();
-                    if (!isLoggedIn) {
-                        alert('この情報を閲覧するにはログインが必要です。');
-                        window.location.href = '/Login.html'; 
-                        return;
-                    }
-
-                    // ログイン済みなら全文表示
-                    const detail = this.closest('.detail') || this.closest('.company-experience');
-                    detail.querySelector('.short-text').style.display = 'none';
-                    detail.querySelector('.read-more-content').style.display = 'block';
-                });
-            });
-
-            const readLessLinks = section.querySelectorAll('.read-less-link');
-            readLessLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const detail = this.closest('.detail') || this.closest('.company-experience');
-                    detail.querySelector('.short-text').style.display = 'block';
-                    detail.querySelector('.read-more-content').style.display = 'none';
-                });
-            });
-        }
     });
 }
 
@@ -718,4 +655,78 @@ function escapeHTML(str) {
             '>': '&gt;',
         }[match];
     });
+}
+
+// ---------------------------------------------
+// キャリア体験を「ログイン状態＋文字数」で出し分けして描画
+function renderCareerExperiences(container, experiences, isLoggedIn) {
+    if (!container) return;
+
+    // この文字数以下ならロックしない（全文表示）
+    const LOCK_THRESHOLD = 80;
+    // ロック時に最初に見せる文字数
+    const PREVIEW_LENGTH = 40;
+
+    // 1) ログイン済みなら全件フル表示
+    if (isLoggedIn) {
+        container.innerHTML = experiences.map(exp => {
+            if (!exp.content) return '';
+            const text = String(exp.content).trim();
+            if (!text) return '';
+            return `
+                <div class="detail">
+                    <p><strong>${escapeHTML(exp.title)}:</strong></p>
+                    <p>${escapeHTML(text)}</p>
+                </div>
+            `;
+        }).join('');
+        return;
+    }
+
+    // 2) 非ログイン時：短い内容はそのまま／長い内容だけロック表示
+    const html = experiences.map(exp => {
+        if (!exp.content) return '';
+
+        const text = String(exp.content).trim();
+        if (!text) return '';
+
+        const length = text.length;
+
+        // ▼ 短い → そのまま全文表示（ボタンなし）
+        if (length <= LOCK_THRESHOLD) {
+            return `
+                <div class="detail">
+                    <p><strong>${escapeHTML(exp.title)}:</strong></p>
+                    <p>${escapeHTML(text)}</p>
+                </div>
+            `;
+        }
+
+        // ▼ 長い → 最初だけ見せて、後半をぼかし＋CTA
+        const visible = text.slice(0, PREVIEW_LENGTH);
+        const hidden  = text.slice(PREVIEW_LENGTH);
+
+        return `
+            <div class="detail detail-locked">
+                <p><strong>${escapeHTML(exp.title)}:</strong></p>
+                <p class="locked-body">
+                    <span class="locked-visible">${escapeHTML(visible)}</span>
+                    <span class="locked-blur">${escapeHTML(hidden)}</span>
+                </p>
+                <div class="locked-footer">
+                    <div class="locked-buttons">
+                        <a href="/Register.html" class="locked-cta">
+                            無料登録して全文を見る
+                        </a>
+                        <a href="/Login.html" class="locked-secondary">
+                            登録済みの方はこちら
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // 何もなければメッセージだけ表示
+    container.innerHTML = html || '<p>まだ公開されているキャリア体験はありません。</p>';
 }
