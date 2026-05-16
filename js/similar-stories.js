@@ -56,80 +56,85 @@ function fetchSimilarCareerStories(isLoggedIn) {
         // 未ログインの場合は dummy データ（5件分）を使用
         const dummyStories = [
             {
-                id: 'dummy1',
-                name: '山田 太郎',
-                age: 30,
-                profession: 'エンジニア',
-                latestIncome: '500万円',
-                career_type: '技術職',
-                view_count: 120,
+                id: 'preview1',
+                name: '20代後半・営業職',
+                birthYear: 1996,
+                profession: '法人営業',
+                income: [{ income: '401〜500万円' }],
+                career_type: 'やりがい軸(マネジメント職につきたい)',
+                view_count: 128,
                 careerStages: [
-                    { year: 2010, stage: '大学入学' },
-                    { year: 2014, stage: '大卒就職' }
+                    { year: 2015, stage: '関西大学入学' },
+                    { year: 2019, stage: '人材会社で営業' },
+                    { year: 2023, stage: 'IT企業へ転職' }
                 ],
                 activity_status: 'inactive'
             },
             {
-                id: 'dummy2',
-                name: '佐藤 花子',
-                age: 28,
+                id: 'preview2',
+                name: '20代後半・マーケ職',
+                birthYear: 1997,
                 profession: 'マーケター',
-                latestIncome: '450万円',
-                career_type: 'クリエイティブ',
-                view_count: 90,
+                income: [{ income: '301〜400万円' }],
+                career_type: '環境軸(ワークライフバランスを重視したい)',
+                view_count: 94,
                 careerStages: [
-                    { year: 2012, stage: '大学入学' },
-                    { year: 2016, stage: '就職' }
+                    { year: 2016, stage: '大学入学' },
+                    { year: 2020, stage: '広告代理店' },
+                    { year: 2022, stage: '事業会社へ転職' }
                 ],
                 activity_status: 'inactive'
             },
             {
-                id: 'dummy3',
-                name: '鈴木 次郎',
-                age: 35,
-                profession: 'プロジェクトマネージャー',
-                latestIncome: '600万円',
-                career_type: '管理職',
-                view_count: 200,
-                careerStages: [
-                    { year: 2008, stage: '大学入学' },
-                    { year: 2012, stage: '就職' }
-                ],
-                activity_status: 'inactive'
-            },
-            {
-                id: 'dummy4',
-                name: '高橋 三郎',
-                age: 32,
-                profession: 'デザイナー',
-                latestIncome: '480万円',
-                career_type: 'クリエイティブ',
-                view_count: 150,
+                id: 'preview3',
+                name: '30代前半・エンジニア',
+                birthYear: 1992,
+                profession: 'ITエンジニア',
+                income: [{ income: '501〜600万円' }],
+                career_type: 'やりがい軸(専門技術を極めたい)',
+                view_count: 210,
                 careerStages: [
                     { year: 2011, stage: '大学入学' },
-                    { year: 2015, stage: '就職' }
+                    { year: 2015, stage: 'SIer就職' },
+                    { year: 2021, stage: 'Web企業へ転職' }
                 ],
                 activity_status: 'inactive'
             },
             {
-                id: 'dummy5',
-                name: '伊藤 四郎',
-                age: 29,
-                profession: '営業',
-                latestIncome: '400万円',
-                career_type: '営業',
-                view_count: 80,
+                id: 'preview4',
+                name: '30代前半・企画職',
+                birthYear: 1991,
+                profession: '事業企画',
+                income: [{ income: '601〜700万円' }],
+                career_type: 'お金軸(給与を上げたい)',
+                view_count: 176,
                 careerStages: [
-                    { year: 2013, stage: '大学入学' },
-                    { year: 2017, stage: '就職' }
+                    { year: 2010, stage: '大学入学' },
+                    { year: 2014, stage: 'メーカー就職' },
+                    { year: 2019, stage: '企画職へ異動' }
+                ],
+                activity_status: 'inactive'
+            },
+            {
+                id: 'preview5',
+                name: '20代後半・営業職',
+                birthYear: 1995,
+                profession: '個人営業',
+                income: [{ income: '301〜400万円' }],
+                career_type: '環境軸(人間関係が良い環境を重視したい)',
+                view_count: 83,
+                careerStages: [
+                    { year: 2014, stage: '大学入学' },
+                    { year: 2018, stage: '営業職就職' },
+                    { year: 2022, stage: '転職検討中' }
                 ],
                 activity_status: 'inactive'
             }
         ];
         listContainer.style.display = 'flex';
         desc.textContent = "登録すると、学歴・職種・年齢などが近い人のキャリア事例を見つけやすくなります。";
-        dummyStories.forEach(story => {
-            const card = createSimilarStoryCard(story, false);
+        dummyStories.forEach((story, index) => {
+            const card = createSimilarStoryCard(story, false, index === 0);
             listContainer.appendChild(card);
         });
         setupIndicators('similar-stories', 'similar-stories-list');
@@ -189,10 +194,9 @@ function fetchSimilarCareerStories(isLoggedIn) {
         }
     }
 
-function createSimilarStoryCard(story, isLoggedIn) {
+function createSimilarStoryCard(story, isLoggedIn, showPreview = false) {
     const card = document.createElement('div');
-    // 未ログインなら preview-blur クラスを付与
-    card.className = isLoggedIn ? 'card' : 'card preview-blur';
+    card.className = (!isLoggedIn && !showPreview) ? 'card preview-blur' : 'card';
     card.setAttribute('data-story-id', story.id);
 
     const age = story.birthYear ? calculateAge(story.birthYear) : "不明";
@@ -221,7 +225,7 @@ function createSimilarStoryCard(story, isLoggedIn) {
             <img src="images/eye-icon.png" alt="View Icon" class="view-icon">
             <span class="view-count">${escapeHTML(String(story.view_count || 0))} 回</span>
         </div>
-        ${!isLoggedIn ? '<div class="overlay">無料登録すると、あなたに近い事例を探せます</div>' : ''}
+        ${(!isLoggedIn && !showPreview) ? '<div class="overlay">無料登録すると、あなたに近い事例を探せます</div>' : ''}
     `;
 
     // カードクリック時の処理
