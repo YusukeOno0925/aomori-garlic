@@ -90,8 +90,8 @@ Hero
   width: 100%;
   min-height: 460px;
   background:
-    linear-gradient(90deg, rgba(20,16,12,.82), rgba(20,16,12,.55)),
-    url('../images/hero-image.jpg') no-repeat center/cover;
+    linear-gradient(90deg, rgba(20,16,12,.78), rgba(20,16,12,.48)),
+    url('../images/hero-pc.png') no-repeat center/cover;
   overflow: hidden;
 }
 
@@ -857,6 +857,12 @@ Tooltip
 Responsive: Tablet
 --------------------------------------------------*/
 @media (max-width: 900px) {
+  #hero {
+    background:
+      linear-gradient(90deg, rgba(20,16,12,.78), rgba(20,16,12,.50)),
+      url('../images/hero-tablet.png') no-repeat center center / cover;
+  }
+
   .hero-wrapper {
     grid-template-columns: 1fr;
     gap: 1.6rem;
@@ -917,6 +923,9 @@ Responsive: Smartphone
 
   #hero {
     min-height: auto;
+    background:
+      linear-gradient(180deg, rgba(20,16,12,.72), rgba(20,16,12,.66)),
+      url('../images/hero-sp.png') no-repeat center 32% / cover;
   }
 
   .hero-wrapper {
