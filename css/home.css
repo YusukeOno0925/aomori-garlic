@@ -225,6 +225,14 @@ Hero
   font-size: .88rem;
 }
 
+.sp-copy {
+  display: none;
+}
+
+.pc-copy {
+  display: inline;
+}
+
 /*--------------------------------------------------
 CTA
 --------------------------------------------------*/
@@ -969,6 +977,19 @@ Responsive: Smartphone
     font-size: .78rem;
   }
 
+  .pc-copy {
+    display: none;
+  }
+
+  .sp-copy {
+    display: inline;
+  }
+
+  .hero-left h1 {
+    font-size: 1.68rem;
+    line-height: 1.35;
+  }
+
   .concern-grid,
   .failure-theme-grid {
     grid-template-columns: 1fr;
@@ -1070,6 +1091,18 @@ Responsive: Smartphone
     font-size: .86rem;
     line-height: 1.85;
   }
+
+  #career-path-visualization {
+    height: 300px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* スムーズスクロール */
+  }
+
+  #career-path-visualization svg {
+    max-width: none;
+    min-width: 600px;
+  }
 }
 
 /*--------------------------------------------------
@@ -1098,6 +1131,10 @@ Responsive: Small Smartphone
 
   .hero-proof-grid span {
     font-size: .62rem;
+  }
+
+  .hero-left h1 {
+    font-size: 1.48rem;
   }
 
   h2.section-title {

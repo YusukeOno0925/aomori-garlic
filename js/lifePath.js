@@ -167,18 +167,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // ホーム画面用のプレビューサイズ
             const viewportWidth = window.innerWidth;
 
-            let sankeyWidth = 760;
-            let sankeyHeight = 220;
+            const isMobile = viewportWidth <= 600;
 
-            if (viewportWidth <= 768) {
-                sankeyWidth = 620;
-                sankeyHeight = 240;
-            }
-
-            if (viewportWidth <= 450) {
-                sankeyWidth = 520;
-                sankeyHeight = 220;
-            }
+            let sankeyWidth = isMobile ? 720 : 760;
+            let sankeyHeight = isMobile ? 260 : 220;
 
             const svgWidth = sankeyWidth;
             const svgHeight = sankeyHeight;
@@ -193,10 +185,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const svg = d3.select(container)
                 .append('svg')
-                .attr('width', '100%')
+                .attr('width', isMobile ? svgWidth : '100%')
                 .attr('height', svgHeight)
                 .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`)
-                .attr('preserveAspectRatio', 'xMidYMid meet');
+                .attr('preserveAspectRatio', 'xMinYMid meet');
 
             const sankey = d3.sankey()
                 .nodeWidth(10)
