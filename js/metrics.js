@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const storyCount = document.getElementById('story-count');
             const qaCount = document.getElementById('qa-count');
 
-            if (userCount) userCount.textContent = data.user_count ?? 0;
-            if (storyCount) storyCount.textContent = data.story_count ?? 0;
-            if (qaCount) qaCount.textContent = data.qa_count ?? 0;
+            if (userCount) userCount.textContent = data.users ?? 0;
+            if (storyCount) storyCount.textContent = data.stories ?? 0;
+            if (qaCount) qaCount.textContent = data.qa ?? 0;
         })
         .catch(error => {
             console.error('メトリクス取得エラー:', error);
