@@ -127,7 +127,7 @@ function fetchSimilarCareerStories(isLoggedIn) {
             }
         ];
         listContainer.style.display = 'flex';
-        desc.textContent = "あなたの業界/職種/年齢帯等が近いユーザのストーリーを表示しています。";
+        desc.textContent = "登録すると、学歴・職種・年齢などが近い人のキャリア事例を見つけやすくなります。";
         dummyStories.forEach(story => {
             const card = createSimilarStoryCard(story, false);
             listContainer.appendChild(card);
@@ -221,7 +221,7 @@ function createSimilarStoryCard(story, isLoggedIn) {
             <img src="images/eye-icon.png" alt="View Icon" class="view-icon">
             <span class="view-count">${escapeHTML(String(story.view_count || 0))} 回</span>
         </div>
-        ${!isLoggedIn ? '<div class="overlay">ログインすると詳細が見れます</div>' : ''}
+        ${!isLoggedIn ? '<div class="overlay">無料登録すると、あなたに近い事例を探せます</div>' : ''}
     `;
 
     // カードクリック時の処理

@@ -1,13 +1,31 @@
 /*--------------------------------------------------
-Global Styles
+Base
 --------------------------------------------------*/
+:root {
+  --bg: #FBFAF7;
+  --card: #ffffff;
+  --card-soft: #fffdf8;
+  --main: #574637;
+  --accent: #8ba141;
+  --accent-dark: #6f8435;
+  --text: #333333;
+  --muted: #666666;
+  --line: rgba(87,70,55,.10);
+  --line-strong: rgba(87,70,55,.16);
+  --radius: 16px;
+  --shadow: 0 8px 24px rgba(0,0,0,.06);
+  --shadow-hover: 0 12px 30px rgba(0,0,0,.12);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #FBFAF7;
+  margin: 0;
+  background: var(--bg);
   font-family: 'Roboto', sans-serif;
+  color: var(--text);
 }
 
 main {
@@ -19,753 +37,426 @@ section {
   text-align: center;
 }
 
-h2.section-title {
-  color: var(--main-color);
-}
-
-:root{
-  --hero-rail: clamp(320px, 92vw, 680px);
-  --hero-gutter: .75rem;
-  --radius: 14px;
-  --shadow-1: 0 8px 24px rgba(0,0,0,.06);
-  --line: rgba(87,70,55,.10);
-  --band: linear-gradient(180deg,#f7f5f1 0%, #f0ece6 100%);
-}
-
-main > section:not(#hero){
+main > section:not(#hero) {
   max-width: 1100px;
   margin: 0 auto 2rem;
-  padding: 2rem 1.25rem;
-  background: #fff;
+  padding: 2.4rem 1.35rem;
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--shadow);
+}
+
+h2.section-title {
+  margin: 0;
+  color: var(--main);
+  font-size: 1.65rem;
+  line-height: 1.45;
+  letter-spacing: .02em;
+}
+
+h2.section-title strong {
+  color: var(--main);
+}
+
+.section-description {
+  max-width: 680px;
+  margin: .75rem auto 1.5rem;
+  color: var(--muted);
+  font-size: .98rem;
+  line-height: 1.75;
+  text-align: center;
+}
+
+.section-kicker {
+  display: inline-block;
+  margin-bottom: .5rem;
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.section-cta {
+  margin-top: 1.4rem;
+  text-align: center;
 }
 
 /*--------------------------------------------------
-Hero Section (#hero)
-HTML: <section id="hero">…</section>
+Hero
 --------------------------------------------------*/
 #hero {
   position: relative;
   width: 100%;
-  height: 60vh;
-  background: url('../images/hero-image.jpg') no-repeat center/cover;
-  overflow: visible;
+  min-height: 460px;
+  background:
+    linear-gradient(90deg, rgba(20,16,12,.82), rgba(20,16,12,.55)),
+    url('../images/hero-image.jpg') no-repeat center/cover;
+  overflow: hidden;
 }
 
-/* 半透明オーバーレイ */
-#hero::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 1;
-}
-
-/* ヒーロー内全体ラッパー */
 .hero-wrapper {
-  position: relative; /* オーバーレイより手前 */
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center; /* 縦方向中央揃え */
-  max-width: 1200px;
-  height: 100%;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  gap: 3rem;
+  align-items: center;
+  max-width: 1120px;
+  min-height: 460px;
   margin: 0 auto;
-  padding: 0 0.1rem; /* 十分な左右余白 */
-  margin-top: -1.0rem;
+  padding: 3rem 2rem;
+  box-sizing: border-box;
 }
 
-/*--------------------------------------------------
-左カラム
---------------------------------------------------*/
 .hero-left {
-  width: 45%;           /* 左右バランス調整 */
-  padding: 1rem 2rem;   /* 内側余白 */
   text-align: left;
 }
-.hero-left h1 {
-  font-size: 2.2rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-  color: #ffffff;
+
+.hero-kicker {
+  margin: 0 0 .75rem;
+  color: #a9bd5a;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .16em;
 }
+
+.hero-left h1 {
+  margin: 0 0 1.2rem;
+  color: #fff;
+  font-size: clamp(2rem, 3.2vw, 2.7rem);
+  line-height: 1.28;
+  letter-spacing: .02em;
+}
+
 .hero-lead {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  color: #f0f0f0;
+  max-width: 600px;
+  margin: 0 0 1.8rem;
+  color: rgba(255,255,255,.88);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-main-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .95rem 1.6rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  transition: transform .2s ease, background .2s ease;
+}
+
+.hero-main-cta:hover {
+  transform: translateY(-2px);
+  background: var(--accent-dark);
+}
+
+.hero-sub-link {
+  color: rgba(255,255,255,.9);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.55);
+  padding-bottom: 2px;
+}
+
+.hero-right {
+  width: auto;
+}
+
+.hero-proof-card {
+  padding: 1.6rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(255,255,255,.45);
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+  text-align: center;
+}
+
+.hero-proof-title {
+  margin: 0 0 1rem;
+  color: var(--main);
+  font-weight: 700;
+}
+
+.hero-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-proof-grid div {
+  padding: .8rem .4rem;
+  border-radius: 12px;
+  background: #fbfaf7;
+  border: 1px solid rgba(87,70,55,.08);
+}
+
+.hero-proof-grid strong {
+  display: block;
+  color: var(--main);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.hero-proof-grid span {
+  display: block;
+  margin-top: .3rem;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.hero-proof-note {
+  margin: 0;
+  color: var(--main);
+  font-size: .88rem;
 }
 
 /*--------------------------------------------------
-CTA ボタン
+CTA
 --------------------------------------------------*/
 .cta-button {
-  display: inline-block;
-  padding: 1.2rem 2.5rem;
-  background-color: #8ba141;
-  color: #ffffff;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 1.3rem;
-  transition: transform .3s, box-shadow .3s, background-color .3s;
-  position: relative;
-  z-index: 3;
-}
-.cta-button:hover {
-  transform: translateY(-3px); /* ちょっと浮く */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.25); /* 少し強め */
-  background-color: #6b8330; /* 色はすでにあるので同じ */
-}
-/* 疑似要素バッジ */
-.cta-button::after {
-  content: "30秒";
-  position: absolute;
-  top: -0.6rem;      /* ボタンの上端から少しはみ出す */
-  right: -0.6rem;    /* ボタンの右端から少しはみ出す */
-  width: 2.2rem;     /* 円の大きさ */
-  height: 2.2rem;
-  background: #ffffff;
-  border: 2px solid #746302;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  color: #746302;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-/*--------------------------------------------------
-右カラム
---------------------------------------------------*/
-.hero-right {
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(0,0,0,.06);
-  border-radius: 12px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.10);
-  padding: 16px 18px;
-  gap: 14px;
-  align-items: stretch;     /* 子をパネル幅にフィット */
-  max-width: 560px;         /* 45%でも広くなり過ぎない制御 */
-  box-sizing: border-box;
-
-  --hero-rail: clamp(320px, 92vw, 680px);
-}
-
-/*--------------------------------------------------
-トラスト＋メトリクスカード（縦積み）
---------------------------------------------------*/
-.hero-right .trust-wrap{
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;     /* PCは右寄せのまま */
-}
-
-.hero-right .trust-badges{
-  list-style: none; margin: 0; padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 常に3分割 */
-  gap: 1.5rem;
-  width: 100%;
-  max-width: var(--hero-rail);  /* レール幅を固定してメトリクスと“並び幅”を合わせる */
-  justify-items: stretch;        /* 各セルを等幅に */
-  align-items: center;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-}
-.hero-right .trust-badge{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: .45rem;
-  min-height: 44px;
-  padding: .42rem .8rem;
-  border-radius: 9999px;
-  background: rgba(255,255,255,.95);
-  color: #574637;
-  border: 1px solid rgba(87,70,55,.15);
-  box-shadow: 0 2px 6px rgba(0,0,0,.08);
-  white-space: nowrap;
-  text-decoration: none;     /* 下線を消す */
-  cursor: pointer;
-}
-.hero-right .trust-badge i{
-  color: #8ba141;
-  font-size: .95rem;
-}
-.hero-right .metrics-overlay{
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  justify-items: stretch;
-  gap: 12px;
-  margin-top: 10px;
-
-  /* 外枠カード感をなくすためにゼロ寄せ */
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-/* カード全体：軽くホバーアニメーション */
-.metric-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  padding: 4px 0;
-  transition: transform .25s ease, opacity .25s ease;
-  opacity: 0.96;
-}
-.metric-card:hover {
-  transform: translateY(-3px);
-  opacity: 1;
-}
-
-/* 円形部分：内側が白、外周がグラデリング */
-.metric-circle {
-  position: relative;
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at 30% 20%, #ffffff, #f5f1e7);
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.8);
-  overflow: hidden;
-}
-
-/* アイコン＋数字は一段だけ前に出す */
-.metric-icon {
-  position: relative;
-  z-index: 1;
-  font-size: 1.3rem;
-  color: #8ba141;
-  margin-bottom: 0.15rem;
-}
-.metric-number {
-  position: relative;
-  z-index: 1;
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #574637;
-}
-
-/* ラベルは小さめピル型にして情報密度を下に寄せる */
-.metric-label {
-  margin-top: 0.35rem;
-  padding: 0.14rem 0.75rem;
+  padding: .9rem 1.6rem;
   border-radius: 999px;
-  font-size: 0.78rem;
-  color: #f7f5f1;
-  background: rgba(87, 70, 55, 0.78);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;   /* ← 1行に固定 */
-  text-align: center;
-}
-
-.scroll-down {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  color: #ffffff;                   /* 文字は白 */
+  background: var(--accent);
+  color: #fff;
   text-decoration: none;
-  font-size: 1rem;                  /* 少し大きく */
-  opacity: 0.8;
-  z-index: 2;
-  transition: opacity 0.3s, transform 0.3s;
-  animation: pulseScroll 2.5s infinite;
-  /* 白縁取り */
-  text-shadow:
-     -1px -1px 0 #000,
-      1px -1px 0 #000,
-     -1px  1px 0 #000,
-      1px  1px 0 #000;
-}
-.scroll-down:hover {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-4px);
-}
-/* 矢印部分 */
-.scroll-down .arrow {
-  font-size: 1.6rem;                /* 矢印を大きめに */
-  margin-right: 0.4rem;
-  animation: bounce 1.5s infinite;
-  /* 矢印にも白縁取り＆シャドウ */
-  text-shadow:
-     -1px -1px 0 #000,
-      1px -1px 0 #000,
-     -1px  1px 0 #000,
-      1px  1px 0 #000;
-}
-/* 矢印のバウンスアニメーション */
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
-}
-/* テキスト部分 */
-.scroll-down .text {
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0,0,0,.14);
+  transition: transform .2s ease, background .2s ease;
 }
 
-
-/*--------------------------------------------------
-業界分布チャートSection
---------------------------------------------------*/
-.industry-section { 
-  --donut: 260px;         /* ドーナツ直径（ここだけ変えれば全サイズ調整） */
+.cta-button:hover {
+  transform: translateY(-2px);
+  background: var(--accent-dark);
 }
 
-.industry-section .chart-block{
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-  text-align: center;
-  max-width: 960px;     /* レイアウト幅の制御は残す */
-  margin: 0 auto;       /* 余白は親セクションの padding に任せる */
-}
-
-/* ドーナツ左・凡例右 */
-.industry-section .industry-chart-container{
-  display: grid;
-  grid-template-columns: var(--donut) minmax(180px, max-content);
-  align-items: center;
-  justify-content: center;
-  column-gap: 1.25rem;
-  row-gap: .5rem;
-}
-
-/* canvas は CSS でサイズ管理（JSは responsive に） */
-#industry-pie{
-  width: var(--donut);
-  height: var(--donut);
-  display: block;
-  background: transparent;
-}
-
-.industry-section .industry-legend{
-  list-style: none; margin:0; padding:0;
-  font-size: .92rem; color:#333; text-align: left;
-}
-.industry-section .industry-legend .legend-box{
-  width:12px; height:12px; border-radius:2px; flex:0 0 auto;
-}
-/* —— 業界分布 凡例：パーセント列を右で揃える —— */
-.industry-section .industry-legend li{
-  /* ここだけ flex → grid に */
-  display: grid;
-  grid-template-columns: 12px 1fr 4ch; /* [色箱][ラベル可変][％は4文字幅] */
-  align-items: center;
-  column-gap: .5rem;
-}
-.industry-section .industry-legend .legend-text{
-  min-width: 0;                 /* 省略時のはみ出し防止 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.industry-section .industry-legend .legend-pct{
-  justify-self: end;            /* 右端に寄せる */
-  width: 4ch;                   /* 文字幅ベースで固定。例: "100%" までOK */
-  text-align: right;
-  font-variant-numeric: tabular-nums; /* 桁幅を揃える（既存指定でもOK） */
-}
-
-
-/*--------------------------------------------------
-Registration Benefits Section
-「登録するとできること」
-HTML: <section id="why-register" class="why-register">…</section>
---------------------------------------------------*/
-.benefit-slider {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 2rem;
-  max-width:1000px;
-  margin:0 auto;
-  margin-bottom: 2rem;
-}
-
-/* カード共通 */
-.benefit-card {
-  background:#fff;
-  border-radius:8px;
-  padding:2rem 1.5rem;
-  box-shadow:0 4px 12px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
-  text-align:center;
-  align-items: center;  /* 子要素を横方向中央揃え */
-  transition:transform .2s,box-shadow .2s;
-}
-.benefit-card:hover {
-  transform:translateY(-4px);
-  box-shadow:0 8px 20px rgba(0,0,0,0.12);
-}
-
-.benefit-icon {
-  width: 48px;
-  height: 48px;
-  fill: #874e1f;      /* 元のアイコンカラー */
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.benefit-title {
-  font-size:1.1rem;
-  margin-bottom:.5rem;
-  color:#333;
-}
-
-.benefit-desc {
-  font-size:.95rem;
-  color:#666;
-  line-height:1.4;
-}
-
-.cta-wrap {
-  text-align: center;
-}
-
-/*--------------------------------------------------
-Overview Section
-「インノーマルとは？」
-HTML: <section class="what-is">…</section>
---------------------------------------------------*/
-.what-is {
-  text-align: center;
-  padding: 4rem 1rem;
-  margin: 3rem 0;
-  margin-top: -5.0rem;
-  margin-bottom: -3.0rem;
-}
-
-#what-is-title { scroll-margin-top: 152px; }  /* 例: 72px + 80px = 152px */
-
-.what-is__title {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 2rem;
-}
-
-.what-is__description {
-  text-align: left;
-  margin: 0.5rem 1rem 2rem;
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.6;
-}
-
-/* 図解部分だけをブランドライトカラーのバンドで囲む */
-.what-is__diagram-band {
-  background: rgba(135,78,31,0.1);
-  padding: 2rem 0;
-  border-radius: 8px;
-}
-
-/* ─── フローチャート ─── */
-.what-is__diagram {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;  /* 要素間を等間隔に */
-  gap: 0rem;
-  flex-wrap: nowrap; /* 折り返し禁止 */
-}
-
-/* ── ノードを「箱化」 ── */
-.what-is__node {
-  box-sizing: border-box;
-  width: 140px;
-  aspect-ratio: 1 / 1;
-  min-height: 0; 
-  padding: 1rem;
-  background: rgba(255,255,255,0.8);
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.1rem;
-}
-
-/* ─── アイコンは円の中央～上寄せで大きく ─── */
-.what-is__icon {
-  flex-shrink: 0;
-  width: 50%;     /* 円内の50%幅まで拡大 */
-  height: auto;   /* 縦横比を保つ */
-}
-
-/* ── ロゴノードは同じ大きさの箱にアイコン画像をフィット ── */
-.what-is__node--logo {
-  box-sizing: border-box;
-  width: 140px;
-  aspect-ratio: 1 / 1;
-  min-height: 0;
-  padding: 1rem;
-  background: rgba(255,255,255,0.8);
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.what-is__node--logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-.what-is__node p {
-  font-size: 0.8rem;
-  color: #574637;
-}
-
-/* 矢印＋登録ラベル */
-.what-is__arrow {
-  flex: 1 1 auto;    /* 隣のノード⇔ノード間のスペースを吸収 */
-  display: flex;     /* 中身を flex-box */
-  align-items: center;
-  justify-content: center; 
-}
-.what-is__arrow span {
-  margin: 0 0.5rem;
-}
-.what-is__arrow svg {
-  width: 24px;
-  height: 24px;
-  color: #4d2104;
-}
-
-/* 逆向き矢印用 */
-.what-is__arrow--reverse {
-  flex-direction: row-reverse;
-}
-.what-is__arrow--reverse svg {
-  transform: rotate(180deg);
-}
-
-/* ─── 下段バンド ─── */
-.what-is__band {
+.cta-secondary {
   display: inline-flex;
   align-items: center;
-  background: #f2eee9;
-  padding: 0.6rem 1.8rem;
-  border-radius: 4px;
+  justify-content: center;
+  padding: .72rem 1.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .92rem;
+  transition: all .2s ease;
 }
-.what-is__band i {
-  margin-right: 0.5rem;
-  color: #574637;
-}
-.what-is__band span {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #574637;
-}
-.what-is__subcopy {
-  font-size: 0.95rem;
-  margin-top: 1rem;
+
+.cta-secondary:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
 /*--------------------------------------------------
-Howto Section
-「ご利用の流れ」
-HTML: <section id="how-to-use" class="howto-section">…</section>
+Concerns
 --------------------------------------------------*/
-.howto-section {
-  padding: 2rem 1rem;
-  background-color: #fff; 
+.concerns-section {
   text-align: center;
-  margin-bottom: -2rem;
 }
 
-.howto-section h2 {
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
-  color: var(--main-color);
+.concern-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.howto-steps {
-  display: flex;
-  justify-content: space-around;
-  gap: 1.5rem;
-  flex-wrap: wrap; 
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.step {
+.concern-card {
+  display: block;
+  padding: 1.35rem 1rem;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-1);
-  padding: 1.25rem 1rem;
-  width: 300px;                /* 既存レイアウトを維持 */
-  text-align: center;
-  position: relative;
-  transition: transform .2s, box-shadow .2s;
-}
-.step:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0,0,0,.12); /* benefit-card と同等の浮き */
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.step-number {
-  display: inline-block;
+.concern-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.concern-icon {
+  display: block;
   font-size: 2rem;
-  background-color: #874e1f;
-  color: #ffffff;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  line-height: 48px;
-  margin-bottom: 1rem;
+  margin-bottom: .6rem;
 }
 
-.step h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.8rem;
-}
-
-.step p {
+.concern-card h3 {
+  margin: 0 0 .5rem;
+  color: var(--main);
   font-size: 1rem;
-  color: #666;
-  line-height: 1.4;
+}
+
+.concern-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.55;
 }
 
 /*--------------------------------------------------
-Life Path Section
-「ライフパスの可視化」
-HTML: <section id="life-path" class="lifepath-section">…</section>
+Failure Themes
 --------------------------------------------------*/
-.lifepath-section {
-  margin-top: 5rem;
+.failure-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-#career-path-visualization {
-  position: relative;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  background-color: #ffffff;
-  padding: 1rem;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  overflow-x: auto;
-  overflow-y: auto;
-}
-
-/* ライフパス冒頭の説明は左寄せ */
-#life-path > p:first-of-type {
+.failure-theme-card {
+  display: block;
+  padding: 1.35rem 1rem;
+  background: var(--card-soft);
+  border: 1px solid rgba(135,78,31,.16);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
   text-align: left;
-  margin: 0.5rem 1rem 2rem;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-/* ライフパス末尾の案内リンクは中央寄せ */
-#life-path > p:last-of-type {
-  text-align: center;
-  margin: 0.5rem 1rem 2rem; /* 左右 auto にしてもOK */
+.failure-theme-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.failure-theme-label {
+  display: inline-block;
+  margin-bottom: .7rem;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  background: rgba(139,161,65,.12);
+  color: var(--accent-dark);
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.failure-theme-card h3 {
+  margin: 0 0 .5rem;
+  color: var(--main);
+  font-size: 1rem;
+}
+
+.failure-theme-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.55;
 }
 
 /*--------------------------------------------------
-Stories Sections
-「最近のキャリアストーリー」「人気のキャリアストーリー」「あなたと近いキャリアストーリー」
-HTML: <section class="recentstories-section">…</section> 他
+Story Cards
 --------------------------------------------------*/
 .card-container {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto; 
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   gap: 1rem;
   padding: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.card-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+  background: rgba(87,70,55,.22);
+  border-radius: 999px;
 }
 
 .card {
   flex: 0 0 calc((100% / 3) - 1rem);
+  min-width: 0;
   scroll-snap-align: center;
   box-sizing: border-box;
-  background: var(--card-background-color);
-  border: 1px solid var(--card-border-color);
-  border-radius: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
   padding: 1rem 1.2rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  cursor: pointer;
 }
 
-.card h3 {
-  margin-top: 0;
-}
-
-.card p {
-  margin-bottom: 0.5rem;
-}
-
-.card p:last-child {
-  margin-bottom: 0;
-}
-
-.card p:last-of-type {
-  margin-bottom: 1rem;
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
 
 .card-header {
   text-align: left;
-  margin-bottom: 0.5rem;
+  margin-bottom: .6rem;
+}
+
+.card-header h3.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: .5rem;
+  margin: 0 0 .6rem;
+  color: var(--main);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.card-title-text {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-header p {
-  margin: 0.2rem 0;
-  line-height: 1.4;
+  margin: .25rem 0;
+  color: var(--text);
+  font-size: .92rem;
+  line-height: 1.5;
 }
 
 .career-path-svg {
   width: 100%;
-  height: 60px;
+  height: 70px;
   overflow: visible;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  white-space: pre-line;
-  word-wrap: break-word;
+  margin: .4rem auto 1rem;
 }
 
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-top: 0.5rem;
+  margin-top: .5rem;
 }
 
 .card-footer .view-icon {
@@ -775,903 +466,649 @@ HTML: <section class="recentstories-section">…</section> 他
 }
 
 .card-footer .view-count {
-  font-size: 0.9rem;
-  color: #666;
+  color: var(--muted);
+  font-size: .9rem;
 }
 
-.card .arrow-symbol {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  color: #000;
-}
-
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* 未ログイン時のぼかし */
-.preview-blur .card-header,
-.preview-blur svg,
-.preview-blur .card-footer {
-  filter: blur(3px);
-  transition: filter 0.3s;
-}
-
-.card.preview-blur {
-  position: relative;
-}
-
-.card.preview-blur .overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: #333;
-  pointer-events: none;
-}
-
-/* ─── バッヂの基本スタイル ─── */
 .status-badge {
+  flex: 0 0 auto;
   display: inline-block;
-  font-size: 0.65rem;
-  line-height: 1;
-  padding: 0.1em 0.3em;
-  border-radius: 0.25rem;
-  vertical-align: middle;
-  margin-left: 0.3rem;
-  opacity: 0.8;
+  padding: .18em .45em;
+  border-radius: .35rem;
+  font-size: .65rem;
+  line-height: 1.1;
+  opacity: .85;
 }
-/* ─── 状態別カラーリング ─── */
+
 .status-badge.online {
-  background: transparent;
-  color: #8ba141;
-  border: 1px solid #8ba141;
+  color: var(--accent);
+  border: 1px solid var(--accent);
 }
+
 .status-badge.recently_active {
-  background: transparent;
-  color: #f0c419;
-  border: 1px solid #f0c419;
+  color: #c49b22;
+  border: 1px solid #c49b22;
 }
+
 .status-badge.inactive {
-  background: transparent;
   color: #da3e3f;
   border: 1px solid #da3e3f;
 }
 
-/* ─── カードヘッダ／タイトル＋バッジ横並び ─── */
-.card-header h3.card-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.preview-blur .card-header,
+.preview-blur svg,
+.preview-blur .card-footer {
+  filter: blur(3px);
+  transition: filter .3s;
 }
-.card-title-text {
-  white-space: nowrap;
+
+.card.preview-blur .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: var(--main);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  pointer-events: none;
+}
+
+.carousel-indicators {
+  justify-content: center;
+  gap: .45rem;
+  margin-top: .4rem;
+}
+
+.carousel-indicators .indicator {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #d3d0ca;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.carousel-indicators .indicator.active {
+  background: var(--accent);
+  transform: scale(1.1);
 }
 
 /*--------------------------------------------------
-Site Features Section
-「サイトの機能紹介」
-HTML: <section id="site-features">…</section>
+Career Trends
 --------------------------------------------------*/
-#site-features {
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.trend-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.feature-section {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-  justify-content: space-between;
+.trend-card {
+  padding: 1.35rem 1.1rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   text-align: left;
-}
-.feature-section.left-image {
-  flex-direction: row;
-}
-.feature-section.right-image {
-  flex-direction: row-reverse;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.feature-image {
-  width: 50%;
-  height: auto;
-  border-radius: 8px;
+.trend-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
 }
 
-.feature-description {
-  width: 50%;
-  padding: 1rem;
+.trend-label {
+  display: inline-block;
+  margin-bottom: .6rem;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  background: rgba(139,161,65,.12);
+  color: var(--accent-dark);
+  font-size: .75rem;
+  font-weight: 700;
 }
 
-.feature-description h3 {
-  font-size: 1.5rem;
-  color: #4e3d12;
-  margin-bottom: 1rem;
+.trend-card h3 {
+  margin: 0 0 .5rem;
+  color: var(--main);
+  font-size: 1rem;
 }
 
-.feature-description p {
-  font-size: 1.0rem;
-  color: #666;
+.trend-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
   line-height: 1.6;
 }
 
-.detail-button {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.7rem 2rem;
-  background-color: #574637;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 1.1rem;
-}
-.detail-button:hover {
-  background-color: var(--accent-color);
-}
-
 /*--------------------------------------------------
-Announcements & Feedback
-HTML: <section id="announcements">…</section>, <section id="user-feedback">…</section>
+Life Path
 --------------------------------------------------*/
-.announcement-item,
-.feedback-item {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--card-border-color);
-}
-
-.announcements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
-}
-
-.announcement-item {
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  padding: 1rem;
-  transition: transform .2s, box-shadow .2s;
-}
-
-.announcement-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* 日付・タイトル・本文のスタイル */
-.announcement-item .date {
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 0.5rem;
-}
-.announcement-item .title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 0.75rem;
-}
-.announcement-item .snippet {
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.4;
-}
-/* 「続きを読む」リンク */
-.announcement-item .read-more {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--main-color);
-  text-decoration: none;
-}
-.announcement-item .read-more:hover {
-  text-decoration: underline;
-}
-#announcements-list {
-  /* 既に grid レイアウトがかかっている前提 */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
-
-#announcements-list > a.read-more {
-  /* グリッドの 1 列目から最終列までを占有 */
-  grid-column: 1 / -1;
-  /* セル内で中央に寄せる */
-  justify-self: center;
-  /* インラインブロック化して文字幅に合わせる */
-  display: inline-block;
-  margin: 1.5rem 0;
-  font-size: 1rem;
-  color: #6a0dad;
-  text-decoration: none;
-}
-
-#announcements-list > a.read-more:hover {
-  text-decoration: underline;
-}
-
-#feedback-form {
-  text-align: center;
+.lifepath-section {
   margin-top: 2rem;
 }
 
-#feedback-text {
-  width: 80%;
-  padding: 1rem;
-  border: 1px solid var(--card-border-color);
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.life-path-header {
+  max-width: 760px;
+  margin: 0 auto 1.5rem;
 }
 
-#feedback-form button {
-  margin-top: 1rem;
-  padding: 0.5rem 2rem;
-  background-color: var(--main-color);
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.path-insight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .9rem;
+  margin: 1.5rem 0;
 }
-#feedback-form button:hover {
-  background-color: var(--accent-color);
+
+.path-insight-card {
+  text-align: left;
+  padding: 1.1rem;
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.path-insight-card span {
+  display: inline-block;
+  margin-bottom: .5rem;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: .8rem;
+}
+
+.path-insight-card h3 {
+  margin: 0 0 .45rem;
+  color: var(--main);
+  font-size: 1rem;
+}
+
+.path-insight-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .86rem;
+}
+
+.path-preview-card {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: linear-gradient(180deg, #fff 0%, #fbfaf7 100%);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.path-preview-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: .75rem;
+}
+
+.path-preview-head h3 {
+  margin: 0 0 .25rem;
+  color: var(--main);
+  font-size: 1rem;
+}
+
+.path-preview-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.5;
+}
+
+.path-preview-badge {
+  flex: 0 0 auto;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  background: rgba(139,161,65,.12);
+  color: var(--accent-dark);
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+#career-path-visualization {
+  height: 340px;
+  margin: 0;
+  padding: .5rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(87,70,55,.08);
+  box-shadow: none;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.path-cta-wrap {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.path-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .8rem 1.4rem;
+  border-radius: 999px;
+  background: var(--main);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
 }
 
 /*--------------------------------------------------
-Utility / Misc
+What is
+--------------------------------------------------*/
+.what-is {
+  max-width: 820px;
+  text-align: center;
+}
+
+.what-is__lead {
+  margin: 1rem 0 .75rem;
+  color: var(--main);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.what-is__description {
+  max-width: 680px;
+  margin: 0 auto;
+  color: #555;
+  text-align: left;
+  font-size: .98rem;
+  line-height: 1.9;
+}
+
+/*--------------------------------------------------
+Benefits
+--------------------------------------------------*/
+.benefit-slider {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 1.5rem auto 2rem;
+}
+
+.benefit-card {
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.35rem 1.15rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.benefit-number {
+  display: inline-block;
+  margin-bottom: .6rem;
+  color: var(--accent);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.benefit-title {
+  margin: 0 0 .55rem;
+  color: var(--main);
+  font-size: 1rem;
+}
+
+.benefit-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.65;
+}
+
+/*--------------------------------------------------
+Announcements
+--------------------------------------------------*/
+.announcements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+  margin-top: 1.25rem;
+}
+
+.announcement-item {
+  display: block;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+}
+
+.announcement-item .date {
+  margin-bottom: .35rem;
+  color: var(--accent);
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.announcement-item .title {
+  margin-bottom: .4rem;
+  color: var(--main);
+  font-size: .92rem;
+  font-weight: 700;
+}
+
+.announcement-item .snippet {
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+.announcements-more {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: .6rem;
+  color: var(--main);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/*--------------------------------------------------
+Tooltip
 --------------------------------------------------*/
 .tooltip {
   position: absolute;
-  /* デフォルトで隠す */
   opacity: 0;
   pointer-events: none;
   padding: 8px 12px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,.74);
   color: #fff;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 13px;
-  transition: opacity 0.2s ease;
+  transition: opacity .2s ease;
   z-index: 9999;
 }
 
-.section-description {
-  font-size: 1.0rem;
-  color: #555;
-  max-width: 600px;
-  margin: 0.5rem auto 1rem;
-  text-align: center;
-  line-height: 1.4;
-}
-
-.mobile-br {
-  display: none;
-}
-
-
-/* ─────────────────────────────── */
-/* SVGアイコン＋矢印の共通アニメーション */
-/* ─────────────────────────────── */
-.what-is__icon,
-.what-is__arrow-icon {
-  width: 60px;
-  height: 60px;
-  fill: #874e1f;                /* ブランド色 */
-  color: #4d2104;               /* 矢印の stroke 用 */
-  transition: transform 0.3s ease,
-              fill      0.3s ease,
-              color     0.3s ease;
-  transform-origin: center center;
-}
-
-/* ノードアイコン：ホバーで拡大＋アクセント色 */
-.what-is__icon:hover {
-  transform: scale(1.1);
-  fill: #8ba141;                /* アクセント色 */
-}
-
-/* 矢印 */
-.what-is__arrow-icon {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
-  fill: none;
-}
-
-/* 矢印ホバー：左右にスライド＋色変化 */
-.what-is__arrow:hover .what-is__arrow-icon {
-  transform: translateX(6px);
-  color: #8ba141;
-}
-.what-is__arrow--reverse:hover .what-is__arrow-icon {
-  transform: translateX(-6px);
-  color: #8ba141;
-}
-
-
 /*--------------------------------------------------
-レスポンシブ：768px 以下
+Responsive: Tablet
 --------------------------------------------------*/
-@media (max-width: 768px) {
-  main > section:not(#hero){
-    padding: 1.25rem .75rem;
-    margin: 0 auto 1.25rem;
-    border-radius: 12px;
-  }
-
-  h2.section-title {
-    font-size: 1.4rem;
-  }
-
-  /* ===== ヒーローセクション ===== */
-  #hero {
-    height: auto;            /* 固定高さをやめる */
-    padding: 1.5rem 0 4.5rem;       /* 上下の余白だけ確保 */
-  }
-
-  .hero-left h1 {
-    font-size: 1.8rem;
-    line-height: 1.3;
-  }
-  .hero-lead {
-    font-size: 1.0rem;
-    line-height: 1.5;
-  }
+@media (max-width: 900px) {
   .hero-wrapper {
-    display: flex;
-    flex-direction: column;  /* 縦積み */
-    justify-content: flex-start;
-    align-items: stretch;    /* 子要素を横幅いっぱいに */
-    text-align: center;
-    padding: 0;              /* 横パディングは子要素側で調整 */
-    margin-top: -1.5rem;
-  }
-  /* ——— 見出し・リード・CTA を画面幅いっぱいに ——— */
-  .hero-left,
-  .hero-right {
-    width: 100%;
-    padding: 0 0.75rem;      /* ← 余白を 1rem⇒0.75rem に減らして行長を伸ばす */
-    margin: 0;
-  }
-  .hero-left {
-    order: 1;
-    /* inline-block のボタンを中央寄せするために text-align: center */
-    text-align: center;
-  }
-  .hero-left h1 {
-    font-size: 1.8rem;
-    line-height: 1.3;
-    margin-bottom: 1rem;
-  }
-  .hero-lead {
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 1.5rem;
-  }
-  /* ===== CTA ボタン ===== */
-  .cta-button {
-    display: inline-block;      /* 幅をコンテンツサイズに */
-    margin-bottom: 1.5rem;      /* 下マージンだけ確保 */
-    padding: 0.75rem 1.5rem;     /* 必要に応じて微調整 */
-    font-size: 1rem;
-    max-width: 260px;           /* これ以上横に伸びすぎないように */
-    width: 80%;                 /* 幅は親の80％まで（max-width が優先） */
-    box-sizing: border-box;
-  }
-  .hero-right{
-    order: 2;
-    margin-top: 1rem;
-    padding-inline: var(--hero-gutter); /* ← ここにだけ余白を集約 */
-    align-items: stretch;                /* 右寄せの名残を解除 */
-  }
-  .hero-right .trust-wrap{ justify-content: center; }
-  /* コンテナ設定を統一：幅=100%、上限なし、内側余白なし（＝二重パディング解消） */
-  .hero-right .metrics-overlay,
-  .hero-right .trust-badges{
-    width: 100%;
-    max-width: none;     /* ← 680px の上限を外す */
-    margin: 0;
-    padding: 0;          /* ← 子側パディングをゼロに */
-    box-sizing: border-box;
-    margin-bottom: 1rem;
-    gap: var(--hero-gutter);
-  }
-  /* 3 等分で完全揃え（両者とも同じレイアウト手法に） */
-  .hero-right .metrics-overlay{
-    display: grid; /* baseの display:flex を上書き */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    justify-content: initial; /* base の space-between を無効化 */
-  }
-  .hero-right .trust-badges{
-    display: grid; /* flex にしない。等幅セルで安定 */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    justify-items: stretch; /* バッジをセルいっぱいに */
-  }
-  /* アイテム側の幅指定は不要（念のため打ち消し） */
-  .metric-card{
-    flex: initial;
-    max-width: none;
-    text-align: center;
-    box-sizing: border-box;
-  }
-  /* 視覚サイズは現状に合わせて維持 */
-  .metric-circle{ width: 80px; height: 80px; }
-  .metric-icon{   font-size: 1.2rem; }
-  .metric-number{ font-size: 1.4rem; }
-  .metric-label{  width: 6rem; font-size: .75rem; padding: .2rem .4rem; }
-  .hero-right .trust-badge{
-    width: 100%;
-    justify-content: center;
-    font-size: .85rem;
-  }
-  .hero-wrapper{
-    flex-direction: column;
-    align-items: stretch;
-    gap: .75rem;                 /* ← ここが効く */
-    margin-top: -1.5rem;
-  }
-  .scroll-down{
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    z-index: 2;          /* #hero::before(=1) より上に */
-    color: #fff;         /* 白のまま */
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000,
-                 -1px  1px 0 #000, 1px  1px 0 #000;
-  }
-  .scroll-down:hover {
-    transform: translateX(-50%) translateY(-4px);
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+    min-height: auto;
+    padding: 2.7rem 1.4rem;
   }
 
-
-
-  /* ===== 業界分布セクション ===== */
-  .industry-section {
-    --donut: 220px;
-  }
-  .industry-section .industry-legend{
-    font-size:.88rem;
-  }
-  .industry-section .industry-legend .legend-text{
-    max-width:16ch;
-  }
-  .industry-section .industry-chart-container{
-    grid-template-columns: var(--donut) minmax(180px, 28ch);
-    justify-content: center;
-    column-gap: 1rem; /* 少しだけ間隔を詰める（任意） */
-  }
-  
-
-  /* ===== 登録のメリットセクション =====
-     Grid → 横スクロールスライダー化 */
-  .benefit-slider {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .benefit-card {
-    flex: 0 0 80%;
-    scroll-snap-align: center;
-    margin: 0 .5rem;
+  .hero-proof-card {
+    max-width: 520px;
   }
 
-  /* ===== ご利用の流れ (Howto) ===== */
-  .howto-section h2 {
-      font-size: 1.4rem;
-  }
-  /* ステップを横並びにしてスクロール可能に */
-  .howto-steps {
-    flex-wrap: nowrap;               /* 折り返し禁止 */
-    overflow-x: auto;                /* 横スクロールを許可 */
-    scroll-snap-type: x mandatory;   /* スナップ動作 */
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 1rem;            /* 下に余白 */
-    gap: 1rem;                       /* カード間隔 */
-  }
-  .howto-steps .step {
-    flex: 0 0 90%;
-    scroll-snap-align: center;       /* 真ん中で止まる */
+  .concern-grid,
+  .failure-theme-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* ===== 最近／人気／近いキャリアストーリー =====
-     カードを1列表示 */
+  .trend-card-grid,
+  .path-insight-grid,
+  .benefit-slider,
+  .announcements-grid {
+    grid-template-columns: 1fr;
+  }
+
   .card {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-  }
-
-  /* ストーリーインジケータを表示 */
-  #recent-stories-indicators,
-  #popular-stories-indicators,
-  #similar-stories-indicators {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  #recent-stories-indicators .indicator,
-  #popular-stories-indicators .indicator,
-  #similar-stories-indicators .indicator {
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
-    background-color: #ccc;
-    border-radius: 50%;
-    transition: background-color 0.3s;
-  }
-  #recent-stories-indicators .indicator.active,
-  #popular-stories-indicators .indicator.active,
-  #similar-stories-indicators .indicator.active {
-    background-color: #8ba141;
-  }
-
-  /* ===== サイト機能紹介 =====
-     横並び → 縦積みレイアウト */
-  #site-features .feature-section {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  #site-features .feature-section .feature-image,
-  #site-features .feature-section .feature-description {
-    width: 100%;
-    margin: 0 auto;
-  }
-  #site-features .feature-section .feature-image {
-    margin-bottom: 1rem;
-  }
-  #site-features .feature-section .feature-description {
-    padding: 1rem 0;
-  }
-  .feature-description h3 {
-    font-size: 1.3rem;
-  }
-
-  /* ===== インノーマルとは？ (Overview) ===== */
-  .what-is {
-    padding: 2rem 1rem;
-    margin-top: -3.0rem;
-    margin-bottom: -1.5rem;
-  }
-  #what-is-title { scroll-margin-top: 112px; } /* 例: 64px + 48px */
-  .what-is__title {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-  }
-  .what-is__description {
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
-  }
-  .what-is__diagram {
-    gap: 0.5rem;
-  }
-  .what-is__node--logo img {
-    margin-bottom: 0rem;
-  }
-  .what-is__node p {
-    font-size: 0.8rem;
-  }
-  .what-is__arrow svg {
-    width: 20px;
-    height: 20px;
-  }
-  .what-is__band {
-    margin-top: 1rem;
-    padding: 0.4rem 1rem;
-  }
-  .what-is__icon {
-    width: 48px;
-    height: 48px;
+    flex: 0 0 calc(50% - .8rem);
   }
 }
 
-
 /*--------------------------------------------------
-レスポンシブ：550px 以下
+Responsive: Smartphone
 --------------------------------------------------*/
-@media (max-width: 550px) {
-  .what-is__node p {
-    margin-top: 0.5rem;  /* アイコン下の余白を縮める */
+@media (max-width: 600px) {
+  main {
+    padding: .75rem;
   }
-  .what-is__icon {
-    width: 36px;
-    height: 36px;
+
+  main > section:not(#hero) {
+    padding: 1.5rem .9rem;
+    margin-bottom: 1.2rem;
+    border-radius: 14px;
   }
-}
 
-
-/*--------------------------------------------------
-レスポンシブ：450px 以下
---------------------------------------------------*/
-@media (max-width: 450px) {
   h2.section-title {
+    font-size: 1.28rem;
+    line-height: 1.45;
+  }
+
+  .section-description {
+    margin: .65rem auto 1.15rem;
+    font-size: .86rem;
+    line-height: 1.75;
+    text-align: left;
+  }
+
+  .section-kicker {
+    font-size: .68rem;
+  }
+
+  #hero {
+    min-height: auto;
+  }
+
+  .hero-wrapper {
+    padding: 2rem 1rem;
+    gap: 1.3rem;
+  }
+
+  .hero-left h1 {
+    font-size: 1.78rem;
+    line-height: 1.32;
+  }
+
+  .hero-lead {
+    font-size: .92rem;
+    line-height: 1.75;
+  }
+
+  .hero-actions {
+    display: block;
+  }
+
+  .hero-main-cta {
+    width: 100%;
+    box-sizing: border-box;
+    padding: .9rem 1rem;
+  }
+
+  .hero-sub-link {
+    display: inline-block;
+    margin-top: .9rem;
+  }
+
+  .hero-proof-card {
+    padding: 1.05rem;
+  }
+
+  .hero-proof-title {
+    font-size: .92rem;
+  }
+
+  .hero-proof-grid {
+    gap: .45rem;
+  }
+
+  .hero-proof-grid div {
+    padding: .65rem .25rem;
+  }
+
+  .hero-proof-grid strong {
     font-size: 1.2rem;
   }
 
-  /* ===== ヒーローセクション ===== */
-  #hero {
-    padding: 1.5rem 0 2.5rem; 
+  .hero-proof-grid span {
+    font-size: .68rem;
   }
-  .hero-wrapper {
-    margin-top: -2.0rem;
+
+  .hero-proof-note {
+    font-size: .78rem;
   }
-  .hero-right {
-    width: 100%;
-    padding: 0;
-    margin-top: 0.2rem;
-    gap: 0.5rem;
+
+  .concern-grid,
+  .failure-theme-grid {
+    grid-template-columns: 1fr;
+    gap: .8rem;
   }
-  .hero-left h1 {
+
+  .concern-card,
+  .failure-theme-card,
+  .trend-card,
+  .benefit-card,
+  .path-insight-card {
+    padding: 1rem;
+  }
+
+  .concern-card,
+  .failure-theme-card {
     text-align: left;
-    max-width: none;      /* 幅制限を外す */
-    padding: 0 1rem;
-    font-size: 1.6rem;
-    line-height: 1.3;
   }
-  .hero-lead {
-    text-align: left;
-    max-width: none;      /* 幅制限を外す */
-    padding: 0 1rem;
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-  .cta-button {
+
+  .concern-icon {
     display: inline-block;
-    margin-bottom: 0.5rem;       /* 下マージンを少し詰める */
-    padding: 0.6rem 1.2rem;       /* 左右パディングを縮小 */
-    max-width: 220px;             /* これ以上広がらない */
-    width: 85%;                   /* 親の85%まで */
-    box-sizing: border-box;
+    font-size: 1.4rem;
+    margin: 0 .4rem 0 0;
+    vertical-align: middle;
   }
 
-  /* ===== メトリクスをセンター１行に詰める ===== */
-  .hero-right .metrics-overlay {
-    gap: 6px;
-    padding: 8px 6px;
-    box-shadow: none;
-  }
-  .hero-right .metric-card {
-    flex: 0 0 auto;
-    text-align: center;
-  }
-  .hero-right .metric-circle {
-    width: 62px;
-    height: 62px;
-  }
-  .hero-right .metric-icon {
-    font-size: 0.9rem;
-  }
-  .hero-right .metric-number {
-    font-size: 1.1rem;
-  }
-  .hero-right .metric-label {
-    width: auto;         /* ← 固定幅をやめる */
-    min-width: 5.5rem;   /* ← でもあまり小さくならないよう最低幅だけ指定 */
-    font-size: 0.7rem;
-    padding: 0.15rem 0.3rem;
-    margin-top: .2rem;
-  }
-  .hero-right .trust-badge{
-    font-size: 0.7rem;
-  }
-  .scroll-down {
-    bottom: 0.4rem;
-    font-size: 0.7rem; /* 文字も少し小さくしておくとバランス良し */
+  .concern-card h3 {
+    display: inline;
+    font-size: .98rem;
   }
 
-
-  /* ===== 業界分布セクション ===== */
-  .industry-section{
-    --donut: 140px;
+  .concern-card p,
+  .failure-theme-card p,
+  .trend-card p,
+  .benefit-desc,
+  .path-insight-card p {
+    font-size: .82rem;
+    line-height: 1.65;
   }
-  /* ここは “同じ” セレクタ強度で上書きするのがポイント */
-  .industry-section .industry-chart-container{
-    display: grid;
-    grid-template-columns: 1fr;   /* 縦積み */
-    justify-items: center;
+
+  .card-container {
+    padding: .75rem .25rem;
     gap: .75rem;
   }
-  .industry-section .industry-legend{
-    font-size: 0.8rem;
-  }
-  .industry-section .industry-legend .legend-text{
-    max-width: 22ch;
-  }
-  
 
-  /* ===== ライフパス可視化 ===== */
-  .lifepath-section {
-    margin-top: 1rem;
-  }
-  #life-path p {
-    font-size: 0.8rem;
-    line-height: 1.4;
-    margin: 0.5rem 1rem;
-    text-align: left;
-  }
-
-  /* ===== セクション説明文 ===== */
-  .section-description {
-    font-size: 0.8rem;
-    line-height: 1.4;
-    margin: 0.5rem 1rem;
-    text-align: left;
-  }
-
-  /* ===== 見出し・本文共通 ===== */
-  section p,
-  .feature-description p,
-  .overview-container p {
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
-  .step p {
-    font-size: 0.8rem;
-  }
-
-  /* ===== キャリアストーリーカード ===== */
   .card {
-    flex: 0 0 100%;
-    padding: 0.5rem;
-    padding-bottom: 1rem;
+    flex: 0 0 92%;
+    padding: .9rem;
   }
-  .card-footer {
-    position: relative;
-    right: 0;
-    bottom: 0;
-    margin-top: 0.5rem;
-    align-self: flex-end;
+
+  .card-header h3.card-title {
+    font-size: .95rem;
   }
-  .card-header {
-    margin-bottom: 0.2rem;
+
+  .card-header p {
+    font-size: .84rem;
   }
+
   .career-path-svg {
-    max-height: 80px;
-    margin-bottom: 1rem;
-  }
-  #career-path-visualization text {
-    font-size: 0.7rem;
-  }
-  #career-path-visualization tspan {
-    font-size: 0.8rem;
-  }
-  #career-path-visualization .university-label {
-    font-size: 1rem;
-  }
-  #career-path-visualization line {
-    stroke-width: 1px;
-  }
-  .career-path-svg text {
-    letter-spacing: -0.5px;
-  }
-  .career-path-svg g {
-    transform: translateX(-1120px);
+    height: 76px;
   }
 
-  /* ===== サイト機能紹介 ===== */
-  .feature-description h3 {
-    font-size: 1.2rem;
-  }
-  .feature-description p {
-    font-size: 0.8rem;
-    line-height: 1.2;
-  }
-  .detail-button {
-    font-size: 0.8rem;
-    padding: 0.4rem 1rem;
+  .card.preview-blur .overlay {
+    font-size: .84rem;
+    padding: .75rem;
   }
 
-  /* ===== 登録のメリットカード内テキスト ===== */
-  .benefit-card h3 {
-    font-size: 1rem;
-  }
-  .benefit-card p {
-    font-size: 0.8rem;
+  .path-preview-card {
+    padding: .8rem;
   }
 
-  /* ===== モバイル改行（br） ===== */
-  .mobile-br {
-    display: inline;
+  .path-preview-head {
+    display: block;
   }
 
-  /* ===== インノーマルとは？（Overview）微調整 ===== */
-  .what-is {
-    padding: 1.5rem 0.5rem;
+  .path-preview-badge {
+    display: inline-block;
+    margin-top: .6rem;
   }
-  #what-is-title { scroll-margin-top: 104px; } /* 例: 56px + 48px */
-  .what-is__title {
-    font-size: 1.4rem;
+
+  #career-path-visualization {
+    height: 300px;
+    padding: .35rem;
   }
+
+  .path-cta-button,
+  .cta-button,
+  .cta-secondary {
+    width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
+  }
+
+  .what-is__lead {
+    font-size: 1.05rem;
+  }
+
   .what-is__description {
-    font-size: 0.8rem;
-  }
-  .what-is__node--logo img {
-    font-size: 1.2rem;
-    max-width: 100%;
-    max-height: 100%;
-  }
-  .what-is__band {
-    padding: 0.3rem 0.8rem;
-  }
-  .what-is__arrow svg {
-    width: 16px;
-    height: 16px;
-  }
-  .what-is__node p {
-    font-size: 0.6rem;
-  }
-  .what-is__subcopy {
-    font-size: 0.8rem;
-  }
-  .what-is__icon {
-    width: 25px;
-    height: 25px;
-  }
-
-  /* ===== ご利用の流れ (Howto) ===== */
-  .howto-section h2 {
-    font-size: 1.2rem;
-  }
-
-  /* ===== お知らせ ===== */
-  .announcement-item .date {
-    font-size: 0.75rem;
-  }
-  .announcement-item .title {
-    font-size: 0.9rem;
-  }
-  .announcement-item .snippet {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    font-size: .86rem;
+    line-height: 1.85;
   }
 }
 
 /*--------------------------------------------------
-レスポンシブ：360px 以下
+Responsive: Small Smartphone
 --------------------------------------------------*/
-@media (max-width: 360px) {
-  /* ===== ヒーローセクション ===== */
+@media (max-width: 380px) {
+  main {
+    padding: .55rem;
+  }
+
+  .hero-wrapper {
+    padding: 1.7rem .85rem;
+  }
+
   .hero-left h1 {
-    font-size: 1.4rem;
-    line-height: 1.3;
+    font-size: 1.55rem;
   }
+
   .hero-lead {
-    font-size: 0.8rem;
-    line-height: 1.3;
-  }
-  .scroll-down {
-    bottom: 0.1rem;
-    font-size: 0.6rem; /* 文字も少し小さくしておくとバランス良し */
+    font-size: .84rem;
   }
 
-
-  /* ===== 業界分布セクション ===== */
-  .industry-section {
-    --donut: 110px;
+  .hero-proof-grid strong {
+    font-size: 1.05rem;
   }
 
-
-  /* ===== インノーマルとは？（Overview：最小） ===== */
-  .what-is__icon {
-    width: 20px;
-    height: 20px;
+  .hero-proof-grid span {
+    font-size: .62rem;
   }
-  .what-is__node p {
-    font-size: 0.45rem;
-    margin-top: 0.2rem;  /* アイコン下の余白を縮める */
+
+  h2.section-title {
+    font-size: 1.16rem;
+  }
+
+  .card {
+    flex-basis: 94%;
+  }
+
+  #career-path-visualization {
+    height: 270px;
   }
 }

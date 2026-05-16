@@ -113,112 +113,88 @@
         <!-- ヒーローセクション（サービス理念） -->
         <section id="hero">
             <div class="hero-wrapper">
-                <!-- 左カラム：キャッチ＋説明＋CTA -->
                 <div class="hero-left">
-                    <h1>先輩の失敗も成功も。<br>丸ごと見て、<br>自分の一手に変える</h1>
+                    <p class="hero-kicker">CAREER STORIES</p>
+        
+                    <h1>
+                        自分に近い人の経験から、<br>
+                        後悔しないキャリアを考える
+                    </h1>
+        
                     <p class="hero-lead">
-                    先輩のリアルな失敗・成功体験を読んで<br>
-                    自分だけのキャリアを描こう
+                        学歴・職種・年齢が近い人のリアルな成功・失敗を参考に、
+                        これからの働き方や人生の選択を考えられます。
                     </p>
-                    <a href="Register.html" class="cta-button">今すぐ新規登録（無料）</a>
+        
+                    <div class="hero-actions">
+                        <a href="Register.html" class="hero-main-cta">無料でキャリア事例を見る</a>
+                        <a href="Career_overview.html" class="hero-sub-link">まずは事例を見てみる</a>
+                    </div>
                 </div>
-            
-                <!-- 右カラム：トラスト、メトリクス縦積み -->
+        
                 <div class="hero-right">
-                    <!-- トラスト -->
-                    <div class="trust-wrap" aria-label="ご利用上の安心ポイント">
-                        <ul class="trust-badges" role="list">
-                            <li>
-                                <a href="Register.html"
-                                    class="trust-badge"
-                                    data-trust="匿名OK"
-                                    aria-label="匿名OK – 無料登録へ">
-                                    <i class="fa fa-user-secret"></i><span>匿名OK</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="Register.html"
-                                    class="trust-badge"
-                                    data-trust="登録無料"
-                                    aria-label="登録無料 – 無料登録へ">
-                                    <i class="fa fa-check"></i><span>登録無料</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="Register.html"
-                                    class="trust-badge"
-                                    data-trust="登録30秒"
-                                    aria-label="登録30秒 – 無料登録へ">
-                                    <i class="fa fa-stopwatch"></i><span>登録30秒</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- メトリクス -->
-                    <div class="metrics-overlay">
-                        <a href="Career_overview.html" class="metric-card">
-                            <div class="metric-circle">
-                                <i class="fa fa-users metric-icon"></i>
-                                <div class="metric-number" id="user-count">0</div>
+                    <div class="hero-proof-card">
+                        <p class="hero-proof-title">掲載中のキャリアデータ</p>
+        
+                        <div class="hero-proof-grid">
+                            <div>
+                                <strong id="user-count">0</strong>
+                                <span>登録者</span>
                             </div>
-                            <div class="metric-label">メンバー登録数</div>
-                        </a>
-                        <a href="Career_overview.html" class="metric-card">
-                            <div class="metric-circle">
-                                <i class="fa fa-briefcase metric-icon"></i>
-                                <div class="metric-number" id="story-count">0</div>
+                            <div>
+                                <strong id="story-count">0</strong>
+                                <span>事例</span>
                             </div>
-                            <div class="metric-label">掲載事例数</div>
-                        </a>
-                        <a href="Board.html" class="metric-card">
-                            <div class="metric-circle">
-                                <i class="fa fa-comments metric-icon"></i>
-                                <div class="metric-number" id="qa-count">0</div>
+                            <div>
+                                <strong id="qa-count">0</strong>
+                                <span>Q&A</span>
                             </div>
-                            <div class="metric-label">Q&amp;A投稿数</div>
-                        </a>
+                        </div>
+        
+                        <p class="hero-proof-note">
+                            匿名OK・無料登録・30秒ではじめられます
+                        </p>
                     </div>
                 </div>
             </div>
-            <a href="#what-is-title" class="scroll-down" aria-label="下へスクロール">
-                <span class="arrow">⌄</span>
-                <span class="text">Imnormalとは？</span>
-            </a>
         </section>
 
-        <section id="popular-stories" class="popularstories-section">
-            <h2 class="section-title">人気の<strong>キャリアストーリー</strong></h2>
+        <section id="career-concerns" class="concerns-section">
+            <h2 class="section-title">今の悩みに近いキャリアを探す</h2>
             <p class="section-description">
-                閲覧数が多い人気のキャリアストーリーです。<br>
-                各カードをクリックすることで各人の詳細を閲覧できます。
+                迷っている内容に近いテーマから、参考になるキャリア事例を探せます。
             </p>
-            <div class="card-container" id="popular-stories-list">
-                <!-- JavaScriptで人気のキャリアストーリーを動的に生成 -->
-            </div>
-            <!-- インジケータを追加 -->
-            <div id="popular-stories-indicators" class="carousel-indicators">
-                <!-- インジケータはJavaScriptで動的に生成 -->
+        
+            <div class="concern-grid">
+                <a href="Career_overview.html?theme=income" class="concern-card">
+                    <span class="concern-icon">💰</span>
+                    <h3>年収を上げたい</h3>
+                    <p>年収アップに成功した人のキャリア事例を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=change" class="concern-card">
+                    <span class="concern-icon">🔄</span>
+                    <h3>転職するか迷っている</h3>
+                    <p>転職した人・しなかった人のリアルな判断を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=failure" class="concern-card">
+                    <span class="concern-icon">🧭</span>
+                    <h3>後悔や失敗を知りたい</h3>
+                    <p>キャリアの失敗から学んだリアルな経験を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=workstyle" class="concern-card">
+                    <span class="concern-icon">🌿</span>
+                    <h3>働き方を見直したい</h3>
+                    <p>働き方を変えた人のキャリア選択を見る</p>
+                </a>
             </div>
         </section>
 
-        <section id="recent-stories" class="recentstories-section">
-            <h2 class="section-title">最近の<strong>キャリアストーリー</strong></h2>
-            <p class="section-description">
-                最近登録されたキャリアストーリーの一覧です。<br>
-                各カードをクリックすることで各人の詳細を閲覧できます。
-            </p>
-            <div class="card-container" id="recent-stories-list">
-                <!-- JavaScriptでキャリアストーリーハイライトを動的に生成 -->
-            </div>
-            <!-- インジケータを追加 -->
-            <div id="recent-stories-indicators" class="carousel-indicators">
-                <!-- インジケータはJavaScriptで動的に生成 -->
-            </div>
-        </section>
 
         <section id="similar-stories" class="similarstories-section">
-            <h2 class="section-title">あなたと近い<strong>キャリアストーリー</strong></h2>
+            <h2 class="section-title">あなたに近い人の<strong>リアルなキャリア</strong></h2>
             <p class="section-description" id="similar-stories-description">
                 <!-- ログインしている場合: 業界/職種が近いユーザーのストーリーを表示 -->
                 <!-- 未ログインの場合: ログインを促すCTA を表示 -->
@@ -233,180 +209,236 @@
         </section>
 
 
-         <!-- 業界分布（％のみ） -->
-        <section id="industry" class="industry-section" aria-labelledby="industry-title">
-            <h2 id="industry-title" class="section-title">業界分布</h2>
-            <div class="chart-block">
-                <p class="chart-desc">登録者の現職業界(分布)を示しています。</p>
-                <div class="industry-chart-container">
-                    <canvas id="industry-pie"></canvas>
-                    <ul id="industry-legend" class="industry-legend"></ul>
+        <section id="failure-themes" class="failurethemes-section">
+            <h2 class="section-title">失敗・後悔から<strong>キャリアを考える</strong></h2>
+            <p class="section-description">
+                成功談だけでは分からない、リアルな迷い・後悔・学びから、自分の選択を考えられます。
+            </p>
+        
+            <div class="failure-theme-grid">
+                <a href="Career_overview.html?theme=income_regret" class="failure-theme-card">
+                    <span class="failure-theme-label">年収</span>
+                    <h3>年収だけで選んで後悔</h3>
+                    <p>収入は上がったが、働き方や仕事内容に悩んだ事例を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=job_mismatch" class="failure-theme-card">
+                    <span class="failure-theme-label">仕事内容</span>
+                    <h3>仕事内容のミスマッチ</h3>
+                    <p>入社前に想像していた仕事と現実にギャップがあった事例を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=environment_regret" class="failure-theme-card">
+                    <span class="failure-theme-label">環境</span>
+                    <h3>職場環境を見誤った</h3>
+                    <p>人間関係・評価制度・働き方で悩んだ事例を見る</p>
+                </a>
+        
+                <a href="Career_overview.html?theme=stay_regret" class="failure-theme-card">
+                    <span class="failure-theme-label">現職継続</span>
+                    <h3>動かなかった後悔</h3>
+                    <p>転職しない選択をした後に感じた迷いや学びを見る</p>
+                </a>
+            </div>
+            <div class="section-cta">
+                <a href="Register.html" class="cta-button">失敗事例をもっと見る（無料）</a>
+            </div>
+        </section>
+        
+
+        <section id="popular-stories" class="popularstories-section">
+            <h2 class="section-title">よく読まれている<strong>キャリア事例</strong></h2>
+            <p class="section-description">
+                多くの人に読まれているキャリア事例です。<br>
+                年収・満足度・転職理由・失敗経験など、判断材料として参考にできます。
+            </p>
+            <div class="card-container" id="popular-stories-list">
+                <!-- JavaScriptで人気のキャリアストーリーを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="popular-stories-indicators" class="carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+        <section id="recent-stories" class="recentstories-section">
+            <h2 class="section-title">新しく追加された<strong>キャリア事例</strong></h2>
+            <p class="section-description">
+                最新のキャリア事例です。<br>
+                今のリアルな転職・働き方の傾向を知ることができます。
+            </p>
+            <div class="card-container" id="recent-stories-list">
+                <!-- JavaScriptでキャリアストーリーハイライトを動的に生成 -->
+            </div>
+            <!-- インジケータを追加 -->
+            <div id="recent-stories-indicators" class="carousel-indicators">
+                <!-- インジケータはJavaScriptで動的に生成 -->
+            </div>
+        </section>
+
+
+         <!-- 傾向カード -->
+         <section id="career-trends" class="careertrends-section">
+            <h2 class="section-title">
+                登録者の<strong>キャリア傾向</strong>
+            </h2>
+        
+            <p class="section-description">
+                実際のキャリア事例から見えてくる傾向です。<br>
+                多くの人の選択を知ることで、自分の判断の参考にできます。
+            </p>
+        
+            <div class="trend-card-grid">
+        
+                <div class="trend-card">
+                    <span class="trend-label">業界</span>
+                    <h3>IT・コンサルへの転職が多い</h3>
+                    <p>
+                        未経験からでも挑戦しやすく、キャリアチェンジの選択肢として選ばれることが多い傾向があります。
+                    </p>
                 </div>
+        
+                <div class="trend-card">
+                    <span class="trend-label">年収</span>
+                    <h3>年収アップだけでは満足度は上がらない</h3>
+                    <p>
+                        年収が上がっても、仕事内容や働き方とのミスマッチで後悔するケースも見られます。
+                    </p>
+                </div>
+        
+                <div class="trend-card">
+                    <span class="trend-label">満足度</span>
+                    <h3>環境との相性が満足度を左右する</h3>
+                    <p>
+                        人間関係や評価制度、働き方などの要素が、満足度に大きく影響している傾向があります。
+                    </p>
+                </div>
+        
             </div>
         </section>
 
 
         <section id="life-path" class="lifepath-section">
-            <h2 class="section-title">ライフパスの可視化</h2>
-            <p>
-                このグラフでは、データベースに基づき、登録者の上位3校の出身者がどのようなキャリアを歩んできたかを視覚化しています。
-            </p>
-            <div id="career-path-visualization" style="width: 100%; height: 400px;"></div>
-            <p>
-                すべてのキャリアパスを見たい方は
-                <a href="Career_path.html">こちら</a>
-            </p>
+            <div class="life-path-header">
+                <span class="section-kicker">CAREER FLOW</span>
+                <h2 class="section-title">みんなの<strong>キャリアの進み方</strong></h2>
+                <p class="section-description">
+                    登録者の学歴から、その後どの業界へ進んだかを簡易的に可視化しています。
+                    自分と近い出身・業界の人が、どんなキャリアを歩んでいるかをイメージできます。
+                </p>
+            </div>
+        
+            <div class="path-insight-grid">
+                <div class="path-insight-card">
+                    <span>01</span>
+                    <h3>出身校から業界への流れ</h3>
+                    <p>どの学校出身者が、どの業界へ進んでいるかを確認できます。</p>
+                </div>
+                <div class="path-insight-card">
+                    <span>02</span>
+                    <h3>転職後の変化</h3>
+                    <p>最初の業界から、その後どの業界へ移っているかを見られます。</p>
+                </div>
+                <div class="path-insight-card">
+                    <span>03</span>
+                    <h3>自分に近いルートの発見</h3>
+                    <p>自分と近い背景の人が歩んだ選択肢を探すきっかけになります。</p>
+                </div>
+            </div>
+        
+            <div class="path-preview-card">
+                <div class="path-preview-head">
+                    <div>
+                        <h3>上位出身校から見るキャリアの流れ</h3>
+                        <p>登録者数が多い出身校をもとに、代表的な流れを表示しています。</p>
+                    </div>
+                    <span class="path-preview-badge">Preview</span>
+                </div>
+        
+                <div id="career-path-visualization"></div>
+            </div>
+        
+            <div class="path-cta-wrap">
+                <a href="Career_path.html" class="path-cta-button">キャリアパスを詳しく見る</a>
+            </div>
         </section>
 
 
         <section class="what-is" aria-labelledby="what-is-title">
-            <h2 id="what-is-title" class="what-is__title section-title">インノーマルとは？</h2>
+            <span class="section-kicker">ABOUT IMNORMAL</span>
+            <h2 id="what-is-title" class="section-title">インノーマルとは？</h2>
         
-            <!-- ここでテキスト説明 -->
-            <p class="what-is__description">
-                インノーマルは、豊富な転職成功事例とキャリアパスを簡単に可視化し、
-                “本音”ベースで経験を共有・相談できる日本初のキャリアコミュニティです。
+            <p class="what-is__lead">
+                キャリアに、絶対の正解はありません。
             </p>
         
-            <!-- 図解フロー -->
-            <div class="what-is__diagram-band">
-                <div class="what-is__diagram">
-                    <!-- 左ノード -->
-                    <div class="what-is__node">
-                        <svg class="what-is__icon" aria-hidden="true">
-                            <use xlink:href="#icon-search"></use>
-                        </svg>
-                            <p>転職事例を<br class="mobile-br">探したい</p>
-                    </div>
-                
-                    <!-- 左→中央 矢印 -->
-                    <div class="what-is__arrow">
-                        <svg class="what-is__arrow-icon" aria-hidden="true">
-                            <use xlink:href="#icon-arrow"></use>
-                        </svg>
-                    </div>
-                
-                    <!-- 中央ロゴ -->
-                    <div class="what-is__node what-is__node--logo">
-                        <img src="images/company-logo.jpg" alt="インノーマル ロゴ">
-                    </div>
-                
-                    <!-- 右→中央 矢印（逆向き）-->
-                    <div class="what-is__arrow what-is__arrow--reverse">
-                        <svg class="what-is__arrow-icon" aria-hidden="true">
-                            <use xlink:href="#icon-arrow"></use>
-                        </svg>
-                    </div>
-                
-                    <!-- 右ノード -->
-                    <div class="what-is__node">
-                        <svg class="what-is__icon" aria-hidden="true">
-                            <use xlink:href="#icon-chalkboard-teacher"></use>
-                        </svg>
-                        <p>経験を<br class="mobile-br">共有したい</p>
-                    </div>
-                </div>
-            </div>
-
-            <p class="what-is__subcopy">
-                あなたのキャリアを、リアルな“生の声”で<br class="mobile-br">ブラッシュアップしませんか？
+            <p class="what-is__description">
+                だからこそ、自分と近い人がどんな選択をして、何に悩み、何を学んだのかを知ることには価値があります。
+                インノーマルは、先輩たちのリアルな経験から、これからの働き方や人生の選択を考えるためのキャリア共有サービスです。
             </p>
         </section>
 
         <section id="why-register" class="why-register">
-            <h2 class="section-title">登録するとできること</h2>
+            <span class="section-kicker">REGISTER BENEFITS</span>
+        
+            <h2 class="section-title">
+                登録すると、こんな選択ができるようになります
+            </h2>
+        
+            <p class="section-description">
+                無料登録すると、キャリア事例の詳細を見ながら、これからの働き方や人生の選択をより具体的に考えられます。
+            </p>
+        
             <div class="benefit-slider">
                 <div class="benefit-card">
-                    <svg class="benefit-icon" aria-hidden="true">
-                        <use xlink:href="#icon-search"></use>
-                    </svg>
-                    <h3 class="benefit-title">詳細な事例分析</h3>
-                    <p class="benefit-desc">成功・失敗の背景まで深掘りし、具体的な理由を知ることができます。</p>
+                    <span class="benefit-number">01</span>
+                    <h3 class="benefit-title">自分と近いキャリアが見つかる</h3>
+                    <p class="benefit-desc">
+                        学歴・職種・年齢などが近い人のリアルなキャリアを見ることで、自分の未来を具体的にイメージできます。
+                    </p>
                 </div>
+        
                 <div class="benefit-card">
-                    <svg class="benefit-icon" aria-hidden="true">
-                        <use xlink:href="#icon-comments"></use>
-                    </svg>
-                    <h3 class="benefit-title">リアルタイムQ&amp;A</h3>
-                    <p class="benefit-desc">匿名で先輩に質問し、実践的なアドバイスをすぐに受け取れます。</p>
+                    <span class="benefit-number">02</span>
+                    <h3 class="benefit-title">失敗や後悔から学べる</h3>
+                    <p class="benefit-desc">
+                        成功談だけでなく、迷いや失敗も知ることで、同じ後悔を避けるための判断材料にできます。
+                    </p>
                 </div>
+        
                 <div class="benefit-card">
-                    <svg class="benefit-icon" aria-hidden="true">
-                        <use xlink:href="#icon-user-circle"></use>
-                    </svg>
-                    <h3 class="benefit-title">プロフィール自動作成</h3>
-                    <p class="benefit-desc">シンプルな入力だけで、あなた専用のキャリアページを瞬時に生成。</p>
+                    <span class="benefit-number">03</span>
+                    <h3 class="benefit-title">納得してキャリアを選べる</h3>
+                    <p class="benefit-desc">
+                        企業情報や求人情報だけでは分からない実体験をもとに、自分に合う選択肢を考えられます。
+                    </p>
                 </div>
             </div>
-            <div class="cta-wrap">
-            <a href="Register.html" class="cta-button">今すぐ無料登録</a>
+        
+            <div class="section-cta">
+                <a href="/Career_overview.html" class="cta-secondary">
+                  無料でキャリア事例を見る
+                </a>
             </div>
         </section>
 
-        <section id="how-to-use" class="howto-section">
-            <h2>ご利用の流れ</h2>
-            <div class="howto-steps">
-              <div class="step">
-                <span class="step-number">1</span>
-                <h3>30秒で超簡単登録</h3>
-                <p>ユーザ名、メール、パスワードだけですぐにあなた専用のキャリアプロフィールが完成</p>
-              </div>
-              <div class="step">
-                <span class="step-number">2</span>
-                <h3>キャリアストーリーを閲覧</h3>
-                <p>他のユーザーが投稿したリアルな転職事例を見たり、あなた自身の経験をシェアできます。</p>
-              </div>
-              <div class="step">
-                <span class="step-number">3</span>
-                <h3>フィードバック と Q&A</h3>
-                <p>コメント機能や掲示板を活用し、疑問や悩みを相談してみましょう。</p>
-              </div>
-            </div>
-        </section>
 
-        <section id="site-features">
-            <h2 class="section-title">サイトの機能紹介</h2>
-            
-            <div class="feature-section left-image">
-                <img src="images/feature-image1.jpg" alt="キャリアストーリーの共有 - 転職成功事例とキャリアパス" class="feature-image" width="400" height="400" loading="lazy">
-                <div class="feature-description">
-                    <h3>キャリアストーリーの共有</h3>
-                    <p>ユーザーは自身の<strong>キャリアストーリー</strong>を共有し、他のユーザーと知見を共有することができます。<br>
-                        成功体験や失敗談を通じて、他のプロフェッショナルにインスピレーションを与えます。</p>
-                        <a href="Career_overview.html" class="detail-button">Detail</a>
-                </div>
-            </div>
-            
-            <div class="feature-section right-image">
-                <img src="images/feature-image2.jpg" alt="キャリアパスの可視化 - キャリア共有プラットフォーム" class="feature-image" width="400" height="400" loading="lazy">
-                <div class="feature-description">
-                    <h3>キャリアパスの可視化</h3>
-                    <p>この画面では、さまざまな大学や業界におけるキャリアの動向を視覚的に把握できます。グラフ上のノードは業界を示し、リンクはキャリアの移動を表現します。<br>
-                        特定の業界をクリックすると、その業界に関連するユーザー情報がカード形式で表示され、より詳細なキャリアパスを確認することができます。</p>
-                        <a href="Career_path.html" class="detail-button">Detail</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="announcements">
-            <h2 class="section-title">お知らせと更新情報</h2>
+        <section id="announcements" class="announcements-section">
+            <span class="section-kicker">NEWS</span>
+            <h2 class="section-title">お知らせ</h2>
+            <p class="section-description">
+                サービスの更新情報やお知らせを掲載しています。
+            </p>
             <div id="announcements-list" class="announcements-grid">
                 <!-- JavaScriptでお知らせを動的に生成 -->
             </div>
         </section>
 
-        <section id="user-feedback">
-            <h2 class="section-title">ユーザーフィードバック</h2>
-            <div id="feedback-form">
-                <textarea id="feedback-text" rows="4" cols="50" placeholder="フィードバックを入力してください"></textarea><br>
-                <button onclick="sendFeedback()">送信</button>
-            </div>
-        </section>
     </main>
     <footer>
         <div class="footer-content">
             <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
+                <p>&copy; 2026 Imnormal</p>
                 <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
                     <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
                 </a>
@@ -423,7 +455,6 @@
     <script src="js/recent-stories.js"></script>
     <script src="js/popular-stories.js"></script>
     <script src="js/similar-stories.js"></script>
-    <script src="js/feedback.js"></script>
     <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
 
 </body>

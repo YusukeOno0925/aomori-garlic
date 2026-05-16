@@ -52,41 +52,42 @@ function fetchAnnouncements() {
         .then(res => res.json())
         .then(data => {
             const list = document.getElementById('announcements-list');
+            if (!list) return;
+
             list.innerHTML = '';
 
-            data.announcements.slice(0, 6)  // たとえば最新6件
-                .forEach(item => {
-                    const dateObj = new Date(item.timestamp);
-                    const formattedDate = `${dateObj.getFullYear()}/` +
-                    `${String(dateObj.getMonth()+1).padStart(2,'0')}/` +
-                    `${String(dateObj.getDate()).padStart(2,'0')} ` +
-                    `${String(dateObj.getHours()).padStart(2,'0')}:` +
-                    `${String(dateObj.getMinutes()).padStart(2,'0')}`;
+            const announcements = data.announcements || [];
 
-                    const card = document.createElement('div');
-                    card.className = 'announcement-item';
-                    card.innerHTML = `
+            if (announcements.length === 0) {
+                list.innerHTML = '<p class="announcement-empty">現在お知らせはありません。</p>';
+                return;
+            }
+
+            announcements.slice(0, 3).forEach(item => {
+                const dateObj = new Date(item.timestamp);
+                const formattedDate =
+                    `${dateObj.getFullYear()}/` +
+                    `${String(dateObj.getMonth() + 1).padStart(2, '0')}/` +
+                    `${String(dateObj.getDate()).padStart(2, '0')}`;
+
+                const card = document.createElement('a');
+                card.className = 'announcement-item';
+                card.href = `Announcements.html?id=${item.id}`;
+
+                card.innerHTML = `
                     <div class="date">${formattedDate}</div>
                     <div class="title">${item.title}</div>
-                    <div class="snippet">
-                        ${item.content.slice(0, 80)}…
-                        <a href="Announcements.html?id=${item.id}" class="read-more">続きを読む</a>
-                    </div>
-                    `;
-                    list.appendChild(card);
-                });
+                    <div class="snippet">${item.content.slice(0, 60)}…</div>
+                `;
 
-            // さらに多い場合は“もっと見る”ボタン
-            if (data.announcements.length > 6) {
-                const more = document.createElement('a');
-                more.href = 'Announcements.html';
-                more.textContent = 'もっと見る';
-                more.className = 'read-more';
-                more.style.display = 'block';
-                more.style.textAlign = 'center';
-                more.style.marginTop = '1rem';
-                list.appendChild(more);
-            }
+                list.appendChild(card);
+            });
+
+            const more = document.createElement('a');
+            more.href = 'Announcements.html';
+            more.textContent = 'お知らせ一覧を見る';
+            more.className = 'announcements-more';
+            list.appendChild(more);
         })
         .catch(e => console.error(e));
 }
