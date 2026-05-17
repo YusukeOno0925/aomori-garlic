@@ -1,39 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // /announcements/ APIからお知らせ一覧データを取得
     fetch('/announcements/')
         .then(response => response.json())
         .then(data => {
-            const announcements = data.announcements;
+            const announcements = data.announcements || [];
             const container = document.getElementById('announcements-container');
 
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            if (announcements.length === 0) {
+                container.innerHTML = `
+                    <div class="announcements-empty">
+                        現在表示できるお知らせはありません。
+                    </div>
+                `;
+                return;
+            }
+
             announcements.forEach(item => {
-                // カード全体
                 const card = document.createElement('div');
                 card.className = 'announcement-card';
 
-                // 日時表示
                 const timestampEl = document.createElement('div');
                 timestampEl.className = 'timestamp';
-                // 例: 2025-02-15T14:30:00 => 2025/02/15 14:30 の形式に変換
-                const dateObj = new Date(item.timestamp);
-                const y = dateObj.getFullYear();
-                const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-                const d = String(dateObj.getDate()).padStart(2, '0');
-                const hh = String(dateObj.getHours()).padStart(2, '0');
-                const mm = String(dateObj.getMinutes()).padStart(2, '0');
-                timestampEl.textContent = `${y}/${m}/${d} ${hh}:${mm}`;
+                timestampEl.textContent = formatAnnouncementDate(item.timestamp);
 
-                // タイトル
                 const titleEl = document.createElement('div');
                 titleEl.className = 'title';
-                titleEl.textContent = item.title;
+                titleEl.textContent = item.title || 'お知らせ';
 
-                // 内容
                 const contentEl = document.createElement('div');
                 contentEl.className = 'content';
-                contentEl.textContent = item.content;
+                contentEl.textContent = item.content || '';
 
-                // カードに要素を追加
                 card.appendChild(timestampEl);
                 card.appendChild(titleEl);
                 card.appendChild(contentEl);
@@ -43,5 +43,32 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error fetching announcements:', error);
+
+            const container = document.getElementById('announcements-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="announcements-error">
+                        お知らせの取得中にエラーが発生しました。
+                    </div>
+                `;
+            }
         });
 });
+
+function formatAnnouncementDate(timestamp) {
+    if (!timestamp) return '日時未設定';
+
+    const dateObj = new Date(timestamp);
+
+    if (Number.isNaN(dateObj.getTime())) {
+        return '日時未設定';
+    }
+
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    const hh = String(dateObj.getHours()).padStart(2, '0');
+    const mm = String(dateObj.getMinutes()).padStart(2, '0');
+
+    return `${y}/${m}/${d} ${hh}:${mm}`;
+}
