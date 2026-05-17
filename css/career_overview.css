@@ -1,207 +1,324 @@
-body {
-    background-color: #FBFAF7;
+:root {
+    --overview-bg: #FBFAF7;
+    --overview-card: #fff;
+    --overview-text: #574637;
+    --overview-muted: #75685d;
+    --overview-accent: #8ba141;
+    --overview-main: #5a4635;
+    --overview-line: rgba(87,70,55,.12);
+    --overview-shadow: 0 14px 36px rgba(40, 28, 18, .08);
+    --overview-radius: 22px;
+  }
+  
+  body {
+    background-color: var(--overview-bg);
     font-family: 'Roboto', sans-serif;
-}
-
-main {
-    padding: 1rem;
-    margin-top: 100px; /* ヘッダー分のマージンを追加 */
-}
-
-h1 {
-    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
-}
-
-input#search, select#filter-industry {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    width: 100%;
-    max-width: 400px;
+  }
+  
+  /* styles.css の main 指定をこの画面用に整える */
+  main.career-overview-page {
+    margin-left: 220px;
+    margin-top: 100px;
+    padding: 2rem;
+  }
+  
+  main.career-overview-page h1 {
+    margin: 0 0 1rem;
+    color: var(--overview-text);
+    font-size: 2rem;
+    line-height: 1.35;
+  }
+  
+  #search,
+  #filter-industry {
+    width: min(100%, 420px);
+    margin: 0 0 .8rem;
+    padding: .85rem 1rem;
+    border: 1px solid var(--overview-line);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--overview-text);
+    font-size: .95rem;
     box-sizing: border-box;
-}
-
-ul#career-list {
-    list-style-type: none;
+  }
+  
+  #search:focus,
+  #filter-industry:focus {
+    outline: none;
+    border-color: rgba(139,161,65,.7);
+    box-shadow: 0 0 0 4px rgba(139,161,65,.14);
+  }
+  
+  ul#career-list {
+    list-style: none;
     padding: 0;
-}
-
-.career-path-svg {
+    margin: 1.2rem 0 0;
+    display: grid;
+    gap: 1rem;
+  }
+  
+  li.career-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(240px, .9fr) minmax(360px, 1.4fr);
+    gap: 1.5rem;
+    align-items: center;
+  
+    background: var(--overview-card);
+    border: 1px solid var(--overview-line);
+    border-radius: var(--overview-radius);
+    box-shadow: var(--overview-shadow);
+    padding: 1.35rem 1.4rem 1.7rem;
+  
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  
+  li.career-card:hover {
+    background: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 18px 44px rgba(40, 28, 18, .12);
+    border-color: rgba(139,161,65,.25);
+  }
+  
+  li.career-card.selected {
+    background: #fff;
+    color: var(--overview-text);
+    border-color: rgba(139,161,65,.45);
+    box-shadow: 0 18px 44px rgba(40, 28, 18, .14);
+  }
+  
+  .career-info {
+    min-width: 0;
+  }
+  
+  li.career-card h2 {
+    margin: 0 0 .75rem;
+    color: var(--overview-text);
+    font-size: 1.15rem;
+    line-height: 1.45;
+    padding-right: 4.8rem;
+  }
+  
+  li.career-card p {
+    margin: .25rem 0;
+    color: var(--overview-text);
+    font-size: .95rem;
+    line-height: 1.55;
+  
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  
+  .career-path {
+    min-width: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .career-path-svg,
+  .career-path svg {
     width: 100%;
     height: auto;
-    overflow: visible; /* SVGの内容が見切れないようにする */
-    margin-top: 1rem;
-}
-
-li.career-card {
-    background-color: #fff;
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: row; /* 横並び */
-    align-items: flex-start; /* 左寄せ */
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-}
-
-.career-info {
-    flex: 1;
-    margin-bottom: 0rem; /* 年収とグラフの間の余白を狭める */
-}
-
-.career-path {
-    flex: 2;
-    margin-bottom: 1.5rem; /* グラフと目アイコンの間に余白を追加 */
-}
-
-.card-footer {
+    overflow: visible;
+  }
+  
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    font-size: .68rem;
+    line-height: 1;
+    padding: .22rem .46rem;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: .35rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  
+  .status-badge.online {
+    background: rgba(139,161,65,.10);
+    color: #6f8135;
+    border: 1px solid rgba(139,161,65,.45);
+  }
+  
+  .status-badge.recently_active {
+    background: rgba(240,196,25,.12);
+    color: #9b7b00;
+    border: 1px solid rgba(240,196,25,.45);
+  }
+  
+  .status-badge.inactive {
+    background: rgba(218,62,63,.08);
+    color: #c0393a;
+    border: 1px solid rgba(218,62,63,.35);
+  }
+  
+  .card-footer {
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    right: 1rem;
+    bottom: 1rem;
     display: flex;
     align-items: center;
-    margin-top: 1.5rem; /* 目のアイコンとグラフの間に余白を追加 */
-}
-
-.card-footer img {
-    margin-right: 5px; /* アイコンと閲覧回数の間に余白を追加 */
-}
-
-li.career-card.selected {
-    background-color: var(--accent-color);
-    color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-li.career-card:hover {
-    background-color: #f0f0f0;
-    transform: scale(1.02);
-}
-
-li.career-card h2, li.career-card p {
-    margin: 0;
-}
-
-li.career-card p {
-    display: -webkit-box;           /* Flexboxでの表示を制御 */
-    -webkit-box-orient: vertical;   /* テキストを垂直方向に並べる */
-    -webkit-line-clamp: 2;          /* 最大2行に制限 */
-    overflow: hidden;               /* 2行を超えた部分は隠す */
-    text-overflow: ellipsis;        /* 溢れた部分を "..." で省略 */
-    white-space: normal;            /* テキストを折り返す */
-}
-
-/* 閲覧回数（目アイコン＋数）のベース */
-.card-footer { display:flex; align-items:center; gap: 4px; }
-
-.view-icon { width: 16px; height: 16px; }
-.view-count { font-size: 0.95rem; line-height: 1; }
-
-/* ページネーションボタンのスタイル */
-.pagination button {
-    background-color: var(--main-color); /* ブランドカラーに合わせた背景色 */
-    color: #ffffff; /* ボタンの文字色を白にして読みやすく */
-    border: none; /* ボーダーを削除してすっきりとした見た目に */
-    padding: 0.8rem 1.5rem; /* ボタンのサイズを大きくして押しやすく */
-    margin: 0.5rem; /* ボタン間に適切な余白を設定 */
-    border-radius: 5px; /* 角を少し丸くして見た目を柔らかく */
-    cursor: pointer; /* ポインタを変更してクリック可能であることを示す */
-    font-weight: bold; /* 文字を太くして強調 */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時のエフェクト */
-}
-
-.pagination button:hover {
-    background-color: var(--accent-color);  /* ホバー時に少し濃い色に変更 */
-    transform: translateY(-2px); /* ホバー時に少し浮き上がる効果を追加 */
-}
-
-.pagination button:disabled {
-    background-color: #cccccc; /* 無効なボタンはグレーに */
-    cursor: not-allowed; /* 無効状態を示す */
-    transform: none; /* ホバー時の浮き上がり効果を無効に */
-}
-
-.pagination span {
-    font-size: 1.2rem; /* 現在のページ表示を大きくして見やすく */
-    margin: 0 1rem; /* 前後のボタンとの間に適切な余白を追加 */
-    vertical-align: middle; /* テキストの位置を中央に揃える */
-}
-
-/* オンラインステータスのドットのスタイル */
-.status-badge {
-    display: inline-block;
-    font-size: 0.65rem;
+    gap: .28rem;
+    color: var(--overview-muted);
+  }
+  
+  .view-icon {
+    width: 15px;
+    height: 15px;
+  }
+  
+  .view-count {
+    font-size: .9rem;
     line-height: 1;
-    padding: 0.1em 0.3em;
-    border-radius: 0.25rem;
-    vertical-align: middle;
-    margin-left: 0.3rem;
-    opacity: 0.8;
-}
-.status-badge.online {
-    background: transparent;
-    color: #8ba141;
-    border: 1px solid #8ba141;
-}
-.status-badge.recently_active {
-    background: transparent;
-    color: #f0c419;
-    border: 1px solid #f0c419;
-}
-.status-badge.inactive {
-    background: transparent;
-    color: #da3e3f;
-    border: 1px solid #da3e3f;
-}
-
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-    h1{
-        font-size: 1.2rem;
-        margin-top: -20px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .8rem;
+    margin: 2rem 0 0;
+  }
+  
+  .pagination button {
+    background-color: var(--overview-main);
+    color: #fff;
+    border: none;
+    padding: .8rem 1.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 800;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  
+  .pagination button:hover {
+    background-color: #3f3025;
+    transform: translateY(-2px);
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .pagination span {
+    color: var(--overview-text);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  
+  /* タブレット・スマホ */
+  @media (max-width: 768px) {
+    main.career-overview-page {
+      margin-left: 0;
+      margin-top: 90px;
+      padding: 1rem;
     }
-
+  
+    main.career-overview-page h1 {
+      font-size: 1.45rem;
+      margin-bottom: .8rem;
+    }
+  
+    #search,
+    #filter-industry {
+      width: 100%;
+      max-width: none;
+      padding: .8rem .9rem;
+      border-radius: 13px;
+    }
+  
+    ul#career-list {
+      gap: .9rem;
+    }
+  
     li.career-card {
-        flex-direction: column; /* グラフが下に来るように縦並びにする */
+      grid-template-columns: 1fr;
+      gap: .8rem;
+      padding: 1.1rem 1rem 2.1rem;
+      border-radius: 18px;
     }
-    
-    .career-info, .career-path {
-        width: 100%; /* 幅を100%に */
-    }
-    
-    .career-path {
-        margin-top: 1rem; /* グラフとテキストの間に余白を追加 */
-    }
-
-    /* 名前・年齢を小さくする */
+  
     li.career-card h2 {
-        font-size: 1rem;  /* 例えば1remにする（通常が1.2～1.4rem程度なら少し小さめ） */
+      font-size: 1rem;
+      padding-right: 4.6rem;
+      margin-bottom: .55rem;
     }
-
-    /* 例えば職業・年収・将来のキャリアの pタグを更にやや小さく */
+  
     li.career-card p {
-        font-size: 0.9rem; /* または0.85remなど */
-        line-height: 1.3;  /* 少し詰めてもいい */
+      font-size: .9rem;
+      line-height: 1.45;
     }
-
-    /* バッジだけを右上に */
+  
+    .career-path {
+      margin-top: .3rem;
+      margin-bottom: 1rem;
+    }
+  
     li.career-card .status-badge {
-        position: absolute;  /* カードの相対位置基準で */
-        top: 0.5rem;         /* お好みで微調整 */
-        right: 0.5rem;       /* お好みで微調整 */
-        margin-left: 0;      /* inline時の余白をリセット */
+      position: absolute;
+      top: .8rem;
+      right: .8rem;
+      margin-left: 0;
     }
-
-    .view-icon { width: 14px; height: 14px; }
-    .view-count { font-size: 1.0rem; }
-}
-
-
-/* 450px以下：さらに小さく */
-@media (max-width: 450px) {
-    .view-icon { width: 12px; height: 12px; }
-    .view-count { font-size: 0.8rem; }
+  
+    .view-icon {
+      width: 14px;
+      height: 14px;
+    }
+  
+    .view-count {
+      font-size: .85rem;
+    }
+  
+    .pagination {
+      gap: .5rem;
+      margin-top: 1.5rem;
+    }
+  
+    .pagination button {
+      padding: .7rem 1rem;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    main.career-overview-page {
+      margin-top: 86px;
+      padding: .8rem;
+    }
+  
+    main.career-overview-page h1 {
+      font-size: 1.25rem;
+    }
+  
+    li.career-card {
+      padding: 1rem .9rem 2rem;
+    }
+  
+    li.career-card h2 {
+      font-size: .96rem;
+    }
+  
+    li.career-card p {
+      font-size: .84rem;
+    }
+  
+    .status-badge {
+      font-size: .62rem;
+    }
+  
+    .view-icon {
+      width: 12px;
+      height: 12px;
+    }
+  
+    .view-count {
+      font-size: .78rem;
+    }
   }
