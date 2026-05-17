@@ -47,22 +47,62 @@
         </nav>
     </aside>
 
-    <main>
-        <form id="contact-form" method="POST">
+    <main class="contact-page">
+        <section class="contact-hero">
+            <p class="contact-kicker">CONTACT</p>
             <h1>お問い合わせ</h1>
-            <label for="name">お名前:</label>
-            <input type="text" id="name" name="name" placeholder="お名前を入力してください" required>
-            <label for="email">メールアドレス:</label>
-            <input type="email" id="email" name="email" placeholder="メールアドレスを入力してください" required>
-            <label for="message">メッセージ:</label>
-            <textarea id="message" name="message" placeholder="メッセージを入力してください" required></textarea>
-            <button type="submit">送信</button>
-        </form>
+            <p class="contact-lead">
+                サービスに関するご質問・ご意見・不具合のご連絡など、
+                お気軽にお問い合わせください。
+            </p>
+    
+            <div class="contact-points">
+                <div>
+                    <span>01</span>
+                    <p>サービス利用に関するご質問</p>
+                </div>
+                <div>
+                    <span>02</span>
+                    <p>掲載内容・キャリア事例に関するご相談</p>
+                </div>
+                <div>
+                    <span>03</span>
+                    <p>不具合や改善要望のご連絡</p>
+                </div>
+            </div>
+        </section>
+    
+        <section class="contact-card">
+            <div class="contact-card-header">
+                <p class="contact-card-kicker">MESSAGE</p>
+                <h2>メッセージを送る</h2>
+                <p>内容を確認のうえ、必要に応じてご連絡いたします。</p>
+            </div>
+    
+            <form id="contact-form" method="POST">
+                <label for="name">
+                    お名前
+                    <input type="text" id="name" name="name" placeholder="お名前を入力してください" required>
+                </label>
+    
+                <label for="email">
+                    メールアドレス
+                    <input type="email" id="email" name="email" placeholder="メールアドレスを入力してください" required>
+                </label>
+    
+                <label for="message">
+                    メッセージ
+                    <textarea id="message" name="message" placeholder="お問い合わせ内容を入力してください" required></textarea>
+                </label>
+    
+                <button type="submit">送信する</button>
+            </form>
+        </section>
     </main>
     <footer>
         <div class="footer-content">
             <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
+                <p>&copy; 2026 Imnormal</p>
                 <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
                     <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
                 </a>
