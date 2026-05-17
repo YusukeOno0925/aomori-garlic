@@ -230,7 +230,6 @@ function createSimilarStoryCard(story, isLoggedIn, showPreview = false) {
             </h3>
             <p>職業: ${escapeHTML(story.profession || '不明')}</p>
             <p>年収: ${escapeHTML(String(latestIncome))}</p>
-            ${story.career_type ? `<p>志向: ${escapeHTML(story.career_type)}</p>` : ''}
         </div>
         ${drawCareerPathD3(story.careerStages, window.innerWidth)}
         <div class="card-footer">

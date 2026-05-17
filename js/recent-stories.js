@@ -145,9 +145,6 @@ function createStoryCard(story) {
             ? generateCareerTags(story)
             : [];
 
-    const careerTypeText =
-        simplifyCareerType(story.career_type);
-
     const cardHeader = `
         <div class="card-header">
 
@@ -179,12 +176,7 @@ function createStoryCard(story) {
                 ${escapeHTML(String(latestIncome))}
             </p>
 
-            ${careerTypeText ? `
-                <p>
-                    志向:
-                    ${escapeHTML(careerTypeText)}
-                </p>
-            ` : ''}
+             : ''}
 
         </div>
     `;
