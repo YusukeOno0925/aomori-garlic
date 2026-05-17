@@ -380,6 +380,26 @@ Failure Themes
 /*--------------------------------------------------
 Story Cards
 --------------------------------------------------*/
+.similar-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.similar-tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.58rem;
+  border-radius: 999px;
+  background: rgba(139, 161, 65, 0.12);
+  color: var(--accent-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 .card-container {
   display: flex;
   flex-wrap: nowrap;

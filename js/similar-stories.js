@@ -57,12 +57,13 @@ function fetchSimilarCareerStories(isLoggedIn) {
         const dummyStories = [
             {
                 id: 'preview1',
-                name: '20代後半・営業職',
+                name: 'Kaito',
                 birthYear: 1996,
                 profession: '法人営業',
                 income: [{ income: '401〜500万円' }],
                 career_type: 'やりがい軸(マネジメント職につきたい)',
                 view_count: 128,
+                tags: ['20代後半', '営業→IT', '年収UP'],
                 careerStages: [
                     { year: 2015, stage: '関西大学入学' },
                     { year: 2019, stage: '人材会社で営業' },
@@ -72,12 +73,13 @@ function fetchSimilarCareerStories(isLoggedIn) {
             },
             {
                 id: 'preview2',
-                name: '20代後半・マーケ職',
+                name: 'Haru',
                 birthYear: 1997,
                 profession: 'マーケター',
                 income: [{ income: '301〜400万円' }],
                 career_type: '環境軸(ワークライフバランスを重視したい)',
                 view_count: 94,
+                tags: ['20代後半', '広告→事業会社', '働き方重視'],
                 careerStages: [
                     { year: 2016, stage: '大学入学' },
                     { year: 2020, stage: '広告代理店' },
@@ -87,12 +89,13 @@ function fetchSimilarCareerStories(isLoggedIn) {
             },
             {
                 id: 'preview3',
-                name: '30代前半・エンジニア',
+                name: 'Rin',
                 birthYear: 1992,
                 profession: 'ITエンジニア',
                 income: [{ income: '501〜600万円' }],
                 career_type: 'やりがい軸(専門技術を極めたい)',
                 view_count: 210,
+                tags: ['30代前半', 'SIer→Web', '専門性UP'],
                 careerStages: [
                     { year: 2011, stage: '大学入学' },
                     { year: 2015, stage: 'SIer就職' },
@@ -108,6 +111,7 @@ function fetchSimilarCareerStories(isLoggedIn) {
                 income: [{ income: '601〜700万円' }],
                 career_type: 'お金軸(給与を上げたい)',
                 view_count: 176,
+                tags: ['30代前半', 'メーカー→企画', '年収UP'],
                 careerStages: [
                     { year: 2010, stage: '大学入学' },
                     { year: 2014, stage: 'メーカー就職' },
@@ -123,6 +127,7 @@ function fetchSimilarCareerStories(isLoggedIn) {
                 income: [{ income: '301〜400万円' }],
                 career_type: '環境軸(人間関係が良い環境を重視したい)',
                 view_count: 83,
+                tags: ['20代後半', '営業職', '転職検討中'],
                 careerStages: [
                     { year: 2014, stage: '大学入学' },
                     { year: 2018, stage: '営業職就職' },
@@ -208,9 +213,16 @@ function createSimilarStoryCard(story, isLoggedIn, showPreview = false) {
     const status = story.activity_status || 'inactive';
     card.innerHTML = `
         <div class="card-header">
+            ${generateCareerTags(story).length > 0 ? `
+            <div class="similar-tags">
+                ${generateCareerTags(story)
+                    .map(tag => `<span>${escapeHTML(tag)}</span>`)
+                    .join('')}
+            </div>
+        ` : ''}
             <h3 class="card-title">
                 <span class="card-title-text">
-                    ${escapeHTML(story.name)} (${age}歳)
+                    ${escapeHTML(story.name)}  / ${age}歳 
                 </span>
                 <span class="status-badge ${status}">
                     ${STATUS_LABELS[status]}
@@ -218,7 +230,7 @@ function createSimilarStoryCard(story, isLoggedIn, showPreview = false) {
             </h3>
             <p>職業: ${escapeHTML(story.profession || '不明')}</p>
             <p>年収: ${escapeHTML(String(latestIncome))}</p>
-            ${story.career_type ? `<p>今後: ${escapeHTML(story.career_type)}</p>` : ''}
+            ${story.career_type ? `<p>志向: ${escapeHTML(story.career_type)}</p>` : ''}
         </div>
         ${drawCareerPathD3(story.careerStages, window.innerWidth)}
         <div class="card-footer">
