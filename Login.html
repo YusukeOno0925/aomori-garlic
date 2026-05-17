@@ -27,18 +27,62 @@
             </a>
         </div>
     </header>
-    <main>
-        <h2>ログイン</h2>
-        <form id="login-form">
-            <input type="email" name="email" placeholder="メールアドレス" required>
-            <input type="password" name="password" placeholder="パスワード" required>
-            <button type="submit">Login</button>
-        </form>
-        <p id="error-message" style="color: red; display: none;">ログインに失敗しました。ユーザー名またはパスワードが正しくありません。</p>
-        <p>アカウントをお持ちでないですか？ <a href="Register.html">新規登録はこちら</a></p>
-        <p>パスワードをお忘れですか？ <a href="Forgot_password.html">こちら</a></p>
-
-        <!-- ロード中のメッセージを追加 -->
+    <main class="login-page">
+        <section class="login-hero">
+            <p class="login-kicker">WELCOME BACK</p>
+            <h2>キャリアの続きを、見にいく。</h2>
+            <p class="login-lead">
+                あなたに近いキャリア事例や、リアルな失敗・後悔から、
+                これからの働き方を考えられます。
+            </p>
+    
+            <div class="login-benefits">
+                <div>
+                    <span>01</span>
+                    <p>自分に近いキャリア事例を探せる</p>
+                </div>
+                <div>
+                    <span>02</span>
+                    <p>失敗・後悔から学べる</p>
+                </div>
+                <div>
+                    <span>03</span>
+                    <p>年収・職種・志向を参考にできる</p>
+                </div>
+            </div>
+        </section>
+    
+        <section class="login-card">
+            <div class="login-card-header">
+                <p class="login-card-kicker">LOGIN</p>
+                <h2>ログイン</h2>
+                <p>登録済みのメールアドレスとパスワードを入力してください。</p>
+            </div>
+    
+            <form id="login-form">
+                <label>
+                    メールアドレス
+                    <input type="email" name="email" placeholder="example@imnormal.jp" required>
+                </label>
+    
+                <label>
+                    パスワード
+                    <input type="password" name="password" placeholder="パスワードを入力" required>
+                </label>
+    
+                <button type="submit">ログインする</button>
+            </form>
+    
+            <p id="error-message" class="error-message">
+                ログインに失敗しました。メールアドレスまたはパスワードをご確認ください。
+            </p>
+    
+            <div class="login-links">
+                <p>アカウントをお持ちでない方は <a href="Register.html">新規登録</a></p>
+                <p>パスワードをお忘れの方は <a href="Forgot_password.html">こちら</a></p>
+            </div>
+        </section>
+    
         <div id="loading-indicator" class="loading-indicator" style="display: none;">
             <div class="spinner"></div>
             <p>ログイン中です...</p>
@@ -47,7 +91,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
+                <p>&copy; 2026 Imnormal</p>
                 <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
                     <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
                 </a>
