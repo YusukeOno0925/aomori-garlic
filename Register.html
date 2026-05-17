@@ -29,54 +29,67 @@
             </a>
         </div>
     </header>
-    <main>
-        <h2>無料会員登録（30秒）</h2>
+    <main class="register-page">
+        <section class="register-hero">
+            <p class="register-kicker">START FOR FREE</p>
+            <h2>近い人のキャリアから、次の選択を考える。</h2>
+            <p class="register-lead">
+                無料登録すると、キャリア事例の詳細や、年収・満足度・転職理由まで確認できます。
+            </p>
     
-        <!-- ① リードコピー -->
-        <p class="register-lead">
-            登録すると、<strong>現在100件以上</strong>の転職ストーリーを<br>
-            「理由・年収・満足度の推移」まで<strong>全文</strong>チェックできます。
-        </p>
+            <div class="register-benefit-cards">
+                <div>
+                    <span>01</span>
+                    <p>職業を選んだ理由や転職理由まで読める</p>
+                </div>
+                <div>
+                    <span>02</span>
+                    <p>年収レンジと満足度の推移を見られる</p>
+                </div>
+                <div>
+                    <span>03</span>
+                    <p>匿名ニックネームで質問・コメントできる</p>
+                </div>
+            </div>
+        </section>
     
-        <!-- ② ベネフィット（箇条書き） -->
-        <ul class="register-benefits">
-            <li>気になるキャリアの「職業を選んだ理由」「転職理由」まで読める</li>
-            <li>年収レンジと満足度のグラフで、自分の立ち位置がわかる</li>
-            <li>匿名のニックネームでコメント・質問ができる（本名は公開されません）</li>
-        </ul>
+        <section class="register-card">
+            <div class="register-card-header">
+                <p class="register-card-kicker">FREE REGISTER</p>
+                <h2>無料会員登録</h2>
+                <p>30秒で登録できます。本名は公開されません。</p>
+            </div>
     
-        <!-- ③ 登録フォーム -->
-        <form id="register-form" method="post">
-            <label class="field-label">
-                ユーザ名
-                <span class="field-note">※ ニックネームでOKです。本名は公開されません。</span>
-            </label>
-            <input type="text" name="username" placeholder="例）career.imnormal" required>
+            <form id="register-form" method="post">
+                <label>
+                    ユーザ名
+                    <span>ニックネームでOKです</span>
+                    <input type="text" name="username" placeholder="例）career.imnormal" required>
+                </label>
     
-            <label class="field-label">
-                Emailアドレス
-                <span class="field-note">ログインに使用します。広告メールは送りません。</span>
-            </label>
-            <input type="email" name="email" placeholder="mail@example.com" required>
+                <label>
+                    Emailアドレス
+                    <span>ログインに使用します</span>
+                    <input type="email" name="email" placeholder="mail@example.com" required>
+                </label>
     
-            <label class="field-label">
-                パスワード
-                <span class="field-note">8文字以上を推奨しています。</span>
-            </label>
-            <input type="password" name="password" placeholder="パスワードを入力" required>
+                <label>
+                    パスワード
+                    <span>8文字以上を推奨しています</span>
+                    <input type="password" name="password" placeholder="パスワードを入力" required>
+                </label>
     
-            <button type="submit" id="register-button">
-                無料で登録してキャリア体験を読む
-            </button>
-        </form>
+                <button type="submit" id="register-button">
+                    無料で登録する
+                </button>
+            </form>
     
-        <!-- ④ 既存ユーザー向けリンク -->
-        <p class="register-footer-text">
-            すでにアカウントをお持ちの方は
-            <a href="Login.html">こちらからログイン</a>
-        </p>
+            <p class="register-footer-text">
+                すでにアカウントをお持ちの方は
+                <a href="Login.html">ログイン</a>
+            </p>
+        </section>
     
-        <!-- ⑤ ローディングポップアップ（IDだけ合わせる） -->
         <div id="loading-popup" class="loading-popup" style="display: none;">
             <p>登録中です。少々お待ちください…</p>
         </div>
@@ -84,7 +97,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
+                <p>&copy; 2026 Imnormal</p>
                 <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
                     <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
                 </a>
