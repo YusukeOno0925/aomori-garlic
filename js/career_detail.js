@@ -662,17 +662,33 @@ function escapeHTML(str) {
 function renderCareerExperiences(container, experiences, isLoggedIn) {
     if (!container) return;
 
-    // この文字数以下ならロックしない（全文表示）
     const LOCK_THRESHOLD = 80;
-    // ロック時に最初に見せる文字数
-    const PREVIEW_LENGTH = 40;
+    const PREVIEW_LENGTH = 55;
 
-    // 1) ログイン済みなら全件フル表示
+    // 非ログインでも全文を見せる項目
+    const FREE_VISIBLE_TITLES = [
+        '職業を選んだ理由',
+        '初めての仕事のフィードバック'
+    ];
+
+    // 登録導線として強く使う項目
+    const HIGH_VALUE_LOCK_TITLES = [
+        '転職理由',
+        '失敗経験',
+        '学んだこと',
+        '現在の悩み・不安',
+        '転職の詳細',
+        '仕事のフィードバック',
+        '最も誇りに思う達成'
+    ];
+
     if (isLoggedIn) {
         container.innerHTML = experiences.map(exp => {
             if (!exp.content) return '';
+
             const text = String(exp.content).trim();
             if (!text) return '';
+
             return `
                 <div class="detail">
                     <p><strong>${escapeHTML(exp.title)}:</strong></p>
@@ -680,20 +696,28 @@ function renderCareerExperiences(container, experiences, isLoggedIn) {
                 </div>
             `;
         }).join('');
+
         return;
     }
 
-    // 2) 非ログイン時：短い内容はそのまま／長い内容だけロック表示
-    const html = experiences.map(exp => {
+    const html = experiences.map((exp, index) => {
         if (!exp.content) return '';
 
         const text = String(exp.content).trim();
         if (!text) return '';
 
-        const length = text.length;
+        const shouldAlwaysShow =
+            FREE_VISIBLE_TITLES.includes(exp.title);
 
-        // ▼ 短い → そのまま全文表示（ボタンなし）
-        if (length <= LOCK_THRESHOLD) {
+        const isHighValueContent =
+            HIGH_VALUE_LOCK_TITLES.includes(exp.title);
+
+        const shouldLock =
+            !shouldAlwaysShow &&
+            isHighValueContent &&
+            text.length > LOCK_THRESHOLD;
+
+        if (!shouldLock) {
             return `
                 <div class="detail">
                     <p><strong>${escapeHTML(exp.title)}:</strong></p>
@@ -702,18 +726,23 @@ function renderCareerExperiences(container, experiences, isLoggedIn) {
             `;
         }
 
-        // ▼ 長い → 最初だけ見せて、後半をぼかし＋CTA
         const visible = text.slice(0, PREVIEW_LENGTH);
-        const hidden  = text.slice(PREVIEW_LENGTH);
+        const hidden = text.slice(PREVIEW_LENGTH);
 
         return `
             <div class="detail detail-locked">
                 <p><strong>${escapeHTML(exp.title)}:</strong></p>
+
                 <p class="locked-body">
                     <span class="locked-visible">${escapeHTML(visible)}</span>
                     <span class="locked-blur">${escapeHTML(hidden)}</span>
                 </p>
+
                 <div class="locked-footer">
+                    <p class="locked-message">
+                        ${escapeHTML(exp.title)}の続きは、無料登録すると全文確認できます。
+                    </p>
+
                     <div class="locked-buttons">
                         <a href="/Register.html" class="locked-cta">
                             無料登録して全文を見る
@@ -727,6 +756,6 @@ function renderCareerExperiences(container, experiences, isLoggedIn) {
         `;
     }).join('');
 
-    // 何もなければメッセージだけ表示
-    container.innerHTML = html || '<p>まだ公開されているキャリア体験はありません。</p>';
+    container.innerHTML =
+        html || '<p>まだ公開されているキャリア体験はありません。</p>';
 }
