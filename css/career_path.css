@@ -1,135 +1,303 @@
-body {
-    background-color: #FBFAF7;
-    font-family: 'Roboto', sans-serif; /* デフォルトフォントを設定 */
+:root {
+    --path-bg: #FBFAF7;
+    --path-card: #fff;
+    --path-soft: #fffdf8;
+    --path-text: #574637;
+    --path-muted: #75685d;
+    --path-accent: #8ba141;
+    --path-main: #5a4635;
+    --path-line: rgba(87,70,55,.12);
+    --path-shadow: 0 14px 36px rgba(40, 28, 18, .08);
+    --path-radius: 22px;
+  }
+  
+  body {
+    background-color: var(--path-bg);
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* styles.css の main 指定をこの画面用に調整 */
+  main.career-path-page {
+    box-sizing: border-box;
+    width: calc(100% - 220px);
+    margin-left: 220px;
+    margin-top: 100px;
+    padding: 2rem;
+  }
+  
+  /* Hero */
+  .career-path-hero {
+    max-width: 1000px;
+    margin: 0 auto 1.5rem;
+    padding: 2.4rem;
+    background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,253,248,.94));
+    border: 1px solid var(--path-line);
+    border-radius: var(--path-radius);
+    box-shadow: var(--path-shadow);
+  }
+  
+  .career-path-kicker {
+    margin: 0 0 .75rem;
+    color: var(--path-accent);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+  }
+  
+  .career-path-hero h1 {
+    margin: 0 0 .9rem;
+    color: var(--path-text);
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.25;
+  }
+  
+  .career-path-lead {
     margin: 0;
-    padding: 0;
-}
-
-/* メインコンテンツ */
-main {
-    padding: 1rem;
-}
-
-h1 {
-    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
-}
-
-/* サーチセクション */
-#search-section {
-    padding: 20px;
-    text-align: center;
-    margin-top: 20px; /* 上部に余白を追加 */
-    width: 100%; /* 幅を100%に設定 */
-    max-width: 800px; /* 最大幅を設定 */
-}
-
-/* キャリアパスグラフのセクション */
-#career-visualization {
-    text-align: center;
-    margin-bottom: 20px;
-    width: 100%; /* 幅を100%に設定 */
-    max-width: 800px; /* 最大幅を設定 */
-}
-
-#career-visualization h2 {
-    font-size: 24px;
-    color: #574637;
-    text-align: center; /* 中央揃え */
-    margin-bottom: 10px; /* 下に少し余白を追加 */
-}
-
-#career-visualization p {
-    margin: 0 20px; /* 左右に余白を追加 */
-    line-height: 1.5;
-    text-align: left; /* 左揃え */
-    max-width: 800px; /* 最大幅を設定して中央に配置 */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* キャリアパスグラフ */
-#career-path-graph {
+    max-width: 760px;
+    color: var(--path-muted);
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+  
+  .career-path-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: 1.4rem;
+  }
+  
+  .career-path-tags span {
+    display: inline-flex;
+    align-items: center;
+    padding: .35rem .75rem;
+    border-radius: 999px;
+    background: rgba(139,161,65,.12);
+    color: #6f8135;
+    font-size: .82rem;
+    font-weight: 800;
+  }
+  
+  /* Filter */
+  .career-path-filter-card {
+    max-width: 1000px;
+    margin: 0 auto 1.2rem;
+    padding: 1.4rem;
+    background: var(--path-card);
+    border: 1px solid var(--path-line);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(40, 28, 18, .05);
+  }
+  
+  .filter-heading {
+    margin-bottom: 1rem;
+  }
+  
+  .filter-heading h2 {
+    margin: 0 0 .35rem;
+    color: var(--path-text);
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+  
+  .filter-heading p {
+    margin: 0;
+    color: var(--path-muted);
+    font-size: .9rem;
+    line-height: 1.7;
+  }
+  
+  .filter-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .8rem;
+  }
+  
+  #filter-university,
+  #filter-industry {
     width: 100%;
-    margin-top: 10px; /* 上部の余白を小さく */
-    margin-bottom: 10px; /* 下部の余白を小さく */
-    overflow-x: auto; /* 横スクロールを可能に */
-    overflow-y: auto; /* 縦スクロールを可能に */
-    height: auto; /* 高さを自動調整 */
-}
-
-/* ユーザーカードのセクション */
-#user-card-container {
-    display: block; /* ブロック要素に設定 */
-    width: 100%; /* 幅を100%に設定 */
-    margin-top: 20px; /* 上部の余白を増やす */
-}
-
-/* カードスタイル */
-.career-card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px; /* パディングを増やす */
-    margin-bottom: 20px; /* 下に余白を追加 */
-    width: 100%; /* 親コンテナに合わせて幅を設定 */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
-    box-sizing: border-box; /* パディングとボーダーを含める */
-}
-
-.career-card:hover {
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* ツールチップのスタイル */
-.tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 6px;
+    padding: .85rem 1rem;
+    border: 1px solid var(--path-line);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--path-text);
+    font-size: .95rem;
+    box-sizing: border-box;
+  }
+  
+  #filter-university:focus,
+  #filter-industry:focus {
+    outline: none;
+    border-color: rgba(139,161,65,.7);
+    box-shadow: 0 0 0 4px rgba(139,161,65,.14);
+  }
+  
+  /* Graph */
+  #career-path-graph {
+    max-width: 1000px;
+    margin: 0 auto 1.4rem;
+    padding: 1rem;
+    background: var(--path-card);
+    border: 1px solid var(--path-line);
+    border-radius: var(--path-radius);
+    box-shadow: var(--path-shadow);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  #career-path-graph svg {
+    display: block;
+  }
+  
+  svg text {
     font-size: 12px;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
-}
-
-svg text {
-    font-size: 14px;  /* すべてのSVG内テキストを14pxに固定 */
-}
-
-.tooltip {
+    fill: var(--path-text);
+  }
+  
+  /* User cards */
+  #user-card-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .career-card {
+    padding: 1.25rem;
+    background: var(--path-card);
+    border: 1px solid var(--path-line);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(40, 28, 18, .05);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  
+  .career-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(139,161,65,.25);
+    box-shadow: 0 14px 34px rgba(40, 28, 18, .10);
+  }
+  
+  .career-info h2 {
+    margin: 0 0 .6rem;
+    color: var(--path-text);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  
+  .career-info p {
+    margin: .25rem 0;
+    color: var(--path-muted);
+    font-size: .92rem;
+    line-height: 1.55;
+  }
+  
+  .career-path {
+    margin-top: .7rem;
+  }
+  
+  /* Tooltip */
+  .tooltip {
     position: absolute;
     text-align: center;
-    padding: 8px 12px;
-    background: rgba(0,0,0,0.7);
+    padding: .55rem .75rem;
+    background: rgba(40, 28, 18, .88);
     color: #fff;
-    border-radius: 6px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: .78rem;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity .2s ease;
     z-index: 9999;
   }
-
-@media (max-width: 768px) {
-    h1{
-        font-size: 1.2rem;
-        margin-top: -20px;
+  
+  /* Tablet / Mobile */
+  @media (max-width: 768px) {
+    main.career-path-page {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 90px;
+      padding: 1rem;
     }
-
-    #career-visualization h2 {
-        font-size: 1.0rem;
+  
+    .career-path-hero {
+      padding: 1.6rem;
+      border-radius: 20px;
     }
-
-    #career-visualization p {
-        font-size: 0.8rem;
+  
+    .career-path-hero h1 {
+      font-size: 1.8rem;
     }
-}
-
-/* 450px以下 */
-@media (max-width: 450px) {
+  
+    .career-path-lead {
+      font-size: .92rem;
+    }
+  
+    .career-path-filter-card {
+      padding: 1.1rem;
+      border-radius: 18px;
+    }
+  
+    .filter-controls {
+      grid-template-columns: 1fr;
+    }
+  
+    #career-path-graph {
+      padding: .8rem;
+      border-radius: 18px;
+    }
+  
+    .career-card {
+      padding: 1.05rem;
+      border-radius: 16px;
+    }
+  
+    .career-info h2 {
+      font-size: .98rem;
+    }
+  
+    .career-info p {
+      font-size: .86rem;
+    }
+  }
+  
+  @media (max-width: 450px) {
+    main.career-path-page {
+      margin-top: 86px;
+      padding: .8rem;
+    }
+  
+    .career-path-hero {
+      padding: 1.3rem;
+    }
+  
+    .career-path-hero h1 {
+      font-size: 1.55rem;
+    }
+  
+    .career-path-tags {
+      gap: .35rem;
+    }
+  
+    .career-path-tags span {
+      font-size: .72rem;
+      padding: .3rem .6rem;
+    }
+  
+    .filter-heading h2 {
+      font-size: 1rem;
+    }
+  
+    .filter-heading p {
+      font-size: .82rem;
+    }
+  
+    #filter-university,
+    #filter-industry {
+      font-size: .88rem;
+      padding: .78rem .85rem;
+    }
+  
     svg text {
-        font-size: 12px;  /* すべてのSVG内テキストを12pxに固定 */
+      font-size: 11px;
     }
-}
+  }
