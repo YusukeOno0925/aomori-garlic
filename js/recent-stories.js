@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const RECENT_STATUS_LABELS = {
-    online: '在席中',
+    online: '活動中',
     recently_active: '最近活動',
     inactive: 'お休み中'
 };

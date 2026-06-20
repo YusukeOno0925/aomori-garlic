@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         `;
 
-                        // オンラインステータスの取得（在席中／最近活動／お休み中 の文字付きバッジに変更）
+                        // オンラインステータスの取得（活動中／最近活動／お休み中 の文字付きバッジに変更）
                         const activityStatus = career.activity_status || 'inactive';
                         const statusText = activityStatus === 'online'
-                            ? '在席中'
+                            ? '活動中'
                             : activityStatus === 'recently_active'
                                 ? '最近活動'
                                 : 'お休み中';
