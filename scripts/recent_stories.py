@@ -24,8 +24,19 @@ async def get_recent_career_stories():
         LEFT JOIN profile_views pv ON u.id = pv.user_id
         LEFT JOIN career_aspirations ca ON u.id = ca.user_id
         INNER JOIN (
-            SELECT id
-            FROM users
+            SELECT
+                u2.id,
+                MAX(u2.created_at) AS created_at
+            FROM users u2
+            INNER JOIN job_experiences j2 ON u2.id = j2.user_id
+            WHERE
+                u2.birthdate IS NOT NULL
+                AND j2.job_category IS NOT NULL
+                AND j2.job_category <> ''
+                AND j2.salary IS NOT NULL
+                AND j2.salary <> ''
+                AND j2.work_start_period IS NOT NULL
+            GROUP BY u2.id
             ORDER BY created_at DESC
             LIMIT 5
         ) recent ON u.id = recent.id
