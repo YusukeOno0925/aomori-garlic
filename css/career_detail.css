@@ -131,7 +131,7 @@ main.career-detail-page {
 }
 
 
-/* 他CSSとの干渉防止 */
+/* 莉砲SS縺ｨ縺ｮ蟷ｲ貂蛾亟豁｢ */
 
 .career-detail-page .career-section-header,
 .career-detail-page .career-compact-header,
@@ -2057,9 +2057,9 @@ main.career-detail-page {
    ========================================================= */
 
 /*
- * JSが未ログイン時に .career-outcome-guest を
- * chartWrapper内へ生成するため、
- * その場合は350px固定を解除する。
+ * JS縺梧悴繝ｭ繧ｰ繧､繝ｳ譎ゅ↓ .career-outcome-guest 繧�
+ * chartWrapper蜀�∈逕滓�縺吶ｋ縺溘ａ縲�
+ * 縺昴�蝣ｴ蜷医�350px蝗ｺ螳壹ｒ隗｣髯､縺吶ｋ縲�
  */
 
 .career-outcome__chart:has(.career-outcome-guest) {
@@ -2256,11 +2256,11 @@ main.career-detail-page {
    ========================================================= */
 
 /*
- * 新JSでは .career-outcome-guest 側で登録導線を持つため、
- * 旧career-outcome-lockは不要。
+ * 譁ｰJS縺ｧ縺ｯ .career-outcome-guest 蛛ｴ縺ｧ逋ｻ骭ｲ蟆守ｷ壹ｒ謖√▽縺溘ａ縲�
+ * 譌ｧcareer-outcome-lock縺ｯ荳崎ｦ√�
  *
- * updateOutcomeAccess() がhiddenを戻してしまっても、
- * CSS側で完全に消す。
+ * updateOutcomeAccess() 縺敬idden繧呈綾縺励※縺励∪縺｣縺ｦ繧ゅ�
+ * CSS蛛ｴ縺ｧ螳悟�縺ｫ豸医☆縲�
  */
 
 .career-outcome-lock,
@@ -2403,7 +2403,7 @@ main.career-detail-page {
 }
 
 
-/* 未登録 */
+/* 譛ｪ逋ｻ骭ｲ */
 
 .career-message.is-locked {
 
@@ -3462,4 +3462,492 @@ footer a {
         height: 240px;
     }
 
+}
+
+
+/* =========================================================
+   30. FINAL PREMIUM POLISH
+   - HTML / JS structure unchanged
+   - Visual density, hierarchy and product feel refined
+   ========================================================= */
+
+:root {
+    --gps-wide-width: 1220px;
+    --gps-reading-width: 760px;
+}
+
+/* ---------- Page rhythm ---------- */
+
+main.career-detail-page {
+    padding-top: 38px;
+    padding-bottom: 76px;
+}
+
+.career-gps-intro {
+    margin-bottom: 26px;
+}
+
+.career-gps-section {
+    margin-bottom: 26px;
+}
+
+.career-section-header {
+    gap: 28px;
+    margin-bottom: 20px;
+}
+
+.career-section-description {
+    color: #5f5952;
+}
+
+/* ---------- Intro ---------- */
+
+.career-gps-intro__eyebrow {
+    margin-bottom: 7px;
+}
+
+.career-gps-intro__title {
+    max-width: 880px;
+    font-size: clamp(2rem, 2.7vw, 2.55rem);
+    letter-spacing: -0.04em;
+}
+
+.career-gps-intro__description {
+    margin-top: 13px;
+    max-width: 780px;
+    line-height: 1.82;
+}
+
+/* ---------- Shared premium card treatment ---------- */
+
+.career-profile-section,
+.career-journey-section,
+.career-turning-section,
+.career-compass-section,
+.career-outcome-section {
+    border-color: rgba(53, 46, 39, 0.11);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,1) 0%,
+            rgba(253,252,250,0.98) 100%
+        );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.92) inset,
+        0 10px 28px rgba(35,30,26,0.045),
+        0 24px 60px rgba(35,30,26,0.035);
+}
+
+/* ---------- Profile: tighter and more editorial ---------- */
+
+.career-profile {
+    grid-template-columns:
+        minmax(0, 1.34fr)
+        minmax(330px, 0.66fr);
+    gap: 32px;
+    padding: 28px 32px;
+}
+
+.career-profile__identity {
+    gap: 19px;
+}
+
+.career-profile__avatar {
+    width: 82px;
+    height: 82px;
+    font-size: 1.78rem;
+    box-shadow:
+        inset 0 0 0 5px rgba(255,255,255,0.82),
+        0 8px 20px rgba(89,72,58,0.055);
+}
+
+.career-profile__name {
+    font-size: 1.38rem;
+}
+
+.career-profile__headline {
+    margin-top: 5px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+.career-profile__tags {
+    margin-top: 12px;
+}
+
+.tag-pill {
+    padding: 4px 9px;
+    background: rgba(116,128,79,0.075);
+}
+
+.career-profile__snapshot {
+    padding-left: 27px;
+}
+
+.career-profile__snapshot-header {
+    margin-bottom: 10px;
+}
+
+.snapshot-item {
+    padding: 10px 11px;
+    background: rgba(250,249,247,0.86);
+}
+
+.snapshot-item__value {
+    font-size: 0.78rem;
+}
+
+/* ---------- Career Journey: stronger timeline, less empty ---------- */
+
+.career-journey-section {
+    padding: 24px 28px 24px;
+}
+
+.career-journey-section .career-section-header {
+    margin-bottom: 14px;
+}
+
+.journey-track {
+    gap: clamp(18px, 3.4vw, 54px);
+    padding: 14px 10px 2px;
+}
+
+.journey-track::before {
+    top: 30px;
+    left: 6%;
+    right: 6%;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(116,128,79,0.06),
+            rgba(116,128,79,0.62) 18%,
+            rgba(116,128,79,0.62) 82%,
+            rgba(116,128,79,0.06)
+        );
+}
+
+.journey-node {
+    flex-basis: 210px;
+    max-width: 220px;
+    min-width: 135px;
+}
+
+.journey-node__year {
+    margin-bottom: 6px;
+    color: #7f786f;
+}
+
+.journey-node__marker {
+    width: 11px;
+    height: 11px;
+    margin-bottom: 9px;
+    border-width: 3px;
+    box-shadow:
+        0 0 0 1px rgba(116,128,79,0.18),
+        0 4px 12px rgba(116,128,79,0.12);
+}
+
+.journey-node__company {
+    font-size: 0.84rem;
+    line-height: 1.38;
+}
+
+.journey-node__role {
+    margin-top: 3px;
+}
+
+.journey-node__period {
+    margin-top: 4px;
+}
+
+/* ---------- Turning Points: premium editorial density ---------- */
+
+.career-turning-section {
+    padding: 29px 32px 32px;
+    border-radius: 24px;
+}
+
+.career-turning-section .career-section-header {
+    margin-bottom: 18px;
+}
+
+.career-turning-list {
+    gap: 12px;
+}
+
+.turning-point-card {
+    border-color: rgba(53,46,39,0.105);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.985);
+}
+
+.turning-point-card__header {
+    gap: 13px;
+    padding: 16px 20px;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(89,72,58,0.032) 0%,
+            rgba(116,128,79,0.025) 38%,
+            rgba(255,255,255,0) 100%
+        );
+}
+
+.turning-point-card__number {
+    width: 36px;
+    height: 36px;
+}
+
+.turning-point-card__type {
+    padding: 3px 8px;
+}
+
+.turning-point-card__title {
+    margin-top: 4px;
+    font-size: 1rem;
+}
+
+.turning-point-card__career {
+    padding: 8px 20px;
+    font-size: 0.65rem;
+}
+
+/* Story area gets wider so it feels like a product, not a narrow article */
+
+.turning-story {
+    width: min(calc(100% - 40px), 930px);
+    padding: 17px 0 4px;
+}
+
+.turning-story-step {
+    grid-template-columns: 34px minmax(0,1fr);
+    gap: 13px;
+}
+
+.turning-story-step__number {
+    width: 26px;
+    height: 26px;
+}
+
+.turning-story-step__body {
+    max-width: 800px;
+    padding-bottom: 19px;
+}
+
+.turning-story-step__heading {
+    margin-bottom: 6px;
+}
+
+.turning-story-step__answer {
+    max-width: 800px;
+    font-size: 0.8rem;
+    line-height: 1.82;
+}
+
+/* Emphasis blocks feel less like form fields */
+
+.turning-story-step--decision .turning-story-step__body,
+.turning-story-step--outcome .turning-story-step__body,
+.turning-story-step--learning .turning-story-step__body {
+    padding: 13px 15px;
+    margin-bottom: 10px;
+}
+
+.turning-story-step--decision .turning-story-step__body {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(244,240,236,0.78),
+            rgba(255,255,255,0.98)
+        );
+}
+
+.turning-story-step--outcome .turning-story-step__body {
+    background: rgba(248,247,244,0.84);
+}
+
+.turning-story-step--learning .turning-story-step__body {
+    border-left-width: 2px;
+}
+
+/* ---------- Supplementary / same choice ---------- */
+
+.turning-supplementary,
+.turning-point-card__same-choice {
+    width: min(calc(100% - 40px), 930px);
+}
+
+.turning-supplementary__item {
+    background: rgba(250,249,247,0.8);
+}
+
+.turning-point-card__same-choice {
+    margin-top: 2px;
+    background: rgba(250,249,247,0.8);
+}
+
+/* ---------- Preview cards ---------- */
+
+.turning-point-card--preview {
+    opacity: 0.98;
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff 0%,
+            rgba(116,128,79,0.022) 100%
+        );
+}
+
+/* ---------- Registration wall ---------- */
+
+.career-value-wall {
+    margin-top: -18px;
+    padding-top: 46px;
+}
+
+.career-value-wall__content {
+    max-width: 620px;
+    padding: 25px 28px 24px;
+    border-color: rgba(53,46,39,0.11);
+    box-shadow:
+        0 18px 44px rgba(35,30,26,0.075);
+}
+
+/* ---------- Outcome ---------- */
+
+.career-outcome-section {
+    padding: 25px 28px 28px;
+}
+
+.career-outcome__kpis {
+    grid-template-columns: repeat(2, minmax(0, 230px));
+    gap: 9px;
+}
+
+.outcome-kpi {
+    padding: 11px 12px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(249,248,246,0.95),
+            rgba(255,255,255,1)
+        );
+}
+
+.career-outcome-guest {
+    padding: 18px 20px;
+    border-color: rgba(89,72,58,0.14);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(250,249,247,1) 0%,
+            rgba(255,255,255,1) 58%,
+            rgba(244,240,236,0.66) 140%
+        );
+}
+
+.career-outcome-guest__cta,
+.career-value-wall__cta,
+.career-message-lock__content a {
+    background:
+        linear-gradient(
+            180deg,
+            #665241 0%,
+            var(--gps-brown) 100%
+        );
+}
+
+.career-outcome-guest__cta:hover,
+.career-value-wall__cta:hover,
+.career-message-lock__content a:hover {
+    background:
+        linear-gradient(
+            180deg,
+            #4b3d33 0%,
+            var(--gps-brown-dark) 100%
+        );
+}
+
+/* ---------- Message ---------- */
+
+.career-message-section {
+    margin-top: 38px;
+}
+
+.career-message-section__inner {
+    max-width: 760px;
+}
+
+.career-message {
+    max-width: 660px;
+}
+
+.career-message p {
+    font-size: 0.93rem;
+    line-height: 1.86;
+}
+
+/* ---------- Desktop polish ---------- */
+
+@media (min-width: 1101px) {
+    .career-profile-section:hover,
+    .career-journey-section:hover,
+    .career-outcome-section:hover {
+        box-shadow:
+            0 1px 0 rgba(255,255,255,0.95) inset,
+            0 14px 32px rgba(35,30,26,0.048),
+            0 28px 68px rgba(35,30,26,0.04);
+    }
+}
+
+/* ---------- Tablet/mobile tuning after premium overrides ---------- */
+
+@media (max-width: 1100px) {
+    .turning-story,
+    .turning-supplementary,
+    .turning-point-card__same-choice {
+        width: min(calc(100% - 30px), 860px);
+    }
+}
+
+@media (max-width: 900px) {
+    main.career-detail-page {
+        padding-top: 26px;
+    }
+
+    .career-profile {
+        padding: 22px 20px;
+    }
+
+    .career-journey-section {
+        padding: 20px 18px 21px;
+    }
+
+    .career-turning-section {
+        padding: 21px 15px 23px;
+    }
+
+    .turning-story,
+    .turning-supplementary,
+    .turning-point-card__same-choice {
+        width: auto;
+    }
+}
+
+@media (max-width: 599px) {
+    main.career-detail-page {
+        padding-top: 18px;
+    }
+
+    .career-gps-section {
+        margin-bottom: 20px;
+    }
+
+    .career-profile {
+        padding: 18px 14px;
+    }
+
+    .career-turning-section {
+        padding: 17px 9px 20px;
+    }
 }
