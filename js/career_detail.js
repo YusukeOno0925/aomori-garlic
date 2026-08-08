@@ -729,7 +729,7 @@ function renderCareerJourney(
                             ${
                                 node.department
                                     ? `
-                                        <p class="journey-node__role">
+                                        <p class="journey-node__department">
                                             ${escapeHTML(
                                                 node.department
                                             )}

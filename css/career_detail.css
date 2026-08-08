@@ -591,18 +591,42 @@ main.career-detail-page {
 
 .career-journey-section {
 
+    position: relative;
+
     padding:
+        24px
         28px
-        32px
         30px;
 
-    border: 1px solid var(--gps-line);
+    border: 0;
+    border-radius: 0;
 
-    border-radius: var(--gps-radius-xl);
+    background: transparent;
 
-    background: var(--gps-surface);
+    box-shadow: none;
+}
 
-    box-shadow: var(--gps-shadow-md);
+
+.career-journey-section::after {
+
+    position: absolute;
+
+    right: 28px;
+    bottom: 0;
+    left: 28px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gps-line-strong) 12%,
+            var(--gps-line-strong) 88%,
+            transparent
+        );
+
+    content: '';
 }
 
 
@@ -761,6 +785,22 @@ main.career-detail-page {
 }
 
 
+.journey-node__department {
+  margin:
+      3px
+      0
+      0;
+
+  color: var(--gps-text-sub);
+
+  font-size: 0.68rem;
+
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+
 .journey-node__period {
 
     display: block;
@@ -782,19 +822,26 @@ main.career-detail-page {
     position: relative;
 
     padding:
+        38px
         34px
-        36px
-        38px;
+        42px;
 
     overflow: hidden;
 
-    border: 1px solid var(--gps-line);
+    border: 1px solid rgba(122, 108, 84, 0.12);
 
-    border-radius: 26px;
+    border-radius: 28px;
 
-    background: var(--gps-surface);
+    background:
+        linear-gradient(
+            145deg,
+            #f1eee7 0%,
+            #f5f2eb 48%,
+            #f7f5f0 100%
+        );
 
-    box-shadow: var(--gps-shadow-lg);
+    box-shadow:
+        0 18px 52px rgba(45, 34, 26, 0.055);
 }
 
 
@@ -2284,16 +2331,15 @@ main.career-detail-page {
    22. MESSAGE
    莉翫�閾ｪ蛻�°繧峨√≠縺ｮ鬆��閾ｪ蛻�∈
    ========================================================= */
-
-   .career-message-section {
+.career-message-section {
 
     position: relative;
 
     width: 100%;
-    max-width: var(--gps-wide-width);
+    max-width: 920px;
 
     margin:
-        34px
+        58px
         auto
         12px;
 
@@ -2301,25 +2347,25 @@ main.career-detail-page {
 }
 
 
+
 .career-message-section__inner {
 
     position: relative;
 
     width: 100%;
-    max-width: 820px;
+    max-width: 760px;
 
     margin:
         0
         auto;
 
     padding:
-        24px
-        0
-        22px;
+        28px
+        20px
+        36px;
 
     box-sizing: border-box;
 
-    /* 譛蠕後�繝｡繝�そ繝ｼ繧ｸ縺ｯ繧ｫ繝ｼ繝牙喧縺励↑縺� */
     border: 0;
     border-radius: 0;
 
@@ -2339,14 +2385,22 @@ main.career-detail-page {
     margin:
         0
         0
-        20px;
+        30px;
 
     color: var(--gps-text);
 
-    font-size: 1.16rem;
+    font-size:
+        clamp(
+            1.25rem,
+            2vw,
+            1.55rem
+        );
+
     font-weight: 800;
 
-    line-height: 1.48;
+    letter-spacing: -0.025em;
+
+    line-height: 1.5;
 }
 
 
@@ -2355,10 +2409,10 @@ main.career-detail-page {
     position: relative;
 
     padding:
-        7px
+        10px
         0
-        8px
-        30px;
+        12px
+        46px;
 }
 
 
@@ -2366,18 +2420,18 @@ main.career-detail-page {
 
     position: absolute;
 
-    top: 2px;
-    bottom: 2px;
-    left: 0;
+    top: 4px;
+    bottom: 4px;
+    left: 17px;
 
-    width: 2px;
+    width: 1px;
 
     background:
         linear-gradient(
             180deg,
-            var(--gps-brown),
-            var(--gps-olive),
-            rgba(116,128,79,0.08)
+            rgba(89,72,58,0.46),
+            rgba(116,128,79,0.28),
+            rgba(116,128,79,0.03)
         );
 
     content: '';
@@ -2388,16 +2442,16 @@ main.career-detail-page {
 
     position: absolute;
 
-    top: -19px;
-    left: 16px;
+    top: -22px;
+    left: 0;
 
-    color: rgba(89,72,58,0.075);
+    color: rgba(111,130,60,0.18);
 
     font-family:
         Georgia,
         serif;
 
-    font-size: 4.4rem;
+    font-size: 4.8rem;
 
     line-height: 1;
 
@@ -2411,12 +2465,12 @@ main.career-detail-page {
 
     z-index: 1;
 
-    max-width: 720px;
+    max-width: 650px;
 
     padding:
         8px
         0
-        11px;
+        12px;
 }
 
 
@@ -2424,12 +2478,22 @@ main.career-detail-page {
 
     margin: 0;
 
+    max-width: 620px;
+
     color: #403a34;
 
-    font-size: 0.94rem;
+    font-size:
+        clamp(
+            1.08rem,
+            1.55vw,
+            1.28rem
+        );
+
     font-weight: 500;
 
-    line-height: 1.95;
+    letter-spacing: 0.01em;
+
+    line-height: 2;
 
     white-space: pre-wrap;
 
@@ -2599,7 +2663,36 @@ footer a {
 
 
 /* =========================================================
-   26. PREMIUM POLISH (DESKTOP BASE)
+   COMPASS + OUTCOME
+   PC縺ｧ縺ｯ讓ｪ荳ｦ縺ｳ縲∫強縺�判髱｢縺ｧ縺ｯ邵ｦ荳ｦ縺ｳ
+   ========================================================= */
+
+   @media (min-width: 1101px) {
+
+    .career-gps-insight-grid {
+        display: grid;
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1.15fr);
+        gap: 22px;
+        align-items: stretch;
+    }
+
+    .career-compass-section,
+    .career-outcome-section {
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .career-outcome__kpis {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   26. PREMIUM POLISH
    - HTML / JS structure unchanged
    - Visual density, hierarchy and product feel refined
    ========================================================= */
@@ -2654,8 +2747,6 @@ main.career-detail-page {
 /* ---------- Shared premium card treatment ---------- */
 
 .career-profile-section,
-.career-journey-section,
-.career-turning-section,
 .career-compass-section,
 .career-outcome-section {
     border-color: rgba(53, 46, 39, 0.11);
@@ -2734,6 +2825,10 @@ main.career-detail-page {
 
 .career-journey-section {
     padding: 24px 28px 24px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .career-journey-section .career-section-header {
@@ -2796,8 +2891,18 @@ main.career-detail-page {
 /* ---------- Turning Points: premium editorial density ---------- */
 
 .career-turning-section {
-    padding: 29px 32px 32px;
-    border-radius: 24px;
+    padding: 34px 32px 36px;
+    border-color: rgba(122,108,84,0.12);
+    border-radius: 26px;
+    background:
+        linear-gradient(
+            145deg,
+            #f1eee7 0%,
+            #f5f2eb 48%,
+            #f7f5f0 100%
+        );
+    box-shadow:
+        0 18px 52px rgba(45,34,26,0.055);
 }
 
 .career-turning-section .career-section-header {
@@ -3006,7 +3111,6 @@ main.career-detail-page {
 
 @media (min-width: 1101px) {
     .career-profile-section:hover,
-    .career-journey-section:hover,
     .career-outcome-section:hover {
         box-shadow:
             0 1px 0 rgba(255,255,255,0.95) inset,
@@ -3015,33 +3119,6 @@ main.career-detail-page {
     }
 }
 
-/* =========================================================
-   COMPASS + OUTCOME
-   PC縺ｧ縺ｯ讓ｪ荳ｦ縺ｳ縲∫強縺�判髱｢縺ｧ縺ｯ邵ｦ荳ｦ縺ｳ
-   ========================================================= */
-
-   @media (min-width: 1101px) {
-
-    .career-gps-insight-grid {
-        display: grid;
-        grid-template-columns:
-            minmax(0, 1fr)
-            minmax(0, 1.15fr);
-        gap: 22px;
-        align-items: stretch;
-    }
-
-    .career-compass-section,
-    .career-outcome-section {
-        height: 100%;
-        box-sizing: border-box;
-    }
-
-    .career-outcome__kpis {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-}
 
 
 /* =========================================================
@@ -3084,12 +3161,13 @@ main.career-detail-page {
 
         width:
             min(
-                calc(100% - 32px),
-                820px
+                calc(100% - 30px),
+                860px
             );
     }
 
 }
+
 
 
 /* =========================================================
@@ -3106,9 +3184,11 @@ main.career-detail-page {
         margin-top: 84px;
 
         padding:
-            26px
+            28px
             18px
             58px;
+
+        padding-top: 26px;
     }
 
 
@@ -3170,19 +3250,6 @@ main.career-detail-page {
     }
 
 
-    .career-profile__identity {
-        width: 100%;
-        min-width: 0;
-    }
-
-
-    .career-profile__identity-main {
-        flex: 1 1 auto;
-        width: auto;
-        min-width: 0;
-    }
-
-
     .career-profile__avatar {
 
         width: 68px;
@@ -3193,20 +3260,12 @@ main.career-detail-page {
 
 
     .career-profile__name {
-        width: 100%;
-        max-width: none;
         font-size: 1.16rem;
-        overflow-wrap: break-word;
-        word-break: normal;
     }
 
 
     .career-profile__headline {
-        width: 100%;
-        max-width: none;
         font-size: 0.77rem;
-        overflow-wrap: break-word;
-        word-break: normal;
     }
 
 
@@ -3277,6 +3336,7 @@ main.career-detail-page {
             "marker year"
             "marker company"
             "marker role"
+            "marker department"
             "marker period";
 
         column-gap: 12px;
@@ -3293,6 +3353,27 @@ main.career-detail-page {
             19px;
 
         text-align: left;
+    }
+
+
+    .journey-node__department {
+        grid-area: department;
+    
+        margin:
+            3px
+            0
+            0;
+    
+        color: var(--gps-text-sub);
+    
+        font-size: 0.68rem;
+    
+        line-height: 1.5;
+    
+        text-align: left;
+    
+        position: static;
+        transform: none;
     }
 
 
@@ -3562,16 +3643,202 @@ main.career-detail-page {
 }
 
 
+
 /* =========================================================
-   29. SMARTPHONE
+   29. MOBILE RESPONSIVE FIX
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    /* -----------------------------------------
+       Page
+       ----------------------------------------- */
+
+    main.career-detail-page {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 84px;
+
+        padding:
+            24px
+            18px
+            56px;
+    }
+
+
+    /* -----------------------------------------
+       Profile
+       ----------------------------------------- */
+
+    .career-profile {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+
+        padding:
+            22px
+            20px;
+    }
+
+    .career-profile__identity {
+        display: flex;
+
+        width: 100%;
+        min-width: 0;
+
+        align-items: center;
+
+        gap: 14px;
+    }
+
+    .career-profile__identity-main {
+        flex: 1 1 auto;
+
+        width: auto;
+        min-width: 0;
+    }
+
+    .career-profile__avatar {
+        flex: 0 0 64px;
+
+        width: 64px;
+        height: 64px;
+
+        font-size: 1.4rem;
+    }
+
+    .career-profile__name {
+        width: 100%;
+        max-width: none;
+
+        font-size: 1.12rem;
+
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .career-profile__headline {
+        width: 100%;
+        max-width: none;
+
+        font-size: 0.76rem;
+
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .career-profile__snapshot {
+        width: 100%;
+        min-width: 0;
+
+        padding:
+            18px
+            0
+            0;
+
+        border-top: 1px solid var(--gps-line);
+        border-left: 0;
+    }
+
+    .career-profile__snapshot-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    /* -----------------------------------------
+       Section Header
+       ----------------------------------------- */
+
+    .career-section-header {
+        grid-template-columns: minmax(0, 1fr);
+
+        gap: 8px;
+    }
+
+
+    /* -----------------------------------------
+       Journey
+       ----------------------------------------- */
+
+    .journey-track {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+
+    /* -----------------------------------------
+       Insight
+       ----------------------------------------- */
+
+    .career-gps-insight-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .career-compass__values {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+
+    /* -----------------------------------------
+       Turning Point
+       ----------------------------------------- */
+
+    .turning-story,
+    .turning-supplementary,
+    .turning-point-card__same-choice {
+        width: auto;
+    }
+
+
+    /* -----------------------------------------
+       Message
+       ----------------------------------------- */
+
+    .career-message-section {
+        margin-top: 40px;
+    }
+
+    .career-message-section__inner {
+        max-width: 720px;
+        padding:
+            24px
+            8px
+            30px;
+    }
+
+    .career-message-section__caption {
+        margin-bottom: 22px;
+        font-size: 1.08rem;
+    }
+
+    .career-message-layout {
+        padding-left: 36px;
+    }
+
+    .career-message-layout::before {
+        left: 13px;
+    }
+
+    .career-message-layout__quote {
+        top: -18px;
+        font-size: 4rem;
+    }
+
+    .career-message p {
+        font-size: 0.95rem;
+        line-height: 1.9;
+    }
+
+}
+
+
+
+/* =========================================================
+   30. SMARTPHONE
    ========================================================= */
 
 @media (max-width: 599px) {
-
-    .career-gps-section {
-        margin-bottom: 20px;
-    }
-
 
     main.career-detail-page {
 
@@ -3590,6 +3857,11 @@ main.career-detail-page {
     .career-gps-intro__description {
         font-size: 0.74rem;
     }
+
+    .career-gps-section {
+        margin-bottom: 20px;
+    }
+
 
 
     .career-profile-section,
@@ -3936,8 +4208,62 @@ main.career-detail-page {
 }
 
 
+
 /* =========================================================
-   30. VERY SMALL SMARTPHONE
+   31. SMALL SMARTPHONE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    main.career-detail-page {
+        padding:
+            20px
+            12px
+            48px;
+    }
+
+    .career-profile {
+        padding:
+            19px
+            15px;
+    }
+
+    .career-profile__identity {
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+    .career-profile__avatar {
+        flex-basis: 56px;
+
+        width: 56px;
+        height: 56px;
+    }
+
+    .career-profile__name {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .career-profile__snapshot-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .snapshot-item {
+        min-width: 0;
+    }
+}
+
+
+/* =========================================================
+   Very Small Smartphone
+   ========================================================= */
+
+
+/* =========================================================
+   32. VERY SMALL SMARTPHONE
    ========================================================= */
 
 @media (max-width: 390px) {
@@ -3971,4 +4297,19 @@ main.career-detail-page {
     }
 
 }
+
+
+
+/* =========================================================
+   33. VERY SMALL SMARTPHONE - 360px
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .career-profile__snapshot-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+
 
