@@ -1167,7 +1167,7 @@ main.career-detail-page {
 
     line-height: 1.9;
 
-    white-space: pre-wrap;
+    white-space: pre-line;
 
     overflow-wrap: anywhere;
 }

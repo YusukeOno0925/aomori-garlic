@@ -1337,13 +1337,7 @@ function createTurningPointCard(
                             </div>
 
 
-                            <p class="turning-story-step__answer">
-                                ${escapeHTML(
-                                    normalizeText(
-                                        step.value
-                                    )
-                                )}
-                            </p>
+                            <p class="turning-story-step__answer">${escapeHTML(normalizeText(step.value))}</p>
 
                         </div>
 
@@ -2776,11 +2770,7 @@ function renderCareerMessage(
 
 
     message.innerHTML = `
-        <p>
-            ${escapeHTML(
-                displayText
-            )}
-        </p>
+        <p>${escapeHTML(displayText)}</p>
     `;
 
 
