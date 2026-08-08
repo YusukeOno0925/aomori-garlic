@@ -29,6 +29,7 @@ from scripts.auth import router as auth_router
 from scripts.career_path import router as career_path_router
 from scripts.announcements import router as announcements_router
 from scripts.metrics import router as metrics_router
+from scripts.career_decisions import router as career_decisions_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -63,6 +64,7 @@ app.include_router(password_reset_router)
 app.include_router(career_path_router)
 app.include_router(announcements_router)
 app.include_router(metrics_router)
+app.include_router(career_decisions_router)
 
 # CORSの設定
 app.add_middleware(
@@ -259,6 +261,13 @@ async def get_environment():
     base_url = local_base_url if environment == "development" else production_base_url
     return JSONResponse({"environment": environment, "base_url": base_url})
 
+@app.get("/Career_decisions.html")
+async def career_decisions_page():
+    return FileResponse("Career_decisions.html")
+
+@app.get("/Career_decision_edit.html")
+async def career_decision_edit_page():
+    return FileResponse("Career_decision_edit.html")
 
 # 各ユーザのプロフィール回数の表示に用いる
 @app.post("/increment-profile-view/{user_id}")

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        キャリアの振り返りを登録 | インノーマル
+    </title>
+
+    <meta
+        name="description"
+        content="転職・異動・昇進など、キャリアにおける重要な意思決定と、その背景・結果・学びを記録します。"
+    >
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link
+        rel="stylesheet"
+        href="css/career_decision_edit.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <a href="Home.html" class="logo-link">
+                <img
+                    src="images/company-logo.jpg"
+                    alt="インノーマルのロゴ"
+                    class="logo-image"
+                >
+
+                <span
+                    class="logo"
+                    aria-label="インノーマル"
+                >
+                    インノーマル
+                </span>
+            </a>
+
+            <p class="lead-text">
+                〜キャリアの未来を共に創る〜
+            </p>
+
+            <div class="login-button-container">
+                <a
+                    href="/Register.html"
+                    class="header-register-btn"
+                >
+                    新規登録
+                </a>
+
+                <a
+                    href="Login.html"
+                    id="login-button"
+                    class="login-button"
+                    style="display: none;"
+                >
+                    ログイン
+                </a>
+
+                <a
+                    href="#"
+                    id="logout-button"
+                    class="login-button"
+                    style="display: none;"
+                >
+                    ログアウト
+                </a>
+            </div>
+
+            <div class="hamburger-menu">
+                ☰
+            </div>
+        </div>
+    </header>
+
+    <aside class="main-menu" id="main-menu">
+        <nav>
+            <ul>
+                <li>
+                    <a href="Home.html">
+                        <img
+                            src="images/home-icon.png"
+                            alt="ホームアイコン"
+                        >
+                        ホーム
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Career_overview.html">
+                        <img
+                            src="images/career-icon.png"
+                            alt="キャリアストーリーアイコン"
+                        >
+                        キャリアストーリー
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Board.html">
+                        <img
+                            src="images/board-icon.png"
+                            alt="掲示板アイコン"
+                        >
+                        掲示板（Q&A）
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Mypage.html">
+                        <img
+                            src="images/mypage-icon.png"
+                            alt="マイページアイコン"
+                        >
+                        マイページ
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Announcements.html">
+                        <img
+                            src="images/notification-icon.png"
+                            alt="お知らせアイコン"
+                        >
+                        お知らせ
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Contact.html">
+                        <img
+                            src="images/contact-icon.png"
+                            alt="問い合わせアイコン"
+                        >
+                        お問い合わせ
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="career-decision-edit-main">
+        <!-- パンくず・戻る導線 -->
+        <div class="page-navigation">
+            <a
+                href="Career_decisions.html"
+                class="back-link"
+            >
+                ← キャリアの振り返り一覧へ戻る
+            </a>
+        </div>
+
+        <!-- ページタイトル -->
+        <section class="page-header">
+            <p class="page-kicker">
+                CAREER REFLECTION
+            </p>
+
+            <h1 id="page-title">
+                キャリアの振り返りを登録
+            </h1>
+
+            <p class="page-description">
+                転職・異動・昇進など、キャリアにおける重要な選択について、
+                当時の状況や迷い、決め手、結果と学びを記録します。
+            </p>
+
+            <p class="page-note">
+                すべてを埋める必要はありません。
+                まずは思い出せる項目から登録し、後から追記できます。
+            </p>
+        </section>
+
+        <!-- エラー・完了メッセージ -->
+        <div
+            id="form-message"
+            class="form-message"
+            role="alert"
+            aria-live="polite"
+            style="display: none;"
+        ></div>
+
+        <form
+            id="career-decision-form"
+            novalidate
+        >
+            <!-- 編集時のID -->
+            <input
+                type="hidden"
+                id="decision_id"
+                name="id"
+                value=""
+            >
+
+            <!-- 内部管理項目 -->
+            <input
+                type="hidden"
+                id="status"
+                name="status"
+                value="draft"
+            >
+
+            <input
+                type="hidden"
+                id="needs_review"
+                name="needs_review"
+                value="0"
+            >
+
+            <input
+                type="hidden"
+                id="display_order"
+                name="display_order"
+                value="1"
+            >
+
+            <!-- ==================================================
+                 1. 意思決定の概要
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        01
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            DECISION
+                        </p>
+
+                        <h2>
+                            どのような意思決定でしたか？
+                        </h2>
+
+                        <p>
+                            まずは、振り返る出来事の概要を登録します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-grid form-grid--two">
+                        <div class="form-field">
+                            <label for="title">
+                                タイトル
+                                <span class="optional-label">
+                                    任意
+                                </span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                maxlength="255"
+                                placeholder="例：未経験業界への転職を決めた"
+                            >
+
+                            <p class="field-help">
+                                一覧で見たときに内容が分かる短いタイトルです。
+                            </p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="decision_type">
+                                意思決定の種類
+                                <span class="required-label">
+                                    必須
+                                </span>
+                            </label>
+
+                            <select
+                                id="decision_type"
+                                name="decision_type"
+                                required
+                            >
+                                <option value="">
+                                    選択してください
+                                </option>
+
+                                <option value="就職">
+                                    就職
+                                </option>
+
+                                <option value="転職">
+                                    転職
+                                </option>
+
+                                <option value="異動">
+                                    異動
+                                </option>
+
+                                <option value="出向">
+                                    出向
+                                </option>
+
+                                <option value="昇進">
+                                    昇進
+                                </option>
+
+                                <option value="役割変更">
+                                    役割変更
+                                </option>
+
+                                <option value="退職">
+                                    退職
+                                </option>
+
+                                <option value="休職">
+                                    休職
+                                </option>
+
+                                <option value="復職">
+                                    復職
+                                </option>
+
+                                <option value="独立・起業">
+                                    独立・起業
+                                </option>
+
+                                <option value="副業開始">
+                                    副業開始
+                                </option>
+
+                                <option value="結婚・出産・育児">
+                                    結婚・出産・育児
+                                </option>
+
+                                <option value="学び直し">
+                                    学び直し
+                                </option>
+
+                                <option value="その他">
+                                    その他
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="occurred_at">
+                                意思決定した日
+                                <span class="optional-label">
+                                    任意
+                                </span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="occurred_at"
+                                name="occurred_at"
+                            >
+
+                            <p class="field-help">
+                                正確な日付が不明な場合は、近い日付で構いません。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 2. 会社・役割との関連
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        02
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            RELATED CAREER
+                        </p>
+
+                        <h2>
+                            どの会社・役割に関係する選択ですか？
+                        </h2>
+
+                        <p>
+                            職歴と結び付けることで、後から時系列で整理しやすくなります。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-grid form-grid--two">
+                        <div class="form-field">
+                            <label for="job_experience_id">
+                                関連する会社
+                                <span class="optional-label">
+                                    任意
+                                </span>
+                            </label>
+
+                            <select
+                                id="job_experience_id"
+                                name="job_experience_id"
+                            >
+                                <option value="">
+                                    会社を指定しない
+                                </option>
+
+                                <!--
+                                    JavaScriptでjob_experiencesを取得し、
+                                    選択肢を追加する
+                                -->
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="role_history_id">
+                                関連する役割
+                                <span class="optional-label">
+                                    任意
+                                </span>
+                            </label>
+
+                            <select
+                                id="role_history_id"
+                                name="role_history_id"
+                                disabled
+                            >
+                                <option value="">
+                                    役割を指定しない
+                                </option>
+
+                                <!--
+                                    会社選択後にJavaScriptでrole_historiesを追加
+                                -->
+                            </select>
+
+                            <p class="field-help">
+                                会社を選択すると、その会社に登録済みの役割を選べます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 3. きっかけ・迷い
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        03
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            BACKGROUND
+                        </p>
+
+                        <h2>
+                            何がきっかけで、何に迷いましたか？
+                        </h2>
+
+                        <p>
+                            意思決定に至る前の状況や、当時抱えていた迷いを振り返ります。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-field">
+                        <label for="trigger_text">
+                            何がきっかけでしたか？
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="trigger_text"
+                            name="trigger_text"
+                            rows="6"
+                            placeholder="例：現在の業務では専門性を広げにくいと感じ、転職を考え始めた"
+                        ></textarea>
+
+                        <p class="field-help">
+                            出来事、環境の変化、誰かの言葉、自分の気持ちの変化などを書けます。
+                        </p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="dilemma_text">
+                            何に迷いましたか？
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="dilemma_text"
+                            name="dilemma_text"
+                            rows="6"
+                            placeholder="例：安定した環境を離れることと、新しい挑戦をすることの間で迷った"
+                        ></textarea>
+
+                        <p class="field-help">
+                            比較した選択肢、不安だったこと、決めきれなかった理由などを記録します。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 4. 判断軸・決め手
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        04
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            DECISION AXIS
+                        </p>
+
+                        <h2>
+                            最終的に何を重視し、なぜ決めましたか？
+                        </h2>
+
+                        <p>
+                            自分が大切にした価値観や、最終判断につながった理由を記録します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-field">
+                        <label for="priority_text">
+                            意思決定で重視したこと
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="priority_text"
+                            name="priority_text"
+                            rows="6"
+                            placeholder="例：年収よりも、成長できる環境と新しい技術領域への挑戦を優先した"
+                        ></textarea>
+
+                        <p class="field-help">
+                            給与、安定、成長、やりがい、働き方、人間関係、家庭など、判断軸を書けます。
+                        </p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="final_reason">
+                            最終的な決め手
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="final_reason"
+                            name="final_reason"
+                            rows="6"
+                            placeholder="例：将来後悔するのは、挑戦して失敗することより、挑戦しなかったことだと考えた"
+                        ></textarea>
+
+                        <p class="field-help">
+                            最後に背中を押した出来事や考えを記録します。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 5. 結果・想定外
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        05
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            OUTCOME
+                        </p>
+
+                        <h2>
+                            選択した結果、どうなりましたか？
+                        </h2>
+
+                        <p>
+                            実際の結果と、選択前には予想していなかったことを振り返ります。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-field">
+                        <label for="result_text">
+                            選択した結果
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="result_text"
+                            name="result_text"
+                            rows="6"
+                            placeholder="例：希望していた領域の仕事に携われ、専門性を広げることができた"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="unexpected_result">
+                            想定外だったこと
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="unexpected_result"
+                            name="unexpected_result"
+                            rows="6"
+                            placeholder="例：技術力だけでなく、関係者との調整力が想像以上に求められた"
+                        ></textarea>
+
+                        <p class="field-help">
+                            良かった誤算、難しかったこと、選択前とのギャップなどを書けます。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 6. 学び・再選択
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        06
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            REFLECTION
+                        </p>
+
+                        <h2>
+                            今振り返って、何を学びましたか？
+                        </h2>
+
+                        <p>
+                            過去の選択を現在の視点から振り返ります。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-field">
+                        <label for="learning_text">
+                            この経験から学んだこと
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="learning_text"
+                            name="learning_text"
+                            rows="6"
+                            placeholder="例：情報を集めるだけでなく、自分が何を大切にしたいかを言語化することが重要だと学んだ"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-grid form-grid--two">
+                        <div class="form-field">
+                            <label for="same_choice_answer">
+                                今なら同じ選択をしますか？
+                                <span class="optional-label">
+                                    任意
+                                </span>
+                            </label>
+
+                            <select
+                                id="same_choice_answer"
+                                name="same_choice_answer"
+                            >
+                                <option value="">
+                                    選択してください
+                                </option>
+
+                                <option value="はい">
+                                    はい
+                                </option>
+
+                                <option value="いいえ">
+                                    いいえ
+                                </option>
+
+                                <option value="どちらともいえない">
+                                    どちらともいえない
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="same_choice_reason">
+                            そのように考える理由
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="same_choice_reason"
+                            name="same_choice_reason"
+                            rows="6"
+                            placeholder="例：大変なこともあったが、長期的には自分の選択肢を広げる経験になったため"
+                        ></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================================================
+                 7. 当時の自分へのアドバイス
+            =================================================== -->
+            <section class="form-section">
+                <div class="form-section-header">
+                    <div class="section-number">
+                        07
+                    </div>
+
+                    <div>
+                        <p class="section-kicker">
+                            ADVICE
+                        </p>
+
+                        <h2>
+                            当時の自分に、今なら何と伝えますか？
+                        </h2>
+
+                        <p>
+                            今の自分だから伝えられるアドバイスを記録します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-section-body">
+                    <div class="form-field">
+                        <label for="advice_text">
+                            当時の自分へのアドバイス
+                            <span class="optional-label">
+                                任意
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="advice_text"
+                            name="advice_text"
+                            rows="7"
+                            placeholder="例：完璧な答えが見つかるまで待たず、まずは小さく情報収集や行動を始めてもよい"
+                        ></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 保存操作 -->
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    id="delete-decision-btn"
+                    class="delete-button"
+                    style="display:none;"
+                >
+                    この振り返りを削除
+                </button>
+            
+                <div class="form-actions__primary">
+            
+                    <a
+                        href="Career_decisions.html"
+                        class="cancel-button"
+                    >
+                        キャンセル
+                    </a>
+            
+                    <button
+                        type="submit"
+                        id="save-decision-button"
+                        class="save-button"
+                    >
+                        振り返りを保存する
+                    </button>
+            
+                </div>
+            
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-items">
+                <p>&copy; 2026 Imnormal</p>
+
+                <a
+                    href="https://www.instagram.com/imnormal_official/"
+                    target="_blank"
+                    aria-label="Instagram"
+                >
+                    <img
+                        src="images/instagram-icon.png"
+                        alt="Instagram"
+                        class="instagram-icon"
+                    >
+                </a>
+
+                <a
+                    href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
+                    target="_blank"
+                    aria-label="LinkedIn"
+                >
+                    <img
+                        src="images/linkedin_icon.png"
+                        alt="LinkedIn"
+                        class="linkedin-icon"
+                    >
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/hamburgermenu.js"></script>
+    <script src="js/session.js"></script>
+
+    <script
+        src="js/career_decision_edit.js"
+    ></script>
+</body>
+</html>

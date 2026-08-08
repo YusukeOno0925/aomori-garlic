@@ -420,6 +420,70 @@
             <button type="button" id="edit-button-bottom">編集</button>
             <button type="submit" id="save-button-bottom" style="display: none;">保存</button>
         </div>
+
+        <!-- Career Decisionへの入口 -->
+        <section class="career-reflection-card">
+            <div class="career-reflection-card__content">
+                <p class="career-reflection-card__kicker">
+                    CAREER REFLECTION
+                </p>
+
+                <h2 class="career-reflection-card__title">
+                    キャリアの振り返り
+                </h2>
+
+                <p class="career-reflection-card__description">
+                    転職・異動・昇進など、これまでの重要な意思決定を記録します。
+                    そのとき迷ったことや重視したことを蓄積することで、
+                    Career GPSがあなたの価値観や判断軸をより深く理解できるようになります。
+                </p>
+
+                <div class="career-reflection-card__features">
+                    <div class="career-reflection-feature">
+                        <span class="career-reflection-feature__number">01</span>
+                        <p>重要な選択と、その背景を記録</p>
+                    </div>
+
+                    <div class="career-reflection-feature">
+                        <span class="career-reflection-feature__number">02</span>
+                        <p>結果・学び・後悔を振り返る</p>
+                    </div>
+
+                    <div class="career-reflection-feature">
+                        <span class="career-reflection-feature__number">03</span>
+                        <p>Career GPSの分析精度を高める</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="career-reflection-card__action">
+                <div class="career-reflection-card__status">
+                    <span class="career-reflection-card__status-label">
+                        登録済み
+                    </span>
+
+                    <!-- 件数API作成後にJavaScriptで更新 -->
+                    <strong
+                        id="career-decision-count"
+                        class="career-reflection-card__count"
+                    >
+                        --
+                    </strong>
+
+                    <span class="career-reflection-card__count-unit">
+                        件
+                    </span>
+                </div>
+
+                <a
+                    href="Career_decisions.html"
+                    class="career-reflection-card__button"
+                >
+                    キャリアの振り返りを管理する
+                    <span aria-hidden="true">→</span>
+                </a>
+            </div>
+        </section>
     </main>
     <footer>
         <div class="footer-content">

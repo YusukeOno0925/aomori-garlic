@@ -1,107 +1,207 @@
+/* =========================================================
+   1. ページ全体
+========================================================= */
+
 body {
-    background-color: #FBFAF7;
+    background-color: #fbfaf7;
     font-family: 'Roboto', sans-serif;
 }
 
 main {
-    width: calc(100% - 250px); /* サイドメニュー分の幅を引いた幅を設定 */
-    margin: 20px auto;
-    padding: 20px;
-    background-color: var(--card-background-color);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    width: calc(100% - 280px);
+    max-width: 1180px;
+    margin-top: 100px;
+    margin-right: 30px;
+    margin-bottom: 60px;
     margin-left: 220px;
-    margin-top: 100px; /* ヘッダー分のマージンを追加 */
+    padding: 28px 32px 36px;
+    box-sizing: border-box;
+    background-color: var(--card-background-color);
+    box-shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
 }
 
 h1 {
-    font-size: 1.6rem;   /* PCなど広い画面向けのサイズ */
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.7rem;
+    line-height: 1.4;
+    color: var(--text-color);
 }
 
-/* タブメニュー */
+h3 {
+    margin-top: 34px;
+    margin-bottom: 18px;
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+h4 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+
+/* =========================================================
+   2. タブメニュー
+========================================================= */
+
 .tab-menu {
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: auto; /* 横スクロールを有効にする */
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-}
-.tab-menu button {
-    flex: 1 0 auto; /* ボタンが均等に並ぶように設定 */
-    background-color: #f1f1f1;
-    border: none;
-    outline: none;
-    padding: 10px 12px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 14px;
-    white-space: nowrap; /* テキストの折り返しを防ぐ */
-}
-.tab-menu button.active {
-    background-color: #ccc;
+    gap: 6px;
+    overflow-x: auto;
+    margin-top: 18px;
+    margin-bottom: 28px;
+    padding: 5px;
+    border: 1px solid #e6e2da;
+    border-radius: 12px;
+    background-color: #f4f2ed;
+    scrollbar-width: thin;
 }
 
-/* タブの中身 */
+.tab-menu button {
+    flex: 1 0 auto;
+    min-width: 150px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background-color: transparent;
+    color: #66635e;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.tab-menu button:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: var(--text-color);
+}
+
+.tab-menu button.active {
+    background-color: #ffffff;
+    color: var(--main-color);
+    box-shadow: 0 2px 10px rgba(31, 41, 55, 0.08);
+}
+
+
+/* =========================================================
+   3. タブコンテンツ・フォーム
+========================================================= */
+
 .tab-content {
     display: none;
 }
+
 .tab-content.active {
     display: block;
 }
 
-/* フォーム */
 form {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0;
     box-sizing: border-box;
 }
 
-/* フローティングラベル */
+
+/* =========================================================
+   4. フローティングラベル
+========================================================= */
+
 .floating-label {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
+
 .floating-label input,
 .floating-label select,
 .floating-label textarea {
     width: 100%;
-    padding: 12px 12px 12px 12px;
-    border: 1px solid var(--card-border-color);
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    min-height: 48px;
+    padding: 14px 14px 12px;
+    border: 1px solid #d9d5cd;
+    border-radius: 8px;
     box-sizing: border-box;
+    background-color: #ffffff;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
     resize: vertical;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
 }
+
+.floating-label textarea {
+    min-height: 112px;
+    padding-top: 18px;
+}
+
+.floating-label input:hover,
+.floating-label select:hover,
+.floating-label textarea:hover {
+    border-color: #bcb6ab;
+}
+
+.floating-label input:focus,
+.floating-label select:focus,
+.floating-label textarea:focus {
+    border-color: var(--main-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(88, 120, 88, 0.12);
+}
+
 .floating-label input[type="date"] {
     width: 100%;
     text-align: left;
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none;
 }
+
 .floating-label label {
     position: absolute;
-    top: 12px;
-    left: 16px;
-    pointer-events: none;
-    transition: all 0.2s ease;
-    background-color: var(--background-color);
+    top: 14px;
+    left: 13px;
+    z-index: 1;
+    max-width: calc(100% - 28px);
     padding: 0 4px;
-    color: #aaa;
+    overflow: hidden;
+    background-color: #ffffff;
+    color: #908b83;
+    font-size: 14px;
+    line-height: 1.3;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition:
+        top 0.2s ease,
+        left 0.2s ease,
+        color 0.2s ease,
+        font-size 0.2s ease;
 }
+
 .floating-label input:focus + label,
 .floating-label input:not(:placeholder-shown) + label,
 .floating-label textarea:focus + label,
 .floating-label textarea:not(:placeholder-shown) + label,
 .floating-label select:focus + label,
-.floating-label select:not([value=""]) + label {
-    top: -10px;
-    left: 12px;
-    font-size: 12px;
+.floating-label select:valid + label {
+    top: -9px;
+    left: 10px;
+    font-size: 11px;
     color: var(--main-color);
 }
 
@@ -109,211 +209,756 @@ input::placeholder,
 textarea::placeholder {
     opacity: 0;
 }
-textarea {
-    min-height: 100px;
+
+
+/* =========================================================
+   5. 読み取り専用・無効状態
+========================================================= */
+
+input[readonly],
+textarea[readonly],
+select:disabled {
+    border-color: #e2ded6;
+    background-color: #f7f6f2;
+    color: #5f5b55;
+    cursor: default;
 }
 
-/* ボタン群 */
+input[readonly]:focus,
+textarea[readonly]:focus,
+select:disabled:focus {
+    box-shadow: none;
+}
+
+select:disabled {
+    opacity: 1;
+    -webkit-text-fill-color: #5f5b55;
+}
+
+input[readonly] + label,
+textarea[readonly] + label,
+select:disabled + label {
+    background-color: #f7f6f2;
+}
+
+
+/* =========================================================
+   6. ボタン
+========================================================= */
+
 .button-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    margin: 20px 0;
+    gap: 10px;
+    margin: 18px 0;
 }
+
 .button-group button {
-    margin-left: 10px;
-    margin-bottom: 10px;
+    margin: 0;
 }
+
 button {
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 8px;
     background-color: var(--main-color);
-    color: white;
+    color: #ffffff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-button:hover {
-    background-color: var(--accent-color);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+    transition:
+        background-color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
 }
 
-/* チェックボックス */
+button:hover {
+    background-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.12);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+#add-job-experience {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+    background-color: #ffffff;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+}
+
+#add-job-experience:hover {
+    background-color: rgba(88, 120, 88, 0.08);
+}
+
+
+/* =========================================================
+   7. チェックボックス
+========================================================= */
+
 .checkbox-group {
     margin-bottom: 20px;
 }
+
 .checkbox-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--main-color);
+}
+
+
+/* =========================================================
+   8. 会社カード
+========================================================= */
+
+.job-info-group,
+.company-card {
+    margin-bottom: 28px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #dcd8d0;
+    border-radius: 14px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 18px rgba(31, 41, 55, 0.06);
+}
+
+.job-info-group + .job-info-group,
+.company-card + .company-card {
+    margin-top: 28px;
+}
+
+.company-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid #ebe7df;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(88, 120, 88, 0.09),
+            rgba(255, 255, 255, 0.95)
+        );
+}
+
+.company-card-kicker {
+    margin: 0 0 5px;
+    color: var(--main-color);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.company-card-title {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.company-card-description {
+    margin: 7px 0 0;
+    color: #77726a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.company-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+    padding: 24px 24px 2px;
+}
+
+.company-private-field {
+    margin: 0;
+    padding: 0 24px 22px;
+}
+
+
+/* =========================================================
+   9. 役割履歴エリア
+========================================================= */
+
+.roles-section {
+    padding: 22px 24px 26px;
+    border-top: 1px solid #ebe7df;
+    background-color: #f8f7f3;
+}
+
+.roles-section-header {
     display: flex;
     align-items: center;
-    font-size: 16px;
-    color: var(--text-color);
-}
-.checkbox-group input[type="checkbox"] {
-    margin-right: 10px;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
 }
 
-/* 読み取り専用 */
-input[readonly],
-textarea[readonly],
-select:disabled {
-    background-color: #f9f9f9;
-    color: #555;
-    cursor: not-allowed;
+.roles-section-kicker {
+    margin: 0 0 3px;
+    color: #8b867e;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
 }
 
-/* 職歴フィールド */
-.job-info-group {
-    border: 1px solid var(--card-border-color);
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-.job-experience-header {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-.job-fields-container .floating-label {
-    margin-bottom: 15px;
-}
-.job-info-group + .job-info-group {
-    margin-top: 30px;
-}
-
-/* 補足文章やガイド */
-.section-explain {
-    background-color: #f9f9f9;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid var(--main-color);
-    font-size: 0.9rem;
-    color: #333;
-    line-height: 1.6;
-    border-radius: 4px;
-}
-.textarea-guide {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 5px;
-    background-color: #fffaf0; /* 少し色を変えて注目度を上げる */
-    padding: 8px 10px;
-    border-radius: 4px;
+.roles-section-header h4 {
+    font-size: 1rem;
     line-height: 1.4;
 }
-.textarea-guide strong {
-    color: #000;
-}
 
-/* ▼▼ 折りたたみ用クラス ▼▼ */
-.collapsible-block {
-    /* ここでsection-explainと兼用してもOK。
-       既に.section-explainで似たデザインをしているので、上書き可 */
-    margin-bottom: 15px;
-    padding: 10px 15px;
-    position: relative;
-    border-left: 4px solid var(--main-color);
-    background-color: #f9f9f9;
-    border-radius: 4px;
-}
-
-/* まとめて折りたたむ対象 */
-.collapsible-details {
-    display: none; /* 初期は隠す、JSで開閉 */
-    margin-top: 8px;
+.add-role-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 15px;
+    border: 1px solid var(--main-color);
+    border-radius: 8px;
     background-color: #ffffff;
-    padding: 8px 12px;
-    border: 1px solid #eee;
-    border-radius: 4px;
+    color: var(--main-color);
+    font-size: 13px;
 }
 
-/* “もっと見る”ボタン */
+.add-role-button:hover {
+    background-color: rgba(88, 120, 88, 0.08);
+    color: var(--main-color);
+}
+
+.roles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* =========================================================
+   10. 役割カード
+========================================================= */
+
+.role-card {
+    padding: 20px 20px 4px;
+    border: 1px solid #ddd8cf;
+    border-left: 4px solid var(--main-color);
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 12px rgba(31, 41, 55, 0.05);
+}
+
+.role-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid #eeeae3;
+}
+
+.role-card-kicker {
+    margin: 0 0 3px;
+    color: var(--main-color);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+}
+
+.role-card-header h4 {
+    font-size: 1rem;
+}
+
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
+}
+
+.role-description-field {
+    margin-bottom: 16px;
+}
+
+.role-description-field textarea {
+    min-height: 125px;
+}
+
+
+/* =========================================================
+   11. 補足文章・ガイド
+========================================================= */
+
+.section-explain {
+    margin-bottom: 18px;
+    padding: 13px 16px;
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
+    background-color: #f5f5f1;
+    color: #45423d;
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.textarea-guide {
+    margin-top: 7px;
+    padding: 9px 11px;
+    border: 1px solid #eee5d5;
+    border-radius: 7px;
+    background-color: #fffaf0;
+    color: #70695e;
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+.textarea-guide strong {
+    color: #26231f;
+}
+
+
+/* =========================================================
+   12. 折りたたみ表示
+========================================================= */
+
+.collapsible-block {
+    position: relative;
+    margin-bottom: 18px;
+    padding: 13px 16px;
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
+    background-color: #f5f5f1;
+}
+
+.collapsible-summary {
+    color: #45423d;
+    line-height: 1.7;
+}
+
+.collapsible-details {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border: 1px solid #e5e1d9;
+    border-radius: 7px;
+    background-color: #ffffff;
+    color: #56514a;
+    line-height: 1.7;
+}
+
 .toggle-btn {
-    color: #0066cc;
-    text-decoration: underline;
-    cursor: pointer;
     display: inline-block;
     margin-top: 8px;
-    font-weight: bold;
+    color: var(--main-color);
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
-/* レスポンシブ */
+
+/* =========================================================
+   13. Date入力のブラウザ差異対策
+========================================================= */
+
+.floating-label input[type="date"]::-webkit-datetime-edit {
+    padding-left: 0;
+    text-align: left;
+}
+
+.floating-label input[type="date"]::-moz-datetime-edit {
+    padding-left: 0;
+    text-align: left;
+}
+
+.floating-label input[type="date"]::-ms-datetime-edit {
+    padding-left: 0;
+    text-align: left;
+}
+
+/* =========================================================
+   14.　Career Decisionへの入口
+========================================================= */
+
+.career-reflection-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 32px;
+    align-items: center;
+    margin-top: 44px;
+    padding: 30px 32px;
+    border: 1px solid #dcd8d0;
+    border-radius: 16px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(88, 120, 88, 0.12) 0%,
+            rgba(255, 255, 255, 0.98) 52%,
+            rgba(244, 241, 233, 0.95) 100%
+        );
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.07);
+}
+
+.career-reflection-card__content {
+    min-width: 0;
+}
+
+.career-reflection-card__kicker {
+    margin: 0 0 8px;
+    color: var(--main-color);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.career-reflection-card__title {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.4rem;
+    line-height: 1.4;
+}
+
+.career-reflection-card__description {
+    max-width: 720px;
+    margin: 12px 0 0;
+    color: #625e57;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.career-reflection-card__features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.career-reflection-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px 14px;
+    border: 1px solid rgba(88, 120, 88, 0.14);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.72);
+}
+
+.career-reflection-feature__number {
+    flex-shrink: 0;
+    color: var(--main-color);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.career-reflection-feature p {
+    margin: 0;
+    color: #4d4943;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.career-reflection-card__action {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+    justify-content: center;
+    padding: 22px;
+    border: 1px solid rgba(88, 120, 88, 0.18);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.82);
+}
+
+.career-reflection-card__status {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+.career-reflection-card__status-label {
+    margin-right: 7px;
+    color: #78736b;
+    font-size: 12px;
+}
+
+.career-reflection-card__count {
+    color: var(--main-color);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.career-reflection-card__count-unit {
+    color: #59554f;
+    font-size: 13px;
+}
+
+.career-reflection-card__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 17px;
+    border: 1px solid var(--main-color);
+    border-radius: 9px;
+    background-color: var(--main-color);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+.career-reflection-card__button:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    box-shadow: 0 5px 14px rgba(31, 41, 55, 0.14);
+}
+
+.career-reflection-card__button:active {
+    transform: translateY(1px);
+}
+
+
+/* =========================================================
+   15. タブレット
+========================================================= */
+
+@media (max-width: 1024px) {
+    main {
+        width: calc(100% - 240px);
+        margin-right: 20px;
+        margin-left: 210px;
+        padding: 24px;
+    }
+
+    .company-fields,
+    .role-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .career-reflection-card {
+        grid-template-columns: 1fr;
+    }
+
+    .career-reflection-card__action {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .career-reflection-card__button {
+        min-width: 260px;
+    }
+}
+
+
+/* =========================================================
+   16. スマートフォン
+========================================================= */
+
 @media (max-width: 768px) {
     main {
-        width: 95%;
-        margin-left: 0px;
+        width: calc(100% - 24px);
+        margin-top: 82px;
+        margin-right: 12px;
+        margin-bottom: 30px;
+        margin-left: 12px;
+        padding: 18px 14px 26px;
+        border-radius: 12px;
     }
-    h1{
-        font-size: 1.2rem;
-        margin-top: 0px;
+
+    h1 {
+        margin-top: 0;
+        font-size: 1.3rem;
     }
+
+    h3 {
+        margin-top: 28px;
+        font-size: 1.05rem;
+    }
+
     .tab-menu {
-        flex-wrap: nowrap;
+        gap: 4px;
+        margin-bottom: 22px;
+        padding: 4px;
     }
+
     .tab-menu button {
         flex: none;
-        padding: 8px 10px;
+        min-width: auto;
+        padding: 9px 12px;
         font-size: 12px;
     }
+
     .button-group {
         justify-content: center;
     }
+
     .button-group button {
-        width: 90%;
-        margin-left: 0;
+        width: 100%;
+        margin: 0;
         font-size: 0.9rem;
     }
-    .floating-label textarea,
-    .floating-label input[type="text"],
-    .floating-label input[type="email"],
-    .floating-label input[type="date"],
-    .floating-label select {
-        padding-top: 28px;
+
+    .floating-label {
+        margin-bottom: 19px;
+    }
+
+    .floating-label input,
+    .floating-label select,
+    .floating-label textarea {
+        min-height: 48px;
+        padding: 18px 12px 10px;
         font-size: 0.9rem;
     }
+
+    .floating-label textarea {
+        min-height: 105px;
+        padding-top: 21px;
+    }
+
     .floating-label label {
-        top: 18px;
+        top: 15px;
+        left: 12px;
+        max-width: calc(100% - 24px);
+        font-size: 0.8rem;
     }
+
     .floating-label input:focus + label,
     .floating-label input:not(:placeholder-shown) + label,
     .floating-label textarea:focus + label,
     .floating-label textarea:not(:placeholder-shown) + label,
     .floating-label select:focus + label,
-    .floating-label select:not([value=""]) + label {
-        top: -10px;
+    .floating-label select:valid + label {
+        top: -8px;
+        left: 9px;
         font-size: 10px;
     }
 
-    /* ラベルのフォントサイズを小さく */
-    .floating-label label {
-        font-size: 0.85rem;
+    .company-card-header {
+        padding: 18px 16px 15px;
     }
 
-    /* ガイドテキストのフォントサイズをさらに小さく */
+    .company-card-title {
+        font-size: 1.1rem;
+    }
+
+    .company-card-description {
+        font-size: 12px;
+    }
+
+    .company-fields {
+        grid-template-columns: 1fr;
+        padding: 20px 16px 2px;
+    }
+
+    .company-private-field {
+        padding: 0 16px 18px;
+    }
+
+    .roles-section {
+        padding: 18px 14px 20px;
+    }
+
+    .roles-section-header {
+        align-items: stretch;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+    .add-role-button {
+        width: 100%;
+    }
+
+    .role-card {
+        padding: 17px 14px 2px;
+    }
+
+    .role-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
     .textarea-guide {
-        font-size: 0.75rem;
+        font-size: 0.74rem;
     }
 
-    /* 折りたたみセクションの概要のフォントサイズを小さく */
     .collapsible-summary {
         font-size: 0.8rem;
     }
 
-    /* 折りたたみセクションの詳細のフォントサイズをさらに小さく */
     .collapsible-details {
-        font-size: 0.7rem;
+        font-size: 0.74rem;
     }
-}
 
-/* Date入力のブラウザ差異対策 */
-.floating-label input[type="date"]::-webkit-datetime-edit {
-    text-align: left;
-    padding-left: 12px;
-}
-.floating-label input[type="date"]::-moz-datetime-edit {
-    text-align: left;
-    padding-left: 12px;
-}
-.floating-label input[type="date"]::-ms-datetime-edit {
-    text-align: left;
-    padding-left: 12px;
+    .checkbox-group label {
+        align-items: flex-start;
+        font-size: 13px;
+    }
+
+    .career-reflection-card {
+        gap: 22px;
+        margin-top: 34px;
+        padding: 22px 17px;
+        border-radius: 13px;
+    }
+
+    .career-reflection-card__title {
+        font-size: 1.2rem;
+    }
+
+    .career-reflection-card__description {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .career-reflection-card__features {
+        grid-template-columns: 1fr;
+        gap: 9px;
+        margin-top: 18px;
+    }
+
+    .career-reflection-feature {
+        padding: 11px 12px;
+    }
+
+    .career-reflection-card__action {
+        flex-direction: column;
+        padding: 17px;
+    }
+
+    .career-reflection-card__button {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
 }
