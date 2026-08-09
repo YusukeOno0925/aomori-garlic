@@ -29,19 +29,18 @@
             );
 
 
-        if (
-            !list ||
-            !description
-        ) {
-
+        if (!list || !description) {
             return;
-
         }
 
 
         const isLoggedIn =
             await checkLoginStatus();
 
+
+        /* =================================================
+           Not logged in
+        ================================================= */
 
         if (!isLoggedIn) {
 
@@ -50,52 +49,43 @@
 
 
             if (benefits) {
-
                 benefits.style.display =
                     'grid';
-
             }
 
 
             if (loginCTA) {
-
                 loginCTA.style.display =
                     'inline-flex';
-
             }
 
 
             description.textContent =
-                '無料登録すると、あなたの年齢・職種・業界などに近いCareer Storyを見つけられます。';
+                '無料登録すると、あなたの年代・職種・業界・キャリア志向などから、参考になりそうなCareer Storyを見つけられます。';
 
 
             return;
-
         }
 
 
-        /* -----------------------------------------
+        /* =================================================
            Logged in
-        ----------------------------------------- */
+        ================================================= */
 
         if (benefits) {
-
             benefits.style.display =
                 'none';
-
         }
 
 
         if (loginCTA) {
-
             loginCTA.style.display =
                 'none';
-
         }
 
 
         description.textContent =
-            'あなたのプロフィールに近い人のCareer Storyです。';
+            'あなたのプロフィールと共通点のあるCareer Storyを選びました。';
 
 
         try {
@@ -131,28 +121,54 @@
                     : [];
 
 
+            /* =============================================
+               No recommendation
+            ============================================= */
+
             if (!careers.length) {
 
                 list.style.display =
                     'none';
 
 
-                description.textContent =
-                    'あなたに近いCareer Storyはまだ見つかりませんでした。プロフィールを充実させるとおすすめ精度が上がります。';
+                const completeness =
+                    Number(
+                        data.baseProfileCompleteness
+                    );
 
 
-                if (benefits) {
+                if (
+                    Number.isFinite(
+                        completeness
+                    )
+                    &&
+                    completeness < 70
+                ) {
 
-                    benefits.style.display =
-                        'grid';
+                    description.textContent =
+                        'まだ十分な共通点を見つけられませんでした。プロフィールを充実させると、あなたに近いCareer Storyを見つけやすくなります。';
+
+                } else {
+
+                    description.textContent =
+                        'あなたに近いCareer Storyはまだ見つかりませんでした。Career Storyが増えると、より近い経験を持つ人をご紹介できるようになります。';
 
                 }
 
 
-                return;
+                if (benefits) {
+                    benefits.style.display =
+                        'grid';
+                }
 
+
+                return;
             }
 
+
+            /* =============================================
+               Render
+            ============================================= */
 
             list.innerHTML =
                 '';
@@ -163,18 +179,19 @@
 
 
             careers
-                .slice(
-                    0,
-                    6
-                )
+                .slice(0, 6)
                 .forEach(
-                    story => {
+                    rawStory => {
+
+                        const story =
+                            normalizeStory(
+                                rawStory
+                            );
+
 
                         list.appendChild(
                             createSimilarStoryCard(
-                                normalizeStory(
-                                    story
-                                )
+                                story
                             )
                         );
 
@@ -199,10 +216,8 @@
 
 
             if (benefits) {
-
                 benefits.style.display =
                     'grid';
-
             }
 
         }
@@ -244,9 +259,7 @@
        Card
     ====================================================== */
 
-    function createSimilarStoryCard(
-        story
-    ) {
+    function createSimilarStoryCard(story) {
 
         const card =
             document.createElement(
@@ -274,10 +287,9 @@
             );
 
 
-        const tags =
-            buildStoryTags(
-                story
-            );
+        const reasons =
+            story.similarityReasons
+                .slice(0, 3);
 
 
         card.innerHTML = `
@@ -285,11 +297,13 @@
             <div class="home-career-card__top">
 
                 <div class="home-career-avatar">
+
                     ${escapeHTML(
                         getInitial(
                             story.name
                         )
                     )}
+
                 </div>
 
 
@@ -307,11 +321,19 @@
                                 : ''
                         }
 
-                        <span>
-                            ${escapeHTML(
-                                story.profession
-                            )}
-                        </span>
+                        ${
+                            story.profession &&
+                            story.profession !==
+                                '職種未設定'
+                                ? `
+                                    <span>
+                                        ${escapeHTML(
+                                            story.profession
+                                        )}
+                                    </span>
+                                `
+                                : ''
+                        }
 
                     </p>
 
@@ -324,11 +346,13 @@
 
 
                     <p class="home-career-person__summary">
+
                         ${escapeHTML(
                             buildCareerSummary(
                                 story
                             )
                         )}
+
                     </p>
 
                 </div>
@@ -342,6 +366,7 @@
                     WHY THIS STORY?
                 </p>
 
+
                 <h4>
                     ${escapeHTML(
                         headline
@@ -352,16 +377,16 @@
 
 
             ${
-                tags.length
+                reasons.length
                     ? `
                         <div class="home-career-tags">
 
-                            ${tags
+                            ${reasons
                                 .map(
-                                    tag => `
+                                    reason => `
                                         <span>
                                             ${escapeHTML(
-                                                tag
+                                                reason
                                             )}
                                         </span>
                                     `
@@ -401,10 +426,13 @@
 
 
                 <span class="home-career-card__link">
-                    詳しく見る
+
+                    Storyを見る
+
                     <span aria-hidden="true">
                         →
                     </span>
+
                 </span>
 
             </div>
@@ -441,11 +469,9 @@
             event => {
 
                 if (
-                    event.key ===
-                        'Enter'
+                    event.key === 'Enter'
                     ||
-                    event.key ===
-                        ' '
+                    event.key === ' '
                 ) {
 
                     event.preventDefault();
@@ -467,15 +493,22 @@
        Normalize
     ====================================================== */
 
-    function normalizeStory(
-        story
-    ) {
+    function normalizeStory(story) {
 
         const companies =
             Array.isArray(
                 story.companies
             )
                 ? story.companies
+                : [];
+
+
+        const similarityReasons =
+            Array.isArray(
+                story.similarity_reasons
+            )
+                ? story.similarity_reasons
+                    .filter(Boolean)
                 : [];
 
 
@@ -506,6 +539,13 @@
                 story.career_type ||
                 '',
 
+            similarityScore:
+                Number(
+                    story.similarity_score
+                ) || 0,
+
+            similarityReasons,
+
             companies,
 
             careerStages:
@@ -518,16 +558,10 @@
     }
 
 
-    function normalizeStages(
-        stages
-    ) {
+    function normalizeStages(stages) {
 
-        if (
-            !Array.isArray(stages)
-        ) {
-
+        if (!Array.isArray(stages)) {
             return [];
-
         }
 
 
@@ -539,27 +573,23 @@
             stage => {
 
                 const value =
-                    stage?.is_private
-                        ? '非公開'
-                        : (
-                            stage?.stage ||
-                            ''
-                        );
+                    stage?.stage ||
+                    '';
+
+
+                if (!value) {
+                    return;
+                }
 
 
                 const key =
                     `${
-                        stage?.year ||
-                        ''
+                        stage?.year || ''
                     }-${value}`;
 
 
-                if (
-                    used.has(key)
-                ) {
-
+                if (used.has(key)) {
                     return;
-
                 }
 
 
@@ -587,16 +617,41 @@
 
 
     /* =====================================================
-       Content
+       Headline
     ====================================================== */
 
-    function buildStoryHeadline(
-        story
-    ) {
+    function buildStoryHeadline(story) {
 
-        if (
-            story.careerType
-        ) {
+        const reasons =
+            story.similarityReasons;
+
+
+        /*
+         * 「なぜこのStoryなのか」を
+         * recommendation理由から作る。
+         */
+
+        if (reasons.length >= 2) {
+
+            return `${
+                reasons[0]
+            }、${
+                reasons[1]
+            }Career Story`;
+
+        }
+
+
+        if (reasons.length === 1) {
+
+            return `${
+                reasons[0]
+            }Career Story`;
+
+        }
+
+
+        if (story.careerType) {
 
             return simplifyCareerType(
                 story.careerType
@@ -605,122 +660,89 @@
         }
 
 
-        if (
-            getUniqueCompanyCount(
-                story.companies
-            ) >=
-            2
-        ) {
-
-            return 'あなたと近い背景から、新しい環境へ踏み出した人';
-
-        }
-
-
-        return 'あなたと近いキャリアを歩んでいる人';
+        return 'あなたと共通点のあるCareer Story';
 
     }
 
 
-    function simplifyCareerType(
-        type
-    ) {
+    function simplifyCareerType(type) {
+
+        const value =
+            String(
+                type || ''
+            );
+
 
         if (
-            type.includes(
-                '給与'
-            )
+            value.includes('給与')
             ||
-            type.includes(
-                '収入'
-            )
+            value.includes('収入')
         ) {
 
-            return '年収を上げたいという思いを持った人';
+            return '年収を大切に考えたCareer Story';
 
         }
 
 
         if (
-            type.includes(
-                'やりがい'
-            )
+            value.includes('やりがい')
         ) {
 
-            return '仕事のやりがいを大切にしている人';
+            return '仕事のやりがいを大切にしたCareer Story';
 
         }
 
 
         if (
-            type.includes(
+            value.includes(
                 'ワークライフバランス'
             )
         ) {
 
-            return '働き方とのバランスを大切にしている人';
+            return '働き方とのバランスを考えたCareer Story';
 
         }
 
 
         if (
-            type.includes(
-                '専門'
-            )
+            value.includes('専門')
         ) {
 
-            return '専門性を高めたいと考えている人';
+            return '専門性を高める道を考えたCareer Story';
 
         }
 
 
         if (
-            type.includes(
+            value.includes(
                 'マネジメント'
             )
         ) {
 
-            return 'マネジメントへの道を考えている人';
+            return 'マネジメントへの道を考えたCareer Story';
 
         }
 
 
         if (
-            type.includes(
-                '起業'
-            )
+            value.includes('起業')
         ) {
 
-            return '独立・起業という道を考えている人';
+            return '独立・起業という道を考えたCareer Story';
 
         }
 
 
-        return String(type)
-            .replace(
-                /軸/g,
-                ''
-            )
-            .replace(
-                /[()（）]/g,
-                ' '
-            )
-            .replace(
-                /\s+/g,
-                ' '
-            )
-            .trim()
-            .slice(
-                0,
-                42
-            );
+        return 'あなたと共通点のあるCareer Story';
 
     }
 
 
-    function buildCareerSummary(
-        story
-    ) {
+    /* =====================================================
+       Summary
+    ====================================================== */
+
+    function buildCareerSummary(story) {
 
         const values = [];
 
@@ -759,69 +781,7 @@
 
         return values.length
             ? values.join('・')
-            : 'あなたに近いCareer Story';
-
-    }
-
-
-    function buildStoryTags(
-        story
-    ) {
-
-        const tags = [];
-
-
-        const companyCount =
-            getUniqueCompanyCount(
-                story.companies
-            );
-
-
-        if (
-            companyCount >=
-            2
-        ) {
-
-            tags.push(
-                '#転職経験あり'
-            );
-
-        }
-
-
-        if (
-            story.profession &&
-            story.profession !==
-                '職種未設定'
-        ) {
-
-            tags.push(
-                `#${story.profession}`
-            );
-
-        }
-
-
-        if (
-            story.age !== null
-        ) {
-
-            tags.push(
-                `#${
-                    Math.floor(
-                        story.age /
-                        10
-                    ) * 10
-                }代`
-            );
-
-        }
-
-
-        return tags.slice(
-            0,
-            3
-        );
+            : 'Career Story';
 
     }
 
@@ -830,14 +790,17 @@
        Timeline
     ====================================================== */
 
-    function buildTimelineHTML(
-        stages
-    ) {
+    function buildTimelineHTML(stages) {
 
         if (!stages.length) {
 
             return `
-                <div class="home-career-timeline home-career-timeline--empty">
+                <div
+                    class="
+                        home-career-timeline
+                        home-career-timeline--empty
+                    "
+                >
                     キャリア履歴はまだ登録されていません
                 </div>
             `;
@@ -846,22 +809,9 @@
 
 
         const items =
-            stages.length <=
-            4
-                ? stages
-                : [
-                    stages[0],
-                    stages[
-                        Math.floor(
-                            stages.length /
-                            2
-                        )
-                    ],
-                    stages[
-                        stages.length -
-                        1
-                    ]
-                ];
+            selectTimelineItems(
+                stages
+            );
 
 
         return `
@@ -877,30 +827,44 @@
                                 index
                             ) => `
 
-                                <div class="home-career-timeline__item">
+                                <div
+                                    class="
+                                        home-career-timeline__item
+                                    "
+                                >
 
-                                    <span class="home-career-timeline__year">
+                                    <span
+                                        class="
+                                            home-career-timeline__year
+                                        "
+                                    >
                                         ${escapeHTML(
                                             String(
-                                                item.year
+                                                item.year ||
+                                                ''
                                             )
                                         )}
                                     </span>
+
 
                                     <span
                                         class="
                                             home-career-timeline__dot
                                             ${
                                                 index ===
-                                                items.length -
-                                                1
+                                                items.length - 1
                                                     ? 'is-current'
                                                     : ''
                                             }
                                         "
                                     ></span>
 
-                                    <span class="home-career-timeline__stage">
+
+                                    <span
+                                        class="
+                                            home-career-timeline__stage
+                                        "
+                                    >
                                         ${escapeHTML(
                                             simplifyStage(
                                                 item.stage
@@ -923,18 +887,39 @@
     }
 
 
+    function selectTimelineItems(stages) {
+
+        if (stages.length <= 4) {
+            return stages;
+        }
+
+
+        return [
+            stages[0],
+
+            stages[
+                Math.floor(
+                    stages.length / 2
+                )
+            ],
+
+            stages[
+                stages.length - 1
+            ]
+        ];
+
+    }
+
+
     /* =====================================================
        Helpers
     ====================================================== */
 
-    function simplifyStage(
-        stage
-    ) {
+    function simplifyStage(stage) {
 
         const value =
             String(
-                stage ||
-                ''
+                stage || ''
             )
                 .replace(
                     /\s+/g,
@@ -943,20 +928,14 @@
                 .trim();
 
 
-        return value.length >
-            17
-                ? `${value.slice(
-                    0,
-                    17
-                )}…`
-                : value;
+        return value.length > 17
+            ? `${value.slice(0, 17)}…`
+            : value;
 
     }
 
 
-    function calculateAge(
-        birthYear
-    ) {
+    function calculateAge(birthYear) {
 
         const year =
             Number(
@@ -964,20 +943,27 @@
             );
 
 
-        return year
-            ? (
-                new Date().getFullYear()
-                -
-                year
-            )
-            : null;
+        if (
+            !Number.isFinite(year)
+            ||
+            year <= 0
+        ) {
+
+            return null;
+
+        }
+
+
+        return (
+            new Date().getFullYear()
+            -
+            year
+        );
 
     }
 
 
-    function getLatestIncome(
-        incomes
-    ) {
+    function getLatestIncome(incomes) {
 
         if (
             !Array.isArray(incomes)
@@ -990,28 +976,25 @@
         }
 
 
-        return (
+        const latest =
             incomes[
-                incomes.length -
-                1
-            ]?.income
-            ||
+                incomes.length - 1
+            ];
+
+
+        return (
+            latest?.income ??
             '未設定'
         );
 
     }
 
 
-    function getUniqueCompanyCount(
-        companies
-    ) {
+    function getUniqueCompanyCount(companies) {
 
-        return new Set(
-
+        const names =
             (
-                Array.isArray(
-                    companies
-                )
+                Array.isArray(companies)
                     ? companies
                     : []
             )
@@ -1019,41 +1002,44 @@
                     company =>
                         company?.name
                 )
-                .filter(Boolean)
+                .filter(
+                    name =>
+                        name &&
+                        name !== '非公開'
+                );
 
+
+        return new Set(
+            names
         ).size;
 
     }
 
 
-    function calculateCareerYears(
-        companies
-    ) {
+    function calculateCareerYears(companies) {
 
-        const years = (
-
-            Array.isArray(
-                companies
+        const years =
+            (
+                Array.isArray(companies)
+                    ? companies
+                    : []
             )
-                ? companies
-                : []
-
-        )
-            .map(
-                company =>
-                    Number(
-                        company?.startYear
-                    )
-            )
-            .filter(
-                Number.isFinite
-            );
+                .map(
+                    company =>
+                        Number(
+                            company?.startYear
+                        )
+                )
+                .filter(
+                    year =>
+                        Number.isFinite(year)
+                        &&
+                        year > 1900
+                );
 
 
         if (!years.length) {
-
             return null;
-
         }
 
 
@@ -1067,13 +1053,10 @@
     }
 
 
-    function getInitial(
-        name
-    ) {
+    function getInitial(name) {
 
         return String(
-            name ||
-            '?'
+            name || '?'
         )
             .trim()
             .charAt(0)
@@ -1082,17 +1065,23 @@
     }
 
 
-    function incrementViewCount(
-        id
-    ) {
+    function incrementViewCount(id) {
+
+        if (!id) {
+            return;
+        }
+
 
         fetch(
-            `/increment-profile-view/${encodeURIComponent(
-                id
-            )}`,
+            `/increment-profile-view/${
+                encodeURIComponent(id)
+            }`,
             {
                 method:
-                    'POST'
+                    'POST',
+
+                credentials:
+                    'include'
             }
         ).catch(
             () => {}
@@ -1101,9 +1090,7 @@
     }
 
 
-    function escapeHTML(
-        value
-    ) {
+    function escapeHTML(value) {
 
         return String(
             value ?? ''

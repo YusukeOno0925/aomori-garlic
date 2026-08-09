@@ -1,287 +1,1019 @@
 import logging
+import re
+from collections import defaultdict
+from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import JSONResponse
-from datetime import date
+
 from .register_user import get_db_connection
 from .auth import get_current_user, User
+
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-def normalize_name(name):
-    """文字列を小文字にし、前後の余分な空白と特定キーワードを除去する。
-       対象キーワード: '株式会社', '有限会社', '大学', '大學' など
+
+# =========================================================
+# Settings
+# =========================================================
+
+MAX_RESULTS = 6
+
+
+# 「近さ」の重み
+WEIGHTS = {
+    "job_category": 30,
+    "industry": 25,
+    "career_type": 20,
+    "age": 15,
+    "company": 6,
+    "institution": 4,
+}
+
+
+# =========================================================
+# Normalize helpers
+# =========================================================
+
+def normalize_text(value):
     """
-    if not name:
+    比較用の基本正規化。
+    表示用データそのものは変更しない。
+    """
+    if not value:
         return ""
-    # 小文字化、前後の空白削除
-    norm = name.strip().lower()
-    # 除去したい文字列を繰り返し除去（必要に応じてキーワードを追加）
-    for keyword in ["株式会社", "有限会社", "大学", "大學", "大学院", "大学大学院"]:
-        norm = norm.replace(keyword, "")
-    return norm
+
+    value = str(value).strip().lower()
+
+    # 全角スペース・通常スペースを除去
+    value = re.sub(r"[\s　]+", "", value)
+
+    return value
+
+
+def normalize_company_name(name):
+    """
+    会社名比較用。
+    株式会社などの法人格を除外する。
+    """
+    value = normalize_text(name)
+
+    if not value:
+        return ""
+
+    keywords = [
+        "株式会社",
+        "有限会社",
+        "合同会社",
+        "合資会社",
+        "合名会社",
+        "㈱",
+        "(株)",
+        "（株）",
+    ]
+
+    for keyword in keywords:
+        value = value.replace(keyword, "")
+
+    return value.strip()
+
+
+def normalize_institution_name(name):
+    """
+    学校名比較用。
+
+    「大学院」を先に除去することが重要。
+    「大学」を先に消すと「○○大学院」→「○○院」になるため。
+    """
+    value = normalize_text(name)
+
+    if not value:
+        return ""
+
+    keywords = [
+        "大学大学院",
+        "大学院",
+        "大學",
+        "大学",
+    ]
+
+    for keyword in keywords:
+        value = value.replace(keyword, "")
+
+    return value.strip()
+
+
+def calculate_age(birthdate):
+    if not birthdate:
+        return None
+
+    today = date.today()
+
+    return (
+        today.year
+        - birthdate.year
+        - (
+            (today.month, today.day)
+            < (birthdate.month, birthdate.day)
+        )
+    )
+
+
+def safe_year(value):
+    if not value:
+        return None
+
+    try:
+        return value.year
+    except AttributeError:
+        return None
+
+
+# =========================================================
+# Similarity
+# =========================================================
+
+def calculate_similarity(base, candidate):
+    """
+    Career GPS用の類似度計算。
+
+    ポイント:
+    ・未設定同士は一致扱いしない
+    ・職種/業界/志向を重視
+    ・年齢は段階評価
+    ・会社/学校は補助的
+    ・一致理由を返す
+    """
+
+    score = 0
+    reasons = []
+    strong_match_count = 0
+
+    # -----------------------------------------------------
+    # 1. 職種
+    # -----------------------------------------------------
+
+    base_job = normalize_text(base.get("job_category"))
+    candidate_job = normalize_text(candidate.get("job_category"))
+
+    if (
+        base_job
+        and candidate_job
+        and base_job == candidate_job
+    ):
+        score += WEIGHTS["job_category"]
+        strong_match_count += 1
+
+        reasons.append({
+            "type": "job_category",
+            "label": "同じ職種",
+            "weight": WEIGHTS["job_category"],
+        })
+
+    # -----------------------------------------------------
+    # 2. 業界
+    # -----------------------------------------------------
+
+    base_industry = normalize_text(base.get("industry"))
+    candidate_industry = normalize_text(candidate.get("industry"))
+
+    if (
+        base_industry
+        and candidate_industry
+        and base_industry == candidate_industry
+    ):
+        score += WEIGHTS["industry"]
+        strong_match_count += 1
+
+        reasons.append({
+            "type": "industry",
+            "label": "同じ業界",
+            "weight": WEIGHTS["industry"],
+        })
+
+    # -----------------------------------------------------
+    # 3. キャリア志向
+    # -----------------------------------------------------
+
+    base_career_type = normalize_text(base.get("career_type"))
+    candidate_career_type = normalize_text(candidate.get("career_type"))
+
+    if (
+        base_career_type
+        and candidate_career_type
+        and base_career_type == candidate_career_type
+    ):
+        score += WEIGHTS["career_type"]
+        strong_match_count += 1
+
+        reasons.append({
+            "type": "career_type",
+            "label": "大切にしていることが近い",
+            "weight": WEIGHTS["career_type"],
+        })
+
+    # -----------------------------------------------------
+    # 4. 年齢
+    # -----------------------------------------------------
+
+    base_age = base.get("age")
+    candidate_age = candidate.get("age")
+
+    if (
+        base_age is not None
+        and candidate_age is not None
+    ):
+        age_diff = abs(base_age - candidate_age)
+
+        if age_diff <= 2:
+            age_score = 15
+            age_label = "年代がとても近い"
+
+        elif age_diff <= 5:
+            age_score = 10
+            age_label = "年代が近い"
+
+        elif age_diff <= 8:
+            age_score = 5
+            age_label = "近い世代"
+
+        else:
+            age_score = 0
+            age_label = None
+
+        if age_score:
+            score += age_score
+
+            reasons.append({
+                "type": "age",
+                "label": age_label,
+                "weight": age_score,
+            })
+
+    # -----------------------------------------------------
+    # 5. 現在 / 最新会社
+    # -----------------------------------------------------
+
+    base_company = normalize_company_name(
+        base.get("company")
+    )
+
+    candidate_company = normalize_company_name(
+        candidate.get("company")
+    )
+
+    if (
+        base_company
+        and candidate_company
+        and base_company == candidate_company
+    ):
+        score += WEIGHTS["company"]
+
+        reasons.append({
+            "type": "company",
+            "label": "同じ会社・組織の経験",
+            "weight": WEIGHTS["company"],
+        })
+
+    # -----------------------------------------------------
+    # 6. 学校
+    # -----------------------------------------------------
+
+    base_institution = normalize_institution_name(
+        base.get("institution")
+    )
+
+    candidate_institution = normalize_institution_name(
+        candidate.get("institution")
+    )
+
+    if (
+        base_institution
+        and candidate_institution
+        and base_institution == candidate_institution
+    ):
+        score += WEIGHTS["institution"]
+
+        reasons.append({
+            "type": "institution",
+            "label": "近い学歴・学校背景",
+            "weight": WEIGHTS["institution"],
+        })
+
+    # -----------------------------------------------------
+    # 情報量
+    # -----------------------------------------------------
+
+    completeness_fields = [
+        candidate.get("job_category"),
+        candidate.get("industry"),
+        candidate.get("career_type"),
+        candidate.get("birthdate"),
+        candidate.get("company"),
+        candidate.get("institution"),
+    ]
+
+    completeness = sum(
+        1
+        for value in completeness_fields
+        if value
+    )
+
+    # -----------------------------------------------------
+    # 弱すぎる候補を少し抑制
+    # -----------------------------------------------------
+    #
+    # 職種・業界・志向のどれも一致せず、
+    # 年齢/学校/会社だけ近い人は
+    # 「Career Storyとして近い」とは言いにくい。
+    #
+
+    if strong_match_count == 0:
+        score *= 0.55
+
+    return {
+        "score": round(score, 2),
+        "reasons": sorted(
+            reasons,
+            key=lambda item: item["weight"],
+            reverse=True,
+        ),
+        "strong_match_count": strong_match_count,
+        "completeness": completeness,
+    }
+
+
+# =========================================================
+# API
+# =========================================================
 
 @router.get("/similar-career-stories/")
 async def get_similar_users(
     target_user_id: int = Query(None),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     """
-    シンプル条件一致型（OR 条件重み付け）の例。
-    - もし `target_user_id` が指定されればそのユーザー基準。
-    - 指定されなければ current_user.id を基準に類似ユーザーを検索する。
+    Career GPS:
+    「あなたに近いCareer Story」を取得する。
+
+    target_user_id が指定されていればそのユーザー、
+    指定されなければログインユーザーを基準にする。
     """
+
+    base_user_id = (
+        target_user_id
+        if target_user_id
+        else current_user.id
+    )
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
 
-    # 1) 基準ユーザーの特定
-    if target_user_id:
-        base_user_id = target_user_id
-    else:
-        base_user_id = current_user.id
-
     try:
-        # 基準ユーザーの年齢・最終職歴の業界 & 職種を取得
-        cursor.execute("""
-            SELECT u.id, u.birthdate,
-                latest.industry AS latest_industry,
-                latest.job_category AS latest_job_category
-            FROM users u
-            LEFT JOIN (
-                SELECT j1.*
-                FROM job_experiences j1
-                INNER JOIN (
-                    SELECT user_id, MAX(work_start_period) AS max_start
-                    FROM job_experiences
-                    GROUP BY user_id
-                ) j2 ON j1.user_id = j2.user_id AND j1.work_start_period = j2.max_start
-            ) latest ON u.id = latest.user_id
-            WHERE u.id = %s
+
+        # =================================================
+        # 1. 基準ユーザー
+        # =================================================
+
+        cursor.execute(
+            """
+            SELECT
+                id,
+                username,
+                birthdate
+            FROM users
+            WHERE id = %s
             LIMIT 1
-        """, (base_user_id,))
-        base_user = cursor.fetchone()
-        if not base_user:
-            raise HTTPException(status_code=404, detail="対象ユーザーが見つかりません")
-            logger.debug(f"基準ユーザ情報: {base_user}")
-
-        # 年齢計算
-        age = None
-        if base_user["birthdate"]:
-            today = date.today()
-            birth = base_user["birthdate"]
-            age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
-
-        base_industry = base_user["latest_industry"] or ""
-        base_job_category = base_user["latest_job_category"] or ""
-
-        # 別クエリで出身大学（education.institution）を取得（例：最初に入学したレコード）
-        cursor.execute("""
-            SELECT institution 
-            FROM education 
-            WHERE user_id = %s 
-            ORDER BY education_start ASC 
-            LIMIT 1
-        """, (base_user_id,))
-        edu_row = cursor.fetchone()
-        base_institution = edu_row["institution"] if edu_row and edu_row["institution"] else ""
-
-        # 別クエリで最新の会社名（job_experiences）を取得
-        cursor.execute("""
-            SELECT company_name 
-            FROM job_experiences 
-            WHERE user_id = %s AND work_end_period IS NULL 
-            ORDER BY work_start_period DESC 
-            LIMIT 1
-        """, (base_user_id,))
-        comp_row = cursor.fetchone()
-        base_company = comp_row["company_name"] if comp_row and comp_row["company_name"] else ""
-
-        # 正規化を実施（ここで base_company, base_institution は既に定義済み）
-        base_company_norm = normalize_name(base_company)
-        base_institution_norm = normalize_name(base_institution)
-
-        # 別クエリでキャリア志向（career_aspirations.type）を取得
-        cursor.execute("""
-            SELECT type 
-            FROM career_aspirations 
-            WHERE user_id = %s 
-            LIMIT 1
-        """, (base_user_id,))
-        asp_row = cursor.fetchone()
-        base_aspiration = asp_row["type"] if asp_row and asp_row["type"] else ""
-
-        # `baseYear` を定義 — もし age が None の場合は 9999 を仮に設定
-        baseYear = date.today().year - (age if age is not None else 9999)
-
-        # --- カーソルを再生成して未読結果をクリアする ---
-        cursor.close()
-        cursor = db.cursor(dictionary=True)
-
-        # 2) CASE WHEN を使ったシンプルスコア式
-        #   （industry一致 +40, job_category一致 +40, 年齢±5歳以内 +20 など）
-        #   参考例:  similarity_score = 
-        #      (CASE WHEN j.industry=base_ind THEN 40 ELSE 0 END)
-        #     + (CASE WHEN j.job_category=base_cat THEN 40 ELSE 0 END)
-        #     + (CASE WHEN ABS(u.age - base_age)<=5 THEN 20 ELSE 0 END)
-        #
-        #   ここでは birthdate からYEAR()を取得、計算する形にします。
-        
-        # DB: 似たユーザーをスコア降順で10件
-        # 自分自身は除外 (u.id != base_user_id)
-        # 0点のユーザーは除外 (HAVING similarity_score>0)
-        # 最新の職歴を job_experiences からjoinするにはサブクエリかMAX()か いろいろ工夫が必要です。 
-        # ここでは「とりあえず最終職歴(または1レコード)をLEFT JOINしている」シンプル例。
-        # birthdateがNULLのユーザーはスコア計算が0になる想定 or 取り扱い注意など
-
-        # Pythonのformatを安全に使うにはパラメータ化... 
-        # ただし CASE WHEN ... => Pythonで組み立て or Jinja2 など
-        # ここではサンプルとしてSQL文字列を直接組み立てます。実運用ではSQLインジェクションに注意
-
-        query = """
-            SELECT 
-                u.id AS user_id,
-                ANY_VALUE(u.username) AS username,
-                ANY_VALUE(u.birthdate) AS birthdate,
-                ANY_VALUE(j.industry) AS industry,
-                ANY_VALUE(j.job_category) AS job_category,
-                ANY_VALUE(e.institution) AS institution,
-                ANY_VALUE(lc.company_name) AS current_company,
-                (
-                (CASE WHEN REPLACE(REPLACE(REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(e.institution))), '大学', ''), '大学院', ''), '大學', ''), '大学大学院', '') = %s THEN 50 ELSE 0 END)
-                + (CASE WHEN REPLACE(REPLACE(LOWER(TRIM(ANY_VALUE(lc.company_name))), '株式会社', ''), '有限会社', '') = %s THEN 40 ELSE 0 END)
-                + (CASE WHEN ANY_VALUE(j.industry) = %s THEN 20 ELSE 0 END)
-                + (CASE WHEN ANY_VALUE(j.job_category) = %s THEN 20 ELSE 0 END)
-                + (CASE WHEN ANY_VALUE(u.birthdate) IS NOT NULL
-                        AND YEAR(ANY_VALUE(u.birthdate)) BETWEEN 1900 AND 2100
-                        AND YEAR(ANY_VALUE(u.birthdate)) BETWEEN %s - 5 AND %s + 5
-                    THEN 5 ELSE 0 END)
-                + (CASE WHEN ANY_VALUE(ca.type) = %s THEN 20 ELSE 0 END)
-                ) AS similarity_score
-            FROM users u
-            LEFT JOIN job_experiences j 
-                ON u.id = j.user_id AND j.work_end_period IS NULL
-            LEFT JOIN education e 
-                ON u.id = e.user_id
-            LEFT JOIN (
-                SELECT j1.user_id, j1.company_name
-                FROM job_experiences j1
-                INNER JOIN (
-                    SELECT user_id, MAX(work_start_period) AS max_start
-                    FROM job_experiences
-                    GROUP BY user_id
-                ) j2 ON j1.user_id = j2.user_id AND j1.work_start_period = j2.max_start
-            ) lc ON u.id = lc.user_id
-            LEFT JOIN career_aspirations ca 
-                ON u.id = ca.user_id
-            WHERE u.id != %s
-            GROUP BY u.id
-            HAVING similarity_score > 0
-            ORDER BY similarity_score DESC
-            LIMIT 5;
-        """
-        params = (
-            base_institution_norm,   # 1. 出身大学
-            base_company_norm,       # 2. 最新の会社名
-            base_industry,      # 3. 業界
-            base_job_category,  # 4. 職種
-            baseYear,           # 5. 年齢補正（基準年：1回目）
-            baseYear,           # 6. 年齢補正（基準年：2回目）
-            base_aspiration,    # 7. キャリア志向（type）
-            base_user_id        # 8. 自分自身のID（除外）
+            """,
+            (base_user_id,),
         )
-        
-        # クエリを1回だけ実行する
-        cursor.execute(query, params)
-        similar_rows = cursor.fetchall()
 
-        if not similar_rows:
-            # 類似ユーザーが0人の場合
-            return JSONResponse(content={"careers": []})
+        base_user_row = cursor.fetchone()
 
-        # 取り出したIDをまとめる
-        user_ids = [ row["user_id"] for row in similar_rows ]
+        if not base_user_row:
+            raise HTTPException(
+                status_code=404,
+                detail="対象ユーザーが見つかりません",
+            )
 
-        # ----------- 似たユーザ達の詳細(学歴/職歴 等)をJOIN取得 -----------
-        # ここは recent_stories.py と同じロジックにする
-        # 例: 5ユーザーの id IN (...) で education / job_experiences / view_count / aspirations などまとめてJOIN
-        # ORDER BY j.work_start_period ASC とか
-        format_ids = ", ".join(str(uid) for uid in user_ids)
+        # -------------------------------------------------
+        # 最新職歴
+        # -------------------------------------------------
 
-        # 1つのクエリにまとめてもOKだが、ここでは例として recent_stories 風にJOINする。
-        # ※ id 順で並べて連続取得 → Pythonで group化
-        details_query = f"""
-        SELECT 
-            u.id, u.username, u.birthdate,
-            e.institution, e.education_start, e.hide_institution,
-            j.company_name, j.industry, j.job_category, j.salary, j.work_start_period, j.is_private,
-            IFNULL(pv.view_count, 0) AS view_count,
-            ca.type AS career_type
-        FROM users u
-        LEFT JOIN education e ON u.id = e.user_id
-        LEFT JOIN job_experiences j ON u.id = j.user_id
-        LEFT JOIN profile_views pv ON u.id = pv.user_id
-        LEFT JOIN career_aspirations ca ON u.id = ca.user_id
-        WHERE u.id IN ({format_ids})
-        ORDER BY u.id, j.work_start_period ASC
-        """
-        cursor.execute(details_query)
-        rows = cursor.fetchall()
+        cursor.execute(
+            """
+            SELECT
+                company_name,
+                industry,
+                job_category,
+                work_start_period
+            FROM job_experiences
+            WHERE user_id = %s
+            ORDER BY
+                CASE
+                    WHEN work_end_period IS NULL THEN 0
+                    ELSE 1
+                END,
+                work_start_period DESC
+            LIMIT 1
+            """,
+            (base_user_id,),
+        )
 
-        # group化して { user_id: { ... careerStages, companies }} の形を組み立てる
-        career_dict = {}
-        for row in rows:
-            uid = row['id']
-            if uid not in career_dict:
-                career_dict[uid] = {
-                    "id": uid,
-                    "name": row['username'],
-                    "birthYear": row['birthdate'].year if row['birthdate'] else '不明',
-                    "profession": None,
-                    "income": [],
-                    "careerStages": [],
-                    "companies": [],
-                    "view_count": row['view_count'],
-                    "career_type": row['career_type'] or None
+        base_job = cursor.fetchone() or {}
+
+        # -------------------------------------------------
+        # 学歴
+        # -------------------------------------------------
+
+        cursor.execute(
+            """
+            SELECT
+                institution
+            FROM education
+            WHERE user_id = %s
+            ORDER BY education_start ASC
+            LIMIT 1
+            """,
+            (base_user_id,),
+        )
+
+        base_education = cursor.fetchone() or {}
+
+        # -------------------------------------------------
+        # キャリア志向
+        # -------------------------------------------------
+
+        cursor.execute(
+            """
+            SELECT
+                type
+            FROM career_aspirations
+            WHERE user_id = %s
+            LIMIT 1
+            """,
+            (base_user_id,),
+        )
+
+        base_aspiration = cursor.fetchone() or {}
+
+        base_profile = {
+            "id": base_user_id,
+            "birthdate": base_user_row.get("birthdate"),
+            "age": calculate_age(
+                base_user_row.get("birthdate")
+            ),
+            "company": base_job.get("company_name"),
+            "industry": base_job.get("industry"),
+            "job_category": base_job.get("job_category"),
+            "institution": base_education.get("institution"),
+            "career_type": base_aspiration.get("type"),
+        }
+
+        # =================================================
+        # 2. 候補ユーザー
+        # =================================================
+        #
+        # SQLでは複雑なスコア計算をしない。
+        # 最新職歴など必要情報だけ取得して、
+        # Python側で明示的に評価する。
+        #
+
+        cursor.execute(
+            """
+            SELECT
+                u.id,
+                u.username,
+                u.birthdate,
+
+                (
+                    SELECT j.company_name
+                    FROM job_experiences j
+                    WHERE j.user_id = u.id
+                    ORDER BY
+                        CASE
+                            WHEN j.work_end_period IS NULL THEN 0
+                            ELSE 1
+                        END,
+                        j.work_start_period DESC
+                    LIMIT 1
+                ) AS company_name,
+
+                (
+                    SELECT j.industry
+                    FROM job_experiences j
+                    WHERE j.user_id = u.id
+                    ORDER BY
+                        CASE
+                            WHEN j.work_end_period IS NULL THEN 0
+                            ELSE 1
+                        END,
+                        j.work_start_period DESC
+                    LIMIT 1
+                ) AS industry,
+
+                (
+                    SELECT j.job_category
+                    FROM job_experiences j
+                    WHERE j.user_id = u.id
+                    ORDER BY
+                        CASE
+                            WHEN j.work_end_period IS NULL THEN 0
+                            ELSE 1
+                        END,
+                        j.work_start_period DESC
+                    LIMIT 1
+                ) AS job_category,
+
+                (
+                    SELECT e.institution
+                    FROM education e
+                    WHERE e.user_id = u.id
+                    ORDER BY e.education_start ASC
+                    LIMIT 1
+                ) AS institution,
+
+                (
+                    SELECT ca.type
+                    FROM career_aspirations ca
+                    WHERE ca.user_id = u.id
+                    LIMIT 1
+                ) AS career_type
+
+            FROM users u
+            WHERE u.id != %s
+            """,
+            (base_user_id,),
+        )
+
+        candidate_rows = cursor.fetchall()
+
+        # =================================================
+        # 3. Pythonで類似度計算
+        # =================================================
+
+        scored_candidates = []
+
+        for row in candidate_rows:
+
+            candidate_profile = {
+                "id": row["id"],
+                "birthdate": row.get("birthdate"),
+                "age": calculate_age(
+                    row.get("birthdate")
+                ),
+                "company": row.get("company_name"),
+                "industry": row.get("industry"),
+                "job_category": row.get("job_category"),
+                "institution": row.get("institution"),
+                "career_type": row.get("career_type"),
+            }
+
+            result = calculate_similarity(
+                base_profile,
+                candidate_profile,
+            )
+
+            if result["score"] <= 0:
+                continue
+
+            scored_candidates.append({
+                "user_id": row["id"],
+                "score": result["score"],
+                "reasons": result["reasons"],
+                "strong_match_count": result["strong_match_count"],
+                "completeness": result["completeness"],
+            })
+
+        # -------------------------------------------------
+        # スコア
+        # → 強い一致数
+        # → 情報充実度
+        # の順
+        # -------------------------------------------------
+
+        scored_candidates.sort(
+            key=lambda item: (
+                item["score"],
+                item["strong_match_count"],
+                item["completeness"],
+            ),
+            reverse=True,
+        )
+
+        scored_candidates = scored_candidates[
+            :MAX_RESULTS
+        ]
+
+        if not scored_candidates:
+            return JSONResponse(
+                content={
+                    "careers": [],
+                    "baseProfileCompleteness": (
+                        calculate_base_profile_completeness(
+                            base_profile
+                        )
+                    ),
                 }
-                # 学歴(非公開なら '非公開')
-                institution_name = row['institution'] if row['hide_institution'] == 0 else '非公開'
-                # 入学
-                if row['education_start']:
-                    career_dict[uid]["careerStages"].append({
-                        "year": row['education_start'].year,
-                        "stage": f"{institution_name} 入学"
-                    })
+            )
 
-            # 職歴があれば
-            if row['company_name']:
-                company_name = row['company_name'] if row['is_private'] == 0 else '非公開'
-                # 最後の職歴だけ profession に設定(上書き) 例:
-                career_dict[uid]['profession'] = row['job_category'] or '不明'
-                # income配列
-                career_dict[uid]['income'].append({"income": row['salary'] or '不明'})
-                # careerStagesに入社を追加
-                if row['work_start_period']:
-                    career_dict[uid]['careerStages'].append({
-                        "year": row['work_start_period'].year,
-                        "stage": f"{company_name} 入社"
-                    })
-                # companies配列
-                career_dict[uid]['companies'].append({
-                    "name": company_name,
-                    "industry": row['industry'] or '不明',
-                    "startYear": row['work_start_period'].year if row['work_start_period'] else '不明'
+        user_ids = [
+            item["user_id"]
+            for item in scored_candidates
+        ]
+
+        score_map = {
+            item["user_id"]: item
+            for item in scored_candidates
+        }
+
+        # =================================================
+        # 4. ユーザー基本情報
+        # =================================================
+
+        placeholders = ", ".join(
+            ["%s"] * len(user_ids)
+        )
+
+        cursor.execute(
+            f"""
+            SELECT
+                id,
+                username,
+                birthdate
+            FROM users
+            WHERE id IN ({placeholders})
+            """,
+            tuple(user_ids),
+        )
+
+        user_rows = cursor.fetchall()
+
+        career_dict = {}
+
+        for row in user_rows:
+
+            uid = row["id"]
+
+            career_dict[uid] = {
+                "id": uid,
+                "name": row.get("username") or "匿名",
+                "birthYear": (
+                    row["birthdate"].year
+                    if row.get("birthdate")
+                    else None
+                ),
+                "profession": None,
+                "income": [],
+                "careerStages": [],
+                "companies": [],
+                "view_count": 0,
+                "career_type": None,
+
+                # 新規
+                "similarity_score": (
+                    score_map[uid]["score"]
+                ),
+                "similarity_reasons": [
+                    reason["label"]
+                    for reason
+                    in score_map[uid]["reasons"]
+                ],
+            }
+
+        # =================================================
+        # 5. 学歴
+        # =================================================
+
+        cursor.execute(
+            f"""
+            SELECT
+                user_id,
+                institution,
+                education_start,
+                hide_institution
+            FROM education
+            WHERE user_id IN ({placeholders})
+            ORDER BY
+                user_id,
+                education_start ASC
+            """,
+            tuple(user_ids),
+        )
+
+        education_rows = cursor.fetchall()
+
+        for row in education_rows:
+
+            uid = row["user_id"]
+
+            if uid not in career_dict:
+                continue
+
+            institution = (
+                row.get("institution")
+                if row.get("hide_institution") == 0
+                else "非公開"
+            )
+
+            if (
+                row.get("education_start")
+                and institution
+            ):
+                career_dict[uid][
+                    "careerStages"
+                ].append({
+                    "year": safe_year(
+                        row["education_start"]
+                    ),
+                    "stage": f"{institution} 入学",
                 })
 
-        # 最終的に { "careers": [ ... ] } の形で返却
-        careers_list = list(career_dict.values())
-        return JSONResponse(content={"careers": careers_list})
+        # =================================================
+        # 6. 職歴
+        # =================================================
+
+        cursor.execute(
+            f"""
+            SELECT
+                user_id,
+                company_name,
+                industry,
+                job_category,
+                salary,
+                work_start_period,
+                work_end_period,
+                is_private
+            FROM job_experiences
+            WHERE user_id IN ({placeholders})
+            ORDER BY
+                user_id,
+                work_start_period ASC
+            """,
+            tuple(user_ids),
+        )
+
+        job_rows = cursor.fetchall()
+
+        latest_job_map = {}
+
+        for row in job_rows:
+
+            uid = row["user_id"]
+
+            if uid not in career_dict:
+                continue
+
+            company_name = (
+                row.get("company_name")
+                if row.get("is_private") == 0
+                else "非公開"
+            )
+
+            # ---------------------------------------------
+            # Career Stage
+            # ---------------------------------------------
+
+            if (
+                row.get("work_start_period")
+                and company_name
+            ):
+                career_dict[uid][
+                    "careerStages"
+                ].append({
+                    "year": safe_year(
+                        row["work_start_period"]
+                    ),
+                    "stage": f"{company_name} 入社",
+                })
+
+            # ---------------------------------------------
+            # Company
+            # ---------------------------------------------
+
+            if company_name:
+
+                career_dict[uid][
+                    "companies"
+                ].append({
+                    "name": company_name,
+                    "industry": (
+                        row.get("industry")
+                        or "不明"
+                    ),
+                    "startYear": (
+                        safe_year(
+                            row.get(
+                                "work_start_period"
+                            )
+                        )
+                        or "不明"
+                    ),
+                })
+
+            # ---------------------------------------------
+            # Income
+            # ---------------------------------------------
+
+            if row.get("salary") is not None:
+
+                career_dict[uid][
+                    "income"
+                ].append({
+                    "income": row["salary"]
+                })
+
+            # ---------------------------------------------
+            # 最新職歴判定
+            # ---------------------------------------------
+
+            current_priority = (
+                1
+                if row.get("work_end_period") is None
+                else 0
+            )
+
+            start_value = (
+                row.get("work_start_period")
+                or date.min
+            )
+
+            existing = latest_job_map.get(uid)
+
+            if (
+                existing is None
+                or (
+                    current_priority,
+                    start_value,
+                )
+                >
+                (
+                    existing["priority"],
+                    existing["start"],
+                )
+            ):
+                latest_job_map[uid] = {
+                    "priority": current_priority,
+                    "start": start_value,
+                    "job_category": (
+                        row.get("job_category")
+                        or "職種未設定"
+                    ),
+                }
+
+        for uid, latest in latest_job_map.items():
+
+            if uid in career_dict:
+                career_dict[uid][
+                    "profession"
+                ] = latest["job_category"]
+
+        # =================================================
+        # 7. Career aspiration
+        # =================================================
+
+        cursor.execute(
+            f"""
+            SELECT
+                user_id,
+                type
+            FROM career_aspirations
+            WHERE user_id IN ({placeholders})
+            """,
+            tuple(user_ids),
+        )
+
+        aspiration_rows = cursor.fetchall()
+
+        for row in aspiration_rows:
+
+            uid = row["user_id"]
+
+            if (
+                uid in career_dict
+                and not career_dict[uid][
+                    "career_type"
+                ]
+            ):
+                career_dict[uid][
+                    "career_type"
+                ] = row.get("type")
+
+        # =================================================
+        # 8. View count
+        # =================================================
+
+        cursor.execute(
+            f"""
+            SELECT
+                user_id,
+                view_count
+            FROM profile_views
+            WHERE user_id IN ({placeholders})
+            """,
+            tuple(user_ids),
+        )
+
+        view_rows = cursor.fetchall()
+
+        for row in view_rows:
+
+            uid = row["user_id"]
+
+            if uid in career_dict:
+                career_dict[uid][
+                    "view_count"
+                ] = row.get(
+                    "view_count"
+                ) or 0
+
+        # =================================================
+        # 9. Timeline sort
+        # =================================================
+
+        for career in career_dict.values():
+
+            career["careerStages"].sort(
+                key=lambda item: (
+                    item.get("year")
+                    if isinstance(
+                        item.get("year"),
+                        int,
+                    )
+                    else 9999
+                )
+            )
+
+            if not career["profession"]:
+                career["profession"] = (
+                    "職種未設定"
+                )
+
+        # =================================================
+        # 10. 類似順を維持
+        # =================================================
+
+        careers_list = [
+            career_dict[uid]
+            for uid in user_ids
+            if uid in career_dict
+        ]
+
+        return JSONResponse(
+            content={
+                "careers": careers_list,
+                "baseProfileCompleteness": (
+                    calculate_base_profile_completeness(
+                        base_profile
+                    )
+                ),
+            }
+        )
+
+    except HTTPException:
+        raise
 
     except Exception as e:
-        print(f"Error on get_similar_career_stories: {e}")
-        raise HTTPException(status_code=500, detail="類似ユーザー取得に失敗しました")
+
+        logger.exception(
+            "Error on get_similar_career_stories: %s",
+            e,
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="類似ユーザー取得に失敗しました",
+        )
+
     finally:
+
         cursor.close()
         db.close()
+
+
+# =========================================================
+# Profile completeness
+# =========================================================
+
+def calculate_base_profile_completeness(profile):
+
+    fields = [
+        profile.get("birthdate"),
+        profile.get("job_category"),
+        profile.get("industry"),
+        profile.get("career_type"),
+        profile.get("company"),
+        profile.get("institution"),
+    ]
+
+    registered = sum(
+        1
+        for value in fields
+        if value
+    )
+
+    return round(
+        registered / len(fields) * 100
+    )
