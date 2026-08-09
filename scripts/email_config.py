@@ -8,9 +8,9 @@ class EmailSchema(BaseModel):
 
 # ConnectionConfigの設定を直接記述
 conf = ConnectionConfig(
-    MAIL_USERNAME="godyusuke.0205earth@gmail.com",
-    MAIL_PASSWORD="hmiylzhclsrpwset",
-    MAIL_FROM="godyusuke.0205earth@gmail.com",
+    MAIL_USERNAME="imnormal0901@gmail.com",
+    MAIL_PASSWORD="soormrikcrnqoafj",
+    MAIL_FROM="imnormal0901@gmail.com",
     MAIL_PORT=587,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_TLS=True,   # これを使用
