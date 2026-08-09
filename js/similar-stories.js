@@ -49,19 +49,23 @@
 
 
             if (benefits) {
+
                 benefits.style.display =
                     'grid';
+
             }
 
 
             if (loginCTA) {
+
                 loginCTA.style.display =
                     'inline-flex';
+
             }
 
 
             description.textContent =
-                '無料登録すると、あなたの年代・職種・業界・キャリア志向などから、参考になりそうなCareer Storyを見つけられます。';
+                '無料登録すると、歩んできたキャリア、現在の職種・業界、価値観、年代などから、あなたの参考になりそうなCareer Storyを見つけられます。';
 
 
             return;
@@ -73,19 +77,23 @@
         ================================================= */
 
         if (benefits) {
+
             benefits.style.display =
                 'none';
+
         }
 
 
         if (loginCTA) {
+
             loginCTA.style.display =
                 'none';
+
         }
 
 
         description.textContent =
-            'あなたのプロフィールと共通点のあるCareer Storyを選びました。';
+            'これまで歩んできた道や現在の仕事、価値観などから、あなたに近いCareer Storyを選びました。';
 
 
         try {
@@ -122,7 +130,7 @@
 
 
             /* =============================================
-               No recommendation
+               Empty
             ============================================= */
 
             if (!careers.length) {
@@ -146,19 +154,21 @@
                 ) {
 
                     description.textContent =
-                        'まだ十分な共通点を見つけられませんでした。プロフィールを充実させると、あなたに近いCareer Storyを見つけやすくなります。';
+                        'まだ十分な共通点を見つけられませんでした。Career GPSを充実させると、歩んできた道や価値観が近いStoryを見つけやすくなります。';
 
                 } else {
 
                     description.textContent =
-                        'あなたに近いCareer Storyはまだ見つかりませんでした。Career Storyが増えると、より近い経験を持つ人をご紹介できるようになります。';
+                        'あなたに近いCareer Storyはまだ見つかりませんでした。Storyが増えると、より近い経験を持つ人をご紹介できるようになります。';
 
                 }
 
 
                 if (benefits) {
+
                     benefits.style.display =
                         'grid';
+
                 }
 
 
@@ -172,7 +182,6 @@
 
             list.innerHTML =
                 '';
-
 
             list.style.display =
                 'grid';
@@ -216,8 +225,10 @@
 
 
             if (benefits) {
+
                 benefits.style.display =
                     'grid';
+
             }
 
         }
@@ -259,7 +270,9 @@
        Card
     ====================================================== */
 
-    function createSimilarStoryCard(story) {
+    function createSimilarStoryCard(
+        story
+    ) {
 
         const card =
             document.createElement(
@@ -288,15 +301,27 @@
 
 
         const reasons =
-            story.similarityReasons
-                .slice(0, 3);
+            story
+                .similarityReasons
+                .slice(
+                    0,
+                    3
+                );
 
 
         card.innerHTML = `
 
-            <div class="home-career-card__top">
+            <div
+                class="
+                    home-career-card__top
+                "
+            >
 
-                <div class="home-career-avatar">
+                <div
+                    class="
+                        home-career-avatar
+                    "
+                >
 
                     ${escapeHTML(
                         getInitial(
@@ -307,32 +332,47 @@
                 </div>
 
 
-                <div class="home-career-person">
+                <div
+                    class="
+                        home-career-person
+                    "
+                >
 
-                    <p class="home-career-person__meta">
+                    <p
+                        class="
+                            home-career-person__meta
+                        "
+                    >
 
                         ${
                             story.age !== null
-                                ? `
-                                    <span>
-                                        ${story.age}歳
-                                    </span>
-                                `
-                                : ''
+
+                            ? `
+                                <span>
+                                    ${story.age}歳
+                                </span>
+                            `
+
+                            : ''
                         }
 
+
                         ${
-                            story.profession &&
-                            story.profession !==
-                                '職種未設定'
-                                ? `
-                                    <span>
-                                        ${escapeHTML(
-                                            story.profession
-                                        )}
-                                    </span>
-                                `
-                                : ''
+                            story.profession
+                            &&
+                            story.profession
+                            !==
+                            '職種未設定'
+
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        story.profession
+                                    )}
+                                </span>
+                            `
+
+                            : ''
                         }
 
                     </p>
@@ -345,7 +385,11 @@
                     </h3>
 
 
-                    <p class="home-career-person__summary">
+                    <p
+                        class="
+                            home-career-person__summary
+                        "
+                    >
 
                         ${escapeHTML(
                             buildCareerSummary(
@@ -360,17 +404,27 @@
             </div>
 
 
-            <div class="home-career-card__story">
+            <div
+                class="
+                    home-career-card__story
+                "
+            >
 
-                <p class="home-career-card__label">
+                <p
+                    class="
+                        home-career-card__label
+                    "
+                >
                     WHY THIS STORY?
                 </p>
 
 
                 <h4>
+
                     ${escapeHTML(
                         headline
                     )}
+
                 </h4>
 
             </div>
@@ -378,24 +432,32 @@
 
             ${
                 reasons.length
-                    ? `
-                        <div class="home-career-tags">
 
-                            ${reasons
-                                .map(
-                                    reason => `
-                                        <span>
-                                            ${escapeHTML(
-                                                reason
-                                            )}
-                                        </span>
-                                    `
-                                )
-                                .join('')}
+                ? `
+                    <div
+                        class="
+                            home-career-tags
+                        "
+                    >
 
-                        </div>
-                    `
-                    : ''
+                        ${reasons
+                            .map(
+                                reason => `
+
+                                    <span>
+                                        ${escapeHTML(
+                                            reason
+                                        )}
+                                    </span>
+
+                                `
+                            )
+                            .join('')}
+
+                    </div>
+                `
+
+                : ''
             }
 
 
@@ -404,32 +466,49 @@
             )}
 
 
-            <div class="home-career-card__footer">
+            <div
+                class="
+                    home-career-card__footer
+                "
+            >
 
-                <div class="home-career-card__facts">
+                <div
+                    class="
+                        home-career-card__facts
+                    "
+                >
 
                     ${
-                        story.income !==
+                        story.income
+                        !==
                         '未設定'
-                            ? `
-                                <span>
-                                    年収
-                                    ${escapeHTML(
-                                        story.income
-                                    )}
-                                </span>
-                            `
-                            : ''
+
+                        ? `
+                            <span>
+                                年収
+                                ${escapeHTML(
+                                    story.income
+                                )}
+                            </span>
+                        `
+
+                        : ''
                     }
 
                 </div>
 
 
-                <span class="home-career-card__link">
+                <span
+                    class="
+                        home-career-card__link
+                    "
+                >
 
                     Storyを見る
 
-                    <span aria-hidden="true">
+                    <span
+                        aria-hidden="true"
+                    >
                         →
                     </span>
 
@@ -469,9 +548,11 @@
             event => {
 
                 if (
-                    event.key === 'Enter'
+                    event.key
+                    === 'Enter'
                     ||
-                    event.key === ' '
+                    event.key
+                    === ' '
                 ) {
 
                     event.preventDefault();
@@ -493,7 +574,9 @@
        Normalize
     ====================================================== */
 
-    function normalizeStory(story) {
+    function normalizeStory(
+        story
+    ) {
 
         const companies =
             Array.isArray(
@@ -507,7 +590,8 @@
             Array.isArray(
                 story.similarity_reasons
             )
-                ? story.similarity_reasons
+                ? story
+                    .similarity_reasons
                     .filter(Boolean)
                 : [];
 
@@ -517,36 +601,55 @@
             id:
                 story.id,
 
+
             name:
-                story.name ||
+                story.name
+                ||
                 '匿名',
+
 
             age:
                 calculateAge(
                     story.birthYear
                 ),
 
+
             profession:
-                story.profession ||
+                story.profession
+                ||
                 '職種未設定',
+
 
             income:
                 getLatestIncome(
                     story.income
                 ),
 
+
             careerType:
-                story.career_type ||
+                story.career_type
+                ||
                 '',
+
 
             similarityScore:
                 Number(
                     story.similarity_score
-                ) || 0,
+                )
+                || 0,
+
+
+            similarityHeadline:
+                story.similarity_headline
+                ||
+                '',
+
 
             similarityReasons,
 
+
             companies,
+
 
             careerStages:
                 normalizeStages(
@@ -558,22 +661,104 @@
     }
 
 
-    function normalizeStages(stages) {
+    /* =====================================================
+       WHY THIS STORY
+    ====================================================== */
 
-        if (!Array.isArray(stages)) {
-            return [];
+    function buildStoryHeadline(
+        story
+    ) {
+
+        /*
+         * Python側で
+         * Career GPSとして意味のある
+         * 推薦理由を生成する。
+         *
+         * JS側では基本的に
+         * その文言をそのまま使う。
+         */
+
+        if (
+            story.similarityHeadline
+        ) {
+
+            return (
+                story.similarityHeadline
+            );
+
         }
 
 
-        const result = [];
-        const used = new Set();
+        if (
+            story.similarityReasons
+            .length >= 2
+        ) {
+
+            return (
+                `${
+                    story
+                        .similarityReasons[0]
+                }、${
+                    story
+                        .similarityReasons[1]
+                }`
+            );
+
+        }
+
+
+        if (
+            story.similarityReasons
+            .length === 1
+        ) {
+
+            return (
+                story
+                    .similarityReasons[0]
+            );
+
+        }
+
+
+        return (
+            'あなたと共通点のあるCareer Story'
+        );
+
+    }
+
+
+    /* =====================================================
+       Normalize stages
+    ====================================================== */
+
+    function normalizeStages(
+        stages
+    ) {
+
+        if (
+            !Array.isArray(
+                stages
+            )
+        ) {
+
+            return [];
+
+        }
+
+
+        const result =
+            [];
+
+        const used =
+            new Set();
 
 
         stages.forEach(
             stage => {
 
                 const value =
-                    stage?.stage ||
+                    stage?.stage
+                    ||
                     '';
 
 
@@ -584,11 +769,15 @@
 
                 const key =
                     `${
-                        stage?.year || ''
+                        stage?.year
+                        ||
+                        ''
                     }-${value}`;
 
 
-                if (used.has(key)) {
+                if (
+                    used.has(key)
+                ) {
                     return;
                 }
 
@@ -599,7 +788,8 @@
                 result.push({
 
                     year:
-                        stage?.year ||
+                        stage?.year
+                        ||
                         '',
 
                     stage:
@@ -617,134 +807,15 @@
 
 
     /* =====================================================
-       Headline
+       Career summary
     ====================================================== */
 
-    function buildStoryHeadline(story) {
+    function buildCareerSummary(
+        story
+    ) {
 
-        const reasons =
-            story.similarityReasons;
-
-
-        /*
-         * 「なぜこのStoryなのか」を
-         * recommendation理由から作る。
-         */
-
-        if (reasons.length >= 2) {
-
-            return `${
-                reasons[0]
-            }、${
-                reasons[1]
-            }Career Story`;
-
-        }
-
-
-        if (reasons.length === 1) {
-
-            return `${
-                reasons[0]
-            }Career Story`;
-
-        }
-
-
-        if (story.careerType) {
-
-            return simplifyCareerType(
-                story.careerType
-            );
-
-        }
-
-
-        return 'あなたと共通点のあるCareer Story';
-
-    }
-
-
-    function simplifyCareerType(type) {
-
-        const value =
-            String(
-                type || ''
-            );
-
-
-        if (
-            value.includes('給与')
-            ||
-            value.includes('収入')
-        ) {
-
-            return '年収を大切に考えたCareer Story';
-
-        }
-
-
-        if (
-            value.includes('やりがい')
-        ) {
-
-            return '仕事のやりがいを大切にしたCareer Story';
-
-        }
-
-
-        if (
-            value.includes(
-                'ワークライフバランス'
-            )
-        ) {
-
-            return '働き方とのバランスを考えたCareer Story';
-
-        }
-
-
-        if (
-            value.includes('専門')
-        ) {
-
-            return '専門性を高める道を考えたCareer Story';
-
-        }
-
-
-        if (
-            value.includes(
-                'マネジメント'
-            )
-        ) {
-
-            return 'マネジメントへの道を考えたCareer Story';
-
-        }
-
-
-        if (
-            value.includes('起業')
-        ) {
-
-            return '独立・起業という道を考えたCareer Story';
-
-        }
-
-
-        return 'あなたと共通点のあるCareer Story';
-
-    }
-
-
-    /* =====================================================
-       Summary
-    ====================================================== */
-
-    function buildCareerSummary(story) {
-
-        const values = [];
+        const values =
+            [];
 
 
         const companyCount =
@@ -779,9 +850,13 @@
         }
 
 
-        return values.length
+        return (
+            values.length
+
             ? values.join('・')
-            : 'Career Story';
+
+            : 'Career Story'
+        );
 
     }
 
@@ -790,19 +865,28 @@
        Timeline
     ====================================================== */
 
-    function buildTimelineHTML(stages) {
+    function buildTimelineHTML(
+        stages
+    ) {
 
-        if (!stages.length) {
+        if (
+            !stages.length
+        ) {
 
             return `
+
                 <div
                     class="
                         home-career-timeline
                         home-career-timeline--empty
                     "
                 >
-                    キャリア履歴はまだ登録されていません
+
+                    キャリア履歴は
+                    まだ登録されていません
+
                 </div>
+
             `;
 
         }
@@ -816,67 +900,87 @@
 
         return `
 
-            <div class="home-career-timeline">
+            <div
+                class="
+                    home-career-timeline
+                "
+            >
 
-                <div class="home-career-timeline__track">
+                <div
+                    class="
+                        home-career-timeline__track
+                    "
+                >
 
-                    ${items
-                        .map(
-                            (
-                                item,
-                                index
-                            ) => `
+                    ${
+                        items
+                            .map(
+                                (
+                                    item,
+                                    index
+                                ) => `
 
-                                <div
-                                    class="
-                                        home-career-timeline__item
-                                    "
-                                >
-
-                                    <span
+                                    <div
                                         class="
-                                            home-career-timeline__year
+                                            home-career-timeline__item
                                         "
                                     >
-                                        ${escapeHTML(
-                                            String(
-                                                item.year ||
-                                                ''
-                                            )
-                                        )}
-                                    </span>
+
+                                        <span
+                                            class="
+                                                home-career-timeline__year
+                                            "
+                                        >
+
+                                            ${escapeHTML(
+                                                String(
+                                                    item.year
+                                                    ||
+                                                    ''
+                                                )
+                                            )}
+
+                                        </span>
 
 
-                                    <span
-                                        class="
-                                            home-career-timeline__dot
-                                            ${
-                                                index ===
-                                                items.length - 1
+                                        <span
+                                            class="
+                                                home-career-timeline__dot
+
+                                                ${
+                                                    index
+                                                    ===
+                                                    items.length - 1
+
                                                     ? 'is-current'
+
                                                     : ''
-                                            }
-                                        "
-                                    ></span>
+                                                }
+                                            "
+                                        >
+                                        </span>
 
 
-                                    <span
-                                        class="
-                                            home-career-timeline__stage
-                                        "
-                                    >
-                                        ${escapeHTML(
-                                            simplifyStage(
-                                                item.stage
-                                            )
-                                        )}
-                                    </span>
+                                        <span
+                                            class="
+                                                home-career-timeline__stage
+                                            "
+                                        >
 
-                                </div>
+                                            ${escapeHTML(
+                                                simplifyStage(
+                                                    item.stage
+                                                )
+                                            )}
 
-                            `
-                        )
-                        .join('')}
+                                        </span>
+
+                                    </div>
+
+                                `
+                            )
+                            .join('')
+                    }
 
                 </div>
 
@@ -887,25 +991,42 @@
     }
 
 
-    function selectTimelineItems(stages) {
+    function selectTimelineItems(
+        stages
+    ) {
 
-        if (stages.length <= 4) {
+        if (
+            stages.length <= 4
+        ) {
+
             return stages;
+
         }
 
 
+        /*
+         * 最初 / 中間 / 最新
+         *
+         * Career Storyカード上で
+         * 経路が分かりやすい3点を表示。
+         */
+
         return [
+
             stages[0],
 
             stages[
                 Math.floor(
-                    stages.length / 2
+                    stages.length
+                    /
+                    2
                 )
             ],
 
             stages[
                 stages.length - 1
             ]
+
         ];
 
     }
@@ -915,11 +1036,15 @@
        Helpers
     ====================================================== */
 
-    function simplifyStage(stage) {
+    function simplifyStage(
+        stage
+    ) {
 
         const value =
             String(
-                stage || ''
+                stage
+                ||
+                ''
             )
                 .replace(
                     /\s+/g,
@@ -928,14 +1053,25 @@
                 .trim();
 
 
-        return value.length > 17
-            ? `${value.slice(0, 17)}…`
-            : value;
+        return (
+            value.length > 17
+
+            ? `${
+                value.slice(
+                    0,
+                    17
+                )
+              }…`
+
+            : value
+        );
 
     }
 
 
-    function calculateAge(birthYear) {
+    function calculateAge(
+        birthYear
+    ) {
 
         const year =
             Number(
@@ -944,7 +1080,9 @@
 
 
         if (
-            !Number.isFinite(year)
+            !Number.isFinite(
+                year
+            )
             ||
             year <= 0
         ) {
@@ -955,7 +1093,8 @@
 
 
         return (
-            new Date().getFullYear()
+            new Date()
+                .getFullYear()
             -
             year
         );
@@ -963,15 +1102,21 @@
     }
 
 
-    function getLatestIncome(incomes) {
+    function getLatestIncome(
+        incomes
+    ) {
 
         if (
-            !Array.isArray(incomes)
+            !Array.isArray(
+                incomes
+            )
             ||
             !incomes.length
         ) {
 
-            return '未設定';
+            return (
+                '未設定'
+            );
 
         }
 
@@ -983,18 +1128,23 @@
 
 
         return (
-            latest?.income ??
+            latest?.income
+            ??
             '未設定'
         );
 
     }
 
 
-    function getUniqueCompanyCount(companies) {
+    function getUniqueCompanyCount(
+        companies
+    ) {
 
         const names =
             (
-                Array.isArray(companies)
+                Array.isArray(
+                    companies
+                )
                     ? companies
                     : []
             )
@@ -1004,59 +1154,85 @@
                 )
                 .filter(
                     name =>
-                        name &&
-                        name !== '非公開'
+                        name
+                        &&
+                        name
+                        !==
+                        '非公開'
                 );
 
 
-        return new Set(
-            names
-        ).size;
+        return (
+            new Set(
+                names
+            ).size
+        );
 
     }
 
 
-    function calculateCareerYears(companies) {
+    function calculateCareerYears(
+        companies
+    ) {
 
         const years =
             (
-                Array.isArray(companies)
+                Array.isArray(
+                    companies
+                )
                     ? companies
                     : []
             )
                 .map(
                     company =>
                         Number(
-                            company?.startYear
+                            company
+                                ?.startYear
                         )
                 )
                 .filter(
                     year =>
-                        Number.isFinite(year)
+                        Number.isFinite(
+                            year
+                        )
                         &&
                         year > 1900
                 );
 
 
-        if (!years.length) {
+        if (
+            !years.length
+        ) {
+
             return null;
+
         }
 
 
         return Math.max(
+
             1,
-            new Date().getFullYear()
+
+            new Date()
+                .getFullYear()
             -
-            Math.min(...years)
+            Math.min(
+                ...years
+            )
+
         );
 
     }
 
 
-    function getInitial(name) {
+    function getInitial(
+        name
+    ) {
 
         return String(
-            name || '?'
+            name
+            ||
+            '?'
         )
             .trim()
             .charAt(0)
@@ -1065,7 +1241,9 @@
     }
 
 
-    function incrementViewCount(id) {
+    function incrementViewCount(
+        id
+    ) {
 
         if (!id) {
             return;
@@ -1074,26 +1252,35 @@
 
         fetch(
             `/increment-profile-view/${
-                encodeURIComponent(id)
+                encodeURIComponent(
+                    id
+                )
             }`,
             {
+
                 method:
                     'POST',
 
                 credentials:
                     'include'
+
             }
-        ).catch(
-            () => {}
-        );
+        )
+            .catch(
+                () => {}
+            );
 
     }
 
 
-    function escapeHTML(value) {
+    function escapeHTML(
+        value
+    ) {
 
         return String(
-            value ?? ''
+            value
+            ??
+            ''
         )
             .replaceAll(
                 '&',
