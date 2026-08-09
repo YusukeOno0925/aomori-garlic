@@ -1,506 +1,1872 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マイページ | キャリア情報を編集・管理 - インノーマル</title>
-    <meta name="description" content="自身のキャリアプロフィールや転職成功事例を編集・管理できるマイページ。スキルや学歴・職歴をアップデートして、より的確なキャリアマッチングを実現します。">
-    <meta property="og:title" content="マイページ - インノーマル">
-    <meta property="og:description" content="あなたのキャリア情報を編集・公開し、他のユーザーと共有して可能性を広げよう。">
-    <meta property="og:image" content="https://www.imnormal.jp/images/ogp-mypage.jpg">
-    <meta property="og:url" content="https://www.imnormal.jp/Mypage.html">
-    <meta property="og:type" content="website">
-    <meta name="keywords" content="マイページ, キャリア情報, キャリアストーリー編集, プロフィール, インノーマル">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/mypage.css">
-    <link rel="canonical" href="https://www.imnormal.jp/Mypage.html">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        My Career GPS | キャリアを振り返り、次の一歩を考える - インノーマル
+    </title>
+
+    <meta
+        name="description"
+        content="これまでのキャリア、意思決定、学び、これから目指したい方向を整理するMy Career GPS。自分のキャリアを振り返り、次の一歩を考えるためのページです。"
+    >
+
+    <meta
+        property="og:title"
+        content="My Career GPS - インノーマル"
+    >
+
+    <meta
+        property="og:description"
+        content="これまでの経験・選択・学びを整理して、自分らしい次の一歩を考える。"
+    >
+
+    <meta
+        property="og:url"
+        content="https://www.imnormal.jp/Mypage.html"
+    >
+
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <link
+        rel="canonical"
+        href="https://www.imnormal.jp/Mypage.html"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/mypage.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 </head>
+
+
 <body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
     <header>
+
         <div class="header-content">
-            <a href="Home.html" class="logo-link">
-                <img src="images/company-logo.jpg" alt="インノーマルのロゴ" class="logo-image">
-                <span class="logo" aria-label="インノーマル">インノーマル</span>
+
+            <a
+                href="Home.html"
+                class="logo-link"
+            >
+
+                <img
+                    src="images/company-logo.jpg"
+                    alt="インノーマルのロゴ"
+                    class="logo-image"
+                >
+
+                <span
+                    class="logo"
+                    aria-label="インノーマル"
+                >
+                    インノーマル
+                </span>
+
             </a>
-            <p class="lead-text">〜キャリアの未来を共に創る〜</p>
+
+
+            <p class="lead-text">
+                〜キャリアの未来を共に創る〜
+            </p>
+
+
             <div class="login-button-container">
-                <a href="/Register.html" class="header-register-btn">新規登録</a>
-                <a href="Login.html" id="login-button" class="login-button" style="display: none;">ログイン</a>
-                <a href="#" id="logout-button" class="login-button" style="display: none;">ログアウト</a>
-            </div>
-            <div class="hamburger-menu">☰</div>
-        </div>
-    </header>
-    <aside class="main-menu" id="main-menu">
-        <nav>
-            <ul>
-                <li><a href="Home.html"><img src="images/home-icon.png" alt="ホームアイコン"> ホーム</a></li>
-                <li><a href="Career_overview.html"><img src="images/career-icon.png" alt="キャリアストーリーアイコン"> キャリアストーリー</a></li>
-                <li><a href="Board.html"><img src="images/board-icon.png" alt="掲示板アイコン"> 掲示板（Q&A）</a></li>
-                <li><a href="Mypage.html" class="active"><img src="images/mypage-icon.png" alt="マイページアイコン"> マイページ</a></li>
-                <li><a href="Announcements.html"><img src="images/notification-icon.png" alt="お知らせアイコン"> お知らせ</a></li>
-                <li><a href="Contact.html"><img src="images/contact-icon.png" alt="問い合わせアイコン"> お問い合わせ</a></li>
-            </ul>
-        </nav>
-    </aside>
-
-    <main>
-        <h1>マイページ</h1>
-        <div class="button-group">
-            <button type="button" id="edit-button-top">編集</button>
-            <button type="submit" id="save-button-top" style="display: none;">保存</button>
-        </div>
-
-        <!-- タブメニュー -->
-        <div class="tab-menu">
-            <button class="tab-link active" data-tab="tab-basic">基本情報</button>
-            <button class="tab-link" data-tab="tab-career-details">キャリア詳細</button>
-            <button class="tab-link" data-tab="tab-future">今後のキャリア志向</button>
-        </div>
-
-        <form id="mypage-form" method="post">
-            <!-- タブ1: 基本情報 -->
-            <div id="tab-basic" class="tab-content active">
-                <h3>基本情報</h3>
-                <div class="floating-label">
-                    <input type="text" id="username" name="username" required readonly>
-                    <label for="username">ユーザ名</label>
-                </div>
-                <div class="floating-label">
-                    <input type="email" id="email" name="email" required readonly>
-                    <label for="email">メールアドレス</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="family_name" name="family_name" readonly>
-                    <label for="family_name">姓</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="given_name" name="given_name" readonly>
-                    <label for="given_name">名</label>
-                </div>
-                <div class="floating-label">
-                    <input type="date" id="birthdate" name="birthdate" readonly>
-                    <label for="birthdate">生年月日</label>
-                </div>
-                <div class="floating-label">
-                    <select id="gender" name="gender" disabled>
-                        <option value="" disabled selected>性別を選択してください</option>
-                        <option value="男性">男性</option>
-                        <option value="女性">女性</option>
-                        <option value="その他">その他</option>
-                    </select>
-                    <label for="gender">性別</label>
-                </div>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" disabled>
-                        キャリアストーリーの通知メールを受信する
-                    </label>
-                </div>
-
-                <h3>学歴</h3>
-                <div class="floating-label">
-                    <input type="text" id="institution" name="institution" readonly>
-                    <label for="institution">学校名</label>
-                </div>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="hide_institution" name="hide_institution">
-                        学歴を非公開にする
-                    </label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="degree" name="degree" readonly>
-                    <label for="degree">学部</label>
-                </div>
-                <div class="floating-label">
-                    <input type="text" id="major" name="major" readonly>
-                    <label for="major">学科</label>
-                </div>
-                <div class="floating-label">
-                    <input type="date" id="education_start" name="education_start" readonly>
-                    <label for="education_start">入学日</label>
-                </div>
-                <div class="floating-label">
-                    <input type="date" id="education_end" name="education_end" readonly>
-                    <label for="education_end">卒業日</label>
-                </div>
-                <input type="hidden" id="education_id" name="education_id">
-
-                <h3>職歴</h3>
-                <div id="job-experiences-container">
-                    <!-- 職歴フィールドを動的に追加 -->
-                </div>
-                <button type="button" id="add-job-experience" style="display: none;">職歴を追加</button>
-            </div>
-
-            <!-- ▼▼▼ タブ2: キャリア詳細 ▼▼▼ -->
-            <div id="tab-career-details" class="tab-content">
-
-                <!-- (1) キャリアのスタート地点 -->
-                <h3>キャリアのスタート地点</h3>
-
-                <!-- 折りたたみブロック -->
-                <div class="section-explain collapsible-block">
-                    <div class="collapsible-summary">
-                        <strong>なぜ書くといい？</strong><br>
-                        - 同じ業界を目指すユーザの参考になり、閲覧数が増える可能性<br>
-                        - あなたの具体的な選択理由が「共感」や「アドバイス」を呼びやすい<br>
-                        （※いずれも任意入力です。後ほど追記も可能）
-                        <br><br>
-                        <span class="toggle-btn">もっと見る</span>
-                    </div>
-                    <div class="collapsible-details" style="display:none;">
-                        <p>
-                            ここでは初めての仕事（新卒など）や、最初にどの業界を選んだかの理由を入力できます。<br>
-                            <em>詳しく書くほど、他のユーザがあなたの選んだ道をイメージしやすくなります。</em>
-                        </p>
-                        <p>例:</p>
-                        <ul>
-                            <li>興味を持ったきっかけやエピソード</li>
-                            <li>他の業界と迷った点 / 最終的に選んだ決め手</li>
-                            <li>学生時代や前職で得たスキルが活かせる理由 etc.</li>
-                        </ul>
-                        <p class="toggle-btn">閉じる</p>
-                    </div>
-                </div>
-                <!-- 入力フィールド -->
-                <div class="floating-label">
-                    <textarea id="start_reason" name="start_reason" readonly></textarea>
-                    <label for="start_reason">どのような経緯・理由でその職業・業界を選びましたか？（任意）</label>
-                    <p class="textarea-guide">
-                        書き方のヒント：<br>
-                        - 興味を持ったきっかけやエピソード<br>
-                        - 他の業界と迷った点 / 最終的に選んだ決め手<br>
-                        - 学生時代や前職で得たスキルが活かせると思った理由 etc.
-                    </p>
-                </div>
-
-                <div class="floating-label">
-                    <textarea id="first_job_feedback" name="first_job_feedback" readonly></textarea>
-                    <label for="first_job_feedback">新卒または初めての仕事での経験や感想（任意）</label>
-                    <p class="textarea-guide">
-                        具体的に書くと、同じ初職を歩んだ人との交流やフィードバックを得やすくなります。<br>
-                        例：<br>
-                        - 入社後に感じたギャップや驚き<br>
-                        - 一番苦労した部分 / 成長できたところ<br>
-                        - 上司や同期との関係 etc.
-                    </p>
-                </div>
-                <input type="hidden" id="start_point_id" name="start_point_id">
-
-                <!-- (2) キャリアの転機 -->
-                <h3>キャリアの転機</h3>
-                <div class="section-explain collapsible-block">
-                    <div class="collapsible-summary">
-                        あなたのキャリアを大きく変えたタイミングについて書けます。<br>
-                        <strong>なぜ書くといい？</strong><br>
-                        - 「どんなきっかけで転職を決断したのか？」を知りたい人が多い<br>
-                        - 詳しく書くほど、共感やコメントが集まり、閲覧数アップに繋がります
-                        <br><br>
-                        <span class="toggle-btn">もっと見る</span>
-                    </div>
-                    <div class="collapsible-details" style="display:none;">
-                        <p>
-                            例えば、「転職を考えたきっかけや周囲の反応、実際に動いてみて役立った情報」などを書けば、
-                            同じ悩みを抱える人にとって非常に有益な事例になります。
-                        </p>
-                        <p class="toggle-btn">閉じる</p>
-                    </div>
-                </div>
-
-                <div class="floating-label">
-                    <select id="transition_type" name="transition_type" disabled required>
-                        <option value="" disabled selected>選択してください</option>
-                        <option value="転職">転職</option>
-                        <option value="異動">異動</option>
-                        <option value="出向">出向</option>
-                        <option value="昇進">昇進</option>
-                        <option value="結婚・出産">結婚・出産</option>
-                        <option value="その他">その他</option>
-                    </select>
-                    <label for="transition_type">キャリアの転機となった主な理由（任意）</label>
-                </div>
-                <div class="floating-label">
-                    <textarea id="transition_story" name="transition_story" readonly></textarea>
-                    <label for="transition_story">具体的なエピソードや心境の変化があれば教えてください（任意）</label>
-                    <p class="textarea-guide">
-                        例：<br>
-                        - キャリアチェンジを考えたきっかけや出来事<br>
-                        - 周囲の反応や自分の気持ちの変化<br>
-                        - 実際に動き始めた時に役立った情報 etc.
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="reason_for_job_change" name="reason_for_job_change" readonly></textarea>
-                    <label for="reason_for_job_change">転職を選んだ理由（社内異動ではなく、転職を選んだ理由など）（任意）</label>
-                    <p class="textarea-guide">
-                        「なぜ転職だったのか？」は非常に多くのユーザが知りたがります。<br>
-                        あなたの決断プロセスを共有することで、同じ悩みを抱える人の助けになるかも。
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="job_experience_feedback" name="job_experience_feedback" readonly></textarea>
-                    <label for="job_experience_feedback">転職先での仕事の経験や感想（任意）</label>
-                    <p class="textarea-guide">
-                        転職後のリアルな感想を詳しく書くと、同じ業界・職種を目指す人にとって
-                        とても貴重な情報になります。<br>
-                        - 具体的な業務内容・大変だったこと<br>
-                        - 前職と比べた違いや学び etc.
-                    </p>
-                </div>
-                <input type="hidden" id="transition_id" name="transition_id">
-
-                <!-- (3) キャリアの達成と失敗経験 -->
-                <h3>キャリアの達成と失敗経験</h3>
-                <div class="section-explain collapsible-block">
-                    <div class="collapsible-summary">
-                        ここでは、あなたがこれまで達成したことや失敗談を共有できます。<br>
-                        <span class="toggle-btn">もっと見る</span>
-                    </div>
-                    <div class="collapsible-details" style="display:none;">
-                        <p>
-                            <strong>なぜ書くといい？</strong><br>
-                            - 成功体験：同じ道を歩む人への大きな励み<br>
-                            - 失敗体験：後からくる人が同じミスを回避できるヒント<br>
-                            書き込むほど、他ユーザからの感謝やコメントが集まるかもしれません。
-                        </p>
-                        <p class="toggle-btn">閉じる</p>
-                    </div>
-                </div>
-
-                <div class="floating-label">
-                    <textarea id="proudest_achievement" name="proudest_achievement" readonly></textarea>
-                    <label for="proudest_achievement">最も誇りに思う達成や、その背景（任意）</label>
-                    <p class="textarea-guide">
-                        - 達成に至った経緯<br>
-                        - 乗り越えた課題や困難は？<br>
-                        - 周囲のサポートや学び etc.
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="failure_experience" name="failure_experience" readonly></textarea>
-                    <label for="failure_experience">失敗や挫折した経験（任意）</label>
-                    <p class="textarea-guide">
-                        失敗談こそ、他ユーザが最も参考にするポイントです。<br>
-                        どうして失敗したのか？ 何が足りなかったのか？を書けば、
-                        誰かの行動を変えるきっかけになるかもしれません。
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="lesson_learned" name="lesson_learned" readonly></textarea>
-                    <label for="lesson_learned">その経験から学んだこと（任意）</label>
-                    <p class="textarea-guide">
-                        失敗や成功から得た学びを書くと、あなたのストーリーがぐっと深みを増し、
-                        多くの共感・交流を呼ぶきっかけとなります。
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="concerns" name="concerns" readonly></textarea>
-                    <label for="concerns">現在抱えている悩みや不安があれば自由にご記入ください（任意）</label>
-                    <p class="textarea-guide">
-                        あなたの不安や課題を書いてみませんか？<br>
-                        - 人間関係で悩んでいること<br>
-                        - 将来のキャリアに対する不安<br>
-                        - 仕事の負担や健康面での悩み etc.
-                    </p>
-                </div>
-
-                <input type="hidden" id="achievement_id" name="achievement_id">
-            </div>
-
-            <!-- ▼▼▼ タブ3: 今後のキャリア志向 ▼▼▼ -->
-            <div id="tab-future" class="tab-content">
-                <h3>今後のキャリア志向</h3>
-                <div class="section-explain collapsible-block">
-                    <div class="collapsible-summary">
-                        ここでは、これからどのようにキャリアを築きたいかを記入できます。<br>
-                        <span class="toggle-btn">もっと見る</span>
-                    </div>
-                    <div class="collapsible-details" style="display:none;">
-                        <p>
-                            「マネジメントに興味あり」「専門職として極めたい」「起業を目指す」等、
-                            あなたの将来像を共有することで、アドバイスや仲間探しに繋がるかもしれません。
-                        </p>
-                        <p class="toggle-btn">閉じる</p>
-                    </div>
-                </div>
-
-                <div class="floating-label">
-                    <select id="career_type" name="career_type" disabled required>
-                        <option value="" disabled selected>選択してください</option>
-                        <option value="お金軸(給与を上げたい)">お金軸(給与を上げたい)</option>
-                        <option value="お金軸(副業・兼業で収入UPしたい)">お金軸(副業・兼業で収入UPしたい)</option>
-                        <option value="お金軸(安定収入が欲しい)">お金軸(安定収入が欲しい)</option>
-                        <option value="環境軸(フレックス中心で働きたい)">環境軸(フレックス中心で働きたい)</option>
-                        <option value="環境軸(ワークライフバランスを重視したい)">環境軸(ワークライフバランスを重視したい)</option>
-                        <option value="環境軸(海外就職・転勤を目指したい)">環境軸(海外就職・転勤を目指したい)</option>
-                        <option value="環境軸(人間関係が良い環境を重視したい)">環境軸(人間関係が良い環境を重視したい)</option>
-                        <option value="やりがい軸(専門技術を極めたい)">やりがい軸(専門技術を極めたい)</option>
-                        <option value="やりがい軸(マネジメント職につきたい)">やりがい軸(マネジメント職につきたい)</option>
-                        <option value="やりがい軸(起業や自分の事業を興したい)">やりがい軸(起業や自分の事業を興したい)</option>
-                        <option value="やりがい軸(社会的意義のある仕事をしたい)">やりがい軸(社会的意義のある仕事をしたい)</option>
-                        <option value="その他">その他</option>
-                    </select>
-                    <label for="career_type">今後のキャリア志向（任意）</label>
-                    <p class="textarea-guide">
-                        ※いずれスカウト機能やマッチング機能が追加されるかもしれません。<br>
-                        あなたの将来像を明確にしておくと、ピンポイントの提案が届く可能性がアップします。
-                    </p>
-                </div>
-
-                <div class="floating-label" id="career_type_other_container" style="display: none;">
-                    <input type="text" id="career_type_other" name="career_type_other" readonly>
-                    <label for="career_type_other">その他のキャリア志向</label>
-                    <p class="textarea-guide">
-                        もし上記になくとも、自由に将来像を記載できます。
-                    </p>
-                </div>
-
-                <div class="floating-label">
-                    <textarea id="career_description" name="career_description" readonly></textarea>
-                    <label for="career_description">キャリア達成のために取り組んでいること（任意）</label>
-                    <p class="textarea-guide">
-                        - 資格取得の勉強やセミナー参加<br>
-                        - 人脈づくり、コミュニティ活動<br>
-                        - 副業、スキルアップのための学習 etc.
-                    </p>
-                </div>
-
-                <div class="floating-label">
-                    <textarea id="career_satisfaction_feedback" name="career_satisfaction_feedback" readonly></textarea>
-                    <label for="career_satisfaction_feedback">これまでのキャリアに満足していますか？理由は？（任意）</label>
-                    <p class="textarea-guide">
-                        自分のキャリアへの満足度を書くと、他のユーザが「どう感じながら働いているか」を参考にできます。
-                        本音ベースで書いてOK！<br>
-                        - 満足している理由、不満点は何か？<br>
-                        - もしやり直せるならこうしたい…など
-                    </p>
-                </div>
-                <input type="hidden" id="career_aspirations_id" name="career_aspirations_id">
-
-                <h3>学びと成長</h3>
-                <div class="section-explain collapsible-block">
-                    <div class="collapsible-summary">
-                        あなたが得たスキルや成長した点を書き留める場所です。<br>
-                        <span class="toggle-btn">もっと見る</span>
-                    </div>
-                    <div class="collapsible-details" style="display:none;">
-                        <p>
-                            ほかのユーザが「このスキルを身につけたらどんな道が開けるのか？」を知る参考になります。<br>
-                            詳しく書くほど、同じスキルを学びたい人から質問が来るかもしれません。
-                        </p>
-                        <p class="toggle-btn">閉じる</p>
-                    </div>
-                </div>
-
-                <div class="floating-label">
-                    <input type="text" id="skill" name="skill" readonly>
-                    <label for="skill">得たスキル</label>
-                    <p class="textarea-guide">
-                        例：プログラミング言語、資格、コミュニケーション力etc.
-                    </p>
-                </div>
-                <div class="floating-label">
-                    <textarea id="growth_description" name="growth_description" readonly></textarea>
-                    <label for="growth_description">スキルの詳細説明（任意）</label>
-                    <p class="textarea-guide">
-                        - どのように学んだか<br>
-                        - 実務でどう活かしたか<br>
-                        - 習得の大変だった点やコツ
-                    </p>
-                </div>
-                <input type="hidden" id="growth_id" name="growth_id">
-            </div>
-        </form>
-        <div class="button-group">
-            <button type="button" id="edit-button-bottom">編集</button>
-            <button type="submit" id="save-button-bottom" style="display: none;">保存</button>
-        </div>
-
-        <!-- Career Decisionへの入口 -->
-        <section class="career-reflection-card">
-            <div class="career-reflection-card__content">
-                <p class="career-reflection-card__kicker">
-                    CAREER REFLECTION
-                </p>
-
-                <h2 class="career-reflection-card__title">
-                    キャリアの振り返り
-                </h2>
-
-                <p class="career-reflection-card__description">
-                    転職・異動・昇進など、これまでの重要な意思決定を記録します。
-                    そのとき迷ったことや重視したことを蓄積することで、
-                    Career GPSがあなたの価値観や判断軸をより深く理解できるようになります。
-                </p>
-
-                <div class="career-reflection-card__features">
-                    <div class="career-reflection-feature">
-                        <span class="career-reflection-feature__number">01</span>
-                        <p>重要な選択と、その背景を記録</p>
-                    </div>
-
-                    <div class="career-reflection-feature">
-                        <span class="career-reflection-feature__number">02</span>
-                        <p>結果・学び・後悔を振り返る</p>
-                    </div>
-
-                    <div class="career-reflection-feature">
-                        <span class="career-reflection-feature__number">03</span>
-                        <p>Career GPSの分析精度を高める</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="career-reflection-card__action">
-                <div class="career-reflection-card__status">
-                    <span class="career-reflection-card__status-label">
-                        登録済み
-                    </span>
-
-                    <!-- 件数API作成後にJavaScriptで更新 -->
-                    <strong
-                        id="career-decision-count"
-                        class="career-reflection-card__count"
-                    >
-                        --
-                    </strong>
-
-                    <span class="career-reflection-card__count-unit">
-                        件
-                    </span>
-                </div>
 
                 <a
-                    href="Career_decisions.html"
-                    class="career-reflection-card__button"
+                    href="/Register.html"
+                    class="header-register-btn"
                 >
-                    キャリアの振り返りを管理する
-                    <span aria-hidden="true">→</span>
+                    新規登録
                 </a>
+
+                <a
+                    href="Login.html"
+                    id="login-button"
+                    class="login-button"
+                    style="display:none;"
+                >
+                    ログイン
+                </a>
+
+                <a
+                    href="#"
+                    id="logout-button"
+                    class="login-button"
+                    style="display:none;"
+                >
+                    ログアウト
+                </a>
+
             </div>
-        </section>
-    </main>
-    <footer>
-        <div class="footer-content">
-            <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
-                <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
-                    <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
-                </a>
-                <a href="https://www.linkedin.com/company/105660424/admin/page-posts/published/" target="_blank" aria-label="LinkedIn">
-                    <img src="images/linkedin_icon.png" alt="LinkedIn" class="linkedin-icon">
-                </a>
+
+
+            <div class="hamburger-menu">
+                ☰
             </div>
+
         </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         SIDE MENU
+         ===================================================== -->
+
+    <aside
+        class="main-menu"
+        id="main-menu"
+    >
+
+        <nav>
+
+            <ul>
+
+                <li>
+                    <a href="Home.html">
+
+                        <img
+                            src="images/home-icon.png"
+                            alt="ホームアイコン"
+                        >
+
+                        ホーム
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Career_overview.html">
+
+                        <img
+                            src="images/career-icon.png"
+                            alt="キャリアストーリーアイコン"
+                        >
+
+                        キャリアストーリー
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Board.html">
+
+                        <img
+                            src="images/board-icon.png"
+                            alt="掲示板アイコン"
+                        >
+
+                        掲示板（Q&A）
+
+                    </a>
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="Mypage.html"
+                        class="active"
+                    >
+
+                        <img
+                            src="images/mypage-icon.png"
+                            alt="マイページアイコン"
+                        >
+
+                        マイページ
+
+                    </a>
+
+                </li>
+
+
+                <li>
+                    <a href="Announcements.html">
+
+                        <img
+                            src="images/notification-icon.png"
+                            alt="お知らせアイコン"
+                        >
+
+                        お知らせ
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Contact.html">
+
+                        <img
+                            src="images/contact-icon.png"
+                            alt="問い合わせアイコン"
+                        >
+
+                        お問い合わせ
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MY CAREER GPS
+         ===================================================== -->
+
+    <main class="my-career-gps-page">
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="mypage-hero">
+
+            <div class="mypage-hero__main">
+
+                <p class="section-kicker">
+                    MY CAREER GPS
+                </p>
+
+
+                <h1>
+                    あなたのキャリアを、
+                    <br>
+                    ひとつの地図に。
+                </h1>
+
+
+                <p class="mypage-hero__lead">
+
+                    これまで歩んできた道、
+                    そのとき選んだ理由、
+                    そこから得た学び。
+
+                    <br>
+
+                    自分のキャリアを整理することで、
+                    次の一歩が少し見えやすくなります。
+
+                </p>
+
+
+                <div class="mypage-hero__actions">
+
+                    <button
+                        type="button"
+                        id="edit-button-top"
+                        class="mypage-primary-button"
+                    >
+                        Career GPSを編集する
+                        <span aria-hidden="true">→</span>
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="save-button-top"
+                        class="mypage-primary-button"
+                        style="display:none;"
+                    >
+                        変更を保存する
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="mypage-hero__side">
+
+                <p class="mypage-hero__side-kicker">
+                    YOUR GPS
+                </p>
+
+                <h2>
+                    今のCareer GPS
+                </h2>
+
+
+                <div class="mypage-gps-progress">
+
+                    <div class="mypage-gps-progress__header">
+
+                        <span>
+                            プロフィール完成度
+                        </span>
+
+                        <strong id="profile-completion">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="mypage-progress-bar">
+
+                        <span
+                            id="profile-completion-bar"
+                            class="mypage-progress-bar__value"
+                        ></span>
+
+                    </div>
+
+                </div>
+
+
+                <p class="mypage-hero__side-message">
+
+                    経歴や意思決定を追加すると、
+                    あなた自身のCareer GPSが
+                    少しずつ鮮明になります。
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             GPS SNAPSHOT
+             ================================================= -->
+
+        <section class="mypage-section mypage-snapshot-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        CAREER SNAPSHOT
+                    </p>
+
+                    <h2>
+                        今のあなた
+                    </h2>
+
+                </div>
+
+
+                <p class="section-heading__description">
+
+                    Career GPSに登録されている情報を、
+                    ひと目で確認できます。
+
+                </p>
+
+            </div>
+
+
+
+            <div class="mypage-snapshot-grid">
+
+
+                <article class="mypage-snapshot-card">
+
+                    <p class="mypage-snapshot-card__label">
+                        CAREER HISTORY
+                    </p>
+
+                    <div class="mypage-snapshot-card__value">
+
+                        <strong id="career-company-count">
+                            --
+                        </strong>
+
+                        <span>
+                            社
+                        </span>
+
+                    </div>
+
+                    <p class="mypage-snapshot-card__description">
+                        これまで経験した会社
+                    </p>
+
+                </article>
+
+
+
+                <article class="mypage-snapshot-card">
+
+                    <p class="mypage-snapshot-card__label">
+                        ROLES
+                    </p>
+
+                    <div class="mypage-snapshot-card__value">
+
+                        <strong id="career-role-count">
+                            --
+                        </strong>
+
+                        <span>
+                            Roles
+                        </span>
+
+                    </div>
+
+                    <p class="mypage-snapshot-card__description">
+                        経験した役割・ポジション
+                    </p>
+
+                </article>
+
+
+
+                <article class="mypage-snapshot-card">
+
+                    <p class="mypage-snapshot-card__label">
+                        DECISIONS
+                    </p>
+
+                    <div class="mypage-snapshot-card__value">
+
+                        <strong id="career-decision-count">
+                            --
+                        </strong>
+
+                        <span>
+                            件
+                        </span>
+
+                    </div>
+
+                    <p class="mypage-snapshot-card__description">
+                        振り返った重要な意思決定
+                    </p>
+
+                </article>
+
+
+
+                <article class="mypage-snapshot-card">
+
+                    <p class="mypage-snapshot-card__label">
+                        NEXT DIRECTION
+                    </p>
+
+                    <p
+                        id="career-type-summary"
+                        class="mypage-snapshot-card__career-type"
+                    >
+                        未設定
+                    </p>
+
+                    <p class="mypage-snapshot-card__description">
+                        今後大切にしたいキャリア軸
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CAREER JOURNEY
+             ================================================= -->
+
+        <section class="mypage-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        YOUR CAREER JOURNEY
+                    </p>
+
+                    <h2>
+                        これまで歩んできた道
+                    </h2>
+
+                </div>
+
+
+                <p class="section-heading__description">
+
+                    会社や役割の変化を通して、
+                    あなたのキャリア全体を振り返ります。
+
+                </p>
+
+            </div>
+
+
+            <div
+                id="career-journey-summary"
+                class="career-journey-summary"
+            >
+
+                <div class="mypage-loading-state">
+                    キャリアを読み込んでいます...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CAREER DECISIONS
+             ================================================= -->
+
+        <section class="mypage-section">
+
+            <div class="career-decision-panel">
+
+
+                <div class="career-decision-panel__main">
+
+                    <p class="section-kicker">
+                        CAREER DECISIONS
+                    </p>
+
+
+                    <h2>
+                        あなたがしてきた選択
+                    </h2>
+
+
+                    <p class="career-decision-panel__description">
+
+                        転職、異動、昇進、独立、結婚・出産。
+
+                        <br>
+
+                        そのとき何に迷い、
+                        何を大切にして決めたのか。
+
+                        <br>
+
+                        意思決定を振り返ることで、
+                        あなた自身の判断軸が見えてきます。
+
+                    </p>
+
+
+                    <div class="career-decision-panel__points">
+
+                        <span>
+                            選択の背景
+                        </span>
+
+                        <span>
+                            迷ったこと
+                        </span>
+
+                        <span>
+                            判断軸
+                        </span>
+
+                        <span>
+                            結果・学び
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="career-decision-panel__action">
+
+                    <p>
+                        登録済み
+                    </p>
+
+
+                    <div class="career-decision-panel__count">
+
+                        <strong id="career-decision-count-large">
+                            --
+                        </strong>
+
+                        <span>
+                            件
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="Career_decisions.html"
+                        class="career-decision-panel__button"
+                    >
+
+                        キャリアの振り返りを見る
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             LOOKING AHEAD
+             ================================================= -->
+
+        <section class="mypage-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        LOOKING AHEAD
+                    </p>
+
+                    <h2>
+                        これから向かいたい方向
+                    </h2>
+
+                </div>
+
+
+                <p class="section-heading__description">
+
+                    今の価値観や目標を、
+                    次のキャリアを考える材料にします。
+
+                </p>
+
+            </div>
+
+
+
+            <div class="future-career-grid">
+
+
+                <article class="future-career-card">
+
+                    <p class="future-career-card__label">
+                        大切にしたいこと
+                    </p>
+
+                    <h3 id="future-career-type">
+                        未設定
+                    </h3>
+
+                </article>
+
+
+
+                <article class="future-career-card">
+
+                    <p class="future-career-card__label">
+                        今取り組んでいること
+                    </p>
+
+                    <p id="future-career-description">
+                        まだ登録されていません。
+                    </p>
+
+                </article>
+
+
+
+                <article class="future-career-card">
+
+                    <p class="future-career-card__label">
+                        得たスキル・成長
+                    </p>
+
+                    <p id="future-career-skill">
+                        まだ登録されていません。
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             EDITOR
+             通常時は非表示
+             ================================================= -->
+
+        <section
+            id="profile-editor"
+            class="mypage-editor"
+            hidden
+        >
+
+
+            <div class="mypage-editor__header">
+
+                <div>
+
+                    <p class="section-kicker">
+                        EDIT YOUR CAREER GPS
+                    </p>
+
+                    <h2>
+                        Career GPSを編集
+                    </h2>
+
+                    <p>
+                        キャリアや意思決定を更新すると、
+                        あなたのCareer GPSがより正確になります。
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="close-editor-button"
+                    class="mypage-editor-close"
+                >
+                    編集を閉じる
+                </button>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 TAB MENU
+                 ============================================= -->
+
+            <div class="tab-menu">
+
+                <button
+                    type="button"
+                    class="tab-link active"
+                    data-tab="tab-basic"
+                >
+                    基本情報・経歴
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tab-link"
+                    data-tab="tab-career-details"
+                >
+                    キャリアストーリー
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tab-link"
+                    data-tab="tab-future"
+                >
+                    これからのキャリア
+                </button>
+
+            </div>
+
+
+
+            <form
+                id="mypage-form"
+                method="post"
+            >
+
+
+                <!-- =========================================
+                     TAB 1
+                     基本情報
+                     ========================================= -->
+
+                <div
+                    id="tab-basic"
+                    class="tab-content active"
+                >
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            PROFILE
+                        </p>
+
+                        <h3>
+                            基本情報
+                        </h3>
+
+                    </div>
+
+
+
+                    <div class="editor-grid">
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                required
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="username">
+                                ユーザー名
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="email">
+                                メールアドレス
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="family_name"
+                                name="family_name"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="family_name">
+                                姓
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="given_name"
+                                name="given_name"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="given_name">
+                                名
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="date"
+                                id="birthdate"
+                                name="birthdate"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="birthdate">
+                                生年月日
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <select
+                                id="gender"
+                                name="gender"
+                                disabled
+                            >
+
+                                <option
+                                    value=""
+                                    disabled
+                                    selected
+                                >
+                                    選択してください
+                                </option>
+
+                                <option value="男性">
+                                    男性
+                                </option>
+
+                                <option value="女性">
+                                    女性
+                                </option>
+
+                                <option value="その他">
+                                    その他
+                                </option>
+
+                            </select>
+
+                            <label for="gender">
+                                性別
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="checkbox-group">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="newsletter_subscription"
+                                name="newsletter_subscription"
+                                disabled
+                            >
+
+                            Career Storyの通知メールを受信する
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         EDUCATION
+                         ===================================== -->
+
+                    <div class="editor-section-divider"></div>
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            EDUCATION
+                        </p>
+
+                        <h3>
+                            学歴
+                        </h3>
+
+                    </div>
+
+
+
+                    <div class="editor-grid">
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="institution"
+                                name="institution"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="institution">
+                                学校名
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="degree"
+                                name="degree"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="degree">
+                                学部
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="text"
+                                id="major"
+                                name="major"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="major">
+                                学科
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="date"
+                                id="education_start"
+                                name="education_start"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="education_start">
+                                入学日
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="floating-label">
+
+                            <input
+                                type="date"
+                                id="education_end"
+                                name="education_end"
+                                readonly
+                                placeholder=" "
+                            >
+
+                            <label for="education_end">
+                                卒業日
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="checkbox-group">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="hide_institution"
+                                name="hide_institution"
+                                disabled
+                            >
+
+                            学歴を非公開にする
+
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="education_id"
+                        name="education_id"
+                    >
+
+
+
+                    <!-- =====================================
+                         CAREER HISTORY
+                         ===================================== -->
+
+                    <div class="editor-section-divider"></div>
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            CAREER HISTORY
+                        </p>
+
+                        <h3>
+                            職歴・役割
+                        </h3>
+
+                        <p>
+                            会社単位で在籍期間を登録し、
+                            その中で経験した役割・ポジションを整理します。
+                        </p>
+
+                    </div>
+
+
+
+                    <div id="job-experiences-container">
+                        <!-- JavaScriptで生成 -->
+                    </div>
+
+
+
+                    <button
+                        type="button"
+                        id="add-job-experience"
+                        class="add-company-button"
+                        style="display:none;"
+                    >
+                        ＋ 会社を追加する
+                    </button>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     TAB 2
+                     CAREER STORY
+                     ========================================= -->
+
+                <div
+                    id="tab-career-details"
+                    class="tab-content"
+                >
+
+
+                    <!-- START POINT -->
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            STARTING POINT
+                        </p>
+
+                        <h3>
+                            キャリアのスタート地点
+                        </h3>
+
+                        <p>
+                            最初の仕事や業界を、
+                            なぜ選んだのかを振り返ります。
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="section-explain collapsible-block">
+
+                        <div class="collapsible-summary">
+
+                            同じ道を目指す人にとって、
+                            「なぜその仕事を選んだのか」は
+                            とても参考になる情報です。
+
+                            <br>
+
+                            <span class="toggle-btn">
+                                書き方のヒントを見る
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="collapsible-details"
+                            style="display:none;"
+                        >
+
+                            <ul>
+
+                                <li>
+                                    興味を持ったきっかけ
+                                </li>
+
+                                <li>
+                                    他の道と迷ったこと
+                                </li>
+
+                                <li>
+                                    最終的な決め手
+                                </li>
+
+                                <li>
+                                    入社後に感じたこと
+                                </li>
+
+                            </ul>
+
+                            <span class="toggle-btn">
+                                閉じる
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="start_reason"
+                            name="start_reason"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="start_reason">
+                            なぜその職業・業界を選びましたか？
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="first_job_feedback"
+                            name="first_job_feedback"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="first_job_feedback">
+                            最初の仕事を経験して、どう感じましたか？
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="start_point_id"
+                        name="start_point_id"
+                    >
+
+
+
+                    <!-- TURNING POINT -->
+
+                    <div class="editor-section-divider"></div>
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            TURNING POINT
+                        </p>
+
+                        <h3>
+                            キャリアの転機
+                        </h3>
+
+                        <p>
+                            どこで迷い、
+                            何を大切にして、
+                            なぜその道を選んだのか。
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <select
+                            id="transition_type"
+                            name="transition_type"
+                            disabled
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                selected
+                            >
+                                選択してください
+                            </option>
+
+                            <option value="転職">
+                                転職
+                            </option>
+
+                            <option value="異動">
+                                異動
+                            </option>
+
+                            <option value="出向">
+                                出向
+                            </option>
+
+                            <option value="昇進">
+                                昇進
+                            </option>
+
+                            <option value="結婚・出産">
+                                結婚・出産
+                            </option>
+
+                            <option value="その他">
+                                その他
+                            </option>
+
+                        </select>
+
+                        <label for="transition_type">
+                            転機の種類
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="transition_story"
+                            name="transition_story"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="transition_story">
+                            何がきっかけでしたか？
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="reason_for_job_change"
+                            name="reason_for_job_change"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="reason_for_job_change">
+                            なぜその選択をしましたか？
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="job_experience_feedback"
+                            name="job_experience_feedback"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="job_experience_feedback">
+                            その選択のあと、どう変わりましたか？
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="transition_id"
+                        name="transition_id"
+                    >
+
+
+
+                    <!-- ACHIEVEMENT -->
+
+                    <div class="editor-section-divider"></div>
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            LEARNINGS
+                        </p>
+
+                        <h3>
+                            成功・失敗・そこからの学び
+                        </h3>
+
+                        <p>
+                            結果だけではなく、
+                            そこから何を学んだのかを残します。
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="proudest_achievement"
+                            name="proudest_achievement"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="proudest_achievement">
+                            最も誇りに思う経験
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="failure_experience"
+                            name="failure_experience"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="failure_experience">
+                            失敗・後悔した経験
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="lesson_learned"
+                            name="lesson_learned"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="lesson_learned">
+                            その経験から学んだこと
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="concerns"
+                            name="concerns"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="concerns">
+                            今、悩んでいること・迷っていること
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="achievement_id"
+                        name="achievement_id"
+                    >
+
+                </div>
+
+
+
+                <!-- =========================================
+                     TAB 3
+                     FUTURE
+                     ========================================= -->
+
+                <div
+                    id="tab-future"
+                    class="tab-content"
+                >
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            NEXT DIRECTION
+                        </p>
+
+                        <h3>
+                            これからのキャリア
+                        </h3>
+
+                        <p>
+                            次の選択で、
+                            何を大切にしたいのかを整理します。
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <select
+                            id="career_type"
+                            name="career_type"
+                            disabled
+                        >
+
+                            <option
+                                value=""
+                                disabled
+                                selected
+                            >
+                                選択してください
+                            </option>
+
+                            <option value="お金軸(給与を上げたい)">
+                                お金軸（給与を上げたい）
+                            </option>
+
+                            <option value="お金軸(副業・兼業で収入UPしたい)">
+                                お金軸（副業・兼業で収入UPしたい）
+                            </option>
+
+                            <option value="お金軸(安定収入が欲しい)">
+                                お金軸（安定収入が欲しい）
+                            </option>
+
+                            <option value="環境軸(フレックス中心で働きたい)">
+                                環境軸（フレックス中心で働きたい）
+                            </option>
+
+                            <option value="環境軸(ワークライフバランスを重視したい)">
+                                環境軸（ワークライフバランスを重視したい）
+                            </option>
+
+                            <option value="環境軸(海外就職・転勤を目指したい)">
+                                環境軸（海外就職・転勤を目指したい）
+                            </option>
+
+                            <option value="環境軸(人間関係が良い環境を重視したい)">
+                                環境軸（人間関係が良い環境を重視したい）
+                            </option>
+
+                            <option value="やりがい軸(専門技術を極めたい)">
+                                やりがい軸（専門技術を極めたい）
+                            </option>
+
+                            <option value="やりがい軸(マネジメント職につきたい)">
+                                やりがい軸（マネジメント職につきたい）
+                            </option>
+
+                            <option value="やりがい軸(起業や自分の事業を興したい)">
+                                やりがい軸（起業したい）
+                            </option>
+
+                            <option value="やりがい軸(社会的意義のある仕事をしたい)">
+                                やりがい軸（社会的意義のある仕事）
+                            </option>
+
+                            <option value="その他">
+                                その他
+                            </option>
+
+                        </select>
+
+                        <label for="career_type">
+                            今後大切にしたいキャリア軸
+                        </label>
+
+                    </div>
+
+
+
+                    <div
+                        class="floating-label"
+                        id="career_type_other_container"
+                        style="display:none;"
+                    >
+
+                        <input
+                            type="text"
+                            id="career_type_other"
+                            name="career_type_other"
+                            readonly
+                            placeholder=" "
+                        >
+
+                        <label for="career_type_other">
+                            その他のキャリア志向
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="career_description"
+                            name="career_description"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="career_description">
+                            そのために今取り組んでいること
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="career_satisfaction_feedback"
+                            name="career_satisfaction_feedback"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="career_satisfaction_feedback">
+                            今までのキャリアを振り返って、どう感じていますか？
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="career_aspirations_id"
+                        name="career_aspirations_id"
+                    >
+
+
+
+                    <!-- GROWTH -->
+
+                    <div class="editor-section-divider"></div>
+
+
+                    <div class="editor-section-heading">
+
+                        <p class="section-kicker">
+                            GROWTH
+                        </p>
+
+                        <h3>
+                            学びと成長
+                        </h3>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="text"
+                            id="skill"
+                            name="skill"
+                            readonly
+                            placeholder=" "
+                        >
+
+                        <label for="skill">
+                            得たスキル
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="floating-label">
+
+                        <textarea
+                            id="growth_description"
+                            name="growth_description"
+                            readonly
+                            placeholder=" "
+                        ></textarea>
+
+                        <label for="growth_description">
+                            どのように身につけ、どう活かしていますか？
+                        </label>
+
+                    </div>
+
+
+                    <input
+                        type="hidden"
+                        id="growth_id"
+                        name="growth_id"
+                    >
+
+                </div>
+
+
+
+                <!-- =========================================
+                     SAVE AREA
+                     ========================================= -->
+
+                <div class="editor-save-area">
+
+                    <button
+                        type="submit"
+                        id="save-button-bottom"
+                        class="mypage-primary-button"
+                        style="display:none;"
+                    >
+                        変更を保存する
+                    </button>
+
+
+                    <!-- JS互換用。通常は非表示 -->
+                    <button
+                        type="button"
+                        id="edit-button-bottom"
+                        style="display:none;"
+                    >
+                        編集
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div class="footer-items">
+
+                <p>
+                    &copy; 2026 Imnormal
+                </p>
+
+                <a
+                    href="https://www.instagram.com/imnormal_official/"
+                    target="_blank"
+                    aria-label="Instagram"
+                >
+
+                    <img
+                        src="images/instagram-icon.png"
+                        alt="Instagram"
+                        class="instagram-icon"
+                    >
+
+                </a>
+
+                <a
+                    href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
+                    target="_blank"
+                    aria-label="LinkedIn"
+                >
+
+                    <img
+                        src="images/linkedin_icon.png"
+                        alt="LinkedIn"
+                        class="linkedin-icon"
+                    >
+
+                </a>
+
+            </div>
+
+        </div>
+
     </footer>
-    <!-- JavaScriptファイルのリンクをボディの最後に配置 -->
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
     <script src="js/hamburgermenu.js"></script>
-    <script src="js/session.js"></script> <!-- ログイン状態確認とログアウト処理 -->
-    <script src="js/mypage.js"></script> <!-- タブ切り替えやフォーム操作のスクリプト -->
+
+    <script src="js/session.js"></script>
+
+    <script src="js/mypage.js"></script>
+
 </body>
+
 </html>
