@@ -1,289 +1,1381 @@
-document.addEventListener('DOMContentLoaded', function () {
-    fetch('/career-overview')
-        .then(response => response.json())
-        .then(data => {
-            // ユーザーIDのリストを取得
-            const userIds = data.careers.map(career => career.id);
+document.addEventListener('DOMContentLoaded', () => {
 
-            // オンラインステータスを取得
-            fetch('/users-status/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userIds)
-            })
-            .then(response => response.json())
-            .then(statusData => {
-                if (!statusData || !statusData.statuses) {
-                    console.error('オンラインステータスの取得に失敗しました');
-                    return;
+    const API_URL = '/career-overview/';
+
+    const ITEMS_PER_PAGE = 6;
+
+    let allCareers = [];
+    let filteredCareers = [];
+
+    let currentPage = 1;
+    let selectedTheme = '';
+
+
+    /* ========================================
+       DOM
+    ======================================== */
+
+    const searchInput =
+        document.getElementById('search');
+
+    const industryFilter =
+        document.getElementById('filter-industry');
+
+    const ageFilter =
+        document.getElementById('filter-age');
+
+    const incomeFilter =
+        document.getElementById('filter-income');
+
+    const resetButton =
+        document.getElementById('reset-career-filter');
+
+    const careerList =
+        document.getElementById('career-list');
+
+    const resultCount =
+        document.getElementById('career-result-count');
+
+    const emptyState =
+        document.getElementById('career-empty-state');
+
+    const paginationContainer =
+        document.getElementById('pagination-container');
+
+    const themeButtons =
+        document.querySelectorAll('.career-theme-chip');
+
+
+    /* ========================================
+       INITIAL LOAD
+    ======================================== */
+
+    loadCareers();
+
+
+    async function loadCareers() {
+
+        try {
+
+            const response =
+                await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error(
+                    `HTTP error: ${response.status}`
+                );
+            }
+
+            const data =
+                await response.json();
+
+            allCareers =
+                Array.isArray(data.careers)
+                    ? data.careers
+                    : [];
+
+            allCareers =
+                allCareers.map(normalizeCareer);
+
+            populateIndustryOptions();
+
+            applyFilters();
+
+        } catch (error) {
+
+            console.error(
+                'キャリア情報取得エラー:',
+                error
+            );
+
+            careerList.innerHTML = '';
+
+            emptyState.hidden = false;
+
+            emptyState.querySelector(
+                '.career-empty-state__title'
+            ).textContent =
+                'キャリア情報を取得できませんでした';
+
+        }
+
+    }
+
+
+    /* ========================================
+       NORMALIZE
+    ======================================== */
+
+    function normalizeCareer(career) {
+
+        const stages =
+            Array.isArray(career.careerStages)
+                ? career.careerStages
+                : [];
+
+        const uniqueStages = [];
+
+        const stageKeys =
+            new Set();
+
+        stages.forEach(stage => {
+
+            const key =
+                `${stage.year}-${stage.stage}`;
+
+            if (!stageKeys.has(key)) {
+
+                stageKeys.add(key);
+
+                uniqueStages.push(stage);
+
+            }
+
+        });
+
+
+        uniqueStages.sort((a, b) => {
+
+            const yearA =
+                Number(a.year) || 9999;
+
+            const yearB =
+                Number(b.year) || 9999;
+
+            return yearA - yearB;
+
+        });
+
+
+        return {
+
+            ...career,
+
+            name:
+                career.name || 'Anonymous',
+
+            profession:
+                career.profession || '職種未設定',
+
+            income:
+                normalizeIncome(career.income),
+
+            careerStages:
+                uniqueStages,
+
+            companies:
+                Array.isArray(career.companies)
+                    ? career.companies
+                    : [],
+
+            career_type:
+                career.career_type || '',
+
+            age:
+                calculateAge(
+                    career.birthYear
+                )
+
+        };
+
+    }
+
+
+    function normalizeIncome(income) {
+
+        if (!Array.isArray(income)) {
+            return '未設定';
+        }
+
+        if (
+            !income.length ||
+            !income[0] ||
+            !income[0].income
+        ) {
+            return '未設定';
+        }
+
+        return income[0].income;
+
+    }
+
+
+    function calculateAge(birthYear) {
+
+        const year =
+            Number(birthYear);
+
+        if (!year) {
+            return null;
+        }
+
+        const currentYear =
+            new Date().getFullYear();
+
+        return currentYear - year;
+
+    }
+
+
+    /* ========================================
+       INDUSTRY OPTIONS
+    ======================================== */
+
+    function populateIndustryOptions() {
+
+        const industries =
+            new Set();
+
+        allCareers.forEach(career => {
+
+            career.companies.forEach(company => {
+
+                if (
+                    company.industry &&
+                    company.industry !== '不明'
+                ) {
+                    industries.add(
+                        company.industry
+                    );
                 }
 
-                // オンラインステータスを各キャリアに追加
-                data.careers.forEach(career => {
-                    career.activity_status = statusData.statuses[career.id] || 'inactive';
-                });
+            });
 
-                // ここから既存のコードを開始
-                const industrySelect = document.getElementById('filter-industry');
+        });
 
-                // すべての会社の業界名を取得してセットに追加
-                const uniqueIndustries = [...new Set(data.careers.flatMap(career => 
-                    (career.companies || []).map(company => company.industry || '不明')
-                ))];
 
-                uniqueIndustries.forEach(industry => {
-                    const option = document.createElement('option');
-                    option.value = industry;
-                    option.textContent = industry;
-                    industrySelect.appendChild(option);
-                });
+        [...industries]
+            .sort((a, b) =>
+                a.localeCompare(
+                    b,
+                    'ja'
+                )
+            )
+            .forEach(industry => {
 
-                // 年齢を計算する関数
-                function calculateAge(birthYear) {
-                    if (!birthYear) {
-                        return "不明";  // 誕生日が入力されていない場合
-                    }
-                    const currentYear = new Date().getFullYear();
-                    return `${currentYear - birthYear}`;
-                }
+                const option =
+                    document.createElement(
+                        'option'
+                    );
 
-                // ページネーション設定
-                let currentPage = 1;
-                const itemsPerPage = 10;
+                option.value =
+                    industry;
 
-                function displayCareers(careers) {
-                    const careerList = document.getElementById('career-list');
-                    careerList.innerHTML = ''; // 前回の表示をクリア
-        
-                    // ページネーションに基づいて表示するアイテムを抽出
-                    const startIndex = (currentPage - 1) * itemsPerPage;
-                    const endIndex = startIndex + itemsPerPage;
-                    const careersToDisplay = careers.slice(startIndex, endIndex);
-        
-                    careersToDisplay.forEach(career => {
-                        const age = calculateAge(career.birthYear);
-        
-                        const listItem = document.createElement('li');
-                        listItem.className = 'career-card';
+                option.textContent =
+                    industry;
 
-                        // 将来のキャリアが登録されていれば表示
-                        let futureCareerHTML = "";
-                        if (career.career_type) {
-                            futureCareerHTML = `<p>今後: ${career.career_type}</p>`;
-                        }
-        
-                        // カードをクリックすると閲覧回数をインクリメント
-                        listItem.addEventListener('click', function () {
-                            // サーバーに閲覧回数のインクリメントを通知
-                            fetch(`/increment-profile-view/${career.id}`, {
-                                method: 'POST'
-                            })
-                            .then(response => {
-                                if (!response.ok) {
-                                    console.error('Failed to increment view count');
-                                }
-                            })
-                            .catch(error => console.error('Error:', error));
-        
-                            // 詳細ページに遷移
-                            window.location.href = `Career_detail.html?id=${career.id}`;
-                        });
-        
-                        // 各ステージ（大学、企業）の情報を取得
-                        let stages = career.careerStages.map(stage => ({
-                            year: stage.year || '不明', // 年が不明な場合
-                            stage: stage.stage || '不明' // ステージが不明な場合
-                        }));
-        
-                        // 閲覧回数の表示を追加
-                        const viewCountSection = `
-                        <div class="card-footer">
-                            <img src="images/eye-icon.png" alt="閲覧数" class="view-icon">
-                            <span class="view-count" aria-label="閲覧回数">${career.view_count || 0} 回</span>
+                industryFilter.appendChild(
+                    option
+                );
+
+            });
+
+    }
+
+
+    /* ========================================
+       FILTERS
+    ======================================== */
+
+    function applyFilters() {
+
+        const keyword =
+            searchInput.value
+                .trim()
+                .toLowerCase();
+
+        const selectedIndustry =
+            industryFilter.value;
+
+        const selectedAge =
+            ageFilter.value;
+
+        const selectedIncome =
+            incomeFilter.value;
+
+
+        filteredCareers =
+            allCareers.filter(career => {
+
+                return (
+                    matchesKeyword(
+                        career,
+                        keyword
+                    ) &&
+                    matchesIndustry(
+                        career,
+                        selectedIndustry
+                    ) &&
+                    matchesAge(
+                        career,
+                        selectedAge
+                    ) &&
+                    matchesIncome(
+                        career,
+                        selectedIncome
+                    ) &&
+                    matchesTheme(
+                        career,
+                        selectedTheme
+                    )
+                );
+
+            });
+
+
+        currentPage = 1;
+
+        render();
+
+    }
+
+
+    function matchesKeyword(
+        career,
+        keyword
+    ) {
+
+        if (!keyword) {
+            return true;
+        }
+
+
+        const companyNames =
+            career.companies
+                .map(company =>
+                    company.name || ''
+                )
+                .join(' ');
+
+        const industries =
+            career.companies
+                .map(company =>
+                    company.industry || ''
+                )
+                .join(' ');
+
+        const stages =
+            career.careerStages
+                .map(stage =>
+                    stage.stage || ''
+                )
+                .join(' ');
+
+
+        const searchableText = `
+            ${career.name}
+            ${career.profession}
+            ${career.career_type}
+            ${companyNames}
+            ${industries}
+            ${stages}
+        `.toLowerCase();
+
+
+        return searchableText.includes(
+            keyword
+        );
+
+    }
+
+
+    function matchesIndustry(
+        career,
+        selectedIndustry
+    ) {
+
+        if (!selectedIndustry) {
+            return true;
+        }
+
+        return career.companies.some(
+            company =>
+                company.industry ===
+                selectedIndustry
+        );
+
+    }
+
+
+    function matchesAge(
+        career,
+        selectedAge
+    ) {
+
+        if (!selectedAge) {
+            return true;
+        }
+
+        if (!career.age) {
+            return false;
+        }
+
+
+        const age =
+            career.age;
+
+        switch (selectedAge) {
+
+            case '20':
+                return age >= 20 &&
+                    age < 30;
+
+            case '30':
+                return age >= 30 &&
+                    age < 40;
+
+            case '40':
+                return age >= 40 &&
+                    age < 50;
+
+            case '50':
+                return age >= 50;
+
+            default:
+                return true;
+
+        }
+
+    }
+
+
+    function matchesIncome(
+        career,
+        selectedIncome
+    ) {
+
+        if (!selectedIncome) {
+            return true;
+        }
+
+        return career.income ===
+            selectedIncome;
+
+    }
+
+
+    function matchesTheme(
+        career,
+        theme
+    ) {
+
+        if (!theme) {
+            return true;
+        }
+
+        const careerType =
+            (
+                career.career_type ||
+                ''
+            ).toLowerCase();
+
+        const profession =
+            (
+                career.profession ||
+                ''
+            ).toLowerCase();
+
+
+        if (theme === '転職') {
+
+            return (
+                career.careerStages.length >= 3 ||
+                career.companies.length >= 2
+            );
+
+        }
+
+
+        return (
+            careerType.includes(
+                theme.toLowerCase()
+            ) ||
+            profession.includes(
+                theme.toLowerCase()
+            )
+        );
+
+    }
+
+
+    /* ========================================
+       RENDER
+    ======================================== */
+
+    function render() {
+
+        renderCareerCards();
+
+        renderPagination();
+
+        renderResultCount();
+
+    }
+
+
+    function renderCareerCards() {
+
+        careerList.innerHTML = '';
+
+
+        if (!filteredCareers.length) {
+
+            emptyState.hidden = false;
+
+            return;
+
+        }
+
+
+        emptyState.hidden = true;
+
+
+        const start =
+            (
+                currentPage - 1
+            ) *
+            ITEMS_PER_PAGE;
+
+        const end =
+            start +
+            ITEMS_PER_PAGE;
+
+
+        const careers =
+            filteredCareers.slice(
+                start,
+                end
+            );
+
+
+        careers.forEach(career => {
+
+            const card =
+                createCareerCard(
+                    career
+                );
+
+            careerList.appendChild(
+                card
+            );
+
+        });
+
+    }
+
+
+    function createCareerCard(career) {
+
+        const li =
+            document.createElement('li');
+
+        li.className =
+            'career-story-card';
+
+        li.tabIndex = 0;
+
+        li.setAttribute(
+            'role',
+            'link'
+        );
+
+
+        const initial =
+            getInitial(
+                career.name
+            );
+
+
+        const headline =
+            buildCareerHeadline(
+                career
+            );
+
+
+        const tags =
+            buildCareerTags(
+                career
+            );
+
+
+        const ageText =
+            career.age
+                ? `${career.age}歳`
+                : '年齢非公開';
+
+
+        li.innerHTML = `
+
+            <article class="career-story-card__inner">
+
+                <div class="career-story-profile">
+
+                    <div
+                        class="career-story-avatar"
+                        aria-hidden="true"
+                    >
+                        ${escapeHTML(initial)}
+                    </div>
+
+                    <div class="career-story-profile__main">
+
+                        <div class="career-story-profile__meta">
+
+                            <span>
+                                ${escapeHTML(ageText)}
+                            </span>
+
+                            <span class="career-meta-separator">
+                                |
+                            </span>
+
+                            <span>
+                                ${escapeHTML(
+                                    career.profession
+                                )}
+                            </span>
+
                         </div>
-                        `;
 
-                        // オンラインステータスの取得（活動中／最近活動／お休み中 の文字付きバッジに変更）
-                        const activityStatus = career.activity_status || 'inactive';
-                        const statusText = activityStatus === 'online'
-                            ? '活動中'
-                            : activityStatus === 'recently_active'
-                                ? '最近活動'
-                                : 'お休み中';
-                        const statusBadge = `<span class="status-badge ${activityStatus}">${statusText}</span>`;
-        
-                        listItem.innerHTML = `
-                            <div class="career-info">
-                            <h2>${career.name || '不明'} (${age}歳) ${statusBadge}</h2>
-                                <p>職業: ${career.profession || '不明'}</p>  <!-- 職業が不明な場合 -->
-                                <p>年収: ${career.income[career.income.length - 1]?.income || '不明'}</p>  <!-- 年収が不明な場合 -->
-                                <p>${futureCareerHTML}</p>
-                            </div>
-                            <div class="career-path" id="career-path-${career.id}">
-                                <!-- ここにD3.jsで描画されるキャリアパスの図が入る -->
-                            </div>
-                            ${viewCountSection}  <!-- 閲覧回数を表示 -->
-                        `;
-        
-                        careerList.appendChild(listItem);
-        
-                        drawCareerPath(`#career-path-${career.id}`, stages);
-                    });
-        
-                    updatePaginationButtons(careers.length);
+                        <h3>
+                            ${escapeHTML(
+                                career.name
+                            )}
+                        </h3>
+
+                        <p class="career-story-profile__summary">
+                            ${escapeHTML(
+                                buildCareerSummary(
+                                    career
+                                )
+                            )}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="career-story-hook">
+
+                    <p class="career-story-hook__label">
+                        CAREER THEME
+                    </p>
+
+                    <p class="career-story-hook__text">
+                        ${escapeHTML(
+                            headline
+                        )}
+                    </p>
+
+                </div>
+
+
+                <div class="career-story-tags">
+
+                    ${tags.map(tag => `
+                        <span class="career-story-tag">
+                            ${escapeHTML(tag)}
+                        </span>
+                    `).join('')}
+
+                </div>
+
+
+                <div class="career-story-timeline">
+
+                    ${buildTimelineHTML(
+                        career.careerStages
+                    )}
+
+                </div>
+
+
+                <div class="career-story-footer">
+
+                    <div class="career-story-footer__stats">
+
+                        <span>
+                            ${escapeHTML(
+                                getTransferCount(
+                                    career
+                                )
+                            )}回転職
+                        </span>
+
+                        <span>
+                            年収
+                            ${escapeHTML(
+                                career.income
+                            )}
+                        </span>
+
+                    </div>
+
+                    <span class="career-story-link">
+                        このキャリアを見る
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </span>
+
+                </div>
+
+            </article>
+
+        `;
+
+
+        const navigate =
+            () => {
+
+                window.location.href =
+                    `Career_detail.html?id=${
+                        encodeURIComponent(
+                            career.id
+                        )
+                    }`;
+
+            };
+
+
+        li.addEventListener(
+            'click',
+            navigate
+        );
+
+
+        li.addEventListener(
+            'keydown',
+            event => {
+
+                if (
+                    event.key === 'Enter' ||
+                    event.key === ' '
+                ) {
+
+                    event.preventDefault();
+
+                    navigate();
+
                 }
 
-                // キャリアパスを描画する関数はそのまま
-                function drawCareerPath(selector, stages) {
-                    const container = document.querySelector(selector);
-                    const width = container.clientWidth;
-                    const height = 100;
+            }
+        );
 
-                    const svg = d3.select(selector)
-                        .append("svg")
-                        .attr("width", "100%")
-                        .attr("height", height)
-                        .attr("viewBox", `0 0 ${width} ${height}`)
-                        .attr("preserveAspectRatio", "xMinYMid meet");
 
-                    const xScale = d3.scaleLinear()
-                        .domain([0, stages.length - 1])
-                        .range([50, width - 50]);
+        return li;
 
-                    svg.append("g")
-                        .selectAll("line")
-                        .data(stages)
-                        .enter()
-                        .append("line")
-                        .attr("x1", (d, i) => i === 0 ? xScale(0) : xScale(i - 1))
-                        .attr("y1", height / 2)
-                        .attr("x2", (d, i) => xScale(i))
-                        .attr("y2", height / 2)
-                        .attr("stroke", "#574637")
-                        .attr("stroke-width", 2);
+    }
 
-                    svg.append("g")
-                        .selectAll("circle")
-                        .data(stages)
-                        .enter()
-                        .append("circle")
-                        .attr("cx", (d, i) => xScale(i))
-                        .attr("cy", height / 2)
-                        .attr("r", 5)
-                        .attr("fill", "#8ba141");
 
-                    svg.append("g")
-                        .selectAll("text.year")
-                        .data(stages)
-                        .enter()
-                        .append("text")
-                        .attr("x", (d, i) => xScale(i))
-                        .attr("y", height / 2 - 15)
-                        .attr("text-anchor", "middle")
-                        .style("font-size", "14px")
-                        .text(d => d.year);
+    /* ========================================
+       CARD CONTENT
+    ======================================== */
 
-                    svg.append("g")
-                        .selectAll("text.stage")
-                        .data(stages)
-                        .enter()
-                        .append("text")
-                        .attr("x", (d, i) => xScale(i))
-                        .attr("y", height / 2 + 25)
-                        .attr("text-anchor", "middle")
-                        .style("font-size", "10px")
-                        .each(function (d) {
-                            const stageText = d3.select(this);
-                            let stage = d.stage.length > 12 ? d.stage.substring(0, 12) + '...' : d.stage; // 最大文字数を12に制限
-                            const lines = stage.match(/.{1,6}/g); // 6文字ごとに区切る
-                            
-                            if (lines.length > 2) {
-                                lines[1] = lines[1].substring(0, 3) + '...'; // 2行目を3文字＋「...」に
-                            }
-                            
-                            stageText.selectAll("tspan")
-                                .data(lines.slice(0, 2)) // 最初の2行だけ表示
-                                .enter()
-                                .append("tspan")
-                                .attr("x", stageText.attr("x"))
-                                .attr("dy", (d, i) => i === 0 ? 0 : 14) // 2行目は14px下に
-                                .text(d => d);
-                        });
+    function getInitial(name) {
 
-                    svg.append("g")
-                        .selectAll("text.icon")
-                        .data([stages[stages.length - 1]])
-                        .enter()
-                        .append("text")
-                        .attr("x", (d, i) => xScale(stages.length - 1) + 10)
-                        .attr("y", height / 2 + 5)
-                        .attr("text-anchor", "middle")
-                        .style("font-size", "18px")
-                        .text('👤');
+        if (!name) {
+            return '?';
+        }
+
+        const firstCharacter =
+            name.trim().charAt(0);
+
+        return firstCharacter
+            .toUpperCase();
+
+    }
+
+
+    function buildCareerSummary(career) {
+
+        const companyCount =
+            getCompanyCount(
+                career
+            );
+
+        const careerYears =
+            getCareerYears(
+                career
+            );
+
+
+        const parts = [];
+
+
+        if (companyCount) {
+
+            parts.push(
+                `${companyCount}社`
+            );
+
+        }
+
+
+        if (careerYears) {
+
+            parts.push(
+                `キャリア約${careerYears}年`
+            );
+
+        }
+
+
+        return parts.length
+            ? parts.join('・')
+            : 'キャリアストーリー';
+
+    }
+
+
+    function buildCareerHeadline(career) {
+
+        const type =
+            career.career_type
+                .trim();
+
+
+        if (type) {
+
+            return normalizeCareerType(
+                type
+            );
+
+        }
+
+
+        if (
+            career.companies.length >= 2
+        ) {
+
+            return '新しい環境へ踏み出したキャリア';
+
+        }
+
+
+        return '自分らしいキャリアを模索してきた';
+
+    }
+
+
+    function normalizeCareerType(type) {
+
+        if (type.length <= 34) {
+            return type;
+        }
+
+        return `${type.slice(0, 34)}…`;
+
+    }
+
+
+    function buildCareerTags(career) {
+
+        const tags = [];
+
+
+        if (
+            career.companies.length >= 2
+        ) {
+
+            tags.push(
+                '#キャリアチェンジ'
+            );
+
+        }
+
+
+        if (
+            career.career_type.includes(
+                'お金'
+            )
+        ) {
+
+            tags.push(
+                '#年収UP'
+            );
+
+        }
+
+
+        if (
+            career.career_type.includes(
+                'やりがい'
+            )
+        ) {
+
+            tags.push(
+                '#やりがい'
+            );
+
+        }
+
+
+        if (
+            career.career_type.includes(
+                '起業'
+            )
+        ) {
+
+            tags.push(
+                '#独立・起業'
+            );
+
+        }
+
+
+        if (
+            career.profession &&
+            career.profession !==
+                '職種未設定'
+        ) {
+
+            tags.push(
+                `#${career.profession}`
+            );
+
+        }
+
+
+        if (career.age) {
+
+            const decade =
+                Math.floor(
+                    career.age / 10
+                ) * 10;
+
+            tags.push(
+                `#${decade}代`
+            );
+
+        }
+
+
+        return [
+            ...new Set(tags)
+        ].slice(0, 4);
+
+    }
+
+
+    function getCompanyCount(career) {
+
+        const companies =
+            career.companies
+                .map(company =>
+                    company.name
+                )
+                .filter(Boolean);
+
+
+        return new Set(
+            companies
+        ).size;
+
+    }
+
+
+    function getTransferCount(career) {
+
+        const companyCount =
+            getCompanyCount(
+                career
+            );
+
+        return Math.max(
+            0,
+            companyCount - 1
+        );
+
+    }
+
+
+    function getCareerYears(career) {
+
+        const years =
+            career.companies
+                .map(company =>
+                    Number(
+                        company.startYear
+                    )
+                )
+                .filter(Boolean);
+
+
+        if (!years.length) {
+            return null;
+        }
+
+
+        const firstYear =
+            Math.min(...years);
+
+        const currentYear =
+            new Date().getFullYear();
+
+
+        return Math.max(
+            1,
+            currentYear -
+                firstYear
+        );
+
+    }
+
+
+    /* ========================================
+       TIMELINE
+    ======================================== */
+
+    function buildTimelineHTML(stages) {
+
+        if (!stages.length) {
+
+            return `
+                <p class="career-story-timeline__empty">
+                    キャリア履歴は未登録です
+                </p>
+            `;
+
+        }
+
+
+        const displayStages =
+            reduceTimelineStages(
+                stages
+            );
+
+
+        return `
+
+            <div class="career-story-timeline__track">
+
+                ${displayStages.map(
+                    (stage, index) => `
+
+                        <div
+                            class="career-story-timeline__item"
+                        >
+
+                            <span class="career-story-timeline__year">
+                                ${escapeHTML(
+                                    String(
+                                        stage.year
+                                    )
+                                )}
+                            </span>
+
+                            <span
+                                class="
+                                    career-story-timeline__dot
+                                    ${
+                                        index ===
+                                        displayStages.length - 1
+                                            ? 'is-current'
+                                            : ''
+                                    }
+                                "
+                            ></span>
+
+                            <span class="career-story-timeline__stage">
+                                ${escapeHTML(
+                                    simplifyStage(
+                                        stage.stage
+                                    )
+                                )}
+                            </span>
+
+                        </div>
+
+                    `
+                ).join('')}
+
+            </div>
+
+        `;
+
+    }
+
+
+    function reduceTimelineStages(stages) {
+
+        if (stages.length <= 4) {
+            return stages;
+        }
+
+
+        return [
+            stages[0],
+            stages[
+                Math.floor(
+                    stages.length / 3
+                )
+            ],
+            stages[
+                Math.floor(
+                    stages.length * 2 / 3
+                )
+            ],
+            stages[
+                stages.length - 1
+            ]
+        ];
+
+    }
+
+
+    function simplifyStage(stage) {
+
+        if (!stage) {
+            return '';
+        }
+
+        return stage
+            .replace(
+                /\s+/g,
+                ' '
+            )
+            .trim();
+
+    }
+
+
+    /* ========================================
+       PAGINATION
+    ======================================== */
+
+    function renderPagination() {
+
+        paginationContainer.innerHTML = '';
+
+
+        const totalPages =
+            Math.ceil(
+                filteredCareers.length /
+                ITEMS_PER_PAGE
+            );
+
+
+        if (totalPages <= 1) {
+            return;
+        }
+
+
+        const prev =
+            document.createElement(
+                'button'
+            );
+
+        prev.type =
+            'button';
+
+        prev.textContent =
+            '前へ';
+
+        prev.disabled =
+            currentPage === 1;
+
+
+        const page =
+            document.createElement(
+                'span'
+            );
+
+        page.className =
+            'pagination__page';
+
+        page.textContent =
+            `${currentPage} / ${totalPages}`;
+
+
+        const next =
+            document.createElement(
+                'button'
+            );
+
+        next.type =
+            'button';
+
+        next.textContent =
+            '次へ';
+
+        next.disabled =
+            currentPage === totalPages;
+
+
+        prev.addEventListener(
+            'click',
+            () => {
+
+                if (currentPage > 1) {
+
+                    currentPage--;
+
+                    render();
+
+                    scrollToStorySection();
+
                 }
 
-                function updatePaginationButtons(totalItems) {
-                    const paginationContainer = document.getElementById('pagination-container');
-                    paginationContainer.innerHTML = '';
-        
-                    const totalPages = Math.ceil(totalItems / itemsPerPage);
-        
-                    if (totalPages > 1) {
-                        if (currentPage > 1) {
-                            const prevButton = document.createElement('button');
-                            prevButton.textContent = '前へ';
-                            prevButton.addEventListener('click', () => {
-                                currentPage--;
-                                displayCareers(data.careers);
-                            });
-                            paginationContainer.appendChild(prevButton);
-                        }
-        
-                        const pageInfo = document.createElement('span');
-                        pageInfo.textContent = `ページ ${currentPage} / ${totalPages}`;
-                        paginationContainer.appendChild(pageInfo);
-        
-                        if (currentPage < totalPages) {
-                            const nextButton = document.createElement('button');
-                            nextButton.textContent = '次へ';
-                            nextButton.addEventListener('click', () => {
-                                currentPage++;
-                                displayCareers(data.careers);
-                            });
-                            paginationContainer.appendChild(nextButton);
-                        }
-                    }
+            }
+        );
+
+
+        next.addEventListener(
+            'click',
+            () => {
+
+                if (
+                    currentPage <
+                    totalPages
+                ) {
+
+                    currentPage++;
+
+                    render();
+
+                    scrollToStorySection();
+
                 }
 
-                displayCareers(data.careers);
+            }
+        );
 
-                const searchInput = document.getElementById('search');
-                searchInput.addEventListener('input', function () {
-                    const keyword = searchInput.value.toLowerCase();
-                    const filteredCareers = data.careers.filter(career => {
-                        const name = career.name?.toLowerCase() || '';  // 名前がnullの場合に備えて
-                        const education = career.education?.toLowerCase() || '';  // 大学名がnullの場合に備えて
-                        const stages = (career.careerStages || []).some(stage => stage.stage?.toLowerCase().includes(keyword));  // ステージがnullの場合に備えて
-                        const companies = (career.companies || []).some(company => company.name?.toLowerCase().includes(keyword));  // 会社名がnullの場合に備えて
-                
-                        return name.includes(keyword) || education.includes(keyword) || stages || companies;
-                    });
-                    currentPage = 1;
-                    displayCareers(filteredCareers);
-                });
 
-                industrySelect.addEventListener('change', function () {
-                    const selectedIndustry = industrySelect.value;
-                    const filteredCareers = selectedIndustry
-                        ? data.careers.filter(career =>
-                            (career.companies || []).some(company => company.industry === selectedIndustry))
-                        : data.careers;
-                    currentPage = 1;
-                    displayCareers(filteredCareers);
-                });
+        paginationContainer.append(
+            prev,
+            page,
+            next
+        );
 
-            })
-            .catch(error => console.error('Error fetching user statuses:', error));
-        })
-        .catch(error => console.error('Error fetching career overview:', error));
+    }
+
+
+    function scrollToStorySection() {
+
+        document
+            .querySelector(
+                '.career-story-section'
+            )
+            ?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+    }
+
+
+    function renderResultCount() {
+
+        resultCount.textContent =
+            `${filteredCareers.length}件のキャリア`;
+
+    }
+
+
+    /* ========================================
+       EVENTS
+    ======================================== */
+
+    searchInput.addEventListener(
+        'input',
+        applyFilters
+    );
+
+
+    industryFilter.addEventListener(
+        'change',
+        applyFilters
+    );
+
+
+    ageFilter.addEventListener(
+        'change',
+        applyFilters
+    );
+
+
+    incomeFilter.addEventListener(
+        'change',
+        applyFilters
+    );
+
+
+    themeButtons.forEach(button => {
+
+        button.addEventListener(
+            'click',
+            () => {
+
+                themeButtons.forEach(
+                    chip =>
+                        chip.classList.remove(
+                            'active'
+                        )
+                );
+
+                button.classList.add(
+                    'active'
+                );
+
+                selectedTheme =
+                    button.dataset.theme || '';
+
+                applyFilters();
+
+            }
+        );
+
+    });
+
+
+    resetButton.addEventListener(
+        'click',
+        () => {
+
+            searchInput.value = '';
+
+            industryFilter.value = '';
+
+            ageFilter.value = '';
+
+            incomeFilter.value = '';
+
+            selectedTheme = '';
+
+            themeButtons.forEach(
+                button => {
+
+                    button.classList.toggle(
+                        'active',
+                        !button.dataset.theme
+                    );
+
+                }
+            );
+
+            applyFilters();
+
+        }
+    );
+
+
+    /* ========================================
+       ESCAPE
+    ======================================== */
+
+    function escapeHTML(value) {
+
+        return String(
+            value ?? ''
+        )
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+
+    }
+
 });

@@ -82,23 +82,343 @@
     </aside>
 
     <main class="career-overview-page">
-        <h1>転職成功事例一覧</h1>
-        <input type="text" id="search" placeholder="キーワードで検索">
-        <select id="filter-industry">
-            <option value="">業界を選択</option>
-            <!-- JavaScriptで業界オプションを動的に生成 -->
-        </select>
 
-        <ul id="career-list">
-            <!-- JavaScriptでキャリアリストを動的に生成 -->
-        </ul>
-
-        <!-- ページネーションボタンの追加 -->
-        <div id="pagination-container" class="pagination">
-            <button id="prev-page" style="display: none;">前へ</button>
-            <span id="current-page">1</span> / <span id="total-pages"></span>
-            <button id="next-page" style="display: none;">次へ</button>
-        </div>
+        <!-- =========================
+             HERO
+        ========================== -->
+        <section class="career-overview-hero">
+    
+            <div class="career-overview-hero__content">
+    
+                <p class="overview-eyebrow">
+                    CAREER STORIES
+                </p>
+    
+                <h1>
+                    自分に近いキャリアを探す
+                </h1>
+    
+                <p class="overview-lead">
+                    転職、異動、昇進、独立、結婚、出産。<br>
+                    同じように迷い、考え、選択した人たちのストーリー。<br>
+                    あなたの次の一歩のヒントが、きっと見つかります。
+                </p>
+    
+            </div>
+    
+        </section>
+    
+    
+        <!-- =========================
+             SEARCH
+        ========================== -->
+        <section class="career-search-panel">
+    
+            <div class="career-search-main">
+    
+                <label
+                    class="career-search-field career-search-field--keyword"
+                    for="search"
+                >
+                    <span class="career-search-label">
+                        キーワードで検索
+                    </span>
+    
+                    <span class="career-search-input-wrap">
+    
+                        <input
+                            type="search"
+                            id="search"
+                            placeholder="職種・業界・会社・キーワード"
+                            autocomplete="off"
+                        >
+    
+                        <span
+                            class="career-search-icon"
+                            aria-hidden="true"
+                        >
+                            ⌕
+                        </span>
+    
+                    </span>
+                </label>
+    
+    
+                <label
+                    class="career-search-field"
+                    for="filter-industry"
+                >
+                    <span class="career-search-label">
+                        業界
+                    </span>
+    
+                    <select id="filter-industry">
+                        <option value="">
+                            すべて
+                        </option>
+                    </select>
+                </label>
+    
+    
+                <label
+                    class="career-search-field"
+                    for="filter-age"
+                >
+                    <span class="career-search-label">
+                        年代
+                    </span>
+    
+                    <select id="filter-age">
+                        <option value="">
+                            すべて
+                        </option>
+                        <option value="20">
+                            20代
+                        </option>
+                        <option value="30">
+                            30代
+                        </option>
+                        <option value="40">
+                            40代
+                        </option>
+                        <option value="50">
+                            50代以上
+                        </option>
+                    </select>
+                </label>
+    
+    
+                <label
+                    class="career-search-field"
+                    for="filter-income"
+                >
+                    <span class="career-search-label">
+                        年収
+                    </span>
+    
+                    <select id="filter-income">
+                        <option value="">
+                            すべて
+                        </option>
+                        <option value="〜400万円">
+                            ～400万円
+                        </option>
+                        <option value="401〜500万円">
+                            401～500万円
+                        </option>
+                        <option value="501〜600万円">
+                            501～600万円
+                        </option>
+                        <option value="601〜700万円">
+                            601～700万円
+                        </option>
+                        <option value="701〜800万円">
+                            701～800万円
+                        </option>
+                        <option value="801〜900万円">
+                            801～900万円
+                        </option>
+                        <option value="901〜1000万円">
+                            901～1000万円
+                        </option>
+                        <option value="1001〜1500万円">
+                            1001～1500万円
+                        </option>
+                        <option value="1501万円〜">
+                            1501万円～
+                        </option>
+                    </select>
+                </label>
+    
+    
+                <button
+                    type="button"
+                    id="reset-career-filter"
+                    class="career-filter-reset"
+                >
+                    条件をリセット
+                </button>
+    
+            </div>
+    
+    
+            <!-- 人気テーマ -->
+            <div class="career-theme-area">
+    
+                <p class="career-theme-title">
+                    今のあなたに近いテーマは？
+                </p>
+    
+                <div
+                    id="career-theme-list"
+                    class="career-theme-list"
+                >
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip active"
+                        data-theme=""
+                    >
+                        すべて
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="お金"
+                    >
+                        #年収UP
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="やりがい"
+                    >
+                        #やりがい
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="転職"
+                    >
+                        #キャリアチェンジ
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="専門"
+                    >
+                        #専門性
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="マネジメント"
+                    >
+                        #マネジメント
+                    </button>
+    
+                    <button
+                        type="button"
+                        class="career-theme-chip"
+                        data-theme="起業"
+                    >
+                        #独立・起業
+                    </button>
+    
+                </div>
+    
+            </div>
+    
+        </section>
+    
+    
+        <!-- =========================
+             STORIES
+        ========================== -->
+        <section class="career-story-section">
+    
+            <div class="career-story-section__header">
+    
+                <div>
+    
+                    <p class="overview-eyebrow">
+                        DISCOVER STORIES
+                    </p>
+    
+                    <h2>
+                        キャリアストーリー
+                    </h2>
+    
+                    <p class="career-story-section__lead">
+                        気になるキャリアを選んで、
+                        その人がどこで迷い、
+                        何を大切にして道を選んだのかを
+                        読んでみてください。
+                    </p>
+    
+                </div>
+    
+                <p
+                    id="career-result-count"
+                    class="career-result-count"
+                ></p>
+    
+            </div>
+    
+    
+            <ul
+                id="career-list"
+                class="career-story-list"
+            >
+                <!-- JavaScriptで生成 -->
+            </ul>
+    
+    
+            <div
+                id="career-empty-state"
+                class="career-empty-state"
+                hidden
+            >
+    
+                <p class="career-empty-state__title">
+                    条件に合うキャリアが見つかりませんでした
+                </p>
+    
+                <p>
+                    条件を少し広げて探してみてください。
+                </p>
+    
+            </div>
+    
+    
+            <div
+                id="pagination-container"
+                class="pagination"
+            ></div>
+    
+        </section>
+    
+    
+        <!-- =========================
+             REGISTER CTA
+        ========================== -->
+        <section class="career-overview-cta">
+    
+            <div class="career-overview-cta__icon">
+                ◇
+            </div>
+    
+            <div class="career-overview-cta__content">
+    
+                <p class="overview-eyebrow">
+                    FIND YOUR NEXT STEP
+                </p>
+    
+                <h2>
+                    あなたに近いキャリアを、もっと見つけよう
+                </h2>
+    
+                <p>
+                    無料登録すると、選択の背景やその後の変化、
+                    本人の振り返りまで読むことができます。
+                </p>
+    
+            </div>
+    
+            <a
+                href="Register.html"
+                class="career-overview-cta__button"
+            >
+                無料登録して続きを見る
+            </a>
+    
+        </section>
+    
     </main>
     <footer>
         <div class="footer-content">
