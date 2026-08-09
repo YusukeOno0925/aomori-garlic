@@ -1,345 +1,995 @@
-:root {
-    --main-color: #574637; 
-    --accent-color: #b0941e; /* アクセントカラー */
-    --background-color: #f7f5f1; /* 背景色 */
-    --text-color: #333333; /* テキスト色 */
-    --card-background-color: #FFFFFF; /* カードの背景色 */
-    --card-border-color: #DDDDDD; /* カードの枠色 */
+/* =========================================================
+   GLOBAL / COMMON STYLE
+   ========================================================= */
+
+   :root {
+    --main-color: #574637;
+    --main-color-dark: #403229;
+
+    --accent-color: #74804f;
+    --accent-color-dark: #596238;
+
+    --background-color: #f7f5f1;
+    --surface-color: #ffffff;
+    --surface-soft-color: #fbfaf7;
+
+    --text-color: #333333;
+    --text-sub-color: #6f655c;
+
+    --card-background-color: #ffffff;
+    --card-border-color: rgba(87, 70, 55, 0.12);
+
+    --header-height: 92px;
+    --sidebar-width: 200px;
+
+    --common-shadow:
+        0 4px 16px rgba(40, 28, 18, 0.07);
 }
 
-/* すべての要素にbox-sizingを適用 */
-*, *::before, *::after {
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
+
+html {
+    scroll-behavior: smooth;
+}
+
+
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    overflow-x: hidden; /* 横スクロールを無効にする */
+
+    overflow-x: hidden;
+
+    background-color:
+        var(--background-color);
+
+    color:
+        var(--text-color);
+
+    font-family:
+        Arial,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
 
-/* ヘッダーのスタイル */
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
 header {
-    background-color: #fff;
-    padding: 0.5rem 1rem;
     position: fixed;
+
     top: 0;
-    left: 0;
     right: 0;
-    /* height: 60px; ヘッダーの高さを固定 */
+    left: 0;
+
     z-index: 100;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    min-height:
+        var(--header-height);
+
+    padding:
+        0.35rem
+        1rem;
+
+    border-bottom:
+        1px solid
+        rgba(87, 70, 55, 0.08);
+
+    background-color:
+        rgba(255, 255, 255, 0.97);
+
+    box-shadow:
+        0 2px 10px
+        rgba(40, 28, 18, 0.06);
+
+    backdrop-filter:
+        blur(10px);
 }
 
-/* ヘッダー内部の配置 */
+
+/* =========================================================
+   HEADER CONTENT
+   ========================================================= */
+
 .header-content {
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto; /* コンテンツを中央に寄せる */
+
+    width: 100%;
+    max-width: 1280px;
+
+    min-height:
+        calc(
+            var(--header-height)
+            - 0.7rem
+        );
+
+    margin:
+        0
+        auto;
 }
 
-/* ロゴリンク */
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
 .logo-link {
     display: flex;
+
     align-items: center;
-    text-decoration: none;
+
+    flex: 0 0 auto;
+
     color: inherit;
+
+    text-decoration: none;
 }
 
-/* ロゴ画像 */
+
 .logo-image {
-    height: 80px;  /* 適切なサイズ */
+    display: block;
+
     width: auto;
+    height: 68px;
+
+    object-fit: contain;
 }
 
-/* テキストロゴ */
+
 .logo {
+    margin-left: 0.9rem;
+
+    color:
+        var(--main-color);
+
+    font-size: 1.28rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.01em;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   LEAD TEXT
+   ========================================================= */
+
+.lead-text {
+    flex-grow: 1;
+
+    margin-left: 2rem;
+
+    color:
+        var(--main-color);
+
+    font-size: 0.95rem;
+
+    line-height: 1.5;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   HEADER BUTTON AREA
+   ========================================================= */
+
+   .login-button-container {
+    display: flex;
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    gap: 0.55rem;
+
+    margin-left: auto;
+
+    white-space: nowrap;
+}
+
+
+/* 共通 */
+.header-register-btn,
+.login-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    min-height: 40px;
+
+    padding:
+        0
+        1rem;
+
+    border-radius: 6px;
+
+    font-size: 0.84rem;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+    word-break: keep-all;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* 新規登録 */
+.header-register-btn {
+    min-width: 88px;
+
+    border:
+        1px solid
+        var(--main-color);
+
+    background:
+        var(--main-color);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 14px
+        rgba(87, 70, 55, 0.10);
+}
+
+
+/* ログイン */
+.login-button {
+    min-width: 82px;
+
+    border:
+        1px solid
+        var(--main-color);
+
+    background:
+        var(--main-color);
+
+    color: #ffffff;
+}
+
+
+/* hover */
+.header-register-btn:hover,
+.login-button:hover {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        var(--accent-color-dark);
+
+    background:
+        var(--accent-color-dark);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   HAMBURGER MENU
+   ========================================================= */
+
+.hamburger-menu {
+    display: none;
+
+    flex: 0 0 auto;
+
+    margin-left: 0.55rem;
+
+    padding: 0.25rem;
+
+    border: none;
+
+    background: none;
+
+    color:
+        var(--main-color);
+
+    font-size: 1.85rem;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   SIDE MENU
+   ========================================================= */
+
+.main-menu {
+    position: fixed;
+
+    top:
+        var(--header-height);
+
+    left: 0;
+
+    z-index: 50;
+
+    width:
+        var(--sidebar-width);
+
+    height:
+        calc(
+            100vh
+            - var(--header-height)
+        );
+
+    overflow-y: auto;
+
+    border-right:
+        1px solid
+        rgba(87, 70, 55, 0.08);
+
+    background-color:
+        #f8f6f2;
+
+    box-shadow:
+        2px 0 10px
+        rgba(40, 28, 18, 0.045);
+}
+
+
+/* =========================================================
+   SIDE MENU LIST
+   ========================================================= */
+
+.main-menu nav {
+    padding:
+        0.8rem
+        0;
+}
+
+
+.main-menu nav ul {
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.main-menu nav ul li {
+    margin:
+        0.18rem
+        0;
+}
+
+
+.main-menu nav ul li a {
+    text-decoration: none;
     color: var(--main-color);
-    margin-left: 1rem;
-    font-size: 1.3rem;
+    font-size: 0.98rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.9rem 0.85rem;
+    min-height: 52px;
+    border-left: 3px solid transparent;
+
+    white-space: nowrap;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.main-menu nav ul li a:hover {
+    padding-left:
+        1rem;
+
+    background:
+        rgba(116, 128, 79, 0.07);
+
+    color:
+        var(--accent-color-dark);
+}
+
+
+/* =========================================================
+   ACTIVE MENU
+   HTML側で class="active" を付けると使用可能
+   ========================================================= */
+
+.main-menu nav ul li a.active {
+    border-left-color:
+        var(--accent-color);
+
+    background:
+        rgba(116, 128, 79, 0.10);
+
+    color:
+        var(--accent-color-dark);
+
     font-weight: 700;
 }
 
-/* キャッチコピー（lead-text） */
-.lead-text {
-    color: var(--main-color);
-    margin-left: 2rem;
-    font-size: 1rem;
-    flex-grow: 1; /* 余白としても機能させる */
+
+/* =========================================================
+   SIDE MENU ICON
+   ========================================================= */
+
+.main-menu nav ul li a img {
+    flex: 0 0 auto;
+
+    width: 20px;
+    height: 20px;
+
+    margin-right: 10px;
+
+    object-fit: contain;
+
+    opacity: 0.85;
 }
 
-/* 1. ボタンを横一列に並べる */
-.login-button-container {
-    display: flex;
-    gap: 0.5rem;          /* ボタン間のスペース */
-    align-items: center;  /* 縦方向中央揃え */
-  }
-  
-  /* 2. 新規登録ボタンの見た目をログインボタンに合わせる */
-  .header-register-btn {
-    background-color: var(--main-color);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    transition: background-color 0.3s;
-  }
-  .header-register-btn:hover {
-    background-color: var(--accent-color);
-  }
 
-/* ログインボタン */
-.login-button {
-    background-color: var(--main-color);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    font-size: 0.9rem;
-}
-
-.login-button:hover {
-    background-color: var(--accent-color);
-}
-
-/* ハンバーガーメニュー（モバイル用） */
-.hamburger-menu {
-    display: none;  /* 初期は非表示、メディアクエリで表示 */
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--main-color);
-}
-
-/* メインメニューのスタイル */
-.main-menu {
-    width: 200px;
-    background-color: #f7f5f1;
-    height: calc(100vh - 60px); /* ヘッダーの高さを引いて全体の高さを調整 */
-    position: fixed;
-    top: 60px; /* ヘッダーの下に位置するように調整 */
-    left: 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    margin-top: 40px; /* ヘッダー分のマージンを追加 */
-}
-
-/* アイコンを右端に固定する */
 .main-menu nav ul li a .icon {
     display: none;
 }
 
-/* サイドメニューが表示された場合、 > アイコンを非表示にする */
+
 .main-menu .icon {
-    display: none; /* サイドメニュー表示中は > アイコンを非表示 */
-}
-
-.main-menu nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.main-menu nav ul li {
-    margin: 10px 0; /* 行間の余白を狭める */
-}
-
-.main-menu nav ul li a {
-    text-decoration: none;
-    color: #574637;
-    font-size: 1rem;
-    display: flex;
-    justify-content: flex-start; /* テキストを左揃えにする */
-    align-items: center;
-    padding: 10px;
-}
-
-.main-menu nav ul li a img {
-    width: 20px; /* 適切な幅を設定 */
-    height: auto; /* 高さを自動調整 */
-    margin-right: 10px; /* アイコンと文字の間に余白を追加 */
-}
-
-/* メインコンテンツのスタイル */
-main {
-    margin-left: 220px; /* サイドメニュー分のマージンを確保 */
-    padding: 2rem;
-    margin-top: 80px; /* ヘッダー分のマージンを追加 */
-}
-
-/* ハンバーガーメニュー */
-.hamburger-menu {
     display: none;
-    font-size: 2rem; /* アイコンのサイズを調整 */
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--main-color);
-    margin-left: auto; /* ハンバーガーメニューを右寄せ */
 }
 
-/* フッター全体のスタイル */
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+    margin-top:
+        var(--header-height);
+
+    margin-left:
+        220px;
+
+    padding:
+        2rem;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
 footer {
-    background-color: var(--accent-color); /* アクセントカラー */
-    color: white; /* テキスト色 */
-    text-align: center; /* テキストを中央揃え */
-    padding: 0.8rem 0; /* 上下のパディングを増やす */
     position: relative;
+
+    bottom: auto;
+    left: auto;
+
     width: 100%;
-    bottom: 0;
-    left: 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+
+    padding:
+        1rem
+        0;
+
+    background:
+        var(--main-color-dark);
+
+    color:
+        rgba(255, 255, 255, 0.86);
+
+    box-shadow: none;
+
+    text-align: center;
 }
 
-/* フッターのコンテンツをフレックスボックスで中央揃え */
+
+/* =========================================================
+   FOOTER CONTENT
+   ========================================================= */
+
 .footer-content {
     display: flex;
-    justify-content: center; /* 中央揃え */
-    align-items: center; /* 垂直方向に中央揃え */
-    max-width: 1000px; /* フッターの最大幅 */
-    margin: 0 auto; /* コンテンツを中央に配置 */
-    padding: 0; /* 既存のパディングをリセット */
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    max-width: 1280px;
+
+    margin:
+        0
+        auto;
+
+    padding:
+        0
+        2rem;
 }
 
-/* フッター内のアイテムを横並びにする */
+
+/* =========================================================
+   FOOTER ITEMS
+   ========================================================= */
+
 .footer-items {
     display: flex;
+
     align-items: center;
-    gap: 1rem; /* テキストとアイコン間のスペース */
+
+    justify-content: center;
+
+    gap: 0.85rem;
 }
 
-/* インスタグラムアイコンのスタイル */
-.instagram-icon {
-    width: 24px; /* アイコンの幅 */
-    height: 24px; /* アイコンの高さ */
-    transition: transform 0.3s ease; /* ホバー時のアニメーション */
+
+.footer-items p {
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, 0.88);
+
+    font-size: 0.82rem;
+
+    line-height: 1;
 }
 
-/* インスタグラムアイコンにホバー効果を追加 */
-.footer-items a:hover .instagram-icon {
-    transform: scale(1.1); /* アイコンを拡大 */
-}
 
+/* =========================================================
+   SOCIAL ICONS
+   ========================================================= */
+
+.instagram-icon,
 .linkedin-icon {
-    width: 24px;  /* 小さめに固定 */
-    height: 24px;
-    transition: transform 0.3s ease;
+    display: block;
+
+    width: 22px;
+    height: 22px;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 
-/* ホバー時に少し拡大する */
-.footer-items a:hover .linkedin-icon {
-    transform: scale(1.1);
+
+.footer-items a {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    line-height: 0;
 }
 
-/* モバイルサイズ用 */
+
+.footer-items a:hover
+.instagram-icon,
+.footer-items a:hover
+.linkedin-icon {
+    transform:
+        translateY(-1px)
+        scale(1.06);
+
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
 @media (max-width: 768px) {
+
+    :root {
+        --header-height: 72px;
+    }
+
+
+    /* -----------------------------------------
+       HEADER
+       ----------------------------------------- */
+
+    header {
+        padding:
+            0.25rem
+            0.45rem;
+    }
+
+
     .header-content {
         width: 100%;
-        padding: 0 1rem;
-        justify-content: space-between; /* 左右に要素を配置 */
+
+        min-height:
+            calc(
+                var(--header-height)
+                - 0.5rem
+            );
+
+        padding:
+            0
+            0.45rem;
     }
 
-    /* ログインボタンコンテナを右端に配置 */
-    .login-button-container {
-        margin-left: auto;  /* これにより、左側のロゴとの間に自動余白が入り、右端に配置 */
+
+    .logo-image {
+        width: auto;
+        height: 45px;
     }
+
 
     .logo {
-        font-size: 1.0rem;
+        margin-left: 0.55rem;
+
+        font-size: 1rem;
     }
 
-    .logo-image {
-        height: 45px;
-        width: auto;
+
+    .header-content
+    .lead-text {
+        display: none;
     }
 
-    main {
-        margin-left: 0;
-        padding: 1rem; /* モバイルサイズでも余白を適切に保持 */
-        margin-top: 80px; /* ヘッダー分のマージンを追加 */
+
+    /* -----------------------------------------
+       HEADER BUTTON
+       ----------------------------------------- */
+
+    .login-button-container {
+        gap: 0.4rem;
+
+        margin-left: auto;
     }
 
-    .main-menu {
-        display: none; /* 768px以下でサイドメニューを非表示に */
+
+    .header-register-btn,
+    .login-button {
+        min-height: 36px;
+
+        padding:
+            0
+            0.75rem;
+
+        border-radius: 5px;
+
+        font-size: 0.72rem;
     }
 
-    .header-content .lead-text {
-        display: none; /* テキストを非表示にする */
-    }
+
+    /* -----------------------------------------
+       HAMBURGER
+       ----------------------------------------- */
 
     .hamburger-menu {
-        display: block; /* ハンバーガーメニューを表示 */
+        display: block;
+
+        font-size: 1.75rem;
     }
+
+
+    /* -----------------------------------------
+       MAIN
+       ----------------------------------------- */
+
+    main {
+        margin-top:
+            var(--header-height);
+
+        margin-left: 0;
+
+        padding:
+            1rem;
+    }
+
+
+    /* -----------------------------------------
+       SIDE MENU
+       ----------------------------------------- */
+
+    .main-menu {
+        display: none;
+    }
+
 
     .main-menu.show {
-        display: block; /* ハンバーガーメニューがクリックされたらサイドメニューを表示 */
+        display: block;
+
         position: fixed;
-        top: 60px;
+
+        top:
+            var(--header-height);
+
         left: 0;
-        width: 100%; /* 横幅を100%に */
-        background-color: #f7f5f1;
-        z-index: 10;
-        transition: transform 0.3s ease; /* アニメーション追加 */
+
+        z-index: 90;
+
+        width: 100%;
+
+        height:
+            calc(
+                100vh
+                - var(--header-height)
+            );
+
+        margin: 0;
+
+        overflow-y: auto;
+
+        border-right: none;
+
+        background-color:
+            #f8f6f2;
+
+        box-shadow:
+            0 8px 18px
+            rgba(40, 28, 18, 0.10);
     }
+
+
+    .main-menu.show nav {
+        padding:
+            0.65rem
+            0;
+    }
+
+
+    .main-menu nav ul li {
+        margin: 0;
+    }
+
+
+    .main-menu nav ul li a {
+        min-height: 54px;
+
+        padding:
+            0.7rem
+            1rem;
+
+        border-left-width: 3px;
+
+        border-bottom:
+            1px solid
+            rgba(87, 70, 55, 0.055);
+
+        font-size: 0.95rem;
+    }
+
+
+    .main-menu nav ul li a:hover {
+        padding-left:
+            1.08rem;
+    }
+
 
     .main-menu nav ul li a .icon {
-        display: inline-block; /* 768px以下ではアイコンを表示 */
-        margin-left: auto; /* 右端に配置 */
+        display: inline-block;
+
+        margin-left: auto;
+
+        color:
+            var(--text-sub-color);
+
         text-align: right;
     }
 
-    /* サイドメニューが非表示時に > を表示 */
+
     .main-menu .icon {
         display: inline-block;
+
+        margin-left: auto;
+
         text-align: right;
     }
-    
-    footer{
-        padding: 0.4rem 0;
+
+
+    /* -----------------------------------------
+       FOOTER
+       ----------------------------------------- */
+
+    footer {
+        padding:
+            0.8rem
+            0;
     }
+
 
     .footer-content {
-        flex-direction: column; /* 縦並びに変更 */
-        gap: 1rem; /* 上下のスペースを追加 */
+        padding:
+            0
+            1rem;
     }
+
 
     .footer-items {
-        justify-content: center; /* 中央揃え */
+        gap:
+            0.7rem;
     }
+
+
+    .footer-items p {
+        font-size: 0.76rem;
+    }
+
+
+    .instagram-icon,
+    .linkedin-icon {
+        width: 20px;
+        height: 20px;
+    }
+
 }
 
-/* 450px以下の画面サイズに対応 */
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
 @media (max-width: 450px) {
-    .header-content .logo {
-        font-size: 0.8rem; /* ロゴのフォントサイズを小さくする */
-        margin-left: 0.5rem;
+
+    :root {
+        --header-height: 68px;
     }
 
-    .logo-image {
-        margin-right: -6px;
-        height: 60px; /* ロゴ画像の高さを小さくする */
-    }
+
+    /* -----------------------------------------
+       LOGO
+       ----------------------------------------- */
 
     .logo-link {
-        display: flex;            /* 元々flexなら不要ですが念のため */
-        flex-direction: column;   /* 縦並びに */
-        align-items: center;      /* 真ん中揃え */
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
     }
-    
-    /* ロゴ下の文字削除 */
+
+
+    .logo-image {
+        width: auto;
+
+        height: 50px;
+
+        margin-right: -4px;
+    }
+
+
     .logo {
         display: none;
     }
 
+
+    /* -----------------------------------------
+       HEADER BUTTON
+       ----------------------------------------- */
+
+    .login-button-container {
+        gap: 0.3rem;
+    }
+
+
     .login-button,
     .header-register-btn {
-        font-size: 0.7rem; /* フォントサイズを小さく設定 */
-        padding: 0.4rem 0.6rem; /* ボタン自体のサイズも調整 */
+        min-height: 34px;
+
+        padding:
+            0
+            0.58rem;
+
+        font-size: 0.66rem;
     }
+
+
+    .hamburger-menu {
+        margin-left: 0.25rem;
+
+        font-size: 1.6rem;
+    }
+
+
+    /* -----------------------------------------
+       MAIN
+       ----------------------------------------- */
+
+    main {
+        margin-top:
+            var(--header-height);
+
+        padding:
+            0.8rem;
+    }
+
+
+    /* -----------------------------------------
+       FOOTER
+       ----------------------------------------- */
+
+    footer {
+        padding:
+            0.72rem
+            0;
+    }
+
+
+    .footer-content {
+        padding:
+            0
+            0.75rem;
+    }
+
+
+    .footer-items {
+        gap:
+            0.6rem;
+    }
+
+
+    .footer-items p {
+        font-size: 0.7rem;
+    }
+
+
+    .instagram-icon,
+    .linkedin-icon {
+        width: 19px;
+        height: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .header-register-btn,
+    .login-button {
+        padding:
+            0
+            0.48rem;
+
+        font-size: 0.62rem;
+    }
+
+
+    .hamburger-menu {
+        font-size: 1.5rem;
+    }
+
+
+    .logo-image {
+        height: 46px;
+    }
+
 }
