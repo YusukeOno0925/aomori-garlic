@@ -63,31 +63,69 @@ function fetchAnnouncements() {
                 return;
             }
 
-            announcements.slice(0, 3).forEach(item => {
-                const dateObj = new Date(item.timestamp);
+            announcements
+            .slice(0, 3)
+            .forEach(item => {
+
+                const dateObj =
+                    new Date(
+                        item.timestamp
+                    );
+
                 const formattedDate =
-                    `${dateObj.getFullYear()}/` +
-                    `${String(dateObj.getMonth() + 1).padStart(2, '0')}/` +
-                    `${String(dateObj.getDate()).padStart(2, '0')}`;
+                    `${dateObj.getFullYear()}.` +
+                    `${String(
+                        dateObj.getMonth() + 1
+                    ).padStart(2, '0')}.` +
+                    `${String(
+                        dateObj.getDate()
+                    ).padStart(2, '0')}`;
 
-                const card = document.createElement('a');
-                card.className = 'announcement-item';
-                card.href = `Announcements.html?id=${item.id}`;
 
-                card.innerHTML = `
-                    <div class="date">${formattedDate}</div>
-                    <div class="title">${item.title}</div>
-                    <div class="snippet">${item.content.slice(0, 60)}…</div>
+                const row =
+                    document.createElement(
+                        'a'
+                    );
+
+
+                row.className =
+                    'announcement-item';
+
+
+                row.href =
+                    `Announcements.html?id=${item.id}`;
+
+
+                row.innerHTML = `
+
+                    <span class="announcement-date">
+                        ${formattedDate}
+                    </span>
+
+                    <span class="announcement-category">
+                        NEWS
+                    </span>
+
+                    <span class="announcement-title">
+                        ${item.title}
+                    </span>
+
+                    <span
+                        class="announcement-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
                 `;
 
-                list.appendChild(card);
+
+                list.appendChild(
+                    row
+                );
+
             });
 
-            const more = document.createElement('a');
-            more.href = 'Announcements.html';
-            more.textContent = 'お知らせ一覧を見る';
-            more.className = 'announcements-more';
-            list.appendChild(more);
         })
         .catch(e => console.error(e));
 }
