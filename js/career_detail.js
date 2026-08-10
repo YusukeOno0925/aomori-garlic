@@ -45,17 +45,9 @@ async function initializeCareerDetail() {
 
     try {
 
-        // ----------------------------------------------------
-        // ログイン状態確認
-        // ----------------------------------------------------
-
         careerDetailIsLoggedIn =
             await checkCareerDetailLoginStatus();
 
-
-        // ----------------------------------------------------
-        // Career Detail取得
-        // ----------------------------------------------------
 
         const response =
             await fetch(
@@ -77,7 +69,6 @@ async function initializeCareerDetail() {
             throw new Error(
                 'キャリア情報を取得できませんでした。'
             );
-
         }
 
 
@@ -98,10 +89,6 @@ async function initializeCareerDetail() {
                 )
                 : [];
 
-
-        // ----------------------------------------------------
-        // Render
-        // ----------------------------------------------------
 
         renderPersonSnapshot(
             data,
@@ -149,9 +136,7 @@ async function initializeCareerDetail() {
         showPageError(
             'キャリア情報の読み込みに失敗しました。'
         );
-
     }
-
 }
 
 
@@ -184,9 +169,7 @@ async function checkCareerDetailLoginStatus() {
     } catch (error) {
 
         return false;
-
     }
-
 }
 
 
@@ -240,6 +223,12 @@ function renderPersonSnapshot(
         );
 
 
+    const latestCareerPoint =
+        getLatestCareerPoint(
+            companies
+        );
+
+
     const ageDecade =
         getAgeDecade(
             data.age
@@ -272,10 +261,6 @@ function renderPersonSnapshot(
         );
 
 
-    // --------------------------------------------------------
-    // Avatar
-    // --------------------------------------------------------
-
     if (avatar) {
 
         const avatarSource =
@@ -288,25 +273,15 @@ function renderPersonSnapshot(
             avatarSource
                 .charAt(0)
                 .toUpperCase();
-
     }
 
-
-    // --------------------------------------------------------
-    // Name
-    // --------------------------------------------------------
 
     if (title) {
 
         title.textContent =
             displayName;
-
     }
 
-
-    // --------------------------------------------------------
-    // Headline
-    // --------------------------------------------------------
 
     if (headline) {
 
@@ -318,13 +293,8 @@ function renderPersonSnapshot(
                 careerYears,
                 latestCompany
             });
-
     }
 
-
-    // --------------------------------------------------------
-    // Tags
-    // --------------------------------------------------------
 
     if (tags) {
 
@@ -336,7 +306,6 @@ function renderPersonSnapshot(
             tagValues.push(
                 `#${profession}`
             );
-
         }
 
 
@@ -345,7 +314,6 @@ function renderPersonSnapshot(
             tagValues.push(
                 `#経験${companies.length}社`
             );
-
         }
 
 
@@ -354,7 +322,6 @@ function renderPersonSnapshot(
             tagValues.push(
                 `#転機${decisions.length}件`
             );
-
         }
 
 
@@ -368,13 +335,8 @@ function renderPersonSnapshot(
                     `
                 )
                 .join('');
-
     }
 
-
-    // --------------------------------------------------------
-    // Snapshot
-    // --------------------------------------------------------
 
     if (!snapshot) {
         return;
@@ -390,7 +352,6 @@ function renderPersonSnapshot(
             label: '現在の職種',
             value: profession
         });
-
     }
 
 
@@ -407,7 +368,6 @@ function renderPersonSnapshot(
             value:
                 latestCompany.name
         });
-
     }
 
 
@@ -418,32 +378,30 @@ function renderPersonSnapshot(
             value:
                 `${companies.length}社`
         });
-
     }
 
 
     if (
-        latestCompany
+        latestCareerPoint
         &&
         isAvailableValue(
-            latestCompany.salary
+            latestCareerPoint.salary
         )
     ) {
 
         snapshotItems.push({
             label: '年収レンジ',
             value:
-                latestCompany.salary
+                latestCareerPoint.salary
         });
-
     }
 
 
     if (
-        latestCompany
+        latestCareerPoint
         &&
         isAvailableValue(
-            latestCompany.satisfaction_level
+            latestCareerPoint.satisfaction_level
         )
     ) {
 
@@ -451,10 +409,9 @@ function renderPersonSnapshot(
             label: '仕事満足度',
             value:
                 formatSatisfaction(
-                    latestCompany.satisfaction_level
+                    latestCareerPoint.satisfaction_level
                 )
         });
-
     }
 
 
@@ -468,7 +425,6 @@ function renderPersonSnapshot(
                     ? '1年未満'
                     : `約${careerYears}年`
         });
-
     }
 
 
@@ -492,7 +448,6 @@ function renderPersonSnapshot(
                 `
             )
             .join('');
-
 }
 
 
@@ -513,7 +468,6 @@ function getCareerDisplayName(
     ) {
 
         return rawName;
-
     }
 
 
@@ -537,7 +491,6 @@ function getCareerDisplayName(
         ||
         'キャリアストーリー'
     );
-
 }
 
 
@@ -557,7 +510,6 @@ function createCareerHeadline({
         pieces.push(
             `${companies.length}社`
         );
-
     }
 
 
@@ -568,7 +520,6 @@ function createCareerHeadline({
                 ? '1年未満'
                 : `約${careerYears}年`
         );
-
     }
 
 
@@ -585,7 +536,6 @@ function createCareerHeadline({
             +
             `${profession}領域を中心にキャリアを歩んできた人。`
         );
-
     }
 
 
@@ -602,7 +552,6 @@ function createCareerHeadline({
             +
             `${normalizeText(latestCompany.name)}でキャリアを歩んできた人。`
         );
-
     }
 
 
@@ -611,12 +560,10 @@ function createCareerHeadline({
         return (
             `${ageDecade}のキャリアストーリー。`
         );
-
     }
 
 
     return 'これまでのキャリアと意思決定を振り返ります。';
-
 }
 
 
@@ -658,7 +605,6 @@ function renderCareerJourney(
         `;
 
         return;
-
     }
 
 
@@ -675,7 +621,6 @@ function renderCareerJourney(
         }
 
         return;
-
     }
 
 
@@ -750,7 +695,6 @@ function renderCareerJourney(
 
                         </article>
                     `;
-
                 }
             )
             .join('');
@@ -769,7 +713,6 @@ function renderCareerJourney(
     if (section) {
         section.hidden = false;
     }
-
 }
 
 
@@ -844,10 +787,8 @@ function createJourneyNodes(
                                 ||
                                 company.endYear
                         });
-
                     }
                 );
-
             }
 
             else {
@@ -885,9 +826,7 @@ function createJourneyNodes(
                     endYear:
                         company.endYear
                 });
-
             }
-
         }
     );
 
@@ -926,7 +865,6 @@ function createJourneyNodes(
                 deduped.push(node);
 
                 return;
-
             }
 
 
@@ -948,7 +886,6 @@ function createJourneyNodes(
                     node;
 
                 return;
-
             }
 
 
@@ -967,9 +904,7 @@ function createJourneyNodes(
             ) {
 
                 deduped.push(node);
-
             }
-
         }
     );
 
@@ -990,7 +925,6 @@ function createJourneyNodes(
             if (yearDifference !== 0) {
 
                 return yearDifference;
-
             }
 
 
@@ -1003,13 +937,11 @@ function createJourneyNodes(
                     b.start
                 )
             );
-
         }
     );
 
 
     return deduped;
-
 }
 
 
@@ -1049,11 +981,9 @@ function renderTurningPoints(
     ) {
 
         section.hidden = true;
-
         container.innerHTML = '';
 
         return;
-
     }
 
 
@@ -1077,7 +1007,6 @@ function renderTurningPoints(
 
 
     section.hidden = false;
-
 }
 
 
@@ -1130,10 +1059,6 @@ function createTurningPointCard(
         .join(' / ');
 
 
-    // --------------------------------------------------------
-    // 未登録者の2件目以降
-    // --------------------------------------------------------
-
     if (
         !isLoggedIn
         &&
@@ -1178,7 +1103,6 @@ function createTurningPointCard(
 
                 </div>
 
-
                 ${
                     relatedCareer
                         ? `
@@ -1188,7 +1112,6 @@ function createTurningPointCard(
                         `
                         : ''
                 }
-
 
                 <div class="turning-point-card__locked-note">
 
@@ -1202,13 +1125,8 @@ function createTurningPointCard(
 
             </article>
         `;
-
     }
 
-
-    // --------------------------------------------------------
-    // Story Steps
-    // --------------------------------------------------------
 
     const storySteps = [
 
@@ -1309,7 +1227,6 @@ function createTurningPointCard(
 
                         </div>
 
-
                         <div class="turning-story-step__body">
 
                             <div class="turning-story-step__heading">
@@ -1335,7 +1252,6 @@ function createTurningPointCard(
                                 </div>
 
                             </div>
-
 
                             <p class="turning-story-step__answer">${escapeHTML(normalizeText(step.value))}</p>
 
@@ -1392,7 +1308,6 @@ function createTurningPointCard(
                     ${String(index + 1).padStart(2, '0')}
                 </div>
 
-
                 <div class="turning-point-card__meta">
 
                     <span class="turning-point-card__type">
@@ -1404,7 +1319,6 @@ function createTurningPointCard(
                     </h3>
 
                 </div>
-
 
                 ${
                     date
@@ -1418,7 +1332,6 @@ function createTurningPointCard(
 
             </div>
 
-
             ${
                 relatedCareer
                     ? `
@@ -1428,7 +1341,6 @@ function createTurningPointCard(
                     `
                     : ''
             }
-
 
             ${
                 storyHtml
@@ -1440,14 +1352,12 @@ function createTurningPointCard(
                     : ''
             }
 
-
             ${supplementaryHtml}
 
             ${sameChoiceHtml}
 
         </article>
     `;
-
 }
 
 
@@ -1474,7 +1384,6 @@ function createTurningPointSupplementary(
             value:
                 decision.unexpected_result
         });
-
     }
 
 
@@ -1490,14 +1399,12 @@ function createTurningPointSupplementary(
             value:
                 decision.same_choice_reason
         });
-
     }
 
 
     if (items.length === 0) {
 
         return '';
-
     }
 
 
@@ -1540,7 +1447,6 @@ function createTurningPointSupplementary(
 
         </div>
     `;
-
 }
 
 
@@ -1600,9 +1506,7 @@ function renderCareerCompass(
             ) {
 
                 values.push(value);
-
             }
-
         }
     );
 
@@ -1612,7 +1516,6 @@ function renderCareerCompass(
         section.hidden = true;
 
         return;
-
     }
 
 
@@ -1681,7 +1584,6 @@ function renderCareerCompass(
 
 
     section.hidden = false;
-
 }
 
 
@@ -1726,60 +1628,50 @@ function renderCareerOutcome(
     }
 
 
-    if (
-        !Array.isArray(companies)
-        ||
-        companies.length === 0
-    ) {
-
-        section.hidden = true;
-
-        return;
-
-    }
-
-
-    const sortedCompanies =
-        sortCompaniesChronologically(
+    const careerPoints =
+        createCareerOutcomePoints(
             companies
         );
 
 
-    const latestCompany =
-        getLatestCompany(
-            sortedCompanies
+    if (careerPoints.length === 0) {
+
+        section.hidden = true;
+
+        return;
+    }
+
+
+    const latestCareerPoint =
+        getLatestCareerPointFromPoints(
+            careerPoints
         );
 
-
-    // --------------------------------------------------------
-    // Current KPI
-    // --------------------------------------------------------
 
     const kpiItems = [];
 
 
     if (
-        latestCompany
+        latestCareerPoint
         &&
         isAvailableValue(
-            latestCompany.salary
+            latestCareerPoint.salary
         )
     ) {
 
         kpiItems.push({
             label: '現在の年収レンジ',
             value:
-                latestCompany.salary
+                latestCareerPoint.salary
         });
-
     }
 
 
     if (
-        latestCompany
+        latestCareerPoint
         &&
         isAvailableValue(
-            latestCompany.satisfaction_level
+            latestCareerPoint.satisfaction_level
         )
     ) {
 
@@ -1787,10 +1679,9 @@ function renderCareerOutcome(
             label: '現在の仕事満足度',
             value:
                 formatSatisfaction(
-                    latestCompany.satisfaction_level
+                    latestCareerPoint.satisfaction_level
                 )
         });
-
     }
 
 
@@ -1820,31 +1711,21 @@ function renderCareerOutcome(
             .join('');
 
 
-    // --------------------------------------------------------
-    // 推移に使えるデータ
-    // --------------------------------------------------------
-
-    const trendCompanies =
-        sortedCompanies.filter(
-            company =>
+    const trendPoints =
+        careerPoints.filter(
+            point =>
                 isAvailableValue(
-                    company.salary
+                    point.salary
                 )
                 ||
                 isAvailableValue(
-                    company.satisfaction_level
+                    point.satisfaction_level
                 )
         );
 
 
-    // --------------------------------------------------------
-    // 履歴1件
-    //
-    // グラフは表示しない
-    // --------------------------------------------------------
-
     if (
-        trendCompanies.length < 2
+        trendPoints.length < 2
     ) {
 
         destroyCareerOutcomeChart();
@@ -1872,103 +1753,468 @@ function renderCareerOutcome(
                     </p>
 
                     <p class="career-outcome-empty__sub">
-                        過去の勤務履歴が増えると、
+                        過去の役割履歴が増えると、
                         キャリアの変化を時系列で確認できます。
                     </p>
 
                 </div>
             `;
-
         }
 
 
         if (lock) {
-
             lock.hidden = true;
-
         }
 
 
         section.hidden = false;
 
         return;
-
     }
 
-
-    // --------------------------------------------------------
-    // 履歴2件以上
-    // --------------------------------------------------------
 
     if (!careerDetailIsLoggedIn) {
 
         destroyCareerOutcomeChart();
-    
+
+
         if (chartWrapper) {
-    
+
             chartWrapper.hidden = false;
-    
-            chartWrapper.classList.remove('is-locked');
-    
+
+            chartWrapper.classList.remove(
+                'is-locked'
+            );
+
+
             chartWrapper.innerHTML = `
                 <div class="career-outcome-guest">
-    
+
                     <div class="career-outcome-guest__icon">
                         🔒
                     </div>
-    
+
                     <p class="career-outcome-guest__title">
                         年収・満足度の変化を見る
                     </p>
-    
+
                     <p class="career-outcome-guest__text">
                         この人がキャリアの選択を重ねる中で、
                         年収や仕事満足度がどう変化してきたのかを確認できます。
                     </p>
-    
+
                     <a
                         href="/Register.html"
                         class="career-outcome-guest__cta"
                     >
                         無料で続きを見る
                     </a>
-    
+
                 </div>
             `;
         }
-    
+
+
         if (lock) {
             lock.hidden = true;
         }
-    
+
+
         section.hidden = false;
-    
+
         return;
     }
-    
-    
-    // ログイン済みだけグラフを描画
+
+
     restoreCareerOutcomeCanvas();
-    
+
+
     renderCareerOutcomeChart(
-        trendCompanies
+        trendPoints
     );
-    
+
+
     if (lock) {
         lock.hidden = true;
     }
-    
-    section.hidden = false;
 
+
+    section.hidden = false;
 }
 
 
 // ============================================================
-// 12. Outcome Chart
+// 12. Career Outcome Point Generation
+// ============================================================
+
+function createCareerOutcomePoints(
+    companies
+) {
+
+    if (!Array.isArray(companies)) {
+        return [];
+    }
+
+
+    const points = [];
+
+
+    companies.forEach(
+        company => {
+
+            const roles =
+                Array.isArray(company.roles)
+                    ? company.roles
+                    : [];
+
+
+            const validRoles =
+                roles.filter(
+                    role =>
+                        isAvailableValue(
+                            role.salary
+                        )
+                        ||
+                        isAvailableValue(
+                            role.satisfaction_level
+                        )
+                );
+
+
+            if (validRoles.length > 0) {
+
+                validRoles.forEach(
+                    (role, roleIndex) => {
+
+                        points.push({
+
+                            type:
+                                'role',
+
+                            companyId:
+                                company.id,
+
+                            company:
+                                normalizeText(
+                                    company.name
+                                )
+                                || '勤務先',
+
+                            roleId:
+                                role.id,
+
+                            role:
+                                normalizeText(
+                                    role.position
+                                )
+                                ||
+                                normalizeText(
+                                    role.job_category
+                                )
+                                ||
+                                `役割${roleIndex + 1}`,
+
+                            department:
+                                normalizeText(
+                                    role.department
+                                ),
+
+                            start:
+                                role.start_period,
+
+                            end:
+                                role.end_period,
+
+                            startYear:
+                                getYearFromDate(
+                                    role.start_period
+                                )
+                                ||
+                                company.startYear,
+
+                            endYear:
+                                getYearFromDate(
+                                    role.end_period
+                                )
+                                ||
+                                company.endYear,
+
+                            salary:
+                                role.salary,
+
+                            satisfaction_level:
+                                role.satisfaction_level,
+
+                            displayOrder:
+                                Number(
+                                    role.display_order
+                                )
+                        });
+                    }
+                );
+
+                return;
+            }
+
+
+            if (
+                isAvailableValue(
+                    company.salary
+                )
+                ||
+                isAvailableValue(
+                    company.satisfaction_level
+                )
+            ) {
+
+                points.push({
+
+                    type:
+                        'company',
+
+                    companyId:
+                        company.id,
+
+                    company:
+                        normalizeText(
+                            company.name
+                        )
+                        || '勤務先',
+
+                    roleId:
+                        null,
+
+                    role:
+                        normalizeText(
+                            company.position
+                        )
+                        ||
+                        normalizeText(
+                            company.job_category
+                        ),
+
+                    department:
+                        '',
+
+                    start:
+                        null,
+
+                    end:
+                        null,
+
+                    startYear:
+                        company.startYear,
+
+                    endYear:
+                        company.endYear,
+
+                    salary:
+                        company.salary,
+
+                    satisfaction_level:
+                        company.satisfaction_level,
+
+                    displayOrder:
+                        0
+                });
+            }
+        }
+    );
+
+
+    points.sort(
+        compareCareerOutcomePoints
+    );
+
+
+    return points;
+}
+
+
+function compareCareerOutcomePoints(
+    a,
+    b
+) {
+
+    const aDate =
+        getSortableDate(
+            a.start
+        );
+
+
+    const bDate =
+        getSortableDate(
+            b.start
+        );
+
+
+    if (
+        aDate > 0
+        &&
+        bDate > 0
+        &&
+        aDate !== bDate
+    ) {
+
+        return aDate - bDate;
+    }
+
+
+    const aYear =
+        getSortableYear(
+            a.startYear
+        );
+
+
+    const bYear =
+        getSortableYear(
+            b.startYear
+        );
+
+
+    if (aYear !== bYear) {
+
+        return aYear - bYear;
+    }
+
+
+    const aCompany =
+        Number(
+            a.companyId || 0
+        );
+
+
+    const bCompany =
+        Number(
+            b.companyId || 0
+        );
+
+
+    if (aCompany !== bCompany) {
+
+        return aCompany - bCompany;
+    }
+
+
+    const aOrder =
+        Number.isFinite(
+            a.displayOrder
+        )
+            ? a.displayOrder
+            : 9999;
+
+
+    const bOrder =
+        Number.isFinite(
+            b.displayOrder
+        )
+            ? b.displayOrder
+            : 9999;
+
+
+    if (aOrder !== bOrder) {
+
+        return aOrder - bOrder;
+    }
+
+
+    return (
+        Number(a.roleId || 0)
+        -
+        Number(b.roleId || 0)
+    );
+}
+
+
+function getLatestCareerPoint(
+    companies
+) {
+
+    const points =
+        createCareerOutcomePoints(
+            companies
+        );
+
+
+    return getLatestCareerPointFromPoints(
+        points
+    );
+}
+
+
+function getLatestCareerPointFromPoints(
+    points
+) {
+
+    if (
+        !Array.isArray(points)
+        ||
+        points.length === 0
+    ) {
+
+        return null;
+    }
+
+
+    const currentPoints =
+        points.filter(
+            point =>
+                isCurrentCareerPoint(
+                    point
+                )
+        );
+
+
+    if (currentPoints.length > 0) {
+
+        return currentPoints[
+            currentPoints.length - 1
+        ];
+    }
+
+
+    return points[
+        points.length - 1
+    ];
+}
+
+
+function isCurrentCareerPoint(
+    point
+) {
+
+    const end =
+        normalizeText(
+            point.end
+        )
+        .toLowerCase();
+
+
+    const endYear =
+        normalizeText(
+            point.endYear
+        )
+        .toLowerCase();
+
+
+    return (
+        !end
+        ||
+        endYear === '現時点'
+        ||
+        endYear === '現在'
+        ||
+        endYear === 'present'
+    );
+}
+
+
+// ============================================================
+// 13. Outcome Chart
 // ============================================================
 
 function renderCareerOutcomeChart(
-    companies
+    points
 ) {
 
     const canvas =
@@ -1990,139 +2236,81 @@ function renderCareerOutcomeChart(
     ) {
 
         if (wrapper) {
-
             wrapper.hidden = true;
-
         }
 
         return;
-
     }
 
 
-    const validCompanies =
-        companies.filter(
-            company =>
+    const validPoints =
+        points.filter(
+            point =>
                 isAvailableValue(
-                    company.salary
+                    point.salary
                 )
                 ||
                 isAvailableValue(
-                    company.satisfaction_level
+                    point.satisfaction_level
                 )
         );
 
 
-    if (
-        validCompanies.length < 2
-    ) {
+    if (validPoints.length < 2) {
 
         destroyCareerOutcomeChart();
 
         return;
-
-    }
-
-
-    let displayCompanies;
-
-
-    // --------------------------------------------------------
-    // Logged in
-    // --------------------------------------------------------
-
-    if (careerDetailIsLoggedIn) {
-
-        displayCompanies =
-            validCompanies;
-
-    }
-
-    // --------------------------------------------------------
-    // Guest
-    // --------------------------------------------------------
-
-    else {
-
-        /*
-         * 3件以上なら最後の1件を隠す。
-         * 2件の場合は2件をPreview表示し、
-         * CSS側でロック表現を付ける。
-         */
-
-        if (
-            validCompanies.length >= 3
-        ) {
-
-            displayCompanies =
-                validCompanies.slice(
-                    0,
-                    validCompanies.length - 1
-                );
-
-        }
-
-        else {
-
-            displayCompanies =
-                validCompanies;
-
-        }
-
     }
 
 
     const labels =
-        displayCompanies.map(
-            company =>
-                createOutcomeLabel(
-                    company
+        validPoints.map(
+            point =>
+                createOutcomePointLabel(
+                    point
                 )
         );
 
 
     const salaryValues =
-        displayCompanies.map(
-            company =>
+        validPoints.map(
+            point =>
                 salaryToNumber(
-                    company.salary
+                    point.salary
                 )
         );
 
 
     const satisfactionValues =
-        displayCompanies.map(
-            company =>
+        validPoints.map(
+            point =>
                 parseSatisfaction(
-                    company.satisfaction_level
+                    point.satisfaction_level
                 )
         );
 
 
     const salaryOriginalLabels =
-        displayCompanies.map(
-            company =>
+        validPoints.map(
+            point =>
                 normalizeText(
-                    company.salary
+                    point.salary
                 )
         );
 
 
     const satisfactionOriginalLabels =
-        displayCompanies.map(
-            company =>
+        validPoints.map(
+            point =>
                 formatSatisfaction(
-                    company.satisfaction_level
+                    point.satisfaction_level
                 )
         );
 
 
     destroyCareerOutcomeChart();
 
-
-    // --------------------------------------------------------
-    // Chart
-    // --------------------------------------------------------
 
     careerOutcomeChart =
         new Chart(
@@ -2178,7 +2366,6 @@ function renderCareerOutcomeChart(
                                 0.3
                         },
 
-
                         {
                             label:
                                 '仕事満足度',
@@ -2221,7 +2408,6 @@ function renderCareerOutcomeChart(
                         }
 
                     ]
-
                 },
 
 
@@ -2237,7 +2423,6 @@ function renderCareerOutcomeChart(
                         mode: 'index',
 
                         intersect: false
-
                     },
 
 
@@ -2252,9 +2437,7 @@ function renderCareerOutcomeChart(
                             bottom: 8,
 
                             left: 4
-
                         }
-
                     },
 
 
@@ -2293,9 +2476,7 @@ function renderCareerOutcomeChart(
                                     weight:
                                         '600'
                                 }
-
                             }
-
                         },
 
 
@@ -2305,6 +2486,35 @@ function renderCareerOutcomeChart(
 
 
                             callbacks: {
+
+                                title(context) {
+
+                                    const index =
+                                        context[0]
+                                            ?.dataIndex;
+
+
+                                    const point =
+                                        validPoints[index];
+
+
+                                    if (!point) {
+                                        return '';
+                                    }
+
+
+                                    const parts = [
+                                        point.company,
+                                        point.role
+                                    ]
+                                    .filter(Boolean);
+
+
+                                    return parts.join(
+                                        ' / '
+                                    );
+                                },
+
 
                                 label(context) {
 
@@ -2323,7 +2533,6 @@ function renderCareerOutcomeChart(
                                                 '-'
                                             )
                                         );
-
                                     }
 
 
@@ -2338,13 +2547,9 @@ function renderCareerOutcomeChart(
                                             '-'
                                         )
                                     );
-
                                 }
-
                             }
-
                         }
-
                     },
 
 
@@ -2356,7 +2561,6 @@ function renderCareerOutcomeChart(
 
                                 display:
                                     false
-
                             },
 
 
@@ -2364,7 +2568,6 @@ function renderCareerOutcomeChart(
 
                                 display:
                                     false
-
                             },
 
 
@@ -2376,15 +2579,14 @@ function renderCareerOutcomeChart(
                                 font: {
 
                                     size: 10
-
                                 },
 
                                 maxRotation: 0,
 
-                                minRotation: 0
+                                minRotation: 0,
 
+                                autoSkip: false
                             }
-
                         },
 
 
@@ -2404,7 +2606,6 @@ function renderCareerOutcomeChart(
 
                                 color:
                                     'rgba(41,39,34,0.06)'
-
                             },
 
 
@@ -2412,7 +2613,6 @@ function renderCareerOutcomeChart(
 
                                 display:
                                     false
-
                             },
 
 
@@ -2424,18 +2624,14 @@ function renderCareerOutcomeChart(
                                 font: {
 
                                     size: 10
-
                                 },
 
 
                                 callback(value) {
 
                                     return `${value}万`;
-
                                 }
-
                             }
-
                         },
 
 
@@ -2456,7 +2652,6 @@ function renderCareerOutcomeChart(
 
                                 drawOnChartArea:
                                     false
-
                             },
 
 
@@ -2464,7 +2659,6 @@ function renderCareerOutcomeChart(
 
                                 display:
                                     false
-
                             },
 
 
@@ -2479,25 +2673,17 @@ function renderCareerOutcomeChart(
                                 font: {
 
                                     size: 10
-
                                 },
 
 
                                 callback(value) {
 
                                     return `${value}`;
-
                                 }
-
                             }
-
                         }
-
                     }
-
-                },
-
-
+                }
             }
         );
 
@@ -2505,14 +2691,12 @@ function renderCareerOutcomeChart(
     if (wrapper) {
 
         wrapper.hidden = false;
-
     }
-
 }
 
 
 // ============================================================
-// 13. Outcome Helpers
+// 14. Outcome Helpers
 // ============================================================
 
 function destroyCareerOutcomeChart() {
@@ -2522,9 +2706,7 @@ function destroyCareerOutcomeChart() {
         careerOutcomeChart.destroy();
 
         careerOutcomeChart = null;
-
     }
-
 }
 
 
@@ -2537,9 +2719,7 @@ function restoreCareerOutcomeCanvas() {
 
 
     if (!wrapper) {
-
         return;
-
     }
 
 
@@ -2554,7 +2734,6 @@ function restoreCareerOutcomeCanvas() {
         wrapper.hidden = false;
 
         return;
-
     }
 
 
@@ -2564,54 +2743,61 @@ function restoreCareerOutcomeCanvas() {
 
 
     wrapper.hidden = false;
-
 }
 
 
-function createOutcomeLabel(
-    company
+function createOutcomePointLabel(
+    point
 ) {
 
     const start =
-        normalizeText(
-            company.startYear
-        );
+        point.start
+            ? formatYearMonth(
+                point.start
+            )
+            : (
+                point.startYear
+                    ? String(point.startYear)
+                    : ''
+            );
 
 
-    const end =
+    const role =
         normalizeText(
-            company.endYear
+            point.role
         );
 
 
     if (
         start
         &&
-        end
-        &&
-        start !== end
+        role
     ) {
 
-        return `${start}–${end}`;
-
+        return [
+            start,
+            role
+        ];
     }
 
 
     if (start) {
-
         return start;
+    }
 
+
+    if (role) {
+        return role;
     }
 
 
     return (
         normalizeText(
-            company.name
+            point.company
         )
         ||
         'Career'
     );
-
 }
 
 
@@ -2626,7 +2812,6 @@ function salaryToNumber(
     ) {
 
         return null;
-
     }
 
 
@@ -2652,7 +2837,6 @@ function salaryToNumber(
     ) {
 
         return null;
-
     }
 
 
@@ -2667,14 +2851,12 @@ function salaryToNumber(
     if (parsed.length === 0) {
 
         return null;
-
     }
 
 
     if (parsed.length === 1) {
 
         return parsed[0];
-
     }
 
 
@@ -2687,12 +2869,11 @@ function salaryToNumber(
         /
         2
     );
-
 }
 
 
 // ============================================================
-// 14. MESSAGE
+// 15. MESSAGE
 // ============================================================
 
 function renderCareerMessage(
@@ -2718,7 +2899,6 @@ function renderCareerMessage(
     ) {
 
         return;
-
     }
 
 
@@ -2731,7 +2911,6 @@ function renderCareerMessage(
         section.hidden = true;
 
         return;
-
     }
 
 
@@ -2747,11 +2926,9 @@ function renderCareerMessage(
     if (!target) {
 
         section.hidden = true;
-
         message.innerHTML = '';
 
         return;
-
     }
 
 
@@ -2775,12 +2952,11 @@ function renderCareerMessage(
 
 
     section.hidden = false;
-
 }
 
 
 // ============================================================
-// 15. Access UI
+// 16. Access UI
 // ============================================================
 
 function updateCareerAccessUI() {
@@ -2790,12 +2966,11 @@ function updateCareerAccessUI() {
     updateOutcomeAccess();
 
     updateMessageAccess();
-
 }
 
 
 // ============================================================
-// 16. Turning Point Value Wall
+// 17. Turning Point Value Wall
 // ============================================================
 
 function updateCareerValueWall() {
@@ -2807,20 +2982,17 @@ function updateCareerValueWall() {
 
 
     if (!wall) {
-
         return;
-
     }
 
 
     wall.hidden =
         careerDetailIsLoggedIn;
-
 }
 
 
 // ============================================================
-// 17. Outcome Access
+// 18. Outcome Access
 // ============================================================
 
 function updateOutcomeAccess() {
@@ -2838,15 +3010,9 @@ function updateOutcomeAccess() {
 
 
     if (!wrapper) {
-
         return;
-
     }
 
-
-    // --------------------------------------------------------
-    // 1件だけの場合
-    // --------------------------------------------------------
 
     const emptyState =
         wrapper.querySelector(
@@ -2854,7 +3020,17 @@ function updateOutcomeAccess() {
         );
 
 
-    if (emptyState) {
+    const guestState =
+        wrapper.querySelector(
+            '.career-outcome-guest'
+        );
+
+
+    if (
+        emptyState
+        ||
+        guestState
+    ) {
 
         wrapper.classList.remove(
             'is-locked'
@@ -2862,20 +3038,13 @@ function updateOutcomeAccess() {
 
 
         if (lock) {
-
             lock.hidden = true;
-
         }
 
 
         return;
-
     }
 
-
-    // --------------------------------------------------------
-    // Logged in
-    // --------------------------------------------------------
 
     if (careerDetailIsLoggedIn) {
 
@@ -2885,16 +3054,9 @@ function updateOutcomeAccess() {
 
 
         if (lock) {
-
             lock.hidden = true;
-
         }
-
     }
-
-    // --------------------------------------------------------
-    // Guest
-    // --------------------------------------------------------
 
     else {
 
@@ -2904,18 +3066,14 @@ function updateOutcomeAccess() {
 
 
         if (lock) {
-
             lock.hidden = false;
-
         }
-
     }
-
 }
 
 
 // ============================================================
-// 18. Message Access
+// 19. Message Access
 // ============================================================
 
 function updateMessageAccess() {
@@ -2945,7 +3103,6 @@ function updateMessageAccess() {
     ) {
 
         return;
-
     }
 
 
@@ -2962,11 +3119,8 @@ function updateMessageAccess() {
 
 
         if (lock) {
-
             lock.hidden = true;
-
         }
-
     }
 
     else {
@@ -2982,18 +3136,14 @@ function updateMessageAccess() {
 
 
         if (lock) {
-
             lock.hidden = false;
-
         }
-
     }
-
 }
 
 
 // ============================================================
-// 19. Sorting
+// 20. Sorting
 // ============================================================
 
 function sortDecisionsNewestFirst(
@@ -3025,7 +3175,6 @@ function sortDecisionsNewestFirst(
                 return (
                     bDate - aDate
                 );
-
             }
 
 
@@ -3038,10 +3187,8 @@ function sortDecisionsNewestFirst(
                     a.id || 0
                 )
             );
-
         }
     );
-
 }
 
 
@@ -3070,15 +3217,13 @@ function sortCompaniesChronologically(
             return (
                 aYear - bYear
             );
-
         }
     );
-
 }
 
 
 // ============================================================
-// 20. Company Helpers
+// 21. Company Helpers
 // ============================================================
 
 function getLatestCompany(
@@ -3092,7 +3237,6 @@ function getLatestCompany(
     ) {
 
         return null;
-
     }
 
 
@@ -3108,7 +3252,6 @@ function getLatestCompany(
     if (current) {
 
         return current;
-
     }
 
 
@@ -3125,7 +3268,6 @@ function getLatestCompany(
         ||
         null
     );
-
 }
 
 
@@ -3149,7 +3291,6 @@ function isCurrentCareer(
         ||
         end === 'present'
     );
-
 }
 
 
@@ -3164,7 +3305,6 @@ function calculateCareerYears(
     ) {
 
         return null;
-
     }
 
 
@@ -3184,7 +3324,6 @@ function calculateCareerYears(
     if (years.length === 0) {
 
         return null;
-
     }
 
 
@@ -3203,12 +3342,11 @@ function calculateCareerYears(
         0,
         currentYear - firstYear
     );
-
 }
 
 
 // ============================================================
-// 21. Date Helpers
+// 22. Date Helpers
 // ============================================================
 
 function formatCompanyPeriodFromNode(
@@ -3238,7 +3376,6 @@ function formatCompanyPeriodFromNode(
     ) {
 
         return `${start} – ${end}`;
-
     }
 
 
@@ -3249,7 +3386,6 @@ function formatCompanyPeriodFromNode(
         ||
         ''
     );
-
 }
 
 
@@ -3265,9 +3401,7 @@ function formatCareerPeriod(
 
 
     if (!startText) {
-
         return '';
-
     }
 
 
@@ -3282,7 +3416,6 @@ function formatCareerPeriod(
     return (
         `${startText} – ${endText}`
     );
-
 }
 
 
@@ -3297,9 +3430,7 @@ function formatDecisionDate(
 
 
     if (!date) {
-
         return '';
-
     }
 
 
@@ -3313,7 +3444,6 @@ function formatDecisionDate(
     .format(
         date
     );
-
 }
 
 
@@ -3328,9 +3458,7 @@ function formatYearMonth(
 
 
     if (!date) {
-
         return '';
-
     }
 
 
@@ -3339,7 +3467,6 @@ function formatYearMonth(
         +
         `${date.getMonth() + 1}月`
     );
-
 }
 
 
@@ -3358,7 +3485,6 @@ function getYearFromDate(
             ? date.getFullYear()
             : null
     );
-
 }
 
 
@@ -3377,7 +3503,6 @@ function getSortableYear(
             ? number
             : 9999
     );
-
 }
 
 
@@ -3396,7 +3521,6 @@ function getSortableDate(
             ? date.getTime()
             : 0
     );
-
 }
 
 
@@ -3405,9 +3529,7 @@ function parseDateOnly(
 ) {
 
     if (!value) {
-
         return null;
-
     }
 
 
@@ -3432,12 +3554,11 @@ function parseDateOnly(
             ? null
             : date
     );
-
 }
 
 
 // ============================================================
-// 22. Satisfaction Helpers
+// 23. Satisfaction Helpers
 // ============================================================
 
 function parseSatisfaction(
@@ -3451,7 +3572,6 @@ function parseSatisfaction(
     ) {
 
         return null;
-
     }
 
 
@@ -3463,9 +3583,7 @@ function parseSatisfaction(
 
 
     if (!match) {
-
         return null;
-
     }
 
 
@@ -3480,7 +3598,6 @@ function parseSatisfaction(
             ? number
             : null
     );
-
 }
 
 
@@ -3499,17 +3616,15 @@ function formatSatisfaction(
         return normalizeText(
             value
         );
-
     }
 
 
     return `${number} / 5`;
-
 }
 
 
 // ============================================================
-// 23. Text / UI Helpers
+// 24. Text / UI Helpers
 // ============================================================
 
 function getElement(
@@ -3527,14 +3642,11 @@ function getElement(
         if (element) {
 
             return element;
-
         }
-
     }
 
 
     return null;
-
 }
 
 
@@ -3555,14 +3667,12 @@ function getAgeDecade(
     ) {
 
         return '';
-
     }
 
 
     return (
         `${Math.floor(number / 10) * 10}代`
     );
-
 }
 
 
@@ -3578,7 +3688,6 @@ function looksLikeEmail(
             value
         )
     );
-
 }
 
 
@@ -3594,7 +3703,6 @@ function normalizeComparable(
         /\s+/g,
         ''
     );
-
 }
 
 
@@ -3609,13 +3717,11 @@ function normalizeText(
     ) {
 
         return '';
-
     }
 
 
     return String(value)
         .trim();
-
 }
 
 
@@ -3630,9 +3736,7 @@ function isAvailableValue(
 
 
     if (!text) {
-
         return false;
-
     }
 
 
@@ -3645,7 +3749,6 @@ function isAvailableValue(
     .includes(
         text.toLowerCase()
     );
-
 }
 
 
@@ -3667,7 +3770,6 @@ function truncateText(
     ) {
 
         return text;
-
     }
 
 
@@ -3677,7 +3779,6 @@ function truncateText(
             maxLength
         )}…`
     );
-
 }
 
 
@@ -3692,9 +3793,7 @@ function createMessagePreview(
 
 
     if (!text) {
-
         return '';
-
     }
 
 
@@ -3703,7 +3802,6 @@ function createMessagePreview(
     ) {
 
         return `${text}…`;
-
     }
 
 
@@ -3713,7 +3811,6 @@ function createMessagePreview(
             28
         )}…`
     );
-
 }
 
 
@@ -3728,7 +3825,6 @@ function escapeHTML(
     ) {
 
         return '';
-
     }
 
 
@@ -3744,12 +3840,11 @@ function escapeHTML(
                 '>': '&gt;'
             })[match]
         );
-
 }
 
 
 // ============================================================
-// 24. Error
+// 25. Error
 // ============================================================
 
 function showPageError(
@@ -3763,9 +3858,7 @@ function showPageError(
 
 
     if (!main) {
-
         return;
-
     }
 
 
@@ -3778,5 +3871,4 @@ function showPageError(
 
         </section>
     `;
-
 }

@@ -131,7 +131,7 @@ main.career-detail-page {
 }
 
 
-/* 莉砲SS縺ｨ縺ｮ蟷ｲ貂蛾亟豁｢ */
+/* 闔臥�ｲSS邵ｺ�ｨ邵ｺ�ｮ陝ｷ�ｲ雋り崟莠溯ｱ�ｽ｢ */
 
 .career-detail-page .career-section-header,
 .career-detail-page .career-compact-header,
@@ -2112,9 +2112,9 @@ main.career-detail-page {
    ========================================================= */
 
 /*
- * JS縺梧悴繝ｭ繧ｰ繧､繝ｳ譎ゅ↓ .career-outcome-guest 繧�
- * chartWrapper 蜀�∈逕滓�縺吶ｋ縲�
- * 縺昴�蝣ｴ蜷医�繧ｰ繝ｩ繝慕畑縺ｮ蝗ｺ螳夐ｫ倥＆ 350px 繧定ｧ｣髯､縺吶ｋ縲�
+ * JS邵ｺ譴ｧ謔ｴ郢晢ｽｭ郢ｧ�ｰ郢ｧ�､郢晢ｽｳ隴弱ｅ竊� .career-outcome-guest 郢ｧ�ｽ
+ * chartWrapper 陷�ｽ竏磯墓ｻ難ｿｽ邵ｺ蜷ｶ�狗ｸｲ�ｽ
+ * 邵ｺ譏ｴ�ｽ陜｣�ｴ陷ｷ蛹ｻ�ｽ郢ｧ�ｰ郢晢ｽｩ郢晄�逡醍ｸｺ�ｮ陜暦ｽｺ陞ｳ螟撰ｽｫ蛟･�� 350px 郢ｧ螳夲ｽｧ�｣鬮ｯ�､邵ｺ蜷ｶ�狗ｸｲ�ｽ
  */
 
 .career-outcome__chart:has(.career-outcome-guest) {
@@ -2311,11 +2311,11 @@ main.career-detail-page {
    ========================================================= */
 
 /*
- * 迴ｾ蝨ｨ縺ｮJS縺ｧ縺ｯ .career-outcome-guest 蛛ｴ縺ｧ
- * 譛ｪ繝ｭ繧ｰ繧､繝ｳ繝ｦ繝ｼ繧ｶ繝ｼ蜷代￠縺ｮ蟆守ｷ壹ｒ陦ｨ遉ｺ縺吶ｋ縲�
+ * 霑ｴ�ｾ陜ｨ�ｨ邵ｺ�ｮJS邵ｺ�ｧ邵ｺ�ｯ .career-outcome-guest 陋幢ｽｴ邵ｺ�ｧ
+ * 隴幢ｽｪ郢晢ｽｭ郢ｧ�ｰ郢ｧ�､郢晢ｽｳ郢晢ｽｦ郢晢ｽｼ郢ｧ�ｶ郢晢ｽｼ陷ｷ莉｣��邵ｺ�ｮ陝�ｮ茨ｽｷ螢ｹ�帝勗�ｨ驕会ｽｺ邵ｺ蜷ｶ�狗ｸｲ�ｽ
  *
- * 譌ｧ .career-outcome-lock 縺ｯ菴ｿ逕ｨ縺励↑縺�◆繧√�
- * CSS蛛ｴ縺ｧ繧ょｮ悟�縺ｫ髱櫁｡ｨ遉ｺ縺ｨ縺吶ｋ縲�
+ * 隴鯉ｽｧ .career-outcome-lock 邵ｺ�ｯ闖ｴ�ｿ騾包ｽｨ邵ｺ蜉ｱ竊醍ｸｺ�ｽ笳�ｹｧ竏堋�ｽ
+ * CSS陋幢ｽｴ邵ｺ�ｧ郢ｧ繧�ｽｮ謔滂ｿｽ邵ｺ�ｫ鬮ｱ讚�ｽ｡�ｨ驕会ｽｺ邵ｺ�ｨ邵ｺ蜷ｶ�狗ｸｲ�ｽ
  */
 
 .career-outcome-lock,
@@ -2329,7 +2329,7 @@ main.career-detail-page {
 
 /* =========================================================
    22. MESSAGE
-   莉翫�閾ｪ蛻�°繧峨√≠縺ｮ鬆��閾ｪ蛻�∈
+   闔臥ｿｫ�ｽ髢ｾ�ｪ陋ｻ�ｽﾂｰ郢ｧ蟲ｨﾂ竏壺旺邵ｺ�ｮ鬯�ｿｽ�ｽ髢ｾ�ｪ陋ｻ�ｽ竏�
    ========================================================= */
 .career-message-section {
 
@@ -2501,7 +2501,7 @@ main.career-detail-page {
 }
 
 
-/* 譛ｪ逋ｻ骭ｲ繝ｦ繝ｼ繧ｶ繝ｼ */
+/* 隴幢ｽｪ騾具ｽｻ鬪ｭ�ｲ郢晢ｽｦ郢晢ｽｼ郢ｧ�ｶ郢晢ｽｼ */
 
 .career-message.is-locked {
 
@@ -2664,7 +2664,7 @@ footer a {
 
 /* =========================================================
    COMPASS + OUTCOME
-   PC縺ｧ縺ｯ讓ｪ荳ｦ縺ｳ縲∫強縺�判髱｢縺ｧ縺ｯ邵ｦ荳ｦ縺ｳ
+   PC邵ｺ�ｧ邵ｺ�ｯ隶難ｽｪ闕ｳ�ｦ邵ｺ�ｳ邵ｲ竏ｫ蠑ｷ邵ｺ�ｽ蛻､鬮ｱ�｢邵ｺ�ｧ邵ｺ�ｯ驍ｵ�ｦ闕ｳ�ｦ邵ｺ�ｳ
    ========================================================= */
 
    @media (min-width: 1101px) {
@@ -4313,3 +4313,73 @@ main.career-detail-page {
 
 
 
+
+/* =========================================================
+   34. PC LAYOUT FIX (2026-08-10)
+   COMPASS / OUTCOME 縺ｮPC陦ｨ遉ｺ蟠ｩ繧後ｒ菫ｮ豁｣
+   ========================================================= */
+
+@media (min-width: 1101px) {
+
+    /* 2繧ｫ繝ｼ繝峨ｒ讓ｪ荳ｦ縺ｳ縺ｫ縺吶ｋ縺後�ｫ倥＆縺ｯ蜀�ｮｹ驥上↓蜷医ｏ縺帙ｋ */
+    .career-gps-insight-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        gap: 22px;
+        align-items: start;
+    }
+
+    .career-compass-section,
+    .career-outcome-section {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        box-sizing: border-box;
+    }
+
+    /* COMPASS縺ｯ蜊雁ｹ�き繝ｼ繝牙�縺ｪ縺ｮ縺ｧ3蛻励↓縺励↑縺��
+       1莉ｶ縺励°縺ｪ縺��ｴ蜷医ｂ繧ｫ繝ｼ繝牙ｹ�＞縺｣縺ｱ縺�↓陦ｨ遉ｺ縺吶ｋ縲� */
+    .career-compass__values {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        width: 100%;
+    }
+
+    .compass-value {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        grid-template-columns: 34px minmax(0, 1fr);
+        align-items: center;
+    }
+
+    .compass-value__text {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: normal;
+    }
+
+    /* KPI縺ｯOUTCOME繧ｫ繝ｼ繝峨�讓ｪ蟷�＞縺｣縺ｱ縺�ｒ2蛻�牡 */
+    .career-outcome__kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    /* Chart.js縺瑚ｦｪ蟷�ｒ謚ｼ縺怜ｺ�￡縺ｪ縺�ｈ縺�↓縺吶ｋ */
+    .career-outcome__chart {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* 1101px逶ｴ蜑阪〒繧１ROFILE縺檎ｪｮ螻医↓縺ｪ繧翫☆縺弱↑縺�ｈ縺�↓縺吶ｋ */
+@media (min-width: 901px) and (max-width: 1100px) {
+    .career-profile {
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    }
+
+    .career-compass__values {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
