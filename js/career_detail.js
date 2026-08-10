@@ -2363,7 +2363,7 @@ function renderCareerOutcomeChart(
                                 true,
 
                             tension:
-                                0.3
+                                0
                         },
 
                         {
@@ -2404,7 +2404,7 @@ function renderCareerOutcomeChart(
                                 true,
 
                             tension:
-                                0.3
+                                0
                         }
 
                     ]
@@ -2645,7 +2645,7 @@ function renderCareerOutcomeChart(
 
                             min: 0,
 
-                            max: 5,
+                            max: 5.5,
 
 
                             grid: {
