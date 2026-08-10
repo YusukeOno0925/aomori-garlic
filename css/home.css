@@ -4,10 +4,17 @@
 
    :root {
     --home-bg: #f7f5f1;
+
     --home-surface: #ffffff;
     --home-surface-soft: #fbfaf7;
-    --home-surface-warm: #f2eee7;
-    --home-surface-olive: #eef0e6;
+
+    /* warm */
+    --home-surface-warm: #f3ede5;
+    --home-surface-warm-strong: #ebe1d5;
+
+    /* olive */
+    --home-surface-olive: #eef1e3;
+    --home-surface-olive-strong: #e3e8d3;
 
     --home-text: #2f2924;
     --home-text-sub: #6f655c;
@@ -15,13 +22,14 @@
 
     --home-brown: #574637;
     --home-brown-dark: #403229;
+    --home-brown-soft: #735e4c;
 
     --home-olive: #74804f;
     --home-olive-dark: #596238;
     --home-olive-light: #a6af82;
 
     --home-line: rgba(87, 70, 55, 0.12);
-    --home-line-strong: rgba(116, 128, 79, 0.26);
+    --home-line-strong: rgba(116, 128, 79, 0.28);
 
     --home-radius-sm: 14px;
     --home-radius-md: 20px;
@@ -48,8 +56,12 @@ html {
 
 body {
     margin: 0;
-    background: var(--home-bg);
-    color: var(--home-text);
+
+    background:
+        var(--home-bg);
+
+    color:
+        var(--home-text);
 
     font-family:
         'Roboto',
@@ -68,13 +80,15 @@ main.career-gps-home {
         32px
         72px;
 
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 }
 
 main.career-gps-home *,
 main.career-gps-home *::before,
 main.career-gps-home *::after {
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 }
 
 
@@ -83,38 +97,53 @@ main.career-gps-home *::after {
    ========================================================= */
 
 .home-eyebrow {
-    margin: 0 0 9px;
+    margin:
+        0
+        0
+        9px;
 
-    color: var(--home-olive-dark);
+    color:
+        var(--home-olive-dark);
 
-    font-size: 0.68rem;
-    font-weight: 800;
+    font-size:
+        0.68rem;
 
-    letter-spacing: 0.17em;
-    line-height: 1.4;
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.17em;
+
+    line-height:
+        1.4;
 }
 
 .home-section-heading {
-    max-width: 620px;
+    max-width:
+        620px;
 }
 
 .home-section-heading--center {
-    max-width: 720px;
+    max-width:
+        720px;
 
     margin:
         0
         auto
         30px;
 
-    text-align: center;
+    text-align:
+        center;
 }
 
 .home-section-heading h2,
 .home-section-heading-row h2,
 .personalized-heading h2 {
-    margin: 0;
+    margin:
+        0;
 
-    color: var(--home-text);
+    color:
+        var(--home-text);
 
     font-size:
         clamp(
@@ -123,55 +152,83 @@ main.career-gps-home *::after {
             2.15rem
         );
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    letter-spacing: -0.025em;
-    line-height: 1.32;
+    letter-spacing:
+        -0.025em;
+
+    line-height:
+        1.32;
 }
 
 .home-section-heading > p:last-child,
 .home-section-heading-row > div > p:last-child,
 .personalized-description {
-    margin: 10px 0 0;
+    margin:
+        10px
+        0
+        0;
 
-    color: var(--home-text-sub);
+    color:
+        var(--home-text-sub);
 
-    font-size: 0.86rem;
-    line-height: 1.75;
+    font-size:
+        0.86rem;
+
+    line-height:
+        1.75;
 }
 
 .home-section-heading-row {
-    display: flex;
+    display:
+        flex;
 
-    align-items: flex-end;
-    justify-content: space-between;
+    align-items:
+        flex-end;
 
-    gap: 28px;
+    justify-content:
+        space-between;
 
-    margin-bottom: 24px;
+    gap:
+        28px;
+
+    margin-bottom:
+        24px;
 }
 
 .home-section-link {
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    flex: 0 0 auto;
+    flex:
+        0 0
+        auto;
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 7px;
+    gap:
+        7px;
 
-    padding-bottom: 3px;
+    padding-bottom:
+        3px;
 
     border-bottom:
         1px solid
         rgba(89, 98, 56, 0.34);
 
-    color: var(--home-olive-dark);
+    color:
+        var(--home-olive-dark);
 
-    font-size: 0.77rem;
-    font-weight: 800;
+    font-size:
+        0.77rem;
 
-    text-decoration: none;
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
 
     transition:
         gap 0.2s ease,
@@ -179,7 +236,8 @@ main.career-gps-home *::after {
 }
 
 .home-section-link:hover {
-    gap: 11px;
+    gap:
+        11px;
 
     border-color:
         var(--home-olive-dark);
@@ -192,23 +250,36 @@ main.career-gps-home *::after {
 
 .home-primary-button,
 .home-secondary-button {
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    align-items: center;
-    justify-content: center;
+    align-items:
+        center;
 
-    gap: 10px;
+    justify-content:
+        center;
 
-    min-height: 48px;
+    gap:
+        10px;
 
-    padding: 0 24px;
+    min-height:
+        48px;
 
-    border-radius: 999px;
+    padding:
+        0
+        24px;
 
-    font-size: 0.79rem;
-    font-weight: 800;
+    border-radius:
+        999px;
 
-    text-decoration: none;
+    font-size:
+        0.79rem;
+
+    font-weight:
+        800;
+
+    text-decoration:
+        none;
 
     transition:
         transform 0.2s ease,
@@ -220,7 +291,8 @@ main.career-gps-home *::after {
     background:
         var(--home-olive-dark);
 
-    color: #ffffff;
+    color:
+        #ffffff;
 
     box-shadow:
         0 11px 25px
@@ -260,9 +332,11 @@ main.career-gps-home *::after {
 }
 
 .home-text-link {
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    align-items: center;
+    align-items:
+        center;
 
     color:
         var(--home-brown);
@@ -290,32 +364,39 @@ main.career-gps-home *::after {
    ========================================================= */
 
 .home-featured-story {
-    position: relative;
+    position:
+        relative;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         minmax(0, 1.12fr)
         minmax(320px, 0.66fr);
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 44px;
+    gap:
+        44px;
 
-    max-width: 1280px;
+    max-width:
+        1280px;
 
-    min-height: 530px;
+    min-height:
+        530px;
 
     margin:
         0
         auto
-        72px;
+        64px;
 
     padding:
         58px
         56px;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
     border:
         1px solid
@@ -349,13 +430,20 @@ main.career-gps-home *::after {
 }
 
 .home-featured-story::before {
-    position: absolute;
+    position:
+        absolute;
 
-    top: 0;
-    right: 0;
-    bottom: 0;
+    top:
+        0;
 
-    width: 36%;
+    right:
+        0;
+
+    bottom:
+        0;
+
+    width:
+        36%;
 
     background:
         linear-gradient(
@@ -364,48 +452,67 @@ main.career-gps-home *::after {
             rgba(247,245,241,0.06)
         );
 
-    content: '';
+    content:
+        '';
 
-    pointer-events: none;
+    pointer-events:
+        none;
 }
 
 .featured-story-content {
-    position: relative;
+    position:
+        relative;
 
-    z-index: 2;
+    z-index:
+        2;
 
-    max-width: 660px;
+    max-width:
+        660px;
 }
 
 .featured-story-badges {
-    display: flex;
+    display:
+        flex;
 
-    align-items: center;
-    flex-wrap: wrap;
+    align-items:
+        center;
 
-    gap: 8px;
+    flex-wrap:
+        wrap;
 
-    margin-bottom: 22px;
+    gap:
+        8px;
+
+    margin-bottom:
+        22px;
 }
 
 .featured-story-badge,
 .featured-story-recommend {
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    align-items: center;
+    align-items:
+        center;
 
-    min-height: 26px;
+    min-height:
+        26px;
 
     padding:
         0
         10px;
 
-    border-radius: 999px;
+    border-radius:
+        999px;
 
-    font-size: 0.62rem;
-    font-weight: 800;
+    font-size:
+        0.62rem;
 
-    letter-spacing: 0.08em;
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
 }
 
 .featured-story-badge {
@@ -432,9 +539,11 @@ main.career-gps-home *::after {
 }
 
 .featured-story-title {
-    max-width: 650px;
+    max-width:
+        650px;
 
-    margin: 0;
+    margin:
+        0;
 
     color:
         var(--home-text);
@@ -446,11 +555,14 @@ main.career-gps-home *::after {
             4rem
         );
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    letter-spacing: -0.045em;
+    letter-spacing:
+        -0.045em;
 
-    line-height: 1.16;
+    line-height:
+        1.16;
 }
 
 .featured-story-answer {
@@ -469,13 +581,16 @@ main.career-gps-home *::after {
             1.18rem
         );
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    line-height: 1.6;
+    line-height:
+        1.6;
 }
 
 .featured-story-description {
-    max-width: 600px;
+    max-width:
+        600px;
 
     margin:
         17px
@@ -493,14 +608,20 @@ main.career-gps-home *::after {
 }
 
 .featured-story-actions {
-    display: flex;
+    display:
+        flex;
 
-    align-items: center;
-    flex-wrap: wrap;
+    align-items:
+        center;
 
-    gap: 18px;
+    flex-wrap:
+        wrap;
 
-    margin-top: 29px;
+    gap:
+        18px;
+
+    margin-top:
+        29px;
 }
 
 
@@ -509,11 +630,14 @@ main.career-gps-home *::after {
    ========================================================= */
 
 .featured-story-summary {
-    position: relative;
+    position:
+        relative;
 
-    z-index: 2;
+    z-index:
+        2;
 
-    width: 100%;
+    width:
+        100%;
 
     padding:
         27px
@@ -582,13 +706,15 @@ main.career-gps-home *::after {
 }
 
 .summary-row {
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         80px
         minmax(0,1fr);
 
-    gap: 14px;
+    gap:
+        14px;
 
     padding:
         12px
@@ -640,7 +766,8 @@ main.career-gps-home *::after {
 }
 
 .recommend-box-label {
-    display: block;
+    display:
+        block;
 
     margin-bottom:
         8px;
@@ -656,19 +783,25 @@ main.career-gps-home *::after {
 }
 
 .featured-story-recommend-box ul {
-    display: grid;
+    display:
+        grid;
 
-    gap: 5px;
+    gap:
+        5px;
 
-    margin: 0;
+    margin:
+        0;
 
-    padding: 0;
+    padding:
+        0;
 
-    list-style: none;
+    list-style:
+        none;
 }
 
 .featured-story-recommend-box li {
-    position: relative;
+    position:
+        relative;
 
     padding-left:
         13px;
@@ -684,15 +817,20 @@ main.career-gps-home *::after {
 }
 
 .featured-story-recommend-box li::before {
-    position: absolute;
+    position:
+        absolute;
 
-    top: 0.65em;
+    top:
+        0.65em;
 
-    left: 0;
+    left:
+        0;
 
-    width: 4px;
+    width:
+        4px;
 
-    height: 4px;
+    height:
+        4px;
 
     border-radius:
         50%;
@@ -716,15 +854,22 @@ main.career-gps-home *::after {
     margin:
         0
         auto
-        76px;
+        68px;
 
     padding:
-        10px
-        0;
+        32px
+        28px;
+
+    border-radius:
+        26px;
+
+    background:
+        #ffffff;
 }
 
 .career-gps-value-grid {
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         repeat(
@@ -741,10 +886,10 @@ main.career-gps-home *::after {
         relative;
 
     min-height:
-        210px;
+        200px;
 
     padding:
-        24px
+        23px
         21px;
 
     overflow:
@@ -752,16 +897,21 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(87,70,55,0.10);
 
     border-radius:
         var(--home-radius-md);
 
     background:
-        var(--home-surface);
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fbfaf7 100%
+        );
 
     box-shadow:
-        var(--home-shadow-sm);
+        0 6px 18px
+        rgba(45,36,28,0.035);
 
     text-align:
         left;
@@ -804,7 +954,7 @@ main.career-gps-home *::after {
         9px;
 
     margin-bottom:
-        28px;
+        24px;
 
     border-radius:
         999px;
@@ -845,7 +995,8 @@ main.career-gps-home *::after {
 }
 
 .career-gps-value-card p {
-    margin: 0;
+    margin:
+        0;
 
     color:
         var(--home-text-sub);
@@ -869,7 +1020,23 @@ main.career-gps-home *::after {
     margin:
         0
         auto
-        76px;
+        68px;
+
+    padding:
+        36px
+        34px
+        40px;
+
+    border-radius:
+        28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f3ede5 0%,
+            #f7f3ed 62%,
+            #fbf9f5 100%
+        );
 }
 
 .home-story-grid {
@@ -906,7 +1073,7 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(87,70,55,0.10);
 
     border-radius:
         20px;
@@ -1021,7 +1188,8 @@ main.career-gps-home *::after {
     gap:
         7px;
 
-    margin: 0;
+    margin:
+        0;
 
     color:
         var(--home-text-muted);
@@ -1101,7 +1269,8 @@ main.career-gps-home *::after {
     min-height:
         3.05em;
 
-    margin: 0;
+    margin:
+        0;
 
     overflow:
         hidden;
@@ -1151,16 +1320,16 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(116,128,79,0.18);
 
     border-radius:
         999px;
 
     background:
-        var(--home-surface-soft);
+        #f7f7f0;
 
     color:
-        var(--home-text-sub);
+        var(--home-olive-dark);
 
     font-size:
         0.57rem;
@@ -1383,7 +1552,8 @@ main.career-gps-home *::after {
 
 .home-career-card__link {
     flex:
-        0 0 auto;
+        0 0
+        auto;
 
     color:
         var(--home-olive-dark);
@@ -1459,7 +1629,7 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(87,70,55,0.10);
 
     border-radius:
         var(--home-radius-md);
@@ -1662,7 +1832,8 @@ main.career-gps-home *::after {
         inline-flex;
 
     flex:
-        0 0 auto;
+        0 0
+        auto;
 
     align-items:
         center;
@@ -1784,16 +1955,16 @@ main.career-gps-home *::after {
     margin:
         0
         auto
-        76px;
+        68px;
 
     padding:
-        38px
+        42px
         40px
-        42px;
+        44px;
 
     border:
         1px solid
-        rgba(116,128,79,0.16);
+        rgba(116,128,79,0.18);
 
     border-radius:
         var(--home-radius-lg);
@@ -1801,10 +1972,15 @@ main.career-gps-home *::after {
     background:
         linear-gradient(
             135deg,
-            #eef0e6 0%,
-            #f4f3eb 55%,
-            #f8f6f1 100%
+            #e6ead8 0%,
+            #edf0e3 50%,
+            #f6f4ed 100%
         );
+
+    box-shadow:
+        inset
+        0 1px 0
+        rgba(255,255,255,0.62);
 }
 
 .personalized-heading {
@@ -1852,30 +2028,56 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        rgba(116,128,79,0.14);
+        rgba(116,128,79,0.17);
 
     border-radius:
         17px;
 
     background:
-        rgba(255,255,255,0.72);
+        rgba(255,255,255,0.82);
 
     text-align:
         left;
+
+    box-shadow:
+        0 6px 18px
+        rgba(70,77,47,0.035);
 }
 
 .personalized-benefit-icon {
     display:
-        inline-block;
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        32px;
+
+    height:
+        26px;
+
+    padding:
+        0
+        8px;
 
     margin-bottom:
-        20px;
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--home-surface-olive);
 
     color:
-        var(--home-olive);
+        var(--home-olive-dark);
 
     font-size:
-        0.66rem;
+        0.63rem;
 
     font-weight:
         800;
@@ -1901,7 +2103,8 @@ main.career-gps-home *::after {
 }
 
 .personalized-benefit p {
-    margin: 0;
+    margin:
+        0;
 
     color:
         var(--home-text-sub);
@@ -1990,13 +2193,13 @@ main.career-gps-home *::after {
     margin:
         0
         auto
-        76px;
+        68px;
 }
 
 .decision-theme-area,
 .career-search-area {
     padding:
-        33px
+        34px
         32px;
 
     border:
@@ -2006,11 +2209,22 @@ main.career-gps-home *::after {
     border-radius:
         var(--home-radius-lg);
 
-    background:
-        var(--home-surface);
-
     box-shadow:
         var(--home-shadow-sm);
+}
+
+.decision-theme-area {
+    background:
+        #ffffff;
+}
+
+.career-search-area {
+    background:
+        linear-gradient(
+            145deg,
+            #f3ede5 0%,
+            #f8f4ed 100%
+        );
 }
 
 .decision-theme-grid {
@@ -2024,7 +2238,7 @@ main.career-gps-home *::after {
         );
 
     gap:
-        9px;
+        10px;
 
     margin-top:
         25px;
@@ -2050,13 +2264,17 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(116,128,79,0.18);
 
     border-radius:
         14px;
 
     background:
-        var(--home-surface-soft);
+        linear-gradient(
+            145deg,
+            #fbfcf7,
+            #f5f6ef
+        );
 
     color:
         inherit;
@@ -2070,7 +2288,8 @@ main.career-gps-home *::after {
     transition:
         transform 0.2s ease,
         border-color 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .decision-theme-card:hover {
@@ -2082,6 +2301,10 @@ main.career-gps-home *::after {
 
     background:
         var(--home-surface-olive);
+
+    box-shadow:
+        0 8px 20px
+        rgba(89,98,56,0.06);
 }
 
 .decision-theme-number {
@@ -2104,7 +2327,7 @@ main.career-gps-home *::after {
         50%;
 
     background:
-        #ffffff;
+        var(--home-surface-olive-strong);
 
     color:
         var(--home-olive-dark);
@@ -2139,7 +2362,8 @@ main.career-gps-home *::after {
 }
 
 .decision-theme-card p {
-    margin: 0;
+    margin:
+        0;
 
     color:
         var(--home-text-muted);
@@ -2200,7 +2424,7 @@ main.career-gps-home *::after {
 
     border:
         1px solid
-        var(--home-line);
+        rgba(87,70,55,0.14);
 
     border-radius:
         12px;
@@ -2209,7 +2433,7 @@ main.career-gps-home *::after {
         0;
 
     background:
-        var(--home-surface-soft);
+        rgba(255,255,255,0.78);
 
     color:
         var(--home-text);
@@ -2283,7 +2507,8 @@ main.career-gps-home *::after {
    ========================================================= */
 
 .home-final-section {
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         minmax(0, 1.05fr)
@@ -2301,7 +2526,7 @@ main.career-gps-home *::after {
     margin:
         0
         auto
-        76px;
+        68px;
 
     padding:
         52px
@@ -2320,14 +2545,14 @@ main.career-gps-home *::after {
     background:
         linear-gradient(
             125deg,
-            #49392f 0%,
-            #574638 50%,
-            #606345 120%
+            #46362d 0%,
+            #584638 50%,
+            #656748 125%
         );
 
     box-shadow:
         0 24px 58px
-        rgba(45,34,27,0.13);
+        rgba(45,34,27,0.16);
 
     color:
         #ffffff;
@@ -2346,7 +2571,7 @@ main.career-gps-home *::after {
 .home-final-section
 .home-eyebrow {
     color:
-        #c9d39f;
+        #d4dda9;
 }
 
 .home-final-message h2 {
@@ -2446,7 +2671,7 @@ main.career-gps-home *::after {
         50%;
 
     background:
-        #aab879;
+        #b6c583;
 
     content:
         '';
@@ -2537,7 +2762,7 @@ main.career-gps-home *::after {
         17px;
 
     background:
-        rgba(255,255,255,0.055);
+        rgba(255,255,255,0.07);
 
     text-align:
         center;
@@ -2610,7 +2835,7 @@ main.career-gps-home *::after {
         17px;
 
     background:
-        rgba(255,255,255,0.055);
+        rgba(255,255,255,0.06);
 }
 
 .home-final-voice::before {
@@ -2685,9 +2910,15 @@ main.career-gps-home *::after {
         auto;
 
     padding:
-        2px
-        0
+        26px
+        24px
         42px;
+
+    border-radius:
+        24px;
+
+    background:
+        #fbfaf7;
 }
 
 .home-news-list {
@@ -2702,7 +2933,7 @@ main.career-gps-home *::after {
         18px;
 
     background:
-        rgba(255,255,255,0.58);
+        rgba(255,255,255,0.76);
 
     box-shadow:
         0 8px 26px
@@ -2710,35 +2941,41 @@ main.career-gps-home *::after {
 }
 
 .home-news-list .announcement-item {
-  display: grid;
+    display:
+        grid;
 
-  grid-template-columns:
-      105px
-      64px
-      minmax(0, 1fr)
-      26px;
+    grid-template-columns:
+        105px
+        64px
+        minmax(0, 1fr)
+        26px;
 
-  align-items: center;
+    align-items:
+        center;
 
-  gap: 16px;
+    gap:
+        16px;
 
-  min-height: 68px;
+    min-height:
+        68px;
 
-  padding:
-      0
-      22px;
+    padding:
+        0
+        22px;
 
-  border-bottom:
-      1px solid
-      var(--home-line);
+    border-bottom:
+        1px solid
+        var(--home-line);
 
-  color: inherit;
+    color:
+        inherit;
 
-  text-decoration: none;
+    text-decoration:
+        none;
 
-  transition:
-      background-color 0.2s ease,
-      padding-left 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        padding-left 0.2s ease;
 }
 
 .home-news-list
@@ -2756,17 +2993,6 @@ main.career-gps-home *::after {
         rgba(238,240,230,0.56);
 }
 
-
-/*
-home.js の現在の出力
-
-<div class="date">
-<div class="title">
-<div class="snippet">
-
-にも対応
-*/
-
 .home-news-list .date,
 .announcement-date {
     color:
@@ -2781,19 +3007,26 @@ home.js の現在の出力
 
 .home-news-list .title,
 .announcement-title {
-    min-width: 0;
+    min-width:
+        0;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
     color:
         var(--home-text);
 
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-size:
+        0.78rem;
 
-    text-overflow: ellipsis;
+    font-weight:
+        700;
 
-    white-space: nowrap;
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
 }
 
 .home-news-list .snippet {
@@ -2802,36 +3035,51 @@ home.js の現在の出力
 }
 
 .announcement-category {
-  display: inline-flex;
+    display:
+        inline-flex;
 
-  align-items: center;
-  justify-content: center;
+    align-items:
+        center;
 
-  justify-self: start;
+    justify-content:
+        center;
 
-  width: auto;
+    justify-self:
+        start;
 
-  min-width: 54px;
-  min-height: 22px;
+    width:
+        auto;
 
-  padding:
-      0
-      9px;
+    min-width:
+        54px;
 
-  border-radius: 999px;
+    min-height:
+        22px;
 
-  background:
-      var(--home-surface-olive);
+    padding:
+        0
+        9px;
 
-  color:
-      var(--home-olive-dark);
+    border-radius:
+        999px;
 
-  font-size: 0.53rem;
-  font-weight: 800;
+    background:
+        var(--home-surface-olive);
 
-  letter-spacing: 0.08em;
+    color:
+        var(--home-olive-dark);
 
-  white-space: nowrap;
+    font-size:
+        0.53rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+
+    white-space:
+        nowrap;
 }
 
 .announcement-arrow {
@@ -2862,13 +3110,6 @@ home.js の現在の出力
     text-align:
         center;
 }
-
-
-/*
-home.js が末尾に追加している
-「お知らせ一覧を見る」は
-HTML側にも一覧リンクがあるため非表示
-*/
 
 .home-news-list
 .announcements-more {
@@ -2947,7 +3188,6 @@ HTML側にも一覧リンクがあるため非表示
             minmax(0,1fr)
             minmax(330px,0.78fr);
     }
-
 }
 
 
@@ -3023,7 +3263,6 @@ HTML側にも一覧リンクがあるため非表示
         max-width:
             620px;
     }
-
 }
 
 
@@ -3045,8 +3284,8 @@ HTML側にも一覧リンクがあるため非表示
 
         padding:
             0
-            14px
-            48px;
+            12px
+            44px;
     }
 
 
@@ -3065,12 +3304,12 @@ HTML側にも一覧リンクがあるため非表示
         margin:
             0
             0
-            48px;
+            38px;
 
         padding:
-            30px
-            20px
-            250px;
+            28px
+            18px
+            220px;
 
         border-radius:
             20px;
@@ -3079,10 +3318,10 @@ HTML側にも一覧リンクがあるため非表示
             linear-gradient(
                 180deg,
                 rgba(247,245,241,1) 0%,
-                rgba(247,245,241,0.98) 45%,
-                rgba(247,245,241,0.80) 59%,
-                rgba(247,245,241,0.18) 77%,
-                rgba(247,245,241,0.03) 100%
+                rgba(247,245,241,0.98) 43%,
+                rgba(247,245,241,0.78) 57%,
+                rgba(247,245,241,0.16) 76%,
+                rgba(247,245,241,0.02) 100%
             ),
             url("../images/career_gps_home_hero.png");
 
@@ -3092,7 +3331,7 @@ HTML側にも一覧リンクがあるため非表示
 
         background-size:
             auto
-            270px;
+            245px;
     }
 
     .home-featured-story::before {
@@ -3107,34 +3346,34 @@ HTML側にも一覧リンクがあるため非表示
 
     .featured-story-badges {
         margin-bottom:
-            16px;
+            15px;
     }
 
     .featured-story-title {
         font-size:
-            2.05rem;
+            2rem;
 
         line-height:
-            1.22;
+            1.2;
     }
 
     .featured-story-answer {
         margin-top:
-            17px;
+            16px;
 
         font-size:
-            0.94rem;
+            0.93rem;
     }
 
     .featured-story-description {
         margin-top:
-            13px;
+            12px;
 
         font-size:
-            0.79rem;
+            0.78rem;
 
         line-height:
-            1.8;
+            1.75;
     }
 
     .featured-story-description br {
@@ -3147,10 +3386,10 @@ HTML側にも一覧リンクがあるため非表示
             grid;
 
         gap:
-            12px;
+            11px;
 
         margin-top:
-            22px;
+            21px;
     }
 
     .home-primary-button {
@@ -3173,14 +3412,17 @@ HTML側にも一覧リンクがあるため非表示
 
     .home-section-heading--center {
         margin-bottom:
-            23px;
+            20px;
     }
 
     .home-section-heading h2,
     .home-section-heading-row h2,
     .personalized-heading h2 {
         font-size:
-            1.45rem;
+            1.48rem;
+
+        line-height:
+            1.35;
     }
 
     .home-section-heading > p:last-child,
@@ -3190,7 +3432,12 @@ HTML側にも一覧リンクがあるため非表示
             0.76rem;
 
         line-height:
-            1.7;
+            1.68;
+    }
+
+    .home-eyebrow {
+        font-size:
+            0.62rem;
     }
 
 
@@ -3198,7 +3445,15 @@ HTML側にも一覧リンクがあるため非表示
 
     .home-about-section {
         margin-bottom:
-            50px;
+            38px;
+
+        padding:
+            25px
+            17px
+            27px;
+
+        border-radius:
+            20px;
     }
 
     .career-gps-value-grid {
@@ -3212,40 +3467,50 @@ HTML側にも一覧リンクがあるため非表示
 
     .career-gps-value-card {
         min-height:
-            180px;
+            162px;
 
         padding:
-            18px
-            15px;
+            16px
+            14px;
 
         border-radius:
-            16px;
+            15px;
     }
 
     .value-icon {
         margin-bottom:
-            19px;
+            15px;
     }
 
     .career-gps-value-card h3 {
         font-size:
-            0.85rem;
+            0.83rem;
     }
 
     .career-gps-value-card p {
         font-size:
-            0.68rem;
+            0.66rem;
 
         line-height:
-            1.65;
+            1.6;
     }
 
 
     /* STORY */
 
     .home-story-section {
-        margin-bottom:
-            50px;
+        margin:
+            0
+            -12px
+            40px;
+
+        padding:
+            30px
+            12px
+            30px;
+
+        border-radius:
+            0;
     }
 
     .home-section-heading-row {
@@ -3256,7 +3521,7 @@ HTML側にも一覧リンクがあるため非表示
             12px;
 
         margin-bottom:
-            17px;
+            16px;
     }
 
     .home-section-link {
@@ -3343,24 +3608,32 @@ HTML側にも一覧リンクがあるため非表示
     /* PERSONALIZED */
 
     .home-personalized-section {
-        margin-bottom:
-            50px;
+        margin:
+            0
+            -12px
+            40px;
 
         padding:
-            27px
+            30px
             18px
-            30px;
+            32px;
 
         border-radius:
-            20px;
+            0;
+
+        border-left:
+            0;
+
+        border-right:
+            0;
     }
 
     .personalized-heading {
         gap:
-            17px;
+            16px;
 
         margin-bottom:
-            19px;
+            18px;
     }
 
     .home-login-cta {
@@ -3369,24 +3642,48 @@ HTML側にも一覧リンクがあるため非表示
     }
 
     .personalized-benefit-grid {
-        grid-template-columns:
-            1fr;
+        display:
+            flex;
 
         gap:
-            8px;
+            10px;
+
+        overflow-x:
+            auto;
+
+        padding-bottom:
+            5px;
+
+        scroll-snap-type:
+            x mandatory;
+
+        scrollbar-width:
+            none;
+    }
+
+    .personalized-benefit-grid::-webkit-scrollbar {
+        display:
+            none;
     }
 
     .personalized-benefit {
+        flex:
+            0 0
+            82%;
+
         min-height:
-            0;
+            150px;
 
         padding:
-            16px;
+            18px;
+
+        scroll-snap-align:
+            start;
     }
 
     .personalized-benefit-icon {
         margin-bottom:
-            11px;
+            12px;
     }
 
 
@@ -3397,13 +3694,13 @@ HTML側にも一覧リンクがあるため非表示
             14px;
 
         margin-bottom:
-            50px;
+            40px;
     }
 
     .decision-theme-area,
     .career-search-area {
         padding:
-            25px
+            26px
             18px;
 
         border-radius:
@@ -3412,15 +3709,48 @@ HTML側にも一覧リンクがあるため非表示
 
     .decision-theme-grid {
         grid-template-columns:
-            1fr;
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+
+        gap:
+            9px;
 
         margin-top:
             20px;
     }
 
     .decision-theme-card {
+        display:
+            block;
+
+        min-height:
+            122px;
+
         padding:
-            14px;
+            13px;
+    }
+
+    .decision-theme-number {
+        margin-bottom:
+            12px;
+    }
+
+    .decision-theme-card h3 {
+        font-size:
+            0.76rem;
+    }
+
+    .decision-theme-card p {
+        margin-top:
+            5px;
+
+        font-size:
+            0.59rem;
+
+        line-height:
+            1.45;
     }
 
 
@@ -3431,17 +3761,19 @@ HTML側にも一覧リンクがあるため非表示
             1fr;
 
         gap:
-            34px;
+            30px;
 
-        margin-bottom:
-            52px;
+        margin:
+            0
+            -12px
+            42px;
 
         padding:
-            35px
-            23px;
+            34px
+            22px;
 
         border-radius:
-            21px;
+            0;
     }
 
     .home-final-message {
@@ -3451,12 +3783,15 @@ HTML側にも一覧リンクがあるため非表示
 
     .home-final-message h2 {
         font-size:
-            2rem;
+            1.9rem;
     }
 
     .home-final-message > p:not(.home-eyebrow) {
         font-size:
-            0.78rem;
+            0.77rem;
+
+        line-height:
+            1.8;
     }
 
     .home-final-benefits {
@@ -3467,9 +3802,9 @@ HTML側にも一覧リンクがあるため非表示
             7px;
 
         margin:
-            20px
+            19px
             0
-            23px;
+            22px;
     }
 
     .home-final-section
@@ -3530,8 +3865,17 @@ HTML側にも一覧リンクがあるため非表示
     /* NEWS */
 
     .home-news-section {
-        padding-bottom:
-            26px;
+        margin:
+            0
+            -12px;
+
+        padding:
+            28px
+            12px
+            24px;
+
+        border-radius:
+            0;
     }
 
     .home-news-list {
@@ -3579,7 +3923,6 @@ HTML側にも一覧リンクがあるため非表示
         display:
             none;
     }
-
 }
 
 
@@ -3593,18 +3936,18 @@ HTML側にも一覧リンクがあるため非表示
         padding:
             0
             11px
-            42px;
+            40px;
     }
 
     .home-featured-story {
         padding:
-            27px
+            25px
             17px
-            225px;
+            205px;
 
         background-size:
             auto
-            240px;
+            222px;
     }
 
     .featured-story-badge,
@@ -3669,9 +4012,27 @@ HTML側にも一覧リンクがあるため非表示
             11px;
     }
 
+    .personalized-benefit {
+        flex-basis:
+            88%;
+    }
+
+    .decision-theme-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+    }
+
+    .decision-theme-card {
+        min-height:
+            116px;
+    }
+
     .home-final-message h2 {
         font-size:
-            1.75rem;
+            1.72rem;
     }
 
     .home-final-metrics {
@@ -3706,7 +4067,6 @@ HTML側にも一覧リンクがあるため非表示
         gap:
             8px;
     }
-
 }
 
 
@@ -3729,6 +4089,16 @@ HTML側にも一覧リンクがあるため非表示
             15px;
     }
 
+    .decision-theme-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .decision-theme-card {
+        min-height:
+            0;
+    }
+
     .home-final-section {
         padding-right:
             18px;
@@ -3741,5 +4111,4 @@ HTML側にも一覧リンクがあるため非表示
         font-size:
             1.15rem;
     }
-
 }
