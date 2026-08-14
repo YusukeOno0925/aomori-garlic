@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 
 from .register_user import get_db_connection
 
-
 router = APIRouter()
 
 
@@ -26,6 +25,12 @@ async def get_popular_career_stories():
         # job_experiences を持たないユーザーを除外することで、
         # Homeの「みんなが読んでいるCareer Story」に
         # 空のCareer Storyが表示されるのを防ぐ
+        #
+        # 現在年収・現在職種については、
+        # 各 job_experience に紐づく最新Roleの値を優先する。
+        #
+        # Roleが存在しない既存データについては、
+        # job_experiences の値へフォールバックする。
         # -------------------------------------------------
 
         query = """
@@ -38,12 +43,93 @@ async def get_popular_career_stories():
                 e.education_start,
                 e.hide_institution,
 
+                j.id AS job_experience_id,
                 j.company_name,
                 j.industry,
                 j.job_category,
+                j.job_sub_category,
                 j.salary,
                 j.work_start_period,
+                j.work_end_period,
                 j.is_private,
+
+                COALESCE(
+                    (
+                        SELECT rh.salary_range
+                        FROM role_histories AS rh
+                        WHERE rh.job_experience_id = j.id
+                        ORDER BY
+                            CASE
+                                WHEN rh.end_period IS NULL THEN 0
+                                ELSE 1
+                            END ASC,
+                            rh.display_order DESC,
+                            rh.start_period DESC,
+                            rh.id DESC
+                        LIMIT 1
+                    ),
+                    j.salary
+                ) AS current_salary,
+
+                COALESCE(
+                    (
+                        SELECT rh.job_category
+                        FROM role_histories AS rh
+                        WHERE rh.job_experience_id = j.id
+                          AND rh.job_category IS NOT NULL
+                          AND rh.job_category <> ''
+                        ORDER BY
+                            CASE
+                                WHEN rh.end_period IS NULL THEN 0
+                                ELSE 1
+                            END ASC,
+                            rh.display_order DESC,
+                            rh.start_period DESC,
+                            rh.id DESC
+                        LIMIT 1
+                    ),
+                    j.job_category
+                ) AS current_job_category,
+
+                COALESCE(
+                    (
+                        SELECT rh.job_sub_category
+                        FROM role_histories AS rh
+                        WHERE rh.job_experience_id = j.id
+                          AND rh.job_sub_category IS NOT NULL
+                          AND rh.job_sub_category <> ''
+                        ORDER BY
+                            CASE
+                                WHEN rh.end_period IS NULL THEN 0
+                                ELSE 1
+                            END ASC,
+                            rh.display_order DESC,
+                            rh.start_period DESC,
+                            rh.id DESC
+                        LIMIT 1
+                    ),
+                    j.job_sub_category
+                ) AS current_job_sub_category,
+
+                COALESCE(
+                    (
+                        SELECT rh.position
+                        FROM role_histories AS rh
+                        WHERE rh.job_experience_id = j.id
+                          AND rh.position IS NOT NULL
+                          AND rh.position <> ''
+                        ORDER BY
+                            CASE
+                                WHEN rh.end_period IS NULL THEN 0
+                                ELSE 1
+                            END ASC,
+                            rh.display_order DESC,
+                            rh.start_period DESC,
+                            rh.id DESC
+                        LIMIT 1
+                    ),
+                    j.position
+                ) AS current_position,
 
                 IFNULL(pv.view_count, 0) AS view_count,
 
@@ -108,9 +194,9 @@ async def get_popular_career_stories():
                 view_count DESC,
                 u.id ASC,
                 e.education_start ASC,
-                j.work_start_period ASC
+                j.work_start_period ASC,
+                j.id ASC
         """
-
 
         cursor = db.cursor(
             dictionary=True
@@ -276,15 +362,14 @@ async def get_popular_career_stories():
 
                 # ---------------------------------------------
                 # 同一職歴の重複判定
+                #
+                # job_experience_id を使用することで、
+                # 同じ会社・同じ開始年でも別職歴であれば
+                # 正しく別データとして扱う。
                 # ---------------------------------------------
 
                 job_key = (
-
-                    company_name,
-                    start_year,
-                    row["job_category"],
-                    row["salary"]
-
+                    row["job_experience_id"],
                 )
 
 
@@ -302,12 +387,22 @@ async def get_popular_career_stories():
                     # ORDER BY work_start_period ASC のため、
                     # 後から処理される職歴ほど新しい。
                     #
-                    # そのため毎回上書きすることで、
-                    # 最終的に「最新職歴」の職種・年収になる。
+                    # 毎回上書きすることで、
+                    # 最終的に最新職歴の情報を保持する。
+                    #
+                    # 職種：
+                    # 最新Roleの job_category を優先。
+                    # Roleに値がない場合は
+                    # job_experiences.job_category を使用。
+                    #
+                    # 年収：
+                    # 最新Roleの salary_range を優先。
+                    # Roleが存在しない場合は
+                    # job_experiences.salary を使用。
                     # -----------------------------------------
 
                     career["profession"] = (
-                        row["job_category"]
+                        row["current_job_category"]
                         or career["profession"]
                         or "不明"
                     )
@@ -317,7 +412,7 @@ async def get_popular_career_stories():
                     career["income"] = [{
 
                         "income":
-                            row["salary"]
+                            row["current_salary"]
                             or "不明"
 
                     }]
@@ -340,10 +435,7 @@ async def get_popular_career_stories():
                 # ---------------------------------------------
 
                 company_key = (
-
-                    company_name,
-                    start_year
-
+                    row["job_experience_id"],
                 )
 
 

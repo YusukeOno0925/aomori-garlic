@@ -209,13 +209,170 @@ def get_latest_job(jobs):
 
         return (
             current_priority,
-            start
+            start,
+            job.get("id") or 0
         )
 
     return max(
         jobs,
         key=sort_key
     )
+
+
+# =========================================================
+# Latest role
+# =========================================================
+
+def get_latest_role(roles):
+
+    if not roles:
+        return {}
+
+    def sort_key(role):
+
+        current_priority = (
+            1
+            if is_empty_end_date(
+                role.get("end_period")
+            )
+            else 0
+        )
+
+        display_order = (
+            role.get("display_order")
+            or 0
+        )
+
+        start = date_sort_value(
+            role.get("start_period")
+        )
+
+        role_id = (
+            role.get("id")
+            or 0
+        )
+
+        return (
+            current_priority,
+            display_order,
+            start,
+            role_id
+        )
+
+    return max(
+        roles,
+        key=sort_key
+    )
+
+
+# =========================================================
+# Current job information
+# =========================================================
+
+def get_current_job_info(
+    jobs,
+    roles_by_job
+):
+
+    """
+    現在の職種・年収などは、
+    最新のjob_experienceに紐づく最新Roleを優先する。
+
+    Roleが存在しない場合、またはRole側の値が未設定の場合は、
+    job_experiencesの値へフォールバックする。
+    """
+
+    latest_job = get_latest_job(
+        jobs
+    )
+
+    if not latest_job:
+        return {
+            "job": {},
+            "role": {},
+            "job_category": None,
+            "job_sub_category": None,
+            "position": None,
+            "salary": None,
+            "industry": None,
+        }
+
+    job_id = latest_job.get(
+        "id"
+    )
+
+    latest_role = get_latest_role(
+        roles_by_job.get(
+            job_id,
+            []
+        )
+    )
+
+    current_job_category = (
+        latest_role.get(
+            "job_category"
+        )
+        or latest_job.get(
+            "job_category"
+        )
+    )
+
+    current_job_sub_category = (
+        latest_role.get(
+            "job_sub_category"
+        )
+        or latest_job.get(
+            "job_sub_category"
+        )
+    )
+
+    current_position = (
+        latest_role.get(
+            "position"
+        )
+        or latest_job.get(
+            "position"
+        )
+    )
+
+    current_salary = (
+        latest_role.get(
+            "salary_range"
+        )
+        or latest_job.get(
+            "salary"
+        )
+    )
+
+    # 業界は会社単位の情報なのでjob_experiencesを使用する
+    current_industry = (
+        latest_job.get(
+            "industry"
+        )
+    )
+
+    return {
+        "job":
+            latest_job,
+
+        "role":
+            latest_role,
+
+        "job_category":
+            current_job_category,
+
+        "job_sub_category":
+            current_job_sub_category,
+
+        "position":
+            current_position,
+
+        "salary":
+            current_salary,
+
+        "industry":
+            current_industry,
+    }
 
 
 # =========================================================
@@ -1166,18 +1323,23 @@ async def get_similar_users(
         cursor.execute(
             """
             SELECT
+                id,
                 user_id,
                 company_name,
                 industry,
+                position,
                 job_category,
+                job_sub_category,
                 salary,
                 work_start_period,
                 work_end_period,
+                satisfaction_level,
                 is_private
             FROM job_experiences
             ORDER BY
                 user_id,
-                work_start_period ASC
+                work_start_period ASC,
+                id ASC
             """
         )
 
@@ -1196,6 +1358,51 @@ async def get_similar_users(
 
             jobs_by_user[
                 row["user_id"]
+            ].append(row)
+
+
+        # =================================================
+        # ROLE HISTORIES
+        # =================================================
+
+        cursor.execute(
+            """
+            SELECT
+                id,
+                job_experience_id,
+                department,
+                position,
+                job_category,
+                job_sub_category,
+                start_period,
+                end_period,
+                salary_range,
+                satisfaction_level,
+                display_order
+            FROM role_histories
+            ORDER BY
+                job_experience_id,
+                display_order ASC,
+                start_period ASC,
+                id ASC
+            """
+        )
+
+
+        all_role_rows = (
+            cursor.fetchall()
+        )
+
+
+        roles_by_job = (
+            defaultdict(list)
+        )
+
+
+        for row in all_role_rows:
+
+            roles_by_job[
+                row["job_experience_id"]
             ].append(row)
 
 
@@ -1293,9 +1500,10 @@ async def get_similar_users(
         )
 
 
-        base_latest_job = (
-            get_latest_job(
-                base_jobs
+        base_current = (
+            get_current_job_info(
+                base_jobs,
+                roles_by_job
             )
         )
 
@@ -1314,13 +1522,16 @@ async def get_similar_users(
                     )
                 ),
 
+            # 最新Roleを優先
             "job_category":
-                base_latest_job.get(
+                base_current.get(
                     "job_category"
                 ),
 
+            # 業界は会社単位なので
+            # job_experiencesを使用
             "industry":
-                base_latest_job.get(
+                base_current.get(
                     "industry"
                 ),
 
@@ -1365,9 +1576,10 @@ async def get_similar_users(
             )
 
 
-            latest_job = (
-                get_latest_job(
-                    jobs
+            current = (
+                get_current_job_info(
+                    jobs,
+                    roles_by_job
                 )
             )
 
@@ -1386,13 +1598,15 @@ async def get_similar_users(
                         )
                     ),
 
+                # 最新Roleを優先
                 "job_category":
-                    latest_job.get(
+                    current.get(
                         "job_category"
                     ),
 
+                # 業界は会社単位
                 "industry":
-                    latest_job.get(
+                    current.get(
                         "industry"
                     ),
 
@@ -1619,16 +1833,16 @@ async def get_similar_users(
             )
 
 
-            latest_job = (
-                get_latest_job(
-                    jobs
+            current = (
+                get_current_job_info(
+                    jobs,
+                    roles_by_job
                 )
             )
 
 
             career_stages = []
             companies = []
-            incomes = []
 
 
             # ---------------------------------------------
@@ -1735,22 +1949,6 @@ async def get_similar_users(
                     })
 
 
-                if (
-                    row.get(
-                        "salary"
-                    )
-                    is not None
-                ):
-
-                    incomes.append({
-
-                        "income":
-                            row.get(
-                                "salary"
-                            )
-                    })
-
-
             career_stages.sort(
 
                 key=lambda item:
@@ -1767,6 +1965,35 @@ async def get_similar_users(
                         else 9999
                     )
             )
+
+
+            # ---------------------------------------------
+            # 現在年収
+            #
+            # 最新Role.salary_rangeを優先。
+            # Role側に値がない場合のみ
+            # job_experiences.salaryへフォールバックする。
+            #
+            # Homeカードでは「現在年収」を表示するため、
+            # 過去職歴の年収はincomeへ含めない。
+            # ---------------------------------------------
+
+            current_salary = (
+                current.get(
+                    "salary"
+                )
+            )
+
+
+            incomes = []
+
+            if current_salary:
+
+                incomes.append({
+
+                    "income":
+                        current_salary
+                })
 
 
             similarity = (
@@ -1798,15 +2025,17 @@ async def get_similar_users(
                         else None
                     ),
 
+                # 最新Role.job_categoryを優先
                 "profession":
                     (
-                        latest_job.get(
+                        current.get(
                             "job_category"
                         )
                         or
                         "職種未設定"
                     ),
 
+                # 現在年収のみ
                 "income":
                     incomes,
 
