@@ -3949,7 +3949,7 @@ document.addEventListener(
 
         gtag(
             'event',
-            'click_register_cta',
+            'signup_cta_click',
             {
                 page_type:
                     'career_detail',
