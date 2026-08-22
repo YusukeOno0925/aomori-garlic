@@ -74,6 +74,25 @@ async function initializeCareerDetail() {
 
         const data =
             await response.json();
+        
+        // ========================================================
+        // GA4: Career Story Detail View
+        // ========================================================
+
+        if (typeof gtag === 'function') {
+
+            gtag(
+                'event',
+                'career_story_view',
+                {
+                    career_id: careerId,
+                    login_status:
+                        careerDetailIsLoggedIn
+                            ? 'logged_in'
+                            : 'guest'
+                }
+            );
+        }
 
 
         const companies =
@@ -3844,7 +3863,110 @@ function escapeHTML(
 
 
 // ============================================================
-// 25. Error
+// 25. GA4 Tracking
+// ============================================================
+
+document.addEventListener(
+    'click',
+    function (event) {
+
+        const registerLink =
+            event.target.closest(
+                'a[href*="Register.html"]'
+            );
+
+
+        if (!registerLink) {
+            return;
+        }
+
+
+        if (typeof gtag !== 'function') {
+            return;
+        }
+
+
+        let ctaLocation =
+            'career_detail_unknown';
+
+
+        if (
+            registerLink.classList.contains(
+                'header-register-btn'
+            )
+        ) {
+
+            ctaLocation =
+                'career_detail_header';
+        }
+
+        else if (
+            registerLink.classList.contains(
+                'career-value-wall__cta'
+            )
+        ) {
+
+            ctaLocation =
+                'career_detail_value_wall';
+        }
+
+        else if (
+            registerLink.classList.contains(
+                'career-outcome-guest__cta'
+            )
+        ) {
+
+            ctaLocation =
+                'career_detail_outcome';
+        }
+
+        else if (
+            registerLink.closest(
+                '.career-outcome-lock'
+            )
+        ) {
+
+            ctaLocation =
+                'career_detail_outcome_lock';
+        }
+
+        else if (
+            registerLink.closest(
+                '.career-message-lock'
+            )
+        ) {
+
+            ctaLocation =
+                'career_detail_message';
+        }
+
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        gtag(
+            'event',
+            'click_register_cta',
+            {
+                page_type:
+                    'career_detail',
+
+                cta_location:
+                    ctaLocation,
+
+                career_id:
+                    params.get('id') || ''
+            }
+        );
+    }
+);
+
+
+// ============================================================
+// 26. Error
 // ============================================================
 
 function showPageError(

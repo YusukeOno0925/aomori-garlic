@@ -77,75 +77,13 @@ async def get_career_detail(career_id: int):
 
 
         # ====================================================
-        # 1. Job Experienceを取得
-        # ====================================================
-
-        cursor.execute(
-            """
-            SELECT
-                j.id,
-                j.user_id,
-                j.company_name,
-                j.position,
-                j.job_category,
-                j.salary,
-                j.satisfaction_level,
-                j.work_start_period,
-                j.work_end_period,
-                j.is_private
-            FROM job_experiences j
-            WHERE j.user_id = %s
-            """,
-            (career_id,)
-        )
-
-        all_jobs = cursor.fetchall()
-
-
-        if not all_jobs:
-
-            raise HTTPException(
-                status_code=404,
-                detail="Career not found"
-            )
-
-
-        # ====================================================
-        # 2. 最新職種を取得
-        # ====================================================
-
-        jobs_for_latest = list(all_jobs)
-
-
-        jobs_for_latest.sort(
-            key=lambda row: (
-                _normalize_date(
-                    row["work_end_period"]
-                ) is None,
-
-                _normalize_date(
-                    row["work_end_period"]
-                )
-                or _date(9999, 12, 31),
-
-                _normalize_date(
-                    row["work_start_period"]
-                )
-                or _date(1, 1, 1)
-            ),
-            reverse=True
-        )
-
-
-        latest_job_category = (
-            jobs_for_latest[0]["job_category"]
-            if jobs_for_latest
-            else None
-        )
-
-
-        # ====================================================
-        # 3. UserとCareer Experienceを取得
+        # 1. UserとCareer Experienceを取得
+        #
+        # 最初にUserの存在確認を行う。
+        #
+        # Userが存在しない場合のみ404とする。
+        # Userは存在するが職歴未登録の場合は、
+        # Career Story未登録ユーザーとして200を返す。
         # ====================================================
 
         cursor.execute(
@@ -185,9 +123,12 @@ async def get_career_detail(career_id: int):
             (career_id,)
         )
 
-
         user_data = cursor.fetchone()
 
+
+        # ====================================================
+        # Userそのものが存在しない場合のみ404
+        # ====================================================
 
         if not user_data:
 
@@ -198,9 +139,75 @@ async def get_career_detail(career_id: int):
 
 
         # ====================================================
+        # 2. Job Experienceを取得
+        #
+        # 職歴が0件でも404にはしない。
+        # all_jobs = [] のまま後続処理を行う。
+        # ====================================================
+
+        cursor.execute(
+            """
+            SELECT
+                j.id,
+                j.user_id,
+                j.company_name,
+                j.position,
+                j.job_category,
+                j.salary,
+                j.satisfaction_level,
+                j.work_start_period,
+                j.work_end_period,
+                j.is_private
+            FROM job_experiences j
+            WHERE j.user_id = %s
+            """,
+            (career_id,)
+        )
+
+        all_jobs = cursor.fetchall()
+
+
+        # ====================================================
+        # 3. 最新職種を取得
+        # ====================================================
+
+        jobs_for_latest = list(all_jobs)
+
+
+        jobs_for_latest.sort(
+            key=lambda row: (
+                _normalize_date(
+                    row["work_end_period"]
+                ) is None,
+
+                _normalize_date(
+                    row["work_end_period"]
+                )
+                or _date(9999, 12, 31),
+
+                _normalize_date(
+                    row["work_start_period"]
+                )
+                or _date(1, 1, 1)
+            ),
+            reverse=True
+        )
+
+
+        latest_job_category = (
+            jobs_for_latest[0]["job_category"]
+            if jobs_for_latest
+            else None
+        )
+
+
+        # ====================================================
         # 4. Role Historyを取得
         #
-        # 年収と満足度は会社単位ではなくRole単位で取得する
+        # 年収と満足度は会社単位ではなくRole単位で取得する。
+        #
+        # 職歴が0件の場合は結果も0件になるため、
+        # そのまま空配列として扱う。
         # ====================================================
 
         cursor.execute(
@@ -238,7 +245,6 @@ async def get_career_detail(career_id: int):
             """,
             (career_id,)
         )
-
 
         role_history_data = cursor.fetchall()
 
@@ -304,7 +310,6 @@ async def get_career_detail(career_id: int):
             """,
             (career_id,)
         )
-
 
         career_decisions_data = cursor.fetchall()
 
@@ -410,6 +415,12 @@ async def get_career_detail(career_id: int):
 
         # ====================================================
         # 8. Companyデータを作成
+        #
+        # work_start_period がNULLでも会社情報は捨てない。
+        #
+        # これにより、
+        # 「会社は登録済みだが入社日が未入力」
+        # というCareer Storyも保持できる。
         # ====================================================
 
         companies = []
@@ -430,10 +441,6 @@ async def get_career_detail(career_id: int):
             start_date = _normalize_date(
                 row["work_start_period"]
             )
-
-
-            if start_date is None:
-                continue
 
 
             company_roles = roles_by_company.get(
@@ -460,15 +467,21 @@ async def get_career_detail(career_id: int):
                     "job_category":
                         row["job_category"],
 
+                    # 入社日未入力の場合はNoneを返す
                     "startYear":
-                        start_date.year,
+                        (
+                            start_date.year
+                            if start_date
+                            else None
+                        ),
 
                     "endYear":
                         _endyear_label(
                             row["work_end_period"]
                         ),
 
-                    # 既存データとの互換性のため会社単位の値も残す
+                    # 既存データとの互換性のため
+                    # 会社単位の値も残す
                     "salary":
                         (
                             row["salary"]
@@ -565,6 +578,13 @@ async def get_career_detail(career_id: int):
 
         # ====================================================
         # 10. Response
+        #
+        # 職歴がない場合：
+        #
+        # profession      = None
+        # companies       = []
+        #
+        # として正常レスポンス（200）を返す。
         # ====================================================
 
         response_data = {
