@@ -71,16 +71,17 @@
                     MAX_STORIES
                 )
                 .forEach(
-                    story => {
-
+                    (story, index) => {
+                
                         container.appendChild(
                             createPopularStoryCard(
                                 normalizeStory(
                                     story
-                                )
+                                ),
+                                index + 1
                             )
                         );
-
+                
                     }
                 );
 
@@ -107,7 +108,8 @@
     ====================================================== */
 
     function createPopularStoryCard(
-        story
+        story,
+        position
     ) {
 
         const card =
@@ -298,6 +300,38 @@
                 incrementViewCount(
                     story.id
                 );
+
+
+                // GA4：Career Storyクリック計測
+                if (
+                    typeof window.gtag ===
+                    'function'
+                ) {
+
+                    window.gtag(
+                        'event',
+                        'career_story_click',
+                        {
+
+                            story_user_id:
+                                String(
+                                    story.id
+                                ),
+
+                            section_name:
+                                'popular',
+
+                            card_position:
+                                position,
+
+                            story_title:
+                                headline
+
+                        }
+                    );
+
+                }
+
 
                 window.location.href =
                     `Career_detail.html?id=${
