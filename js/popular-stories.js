@@ -111,268 +111,283 @@
         story,
         position
     ) {
-
+    
         const card =
             document.createElement(
                 'article'
             );
-
-
+    
+    
         card.className =
             'home-career-card';
-
-
+    
+    
         card.tabIndex =
             0;
-
-
+    
+    
         card.setAttribute(
             'role',
             'link'
         );
-
-
+    
+    
         card.setAttribute(
             'aria-label',
             `${story.name}さんのCareer Storyを見る`
         );
-
-
-        const ageText =
-            story.age !== null
-                ? `${story.age}歳`
-                : '年齢非公開';
-
-
-        const headline =
-            buildStoryHeadline(
-                story
-            );
-
-
-        const tags =
-            buildStoryTags(
-                story
-            );
-
-
+    
+    
+        const decisionHook =
+            story.decision.dilemma
+            ||
+            story.decision.title
+            ||
+            story.decision.trigger
+            ||
+            '';
+    
+    
         card.innerHTML = `
-
+    
             <div class="home-career-card__top">
-
+    
                 <div class="home-career-avatar">
+    
                     ${escapeHTML(
                         getInitial(
                             story.name
                         )
                     )}
+    
                 </div>
-
-
+    
+    
                 <div class="home-career-person">
-
+    
                     <p class="home-career-person__meta">
-
-                        <span>
-                            ${escapeHTML(
-                                ageText
-                            )}
-                        </span>
-
-                        <span>
-                            ${escapeHTML(
-                                story.profession
-                            )}
-                        </span>
-
+    
+                        ${
+                            story.age !== null
+    
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        getAgeGroup(
+                                            story.age
+                                        )
+                                    )}
+                                </span>
+                            `
+    
+                            : ''
+                        }
+    
+    
+                        ${
+                            story.profession
+                            &&
+                            story.profession !==
+                            '職種未設定'
+    
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        story.profession
+                                    )}
+                                </span>
+                            `
+    
+                            : ''
+                        }
+    
                     </p>
-
-
+    
+    
                     <h3>
                         ${escapeHTML(
                             story.name
                         )}
                     </h3>
-
-
-                    <p class="home-career-person__summary">
-                        ${escapeHTML(
-                            buildCareerSummary(
-                                story
-                            )
-                        )}
-                    </p>
-
+    
                 </div>
-
+    
             </div>
-
-
-            <div class="home-career-card__story">
-
-                <p class="home-career-card__label">
-                    CAREER STORY
-                </p>
-
-                <h4>
-                    ${escapeHTML(
-                        headline
-                    )}
-                </h4>
-
-            </div>
-
-
-            ${
-                tags.length
-                    ? `
-                        <div class="home-career-tags">
-
-                            ${tags
-                                .map(
-                                    tag => `
-                                        <span>
-                                            ${escapeHTML(tag)}
-                                        </span>
-                                    `
-                                )
-                                .join('')}
-
-                        </div>
-                    `
-                    : ''
-            }
-
-
-            ${buildTimelineHTML(
+    
+    
+            ${buildPopularJourneyHTML(
                 story.careerStages
             )}
-
-
-            <div class="home-career-card__footer">
-
-                <div class="home-career-card__facts">
-
-                    ${
-                        story.income !==
-                        '未設定'
+    
+    
+            ${
+                decisionHook
+                ||
+                story.decision.type
+                ||
+                story.decision.priority
+    
+                ? `
+                    <div class="career-preview-decision">
+    
+                        <div class="career-preview-decision__heading">
+    
+                            <span>
+                                CAREER DECISION
+                            </span>
+    
+    
+                            ${
+                                story.decision.type
+    
+                                ? `
+                                    <strong>
+                                        ${escapeHTML(
+                                            story.decision.type
+                                        )}
+                                    </strong>
+                                `
+    
+                                : ''
+                            }
+    
+                        </div>
+    
+    
+                        ${
+                            decisionHook
+    
                             ? `
-                                <span>
-                                    年収
+                                <p class="career-preview-decision__hook">
+    
                                     ${escapeHTML(
-                                        story.income
+                                        decisionHook
                                     )}
-                                </span>
+    
+                                </p>
                             `
+    
                             : ''
-                    }
-
-                    ${
-                        story.transferCount >
-                        0
+                        }
+    
+    
+                        ${
+                            story.decision.priority
+    
                             ? `
-                                <span>
-                                    転職
-                                    ${story.transferCount}回
-                                </span>
+                                <div class="career-preview-priority">
+    
+                                    <span>
+                                        重視したこと
+                                    </span>
+    
+                                    <p>
+                                        ${escapeHTML(
+                                            story.decision.priority
+                                        )}
+                                    </p>
+    
+                                </div>
                             `
+    
                             : ''
-                    }
-
-                </div>
-
-
+                        }
+    
+                    </div>
+                `
+    
+                : ''
+            }
+    
+    
+            <div class="home-career-card__footer">
+    
                 <span class="home-career-card__link">
-                    Career Storyを見る
+    
+                    選択の背景と、その後を見る
+    
                     <span aria-hidden="true">
                         →
                     </span>
+    
                 </span>
-
+    
             </div>
-
+    
         `;
-
-
+    
+    
         const navigate =
             () => {
-
+    
                 incrementViewCount(
                     story.id
                 );
-
-
-                // GA4：Career Storyクリック計測
+    
+    
                 if (
                     typeof window.gtag ===
                     'function'
                 ) {
-
+    
                     window.gtag(
                         'event',
                         'career_story_click',
                         {
-
-                            story_user_id:
-                                String(
-                                    story.id
-                                ),
-
+    
+                            career_id:
+                                story.id,
+    
                             section_name:
                                 'popular',
-
+    
                             card_position:
-                                position,
-
-                            story_title:
-                                headline
-
+                                position
+    
                         }
                     );
-
+    
                 }
-
-
+    
+    
                 window.location.href =
                     `Career_detail.html?id=${
                         encodeURIComponent(
                             story.id
                         )
                     }`;
-
+    
             };
-
-
+    
+    
         card.addEventListener(
             'click',
             navigate
         );
-
-
+    
+    
         card.addEventListener(
             'keydown',
             event => {
-
+    
                 if (
-                    event.key ===
-                        'Enter'
+                    event.key === 'Enter'
                     ||
-                    event.key ===
-                        ' '
+                    event.key === ' '
                 ) {
-
+    
                     event.preventDefault();
-
+    
                     navigate();
-
+    
                 }
-
+    
             }
         );
-
-
+    
+    
         return card;
-
+    
     }
 
 
@@ -383,7 +398,13 @@
     function normalizeStory(
         story
     ) {
-
+    
+        const decision =
+            story?.decision
+            ||
+            {};
+    
+    
         const companies =
             Array.isArray(
                 story.companies
@@ -436,7 +457,37 @@
                     getUniqueCompanyCount(
                         companies
                     ) - 1
-                )
+                ),
+
+
+            decision: {
+
+                type:
+                    decision.decision_type
+                    ||
+                    '',
+
+                title:
+                    decision.title
+                    ||
+                    '',
+
+                trigger:
+                    decision.trigger_text
+                    ||
+                    '',
+
+                dilemma:
+                    decision.dilemma_text
+                    ||
+                    '',
+
+                priority:
+                    decision.priority_text
+                    ||
+                    ''
+
+            }
 
         };
 
@@ -820,6 +871,105 @@
     }
 
 
+    function buildPopularJourneyHTML(
+        stages
+    ) {
+    
+        if (!stages.length) {
+    
+            return '';
+    
+        }
+    
+    
+        const displayStages =
+            reduceStages(
+                stages
+            );
+    
+    
+        return `
+    
+            <div class="career-preview-journey">
+    
+                <p class="career-preview-journey__label">
+                    CAREER JOURNEY
+                </p>
+    
+    
+                <div class="home-career-timeline">
+    
+                    <div class="home-career-timeline__track">
+    
+                        ${
+                            displayStages
+                                .map(
+                                    (
+                                        stage,
+                                        index
+                                    ) => `
+    
+                                        <div class="home-career-timeline__item">
+    
+                                            <span class="home-career-timeline__year">
+    
+                                                ${escapeHTML(
+                                                    String(
+                                                        stage.year
+                                                        ||
+                                                        ''
+                                                    )
+                                                )}
+    
+                                            </span>
+    
+    
+                                            <span
+                                                class="
+                                                    home-career-timeline__dot
+    
+                                                    ${
+                                                        index
+                                                        ===
+                                                        displayStages.length - 1
+    
+                                                        ? 'is-current'
+    
+                                                        : ''
+                                                    }
+                                                "
+                                            >
+                                            </span>
+    
+    
+                                            <span class="home-career-timeline__stage">
+    
+                                                ${escapeHTML(
+                                                    simplifyStage(
+                                                        stage.stage
+                                                    )
+                                                )}
+    
+                                            </span>
+    
+                                        </div>
+    
+                                    `
+                                )
+                                .join('')
+                        }
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+        `;
+    
+    }
+
+
     /* =====================================================
        Timeline
     ====================================================== */
@@ -979,6 +1129,37 @@
     /* =====================================================
        Utilities
     ====================================================== */
+
+    function getAgeGroup(
+        age
+    ) {
+    
+        const value =
+            Number(
+                age
+            );
+    
+    
+        if (!Number.isFinite(value)) {
+            return '';
+        }
+    
+    
+        if (value < 20) {
+            return '10代';
+        }
+    
+    
+        if (value >= 60) {
+            return '60代以上';
+        }
+    
+    
+        return `${
+            Math.floor(value / 10) * 10
+        }代`;
+    
+    }
 
     function calculateAge(
         birthYear

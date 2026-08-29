@@ -7,6 +7,140 @@ router = APIRouter()
 
 
 # =========================================================
+# Home Career Decision
+# =========================================================
+
+def get_home_career_decision(
+    decisions
+):
+
+    if not decisions:
+        return None
+
+
+    def decision_quality(
+        decision
+    ):
+
+        score = 0
+
+
+        if decision.get(
+            "decision_type"
+        ):
+            score += 2
+
+
+        if decision.get(
+            "dilemma_text"
+        ):
+            score += 3
+
+
+        if decision.get(
+            "priority_text"
+        ):
+            score += 3
+
+
+        if decision.get(
+            "title"
+        ):
+            score += 1
+
+
+        if decision.get(
+            "trigger_text"
+        ):
+            score += 2
+
+
+        return score
+
+
+    ranked = sorted(
+        decisions,
+        key=lambda decision: (
+            decision_quality(
+                decision
+            ),
+            decision.get(
+                "occurred_at"
+            )
+            or "",
+            decision.get(
+                "id"
+            )
+            or 0,
+        ),
+        reverse=True
+    )
+
+
+    selected = ranked[0]
+
+
+    if not (
+        selected.get(
+            "decision_type"
+        )
+        or
+        selected.get(
+            "dilemma_text"
+        )
+        or
+        selected.get(
+            "title"
+        )
+        or
+        selected.get(
+            "trigger_text"
+        )
+    ):
+
+        return None
+
+
+    return {
+
+        "id":
+            selected.get(
+                "id"
+            ),
+
+        "decision_type":
+            selected.get(
+                "decision_type"
+            )
+            or "",
+
+        "title":
+            selected.get(
+                "title"
+            )
+            or "",
+
+        "trigger_text":
+            selected.get(
+                "trigger_text"
+            )
+            or "",
+
+        "dilemma_text":
+            selected.get(
+                "dilemma_text"
+            )
+            or "",
+
+        "priority_text":
+            selected.get(
+                "priority_text"
+            )
+            or "",
+    }
+
+
+# =========================================================
 # 人気のCareer Storyを取得
 # =========================================================
 
@@ -205,6 +339,60 @@ async def get_popular_career_stories():
         cursor.execute(query)
 
         popular_careers = cursor.fetchall()
+
+
+        # -------------------------------------------------
+        # Career Decision取得
+        # -------------------------------------------------
+
+        cursor.execute(
+            """
+            SELECT
+                id,
+                user_id,
+                title,
+                decision_type,
+                occurred_at,
+                trigger_text,
+                dilemma_text,
+                priority_text
+            FROM career_decisions
+            ORDER BY
+                user_id,
+                occurred_at DESC,
+                id DESC
+            """
+        )
+
+
+        decision_rows = (
+            cursor.fetchall()
+        )
+
+
+        decisions_by_user = {}
+
+
+        for row in decision_rows:
+
+            user_id = row[
+                "user_id"
+            ]
+
+
+            if (
+                user_id
+                not in decisions_by_user
+            ):
+
+                decisions_by_user[
+                    user_id
+                ] = []
+
+
+            decisions_by_user[
+                user_id
+            ].append(row)
 
 
         # -------------------------------------------------
@@ -494,6 +682,22 @@ async def get_popular_career_stories():
             if not career["profession"]:
 
                 career["profession"] = "不明"
+
+
+            # ---------------------------------------------
+            # Home表示用 Career Decision
+            # ---------------------------------------------
+
+            career[
+                "decision"
+            ] = (
+                get_home_career_decision(
+                    decisions_by_user.get(
+                        career["id"],
+                        []
+                    )
+                )
+            )
 
 
             careers.append(

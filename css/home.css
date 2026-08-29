@@ -2275,6 +2275,9 @@ main.career-gps-home *::after {
 
     overflow:
         hidden;
+    
+    overflow-wrap:
+        anywhere;
 
     color:
         var(--home-text);
@@ -2336,6 +2339,9 @@ main.career-gps-home *::after {
 
     overflow:
         hidden;
+
+    overflow-wrap:
+        anywhere;
 
     color:
         var(--home-text-sub);
