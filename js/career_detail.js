@@ -74,25 +74,6 @@ async function initializeCareerDetail() {
 
         const data =
             await response.json();
-        
-        // ========================================================
-        // GA4: Career Story Detail View
-        // ========================================================
-
-        if (typeof gtag === 'function') {
-
-            gtag(
-                'event',
-                'career_story_view',
-                {
-                    career_id: careerId,
-                    login_status:
-                        careerDetailIsLoggedIn
-                            ? 'logged_in'
-                            : 'guest'
-                }
-            );
-        }
 
 
         const companies =
@@ -107,6 +88,51 @@ async function initializeCareerDetail() {
                     data.career_decisions
                 )
                 : [];
+
+
+        // ========================================================
+        // Career Story View
+        // 実際にCareer Storyが存在する場合のみ記録
+        // ========================================================
+
+        const hasCareerStory =
+            companies.length > 0
+            ||
+            decisions.length > 0;
+
+
+        if (hasCareerStory) {
+
+            // ----------------------------------------------------
+            // Profile View Count
+            // ----------------------------------------------------
+
+            incrementCareerStoryView(
+                careerId
+            );
+
+
+            // ----------------------------------------------------
+            // GA4: Career Story Detail View
+            // ----------------------------------------------------
+
+            if (typeof gtag === 'function') {
+
+                gtag(
+                    'event',
+                    'career_story_view',
+                    {
+                        career_id:
+                            careerId,
+
+                        login_status:
+                            careerDetailIsLoggedIn
+                                ? 'logged_in'
+                                : 'guest'
+                    }
+                );
+            }
+        }
 
 
         renderPersonSnapshot(
@@ -3966,7 +3992,60 @@ document.addEventListener(
 
 
 // ============================================================
-// 26. Error
+// 26. Career Story View Count
+// ============================================================
+
+function incrementCareerStoryView(
+    careerId
+) {
+
+    if (!careerId) {
+        return;
+    }
+
+
+    fetch(
+        `/increment-profile-view/${encodeURIComponent(
+            careerId
+        )}`,
+        {
+            method:
+                'POST',
+
+            headers: {
+                Accept:
+                    'application/json'
+            },
+
+            keepalive:
+                true
+        }
+    )
+    .then(
+        response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    'Career Story view count update failed.'
+                );
+            }
+        }
+    )
+    .catch(
+        error => {
+
+            console.error(
+                'Career Story view count error:',
+                error
+            );
+        }
+    );
+}
+
+
+// ============================================================
+// 27. Error
 // ============================================================
 
 function showPageError(

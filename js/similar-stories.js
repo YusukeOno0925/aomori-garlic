@@ -636,11 +636,6 @@
                 );
     
     
-                incrementViewCount(
-                    story.id
-                );
-    
-    
                 window.location.href =
                     `Career_detail.html?id=${
                         encodeURIComponent(
@@ -1161,11 +1156,6 @@
                 trackCareerStoryClick(
                     story.id,
                     'similar'
-                );
-    
-    
-                incrementViewCount(
-                    story.id
                 );
     
     
@@ -2070,38 +2060,6 @@
             .trim()
             .charAt(0)
             .toUpperCase();
-
-    }
-
-
-    function incrementViewCount(
-        id
-    ) {
-
-        if (!id) {
-            return;
-        }
-
-
-        fetch(
-            `/increment-profile-view/${
-                encodeURIComponent(
-                    id
-                )
-            }`,
-            {
-
-                method:
-                    'POST',
-
-                credentials:
-                    'include'
-
-            }
-        )
-            .catch(
-                () => {}
-            );
 
     }
 

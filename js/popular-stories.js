@@ -320,11 +320,6 @@
         const navigate =
             () => {
     
-                incrementViewCount(
-                    story.id
-                );
-    
-    
                 if (
                     typeof window.gtag ===
                     'function'
@@ -1311,25 +1306,6 @@
             .trim()
             .charAt(0)
             .toUpperCase();
-
-    }
-
-
-    function incrementViewCount(
-        id
-    ) {
-
-        fetch(
-            `/increment-profile-view/${encodeURIComponent(
-                id
-            )}`,
-            {
-                method:
-                    'POST'
-            }
-        ).catch(
-            () => {}
-        );
 
     }
 
