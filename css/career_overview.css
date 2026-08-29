@@ -1035,6 +1035,215 @@ main.career-overview-page {
 }
 
 
+/* THEME MODE PROFILE */
+
+.career-gps-story-card {
+
+  display:
+      flex;
+
+  flex-direction:
+      column;
+
+  min-height:
+      100%;
+
+  padding:
+      22px
+      22px
+      0;
+
+}
+
+
+.career-gps-story-profile {
+
+  display:
+      flex;
+
+  align-items:
+      center;
+
+  gap:
+      13px;
+
+}
+
+
+.career-gps-story-avatar {
+
+  display:
+      flex;
+
+  flex:
+      0 0
+      58px;
+
+  align-items:
+      center;
+
+  justify-content:
+      center;
+
+  width:
+      58px;
+
+  height:
+      58px;
+
+  border:
+      1px solid
+      rgba(
+          87,
+          70,
+          55,
+          .13
+      );
+
+  border-radius:
+      50%;
+
+  background:
+      radial-gradient(
+          circle at 35% 30%,
+          #ffffff 0%,
+          #f8f6f1 45%,
+          #ede8df 100%
+      );
+
+  color:
+      var(--overview-brown);
+
+  font-size:
+      1.35rem;
+
+  font-weight:
+      800;
+
+  box-shadow:
+      inset
+      0 0 0 5px
+      rgba(
+          255,
+          255,
+          255,
+          .7
+      );
+
+}
+
+
+.career-gps-story-person {
+
+  min-width:
+      0;
+
+}
+
+
+.career-gps-story-meta {
+
+  display:
+      flex;
+
+  flex-wrap:
+      wrap;
+
+  gap:
+      7px;
+
+  margin:
+      0;
+
+  color:
+      var(--overview-text-muted);
+
+  font-size:
+      .67rem;
+
+  line-height:
+      1.4;
+
+}
+
+
+.career-gps-story-meta span
++ span::before {
+
+  margin-right:
+      7px;
+
+  content:
+      "|";
+
+  opacity:
+      .55;
+
+}
+
+
+.career-gps-story-person h3 {
+
+  margin:
+      4px
+      0
+      0;
+
+  overflow:
+      hidden;
+
+  color:
+      var(--overview-text);
+
+  font-size:
+      1.05rem;
+
+  font-weight:
+      800;
+
+  line-height:
+      1.35;
+
+  text-overflow:
+      ellipsis;
+
+  white-space:
+      nowrap;
+
+}
+
+/* THEME MODE SECTION */
+
+.career-gps-story-section {
+
+  margin-top:
+      22px;
+
+}
+
+
+.career-gps-story-label {
+
+  margin:
+      0
+      0
+      9px;
+
+  color:
+      var(--overview-olive-dark);
+
+  font-size:
+      .58rem;
+
+  font-weight:
+      800;
+
+  letter-spacing:
+      .12em;
+
+}
+
+
 /* HOOK */
 
 .career-story-hook {
@@ -1362,6 +1571,393 @@ main.career-overview-page {
 }
 
 
+/* THEME MODE CAREER JOURNEY */
+
+.career-gps-journey {
+
+  padding:
+      3px
+      4px
+      8px;
+
+}
+
+
+.career-gps-journey__track {
+
+  position:
+      relative;
+
+  display:
+      grid;
+
+  grid-template-columns:
+      repeat(
+          auto-fit,
+          minmax(
+              64px,
+              1fr
+          )
+      );
+
+}
+
+
+.career-gps-journey__track::before {
+
+  position:
+      absolute;
+
+  top:
+      24px;
+
+  right:
+      11%;
+
+  left:
+      11%;
+
+  height:
+      1px;
+
+  background:
+      linear-gradient(
+          90deg,
+          rgba(
+              116,
+              128,
+              79,
+              .18
+          ),
+          rgba(
+              116,
+              128,
+              79,
+              .55
+          ),
+          rgba(
+              116,
+              128,
+              79,
+              .18
+          )
+      );
+
+  content:
+      '';
+
+}
+
+
+.career-gps-journey__item {
+
+  position:
+      relative;
+
+  z-index:
+      1;
+
+  display:
+      flex;
+
+  flex-direction:
+      column;
+
+  align-items:
+      center;
+
+  min-width:
+      0;
+
+  text-align:
+      center;
+
+}
+
+
+.career-gps-journey__year {
+
+  margin-bottom:
+      7px;
+
+  color:
+      var(--overview-text-muted);
+
+  font-size:
+      .59rem;
+
+  font-weight:
+      700;
+
+}
+
+
+.career-gps-journey__dot {
+
+  width:
+      8px;
+
+  height:
+      8px;
+
+  border:
+      2px solid
+      #fff;
+
+  border-radius:
+      50%;
+
+  background:
+      var(--overview-olive);
+
+  box-shadow:
+      0 0 0 1px
+      rgba(
+          116,
+          128,
+          79,
+          .35
+      );
+
+}
+
+
+.career-gps-journey__dot.is-current {
+
+  background:
+      var(--overview-brown);
+
+}
+
+
+.career-gps-journey__stage {
+
+  display:
+      -webkit-box;
+
+  max-width:
+      92px;
+
+  margin-top:
+      8px;
+
+  overflow:
+      hidden;
+
+  color:
+      var(--overview-text-sub);
+
+  font-size:
+      .58rem;
+
+  line-height:
+      1.45;
+
+  overflow-wrap:
+      anywhere;
+
+  -webkit-box-orient:
+      vertical;
+
+  -webkit-line-clamp:
+      2;
+
+}
+
+
+.career-gps-journey-empty {
+
+  margin:
+      0;
+
+  color:
+      var(--overview-text-muted);
+
+  font-size:
+      .7rem;
+
+}
+
+
+/* ========================================
+ CAREER DECISION
+======================================== */
+
+.career-gps-story-decision {
+
+  padding-top:
+      18px;
+
+  border-top:
+      1px solid
+      var(--overview-border);
+
+}
+
+
+.career-gps-story-decision__heading {
+
+  display:
+      flex;
+
+  align-items:
+      center;
+
+  justify-content:
+      space-between;
+
+  gap:
+      12px;
+
+}
+
+
+.career-gps-story-decision__heading
+.career-gps-story-label {
+
+  margin-bottom:
+      0;
+
+}
+
+
+.career-gps-decision-badge {
+
+  flex:
+      0 0 auto;
+
+  padding:
+      4px
+      8px;
+
+  border:
+      1px solid
+      var(--overview-border-strong);
+
+  border-radius:
+      999px;
+
+  background:
+      var(--overview-olive-soft);
+
+  color:
+      var(--overview-olive-dark);
+
+  font-size:
+      .6rem;
+
+  font-weight:
+      800;
+
+}
+
+
+.career-gps-decision-hook {
+
+  display:
+      -webkit-box;
+
+  margin:
+      10px
+      0
+      0;
+
+  overflow:
+      hidden;
+
+  color:
+      var(--overview-text);
+
+  font-size:
+      .96rem;
+
+  font-weight:
+      800;
+
+  line-height:
+      1.55;
+
+  overflow-wrap:
+      anywhere;
+
+  -webkit-box-orient:
+      vertical;
+
+  -webkit-line-clamp:
+      3;
+
+}
+
+
+.career-gps-decision-hook--empty {
+
+  color:
+      var(--overview-text-muted);
+
+  font-weight:
+      600;
+
+}
+
+
+.career-gps-priority {
+
+  margin-top:
+      12px;
+
+  padding:
+      10px
+      12px;
+
+  border-radius:
+      11px;
+
+  background:
+      var(--overview-surface-soft);
+
+}
+
+
+.career-gps-priority span {
+
+  display:
+      block;
+
+  margin-bottom:
+      3px;
+
+  color:
+      var(--overview-text-muted);
+
+  font-size:
+      .58rem;
+
+  font-weight:
+      700;
+
+}
+
+
+.career-gps-priority p {
+
+  margin:
+      0;
+
+  color:
+      var(--overview-text-sub);
+
+  font-size:
+      .7rem;
+
+  line-height:
+      1.6;
+
+  overflow-wrap:
+      anywhere;
+
+}
+
+
 /* ========================================
  CARD FOOTER
 ======================================== */
@@ -1458,6 +2054,76 @@ main.career-overview-page {
 
   transform:
       translateX(3px);
+
+}
+
+
+/* THEME MODE FOOTER */
+
+.career-gps-story-footer {
+
+  display:
+      flex;
+
+  align-items:
+      center;
+
+  justify-content:
+      flex-end;
+
+  gap:
+      7px;
+
+  margin:
+      auto
+      -22px
+      0;
+
+  margin-top:
+      22px;
+
+  padding:
+      13px
+      22px;
+
+  border-top:
+      1px solid
+      var(--overview-border);
+
+  background:
+      linear-gradient(
+          180deg,
+          rgba(
+              251,
+              250,
+              247,
+              .45
+          ),
+          rgba(
+              247,
+              245,
+              241,
+              .8
+          )
+      );
+
+  color:
+      var(--overview-olive-dark);
+
+  font-size:
+      .67rem;
+
+  font-weight:
+      800;
+
+}
+
+
+.career-story-card--gps:hover
+.career-gps-story-footer {
+
+  color:
+      var(--overview-olive);
 
 }
 
@@ -2171,6 +2837,74 @@ main.career-overview-page {
           17px;
 
   }
+
+
+   /* Theme mode cards */
+
+   .career-gps-story-card {
+
+    padding:
+        18px
+        17px
+        0;
+
+}
+
+
+.career-gps-story-avatar {
+
+    flex-basis:
+        52px;
+
+    width:
+        52px;
+
+    height:
+        52px;
+
+    font-size:
+        1.15rem;
+
+}
+
+
+.career-gps-story-section {
+
+    margin-top:
+        18px;
+
+}
+
+
+.career-gps-journey {
+
+    overflow-x:
+        auto;
+
+}
+
+
+.career-gps-journey__track {
+
+    min-width:
+        330px;
+
+}
+
+
+.career-gps-story-footer {
+
+    margin-right:
+        -17px;
+
+    margin-left:
+        -17px;
+
+    padding:
+        12px
+        17px;
+
+}
 
 
   /* CTA */

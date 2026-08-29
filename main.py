@@ -31,6 +31,7 @@ from scripts.announcements import router as announcements_router
 from scripts.metrics import router as metrics_router
 from scripts.career_decisions import router as career_decisions_router
 from scripts.career_story_previews import router as career_story_previews_router
+from scripts.career_stories_by_theme import router as career_stories_by_theme_router
 from fastapi_mail import MessageSchema
 from config import environment, local_base_url, production_base_url
 
@@ -67,6 +68,7 @@ app.include_router(announcements_router)
 app.include_router(metrics_router)
 app.include_router(career_decisions_router)
 app.include_router(career_story_previews_router)
+app.include_router(career_stories_by_theme_router)
 
 # CORSの設定
 app.add_middleware(

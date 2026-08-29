@@ -2479,20 +2479,10 @@ main.career-gps-home *::after {
 
 
 /* =========================================================
-   05. DISCOVERY
+   05. DISCOVERY / DECISION THEMES
    ========================================================= */
 
-.home-discovery-section {
-    display:
-        grid;
-
-    grid-template-columns:
-        minmax(0,1.12fr)
-        minmax(340px,0.72fr);
-
-    gap:
-        20px;
-
+   .home-discovery-section {
     max-width:
         1280px;
 
@@ -2502,11 +2492,11 @@ main.career-gps-home *::after {
         68px;
 }
 
-.decision-theme-area,
-.career-search-area {
+.decision-theme-area {
     padding:
-        34px
-        32px;
+        40px
+        42px
+        42px;
 
     border:
         1px solid
@@ -2515,23 +2505,17 @@ main.career-gps-home *::after {
     border-radius:
         var(--home-radius-lg);
 
+    background:
+        #ffffff;
+
     box-shadow:
         var(--home-shadow-sm);
 }
 
-.decision-theme-area {
-    background:
-        #ffffff;
-}
 
-.career-search-area {
-    background:
-        linear-gradient(
-            145deg,
-            #f3ede5 0%,
-            #f8f4ed 100%
-        );
-}
+/* =========================================================
+   DECISION THEME GRID
+   ========================================================= */
 
 .decision-theme-grid {
     display:
@@ -2539,47 +2523,55 @@ main.career-gps-home *::after {
 
     grid-template-columns:
         repeat(
-            2,
+            3,
             minmax(0,1fr)
         );
 
     gap:
-        10px;
-
-    margin-top:
-        25px;
-}
-
-.decision-theme-card {
-    display:
-        grid;
-
-    grid-template-columns:
-        32px
-        minmax(0,1fr);
-
-    align-items:
-        flex-start;
-
-    gap:
         12px;
 
+    margin-top:
+        28px;
+}
+
+
+/* =========================================================
+   DECISION THEME CARD
+   ========================================================= */
+
+.decision-theme-card {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-height:
+        142px;
+
     padding:
-        16px
-        15px;
+        21px
+        20px
+        18px;
+
+    overflow:
+        hidden;
 
     border:
         1px solid
         rgba(116,128,79,0.18);
 
     border-radius:
-        14px;
+        16px;
 
     background:
         linear-gradient(
             145deg,
-            #fbfcf7,
-            #f5f6ef
+            #fbfcf7 0%,
+            #f5f6ef 100%
         );
 
     color:
@@ -2592,15 +2584,15 @@ main.career-gps-home *::after {
         none;
 
     transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        background-color 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.22s ease,
+        border-color 0.22s ease,
+        background-color 0.22s ease,
+        box-shadow 0.22s ease;
 }
 
 .decision-theme-card:hover {
     transform:
-        translateY(-2px);
+        translateY(-3px);
 
     border-color:
         var(--home-line-strong);
@@ -2609,76 +2601,87 @@ main.career-gps-home *::after {
         var(--home-surface-olive);
 
     box-shadow:
-        0 8px 20px
-        rgba(89,98,56,0.06);
+        0 10px 24px
+        rgba(89,98,56,0.08);
 }
+
+
+/* 番号はCareer GPS上の意味がないため非表示 */
 
 .decision-theme-number {
     display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    width:
-        29px;
-
-    height:
-        29px;
-
-    border-radius:
-        50%;
-
-    background:
-        var(--home-surface-olive-strong);
-
-    color:
-        var(--home-olive-dark);
-
-    font-size:
-        0.57rem;
-
-    font-weight:
-        800;
-
-    box-shadow:
-        inset
-        0 0 0
-        1px
-        rgba(116,128,79,0.16);
+        none;
 }
+
+
+/* =========================================================
+   DECISION THEME TEXT
+   ========================================================= */
 
 .decision-theme-card h3 {
     margin:
-        1px
-        0
-        4px;
+        0;
 
     color:
         var(--home-text);
 
     font-size:
-        0.82rem;
+        0.9rem;
+
+    font-weight:
+        800;
 
     line-height:
-        1.45;
+        1.5;
 }
 
 .decision-theme-card p {
     margin:
+        7px
+        0
         0;
 
     color:
-        var(--home-text-muted);
+        var(--home-text-sub);
 
     font-size:
-        0.65rem;
+        0.68rem;
 
     line-height:
-        1.5;
+        1.65;
+}
+
+
+/* =========================================================
+   DECISION THEME LINK
+   ========================================================= */
+
+.decision-theme-card::after {
+    margin-top:
+        auto;
+
+    padding-top:
+        17px;
+
+    color:
+        var(--home-olive-dark);
+
+    font-size:
+        0.61rem;
+
+    font-weight:
+        800;
+
+    content:
+        '同じ悩みのStoryを見る  →';
+
+    transition:
+        transform 0.2s ease;
+}
+
+.decision-theme-card:hover::after {
+    transform:
+        translateX(3px);
 }
 
 
@@ -3476,12 +3479,6 @@ main.career-gps-home *::after {
             );
     }
 
-    .home-discovery-section {
-        grid-template-columns:
-            minmax(0,1fr)
-            minmax(310px,0.65fr);
-    }
-
     .home-final-section {
         gap:
             36px;
@@ -3540,16 +3537,6 @@ main.career-gps-home *::after {
 
         flex-direction:
             column;
-    }
-
-    .home-discovery-section {
-        grid-template-columns:
-            1fr;
-    }
-
-    .career-search-area {
-        max-width:
-            none;
     }
 
     .home-final-section {
@@ -4054,67 +4041,66 @@ main.career-gps-home *::after {
     /* DISCOVERY */
 
     .home-discovery-section {
-        gap:
-            14px;
-
-        margin-bottom:
-            40px;
+      margin-bottom:
+          40px;
     }
 
-    .decision-theme-area,
-    .career-search-area {
-        padding:
-            26px
-            18px;
+    .decision-theme-area {
+      padding:
+          27px
+          18px
+          28px;
 
-        border-radius:
-            20px;
+      border-radius:
+          20px;
     }
 
     .decision-theme-grid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
+      grid-template-columns:
+          repeat(
+              2,
+              minmax(0,1fr)
+          );
 
-        gap:
-            9px;
+      gap:
+          9px;
 
-        margin-top:
-            20px;
+      margin-top:
+          20px;
     }
 
     .decision-theme-card {
-        display:
-            block;
+      min-height:
+          136px;
 
-        min-height:
-            122px;
-
-        padding:
-            13px;
-    }
-
-    .decision-theme-number {
-        margin-bottom:
-            12px;
+      padding:
+          16px
+          14px
+          14px;
     }
 
     .decision-theme-card h3 {
-        font-size:
-            0.76rem;
+      font-size:
+          0.78rem;
     }
 
     .decision-theme-card p {
-        margin-top:
-            5px;
+      margin-top:
+          5px;
 
-        font-size:
-            0.59rem;
+      font-size:
+          0.61rem;
 
-        line-height:
-            1.45;
+      line-height:
+          1.5;
+    }
+
+    .decision-theme-card::after {
+      padding-top:
+          13px;
+
+      font-size:
+          0.57rem;
     }
 
 
@@ -4379,19 +4365,6 @@ main.career-gps-home *::after {
     .personalized-benefit {
         flex-basis:
             88%;
-    }
-
-    .decision-theme-grid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
-    }
-
-    .decision-theme-card {
-        min-height:
-            116px;
     }
 
     .home-final-message h2 {
