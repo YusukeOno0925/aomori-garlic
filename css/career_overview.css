@@ -757,6 +757,9 @@ main.career-overview-page {
           )
       );
 
+  align-items:
+      stretch;
+
   gap:
       18px;
 
@@ -1940,8 +1943,14 @@ main.career-overview-page {
 
 .career-gps-priority p {
 
+  display:
+      -webkit-box;
+
   margin:
       0;
+
+  overflow:
+      hidden;
 
   color:
       var(--overview-text-sub);
@@ -1954,6 +1963,12 @@ main.career-overview-page {
 
   overflow-wrap:
       anywhere;
+
+  -webkit-box-orient:
+      vertical;
+
+  -webkit-line-clamp:
+      2;
 
 }
 
