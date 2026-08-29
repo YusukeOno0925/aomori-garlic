@@ -2118,6 +2118,306 @@ main.career-gps-home *::after {
 
 
 /* =========================================================
+   CAREER STORY PREVIEW
+   ========================================================= */
+
+   .career-story-preview-area {
+    margin-top:
+        28px;
+}
+
+.career-story-preview-heading {
+    margin-bottom:
+        20px;
+}
+
+.career-story-preview-label,
+.career-preview-journey__label {
+    margin:
+        0
+        0
+        8px;
+
+    color:
+        var(--home-olive-dark);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.14em;
+
+    line-height:
+        1.4;
+}
+
+.career-story-preview-heading h3 {
+    margin:
+        0;
+
+    color:
+        var(--home-text);
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+/* Career Journey */
+
+.career-preview-journey {
+    margin:
+        20px
+        21px
+        0;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid
+        var(--home-line);
+}
+
+
+/* Career Decision */
+
+.career-preview-decision {
+    margin:
+        20px
+        21px
+        0;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid
+        var(--home-line);
+}
+
+.career-preview-decision__heading {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        12px;
+}
+
+.career-preview-decision__heading > span {
+    color:
+        var(--home-olive-dark);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.12em;
+}
+
+.career-preview-decision__heading strong {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        24px;
+
+    padding:
+        0
+        9px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--home-surface-olive);
+
+    color:
+        var(--home-olive-dark);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+}
+
+.career-preview-decision__hook {
+    display:
+        -webkit-box;
+
+    margin:
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--home-text);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.7;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        3;
+}
+
+.career-preview-priority {
+    margin-top:
+        16px;
+
+    padding:
+        13px
+        14px;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--home-surface-soft);
+}
+
+.career-preview-priority > span {
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        var(--home-text-muted);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        700;
+}
+
+.career-preview-priority p {
+    display:
+        -webkit-box;
+
+    margin:
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--home-text-sub);
+
+    font-size:
+        0.7rem;
+
+    line-height:
+        1.65;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        3;
+}
+
+
+/* Preview CTA */
+
+.career-story-preview-cta {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        28px;
+
+    margin-top:
+        24px;
+
+    padding:
+        24px
+        4px
+        0;
+
+    border-top:
+        1px solid
+        var(--home-line-strong);
+}
+
+.career-story-preview-cta > div {
+    max-width:
+        650px;
+}
+
+.career-story-preview-cta p {
+    margin:
+        0;
+
+    color:
+        var(--home-text-sub);
+
+    font-size:
+        0.76rem;
+
+    line-height:
+        1.7;
+}
+
+.career-story-preview-cta
+.career-story-preview-cta__label {
+    margin-bottom:
+        5px;
+
+    color:
+        var(--home-text);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
    PREVIEW BLUR
    ========================================================= */
 
@@ -3685,6 +3985,64 @@ main.career-gps-home *::after {
         margin-bottom:
             12px;
     }
+
+
+    /* CAREER STORY PREVIEW */
+
+    .career-story-preview-area {
+      margin-top:
+          22px;
+  }
+
+  .career-story-preview-heading {
+      margin-bottom:
+          16px;
+  }
+
+  .career-preview-journey {
+      margin:
+          17px
+          17px
+          0;
+
+      padding-top:
+          16px;
+  }
+
+  .career-preview-decision {
+      margin:
+          17px
+          17px
+          0;
+
+      padding-top:
+          16px;
+  }
+
+  .career-story-preview-cta {
+      align-items:
+          flex-start;
+
+      flex-direction:
+          column;
+
+      gap:
+          16px;
+
+      margin-top:
+          20px;
+
+      padding:
+          20px
+          0
+          0;
+  }
+
+  .career-story-preview-cta
+  .home-secondary-button {
+      width:
+          100%;
+  }
 
 
     /* DISCOVERY */

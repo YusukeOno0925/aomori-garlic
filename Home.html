@@ -397,172 +397,8 @@
         </section>
 
 
-
         <!-- =================================================
-             02. What is Career GPS
-        ================================================== -->
-
-        <section
-            id="about-career-gps"
-            class="home-about-section"
-        >
-
-            <div class="home-section-heading home-section-heading--center">
-
-                <p class="home-eyebrow">
-                    WHAT IS CAREER GPS?
-                </p>
-
-                <h2>
-                    Career GPSとは？
-                </h2>
-
-                <p>
-                    実際の人生の意思決定から、
-                    理由・結果・学びを知るキャリアのプラットフォームです。
-                </p>
-
-            </div>
-
-
-            <div class="career-gps-value-grid">
-
-                <article class="career-gps-value-card">
-
-                    <div class="value-icon">
-                        01
-                    </div>
-
-                    <h3>
-                        リアルな意思決定
-                    </h3>
-
-                    <p>
-                        なぜその選択をしたのか。
-                        成功談だけでなく、迷いや葛藤まで知ることができます。
-                    </p>
-
-                </article>
-
-
-                <article class="career-gps-value-card">
-
-                    <div class="value-icon">
-                        02
-                    </div>
-
-                    <h3>
-                        結果と、その後がわかる
-                    </h3>
-
-                    <p>
-                        年収・役割・満足度など、
-                        選択したあとにどう変わったのかを確認できます。
-                    </p>
-
-                </article>
-
-
-                <article class="career-gps-value-card">
-
-                    <div class="value-icon">
-                        03
-                    </div>
-
-                    <h3>
-                        自分に近い人を発見
-                    </h3>
-
-                    <p>
-                        年齢、職種、業界、価値観などから、
-                        自分に近い人のキャリアを探せます。
-                    </p>
-
-                </article>
-
-
-                <article class="career-gps-value-card">
-
-                    <div class="value-icon">
-                        AI
-                    </div>
-
-                    <h3>
-                        AIが要点を整理
-                    </h3>
-
-                    <p>
-                        長いストーリーも、
-                        判断軸や転機をわかりやすく整理して確認できます。
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             03. Popular Stories
-        ================================================== -->
-
-        <section
-            id="popular-stories"
-            class="home-story-section"
-        >
-
-            <div class="home-section-heading-row">
-
-                <div>
-
-                    <p class="home-eyebrow">
-                        POPULAR STORIES
-                    </p>
-
-                    <h2>
-                        みんなが読んでいるCareer Story
-                    </h2>
-
-                    <p>
-                        今、多くの人が読んでいる意思決定のストーリー。
-                    </p>
-
-                </div>
-
-
-                <a
-                    href="Career_overview.html"
-                    class="home-section-link"
-                >
-                    すべて見る
-                    <span aria-hidden="true">→</span>
-                </a>
-
-            </div>
-
-
-            <div
-                id="popular-stories-list"
-                class="home-story-grid"
-            >
-                <!-- popular-stories.jsで生成 -->
-            </div>
-
-
-            <div
-                id="popular-stories-indicators"
-                class="carousel-indicators"
-            >
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             04. Similar Stories
+             02. Similar Stories
         ================================================== -->
 
         <section
@@ -579,15 +415,15 @@
                     </p>
 
                     <h2>
-                        あなたに近いCareer Story
+                        あなたと近い人は、こんな選択をしています。
                     </h2>
 
                     <p
                         id="similar-stories-description"
                         class="personalized-description"
                     >
-                        ログインすると、
-                        あなたのプロフィールに近いキャリアを見つけられます。
+                        あなたの現在地や大切にしていることから、
+                        次の選択を考えるヒントになりそうなCareer Storyを見つけます。
                     </p>
 
                 </div>
@@ -597,7 +433,7 @@
                     href="/Register.html"
                     class="home-secondary-button home-login-cta"
                 >
-                    無料登録して探す
+                    自分に近いCareer Storyを見つける
                 </a>
 
             </div>
@@ -620,62 +456,57 @@
             </div>
 
 
-            <!-- 未ログイン時 -->
+            <!-- 未ログイン時：Career Story Preview -->
             <div
-                id="similar-story-benefits"
-                class="personalized-benefit-grid"
-            >
+                id="career-story-preview-area"
+                class="career-story-preview-area"
+                style="display: none;"
+                >
 
-                <div class="personalized-benefit">
+                <div class="career-story-preview-heading">
 
-                    <span class="personalized-benefit-icon">
-                        01
-                    </span>
+                    <p class="career-story-preview-label">
+                        CAREER STORY PREVIEW
+                    </p>
 
                     <h3>
-                        自分と近い人をおすすめ
+                        たとえば、こんなキャリアと選択があります
                     </h3>
-
-                    <p>
-                        年齢・職種・業界などをもとに、
-                        近いキャリアを見つけます。
-                    </p>
 
                 </div>
 
 
-                <div class="personalized-benefit">
-
-                    <span class="personalized-benefit-icon">
-                        02
-                    </span>
-
-                    <h3>
-                        価値観の近い選択を見る
-                    </h3>
-
-                    <p>
-                        年収、成長、やりがい、働き方など、
-                        自分が大切にする軸から探せます。
-                    </p>
-
+                <div
+                    id="career-story-preview-list"
+                    class="home-story-grid home-story-grid--personalized"
+                >
+                    <!-- similar-stories.jsで生成 -->
                 </div>
 
 
-                <div class="personalized-benefit">
+                <div class="career-story-preview-cta">
 
-                    <span class="personalized-benefit-icon">
-                        03
-                    </span>
+                    <div>
 
-                    <h3>
-                        迷いを越えた人から学ぶ
-                    </h3>
+                        <p class="career-story-preview-cta__label">
+                            あなたの場合は？
+                        </p>
 
-                    <p>
-                        同じような悩みを経験した人の、
-                        判断とその後を確認できます。
-                    </p>
+                        <p>
+                            Career GPSに現在地を登録すると、
+                            自分と近いキャリアを歩んだ人が、
+                            その先でどんな選択をしたのか見つけられます。
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="/Register.html"
+                        class="home-secondary-button"
+                    >
+                        自分に近いCareer Storyを見つける
+                    </a>
 
                 </div>
 
@@ -684,9 +515,8 @@
         </section>
 
 
-
         <!-- =================================================
-             05. Decision Themes / Search
+             03. Decision Themes / Search
         ================================================== -->
 
         <section class="home-discovery-section">
@@ -945,6 +775,168 @@
                     </button>
 
                 </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             04. Popular Stories
+        ================================================== -->
+
+        <section
+            id="popular-stories"
+            class="home-story-section"
+        >
+
+            <div class="home-section-heading-row">
+
+                <div>
+
+                    <p class="home-eyebrow">
+                        POPULAR STORIES
+                    </p>
+
+                    <h2>
+                        みんなが読んでいるCareer Story
+                    </h2>
+
+                    <p>
+                        今、多くの人が読んでいる意思決定のストーリー。
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="Career_overview.html"
+                    class="home-section-link"
+                >
+                    すべて見る
+                    <span aria-hidden="true">→</span>
+                </a>
+
+            </div>
+
+
+            <div
+                id="popular-stories-list"
+                class="home-story-grid"
+            >
+                <!-- popular-stories.jsで生成 -->
+            </div>
+
+
+            <div
+                id="popular-stories-indicators"
+                class="carousel-indicators"
+            >
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             05. What is Career GPS
+        ================================================== -->
+
+        <section
+            id="about-career-gps"
+            class="home-about-section"
+        >
+
+            <div class="home-section-heading home-section-heading--center">
+
+                <p class="home-eyebrow">
+                    WHAT IS CAREER GPS?
+                </p>
+
+                <h2>
+                    Career GPSとは？
+                </h2>
+
+                <p>
+                    実際の人生の意思決定から、
+                    理由・結果・学びを知るキャリアのプラットフォームです。
+                </p>
+
+            </div>
+
+
+            <div class="career-gps-value-grid">
+
+                <article class="career-gps-value-card">
+
+                    <div class="value-icon">
+                        01
+                    </div>
+
+                    <h3>
+                        リアルな意思決定
+                    </h3>
+
+                    <p>
+                        なぜその選択をしたのか。
+                        成功談だけでなく、迷いや葛藤まで知ることができます。
+                    </p>
+
+                </article>
+
+
+                <article class="career-gps-value-card">
+
+                    <div class="value-icon">
+                        02
+                    </div>
+
+                    <h3>
+                        結果と、その後がわかる
+                    </h3>
+
+                    <p>
+                        年収・役割・満足度など、
+                        選択したあとにどう変わったのかを確認できます。
+                    </p>
+
+                </article>
+
+
+                <article class="career-gps-value-card">
+
+                    <div class="value-icon">
+                        03
+                    </div>
+
+                    <h3>
+                        自分に近い人を発見
+                    </h3>
+
+                    <p>
+                        年齢、職種、業界、価値観などから、
+                        自分に近い人のキャリアを探せます。
+                    </p>
+
+                </article>
+
+
+                <article class="career-gps-value-card">
+
+                    <div class="value-icon">
+                        AI
+                    </div>
+
+                    <h3>
+                        AIが要点を整理
+                    </h3>
+
+                    <p>
+                        長いストーリーも、
+                        判断軸や転機をわかりやすく整理して確認できます。
+                    </p>
+
+                </article>
 
             </div>
 

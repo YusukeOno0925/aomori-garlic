@@ -18,9 +18,14 @@
                 'similar-stories-description'
             );
 
-        const benefits =
+        const previewArea =
             document.getElementById(
-                'similar-story-benefits'
+                'career-story-preview-area'
+            );
+        
+        const previewList =
+            document.getElementById(
+                'career-story-preview-list'
             );
 
         const loginCTA =
@@ -46,28 +51,34 @@
 
             list.style.display =
                 'none';
-
-
-            if (benefits) {
-
-                benefits.style.display =
-                    'grid';
-
-            }
-
-
+        
+        
             if (loginCTA) {
-
+        
                 loginCTA.style.display =
                     'inline-flex';
-
+        
             }
-
-
+        
+        
             description.textContent =
-                '無料登録すると、歩んできたキャリア、現在の職種・業界、価値観、年代などから、あなたの参考になりそうなCareer Storyを見つけられます。';
-
-
+                'まずは、実際にどんな道を歩み、どんな分岐で選択した人がいるのか見てみましょう。';
+        
+        
+            if (
+                previewArea
+                &&
+                previewList
+            ) {
+        
+                await loadGuestPreviews(
+                    previewArea,
+                    previewList
+                );
+        
+            }
+        
+        
             return;
         }
 
@@ -76,11 +87,11 @@
            Logged in
         ================================================= */
 
-        if (benefits) {
+        if (previewArea) {
 
-            benefits.style.display =
+            previewArea.style.display =
                 'none';
-
+        
         }
 
 
@@ -93,7 +104,7 @@
 
 
         description.textContent =
-            'これまで歩んできた道や現在の仕事、価値観などから、あなたに近いCareer Storyを選びました。';
+            'あなたのこれまでのキャリアや大切にしていることから、次の選択を考えるヒントになりそうな経験を選びました。';
 
 
         try {
@@ -164,14 +175,6 @@
                 }
 
 
-                if (benefits) {
-
-                    benefits.style.display =
-                        'grid';
-
-                }
-
-
                 return;
             }
 
@@ -224,16 +227,650 @@
                 'おすすめCareer Storyを読み込めませんでした。';
 
 
-            if (benefits) {
+        }
 
-                benefits.style.display =
-                    'grid';
+    }
+
+
+    /* =====================================================
+    Guest Career Story Preview
+    ====================================================== */
+
+    async function loadGuestPreviews(
+        previewArea,
+        previewList
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    '/career-story-previews/'
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
 
             }
+
+
+            const data =
+                await response.json();
+
+
+            const careers =
+                Array.isArray(
+                    data.careers
+                )
+                    ? data.careers
+                    : [];
+
+
+            if (!careers.length) {
+
+                previewArea.style.display =
+                    'none';
+
+                return;
+            }
+
+
+            previewList.innerHTML =
+                '';
+
+
+            careers
+                .slice(0, 3)
+                .forEach(
+                    rawStory => {
+
+                        previewList.appendChild(
+                            createGuestPreviewCard(
+                                normalizeGuestPreview(
+                                    rawStory
+                                )
+                            )
+                        );
+
+                    }
+                );
+
+
+            previewArea.style.display =
+                'block';
+
+
+        } catch (error) {
+
+            console.error(
+                'Career Story Preview error:',
+                error
+            );
+
+
+            previewArea.style.display =
+                'none';
 
         }
 
     }
+
+    function normalizeGuestPreview(
+        story
+    ) {
+    
+        const decision =
+            story?.decision
+            ||
+            {};
+    
+    
+        return {
+    
+            id:
+                story.id,
+    
+    
+            name:
+                story.name
+                ||
+                '匿名',
+    
+    
+            age:
+                Number.isFinite(
+                    Number(
+                        story.age
+                    )
+                )
+                    ? Number(
+                        story.age
+                    )
+                    : null,
+    
+    
+            profession:
+                story.profession
+                ||
+                '職種未設定',
+    
+    
+            industry:
+                story.industry
+                ||
+                '',
+    
+    
+            careerStages:
+                normalizePreviewStages(
+                    story.careerStages
+                ),
+    
+    
+            decision: {
+    
+                type:
+                    decision.decision_type
+                    ||
+                    '',
+    
+                title:
+                    decision.title
+                    ||
+                    '',
+    
+                trigger:
+                    decision.trigger_text
+                    ||
+                    '',
+    
+                dilemma:
+                    decision.dilemma_text
+                    ||
+                    '',
+    
+                priority:
+                    decision.priority_text
+                    ||
+                    ''
+    
+            }
+    
+        };
+    
+    }
+
+
+    function normalizePreviewStages(
+        stages
+    ) {
+    
+        if (!Array.isArray(stages)) {
+    
+            return [];
+    
+        }
+    
+    
+        return stages
+            .filter(
+                stage =>
+                    stage
+                    &&
+                    stage.label
+            )
+            .map(
+                stage => ({
+    
+                    type:
+                        stage.type
+                        ||
+                        '',
+    
+                    year:
+                        stage.year
+                        ||
+                        '',
+    
+                    label:
+                        stage.label
+    
+                })
+            );
+    
+    }
+
+
+    function createGuestPreviewCard(
+        story
+    ) {
+    
+        const card =
+            document.createElement(
+                'article'
+            );
+    
+    
+        card.className =
+            'home-career-card home-career-card--preview';
+    
+    
+        card.tabIndex =
+            0;
+    
+    
+        card.setAttribute(
+            'role',
+            'link'
+        );
+    
+    
+        const decisionHook =
+            story.decision.dilemma
+            ||
+            story.decision.title
+            ||
+            story.decision.trigger
+            ||
+            'この人がどんな選択をしたのかを見る';
+    
+    
+        card.innerHTML = `
+    
+            <div class="home-career-card__top">
+    
+                <div class="home-career-avatar">
+    
+                    ${escapeHTML(
+                        getInitial(
+                            story.name
+                        )
+                    )}
+    
+                </div>
+    
+    
+                <div class="home-career-person">
+    
+                    <p class="home-career-person__meta">
+    
+                        ${
+                            story.age !== null
+    
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        getAgeGroup(
+                                            story.age
+                                        )
+                                    )}
+                                </span>
+                            `
+    
+                            : ''
+                        }
+    
+    
+                        ${
+                            story.profession
+                            &&
+                            story.profession !==
+                            '職種未設定'
+    
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        story.profession
+                                    )}
+                                </span>
+                            `
+    
+                            : ''
+                        }
+    
+                    </p>
+    
+    
+                    <h3>
+                        ${escapeHTML(
+                            story.name
+                        )}
+                    </h3>
+    
+                </div>
+    
+            </div>
+    
+    
+            ${buildGuestTimelineHTML(
+                story.careerStages
+            )}
+    
+    
+            <div class="career-preview-decision">
+    
+                <div class="career-preview-decision__heading">
+    
+                    <span>
+                        CAREER DECISION
+                    </span>
+    
+                    ${
+                        story.decision.type
+    
+                        ? `
+                            <strong>
+                                ${escapeHTML(
+                                    story.decision.type
+                                )}
+                            </strong>
+                        `
+    
+                        : ''
+                    }
+    
+                </div>
+    
+    
+                <p class="career-preview-decision__hook">
+    
+                    ${escapeHTML(
+                        decisionHook
+                    )}
+    
+                </p>
+    
+    
+                ${
+                    story.decision.priority
+    
+                    ? `
+                        <div class="career-preview-priority">
+    
+                            <span>
+                                重視したこと
+                            </span>
+    
+                            <p>
+                                ${escapeHTML(
+                                    story.decision.priority
+                                )}
+                            </p>
+    
+                        </div>
+                    `
+    
+                    : ''
+                }
+    
+            </div>
+    
+    
+            <div class="home-career-card__footer">
+    
+                <span class="home-career-card__link">
+    
+                    選択の背景と、その後を見る
+    
+                    <span aria-hidden="true">
+                        →
+                    </span>
+    
+                </span>
+    
+            </div>
+    
+        `;
+    
+    
+        const navigate =
+            () => {
+    
+                trackCareerStoryClick(
+                    story.id,
+                    'guest_preview'
+                );
+    
+    
+                incrementViewCount(
+                    story.id
+                );
+    
+    
+                window.location.href =
+                    `Career_detail.html?id=${
+                        encodeURIComponent(
+                            story.id
+                        )
+                    }`;
+    
+            };
+    
+    
+        card.addEventListener(
+            'click',
+            navigate
+        );
+    
+    
+        card.addEventListener(
+            'keydown',
+            event => {
+    
+                if (
+                    event.key === 'Enter'
+                    ||
+                    event.key === ' '
+                ) {
+    
+                    event.preventDefault();
+    
+                    navigate();
+    
+                }
+    
+            }
+        );
+    
+    
+        return card;
+    
+    }
+
+
+    function buildGuestTimelineHTML(
+        stages
+    ) {
+    
+        if (!stages.length) {
+    
+            return '';
+    
+        }
+    
+    
+        const displayStages =
+            reduceGuestStages(
+                stages
+            );
+    
+    
+        return `
+    
+            <div class="career-preview-journey">
+    
+                <p class="career-preview-journey__label">
+                    CAREER JOURNEY
+                </p>
+    
+    
+                <div class="home-career-timeline">
+    
+                    <div class="home-career-timeline__track">
+    
+                        ${
+                            displayStages
+                                .map(
+                                    (
+                                        stage,
+                                        index
+                                    ) => `
+    
+                                        <div
+                                            class="
+                                                home-career-timeline__item
+                                            "
+                                        >
+    
+                                            <span
+                                                class="
+                                                    home-career-timeline__year
+                                                "
+                                            >
+                                                ${escapeHTML(
+                                                    String(
+                                                        stage.year
+                                                        ||
+                                                        ''
+                                                    )
+                                                )}
+                                            </span>
+    
+    
+                                            <span
+                                                class="
+                                                    home-career-timeline__dot
+    
+                                                    ${
+                                                        index
+                                                        ===
+                                                        displayStages.length - 1
+    
+                                                        ? 'is-current'
+    
+                                                        : ''
+                                                    }
+                                                "
+                                            >
+                                            </span>
+    
+    
+                                            <span
+                                                class="
+                                                    home-career-timeline__stage
+                                                "
+                                            >
+    
+                                                ${escapeHTML(
+                                                    simplifyStage(
+                                                        buildGuestStageLabel(
+                                                            stage
+                                                        )
+                                                    )
+                                                )}
+    
+                                            </span>
+    
+                                        </div>
+    
+                                    `
+                                )
+                                .join('')
+                        }
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+        `;
+    
+    }
+
+
+    function buildGuestStageLabel(
+        stage
+    ) {
+    
+        const label =
+            String(
+                stage?.label
+                ||
+                ''
+            )
+                .trim();
+    
+    
+        if (!label) {
+            return '';
+        }
+    
+    
+        if (
+            stage.type ===
+            'education'
+        ) {
+    
+            return `${label} 入学`;
+    
+        }
+    
+    
+        if (
+            stage.type ===
+            'company'
+        ) {
+    
+            return `${label} 入社`;
+    
+        }
+    
+    
+        return label;
+    
+    }
+    
+    
+    function reduceGuestStages(
+        stages
+    ) {
+    
+        if (stages.length <= 4) {
+    
+            return stages;
+    
+        }
+    
+    
+        return [
+    
+            stages[0],
+    
+            stages[
+                Math.floor(
+                    stages.length / 3
+                )
+            ],
+    
+            stages[
+                Math.floor(
+                    stages.length * 2 / 3
+                )
+            ],
+    
+            stages[
+                stages.length - 1
+            ]
+    
+        ];
+    
+    }
+
 
 
     /* =====================================================
@@ -1222,6 +1859,65 @@
 
         );
 
+    }
+
+    function getAgeGroup(
+        age
+    ) {
+    
+        const value =
+            Number(
+                age
+            );
+    
+    
+        if (!Number.isFinite(value)) {
+            return '';
+        }
+    
+    
+        if (value < 20) {
+            return '10代';
+        }
+    
+    
+        if (value >= 60) {
+            return '60代以上';
+        }
+    
+    
+        return `${
+            Math.floor(value / 10) * 10
+        }代`;
+    
+    }
+    
+    
+    function trackCareerStoryClick(
+        storyId,
+        sectionName
+    ) {
+    
+        if (
+            typeof gtag
+            !== 'function'
+        ) {
+            return;
+        }
+    
+    
+        gtag(
+            'event',
+            'career_story_click',
+            {
+                career_id:
+                    storyId,
+    
+                section_name:
+                    sectionName
+            }
+        );
+    
     }
 
 
