@@ -1065,6 +1065,9 @@ main.career-gps-home *::after {
     flex-direction:
         column;
 
+    height:
+        500px;
+
     min-width:
         0;
 
@@ -2356,7 +2359,7 @@ main.career-gps-home *::after {
         vertical;
 
     -webkit-line-clamp:
-        3;
+        2;
 }
 
 
@@ -3860,6 +3863,9 @@ main.career-gps-home *::after {
 
         scroll-snap-align:
             center;
+        
+        height:
+            500px;
     }
 
     .home-career-card__top {
