@@ -910,33 +910,27 @@
     function createSimilarStoryCard(
         story
     ) {
-
+    
         const card =
             document.createElement(
                 'article'
             );
-
-
+    
+    
         card.className =
             'home-career-card';
-
-
+    
+    
         card.tabIndex =
             0;
-
-
+    
+    
         card.setAttribute(
             'role',
             'link'
         );
-
-
-        const headline =
-            buildStoryHeadline(
-                story
-            );
-
-
+    
+    
         const reasons =
             story
                 .similarityReasons
@@ -944,63 +938,60 @@
                     0,
                     3
                 );
-
-
+    
+    
+        const decisionHook =
+            story.decision.dilemma
+            ||
+            story.decision.title
+            ||
+            story.decision.trigger
+            ||
+            '';
+    
+    
         card.innerHTML = `
-
-            <div
-                class="
-                    home-career-card__top
-                "
-            >
-
-                <div
-                    class="
-                        home-career-avatar
-                    "
-                >
-
+    
+            <div class="home-career-card__top">
+    
+                <div class="home-career-avatar">
+    
                     ${escapeHTML(
                         getInitial(
                             story.name
                         )
                     )}
-
+    
                 </div>
-
-
-                <div
-                    class="
-                        home-career-person
-                    "
-                >
-
-                    <p
-                        class="
-                            home-career-person__meta
-                        "
-                    >
-
+    
+    
+                <div class="home-career-person">
+    
+                    <p class="home-career-person__meta">
+    
                         ${
                             story.age !== null
-
+    
                             ? `
                                 <span>
-                                    ${story.age}歳
+                                    ${escapeHTML(
+                                        getAgeGroup(
+                                            story.age
+                                        )
+                                    )}
                                 </span>
                             `
-
+    
                             : ''
                         }
-
-
+    
+    
                         ${
                             story.profession
                             &&
-                            story.profession
-                            !==
+                            story.profession !==
                             '職種未設定'
-
+    
                             ? `
                                 <span>
                                     ${escapeHTML(
@@ -1008,202 +999,214 @@
                                     )}
                                 </span>
                             `
-
+    
                             : ''
                         }
-
+    
                     </p>
-
-
+    
+    
                     <h3>
                         ${escapeHTML(
                             story.name
                         )}
                     </h3>
-
-
-                    <p
-                        class="
-                            home-career-person__summary
-                        "
-                    >
-
-                        ${escapeHTML(
-                            buildCareerSummary(
-                                story
-                            )
-                        )}
-
-                    </p>
-
+    
                 </div>
-
+    
             </div>
-
-
-            <div
-                class="
-                    home-career-card__story
-                "
-            >
-
-                <p
-                    class="
-                        home-career-card__label
-                    "
-                >
-                    WHY THIS STORY?
-                </p>
-
-
-                <h4>
-
-                    ${escapeHTML(
-                        headline
-                    )}
-
-                </h4>
-
-            </div>
-
-
+    
+    
             ${
                 reasons.length
-
+    
                 ? `
-                    <div
-                        class="
-                            home-career-tags
-                        "
-                    >
-
-                        ${reasons
-                            .map(
-                                reason => `
-
-                                    <span>
-                                        ${escapeHTML(
-                                            reason
-                                        )}
-                                    </span>
-
-                                `
-                            )
-                            .join('')}
-
+                    <div class="home-career-card__story">
+    
+                        <p class="home-career-card__label">
+                            あなたとの共通点
+                        </p>
+    
+    
+                        <div class="home-career-tags">
+    
+                            ${reasons
+                                .map(
+                                    reason => `
+    
+                                        <span>
+                                            ${escapeHTML(
+                                                reason
+                                            )}
+                                        </span>
+    
+                                    `
+                                )
+                                .join('')}
+    
+                        </div>
+    
                     </div>
                 `
-
+    
                 : ''
             }
-
-
-            ${buildTimelineHTML(
+    
+    
+            ${buildSimilarJourneyHTML(
                 story.careerStages
             )}
-
-
-            <div
-                class="
-                    home-career-card__footer
-                "
-            >
-
-                <div
-                    class="
-                        home-career-card__facts
-                    "
-                >
-
-                    ${
-                        story.income
-                        !==
-                        '未設定'
-
-                        ? `
+    
+    
+            ${
+                decisionHook
+                ||
+                story.decision.type
+                ||
+                story.decision.priority
+    
+                ? `
+                    <div class="career-preview-decision">
+    
+                        <div class="career-preview-decision__heading">
+    
                             <span>
-                                年収
-                                ${escapeHTML(
-                                    story.income
-                                )}
+                                CAREER DECISION
                             </span>
-                        `
-
-                        : ''
-                    }
-
-                </div>
-
-
-                <span
-                    class="
-                        home-career-card__link
-                    "
-                >
-
-                    Storyを見る
-
-                    <span
-                        aria-hidden="true"
-                    >
+    
+    
+                            ${
+                                story.decision.type
+    
+                                ? `
+                                    <strong>
+                                        ${escapeHTML(
+                                            story.decision.type
+                                        )}
+                                    </strong>
+                                `
+    
+                                : ''
+                            }
+    
+                        </div>
+    
+    
+                        ${
+                            decisionHook
+    
+                            ? `
+                                <p class="career-preview-decision__hook">
+    
+                                    ${escapeHTML(
+                                        decisionHook
+                                    )}
+    
+                                </p>
+                            `
+    
+                            : ''
+                        }
+    
+    
+                        ${
+                            story.decision.priority
+    
+                            ? `
+                                <div class="career-preview-priority">
+    
+                                    <span>
+                                        重視したこと
+                                    </span>
+    
+                                    <p>
+                                        ${escapeHTML(
+                                            story.decision.priority
+                                        )}
+                                    </p>
+    
+                                </div>
+                            `
+    
+                            : ''
+                        }
+    
+                    </div>
+                `
+    
+                : ''
+            }
+    
+    
+            <div class="home-career-card__footer">
+    
+                <span class="home-career-card__link">
+    
+                    選択の背景と、その後を見る
+    
+                    <span aria-hidden="true">
                         →
                     </span>
-
+    
                 </span>
-
+    
             </div>
-
+    
         `;
-
-
+    
+    
         const navigate =
             () => {
-
+    
+                trackCareerStoryClick(
+                    story.id,
+                    'similar'
+                );
+    
+    
                 incrementViewCount(
                     story.id
                 );
-
-
+    
+    
                 window.location.href =
                     `Career_detail.html?id=${
                         encodeURIComponent(
                             story.id
                         )
                     }`;
-
+    
             };
-
-
+    
+    
         card.addEventListener(
             'click',
             navigate
         );
-
-
+    
+    
         card.addEventListener(
             'keydown',
             event => {
-
+    
                 if (
-                    event.key
-                    === 'Enter'
+                    event.key === 'Enter'
                     ||
-                    event.key
-                    === ' '
+                    event.key === ' '
                 ) {
-
+    
                     event.preventDefault();
-
+    
                     navigate();
-
+    
                 }
-
+    
             }
         );
-
-
+    
+    
         return card;
-
+    
     }
 
 
@@ -1214,6 +1217,11 @@
     function normalizeStory(
         story
     ) {
+
+        const decision =
+            story?.decision
+            ||
+            {};
 
         const companies =
             Array.isArray(
@@ -1291,7 +1299,37 @@
             careerStages:
                 normalizeStages(
                     story.careerStages
-                )
+                ),
+
+
+            decision: {
+
+                type:
+                    decision.decision_type
+                    ||
+                    '',
+
+                title:
+                    decision.title
+                    ||
+                    '',
+
+                trigger:
+                    decision.trigger_text
+                    ||
+                    '',
+
+                dilemma:
+                    decision.dilemma_text
+                    ||
+                    '',
+
+                priority:
+                    decision.priority_text
+                    ||
+                    ''
+
+            }
 
         };
 
@@ -1495,6 +1533,105 @@
             : 'Career Story'
         );
 
+    }
+
+
+    function buildSimilarJourneyHTML(
+        stages
+    ) {
+    
+        if (!stages.length) {
+    
+            return '';
+    
+        }
+    
+    
+        const items =
+            selectTimelineItems(
+                stages
+            );
+    
+    
+        return `
+    
+            <div class="career-preview-journey">
+    
+                <p class="career-preview-journey__label">
+                    CAREER JOURNEY
+                </p>
+    
+    
+                <div class="home-career-timeline">
+    
+                    <div class="home-career-timeline__track">
+    
+                        ${
+                            items
+                                .map(
+                                    (
+                                        item,
+                                        index
+                                    ) => `
+    
+                                        <div class="home-career-timeline__item">
+    
+                                            <span class="home-career-timeline__year">
+    
+                                                ${escapeHTML(
+                                                    String(
+                                                        item.year
+                                                        ||
+                                                        ''
+                                                    )
+                                                )}
+    
+                                            </span>
+    
+    
+                                            <span
+                                                class="
+                                                    home-career-timeline__dot
+    
+                                                    ${
+                                                        index
+                                                        ===
+                                                        items.length - 1
+    
+                                                        ? 'is-current'
+    
+                                                        : ''
+                                                    }
+                                                "
+                                            >
+                                            </span>
+    
+    
+                                            <span class="home-career-timeline__stage">
+    
+                                                ${escapeHTML(
+                                                    simplifyStage(
+                                                        item.stage
+                                                    )
+                                                )}
+    
+                                            </span>
+    
+                                        </div>
+    
+                                    `
+                                )
+                                .join('')
+                        }
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+        `;
+    
     }
 
 

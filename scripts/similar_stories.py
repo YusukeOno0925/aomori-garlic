@@ -515,6 +515,163 @@ def longest_common_subsequence_length(
 
 
 # =========================================================
+# Home Career Decision
+# =========================================================
+
+def get_home_career_decision(
+    decisions
+):
+
+    """
+    HomeのSimilar Storyカードに表示する
+    Career Decisionを1件選ぶ。
+
+    Career GPSとして、
+    「何に迷ったか」
+    「何を重視したか」
+    が伝わるDecisionを優先する。
+
+    同程度の場合は、
+    より新しいDecisionを優先する。
+    """
+
+    if not decisions:
+        return None
+
+
+    def decision_quality(
+        decision
+    ):
+
+        score = 0
+
+
+        if decision.get(
+            "decision_type"
+        ):
+            score += 2
+
+
+        if decision.get(
+            "dilemma_text"
+        ):
+            score += 3
+
+
+        if decision.get(
+            "priority_text"
+        ):
+            score += 3
+
+
+        if decision.get(
+            "title"
+        ):
+            score += 1
+
+
+        if decision.get(
+            "trigger_text"
+        ):
+            score += 2
+
+
+        return score
+
+
+    ranked = sorted(
+
+        decisions,
+
+        key=lambda decision: (
+
+            decision_quality(
+                decision
+            ),
+
+            date_sort_value(
+                decision.get(
+                    "occurred_at"
+                )
+            ),
+
+            decision.get(
+                "id"
+            )
+            or 0,
+
+        ),
+
+        reverse=True
+    )
+
+
+    selected = ranked[0]
+
+
+    # Career Decisionとして
+    # 最低限表示できる内容がない場合は出さない
+    if not (
+        selected.get(
+            "decision_type"
+        )
+        or
+        selected.get(
+            "dilemma_text"
+        )
+        or
+        selected.get(
+            "title"
+        )
+        or
+        selected.get(
+            "trigger_text"
+        )
+    ):
+
+        return None
+
+
+    return {
+
+        "id":
+            selected.get(
+                "id"
+            ),
+
+        "decision_type":
+            selected.get(
+                "decision_type"
+            )
+            or "",
+
+        "title":
+            selected.get(
+                "title"
+            )
+            or "",
+
+        "trigger_text":
+            selected.get(
+                "trigger_text"
+            )
+            or "",
+
+        "dilemma_text":
+            selected.get(
+                "dilemma_text"
+            )
+            or "",
+
+        "priority_text":
+            selected.get(
+                "priority_text"
+            )
+            or "",
+    }
+
+
+# =========================================================
 # Match headline
 # =========================================================
 
@@ -1479,6 +1636,48 @@ async def get_similar_users(
                 ] = (
                     row.get("type")
                 )
+        
+        # =================================================
+        # CAREER DECISIONS
+        # =================================================
+
+        cursor.execute(
+            """
+            SELECT
+                id,
+                user_id,
+                job_experience_id,
+                role_history_id,
+                title,
+                decision_type,
+                occurred_at,
+                trigger_text,
+                dilemma_text,
+                priority_text
+            FROM career_decisions
+            ORDER BY
+                user_id,
+                occurred_at DESC,
+                id DESC
+            """
+        )
+
+
+        decision_rows = (
+            cursor.fetchall()
+        )
+
+
+        decisions_by_user = (
+            defaultdict(list)
+        )
+
+
+        for row in decision_rows:
+
+            decisions_by_user[
+                row["user_id"]
+            ].append(row)
 
 
         # =================================================
@@ -2002,6 +2201,15 @@ async def get_similar_users(
                 ]
             )
 
+            home_decision = (
+                get_home_career_decision(
+                    decisions_by_user.get(
+                        uid,
+                        []
+                    )
+                )
+            )
+
 
             careers.append({
 
@@ -2055,6 +2263,13 @@ async def get_similar_users(
                     aspiration_by_user.get(
                         uid
                     ),
+                
+                # -----------------------------------------
+                # Career Decision
+                # -----------------------------------------
+
+                "decision":
+                    home_decision,
 
                 # -----------------------------------------
                 # Recommendation
