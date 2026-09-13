@@ -186,9 +186,6 @@
             list.innerHTML =
                 '';
 
-            list.style.display =
-                'grid';
-
 
             careers
                 .slice(0, 6)
