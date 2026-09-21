@@ -297,18 +297,23 @@ async def update_user_info(
         institution = normalize_optional_value(
             data.get("institution")
         )
+
         degree = normalize_optional_value(
             data.get("degree")
         )
+
         major = normalize_optional_value(
             data.get("major")
         )
+
         education_start = normalize_date_value(
             data.get("education_start")
         )
+
         education_end = normalize_date_value(
             data.get("education_end")
         )
+
         hide_institution = normalize_bool(
             data.get("hide_institution"),
             default=False,
@@ -386,18 +391,28 @@ async def update_user_info(
         #
         # 両方を受け付ける。
         # =========================================================
-        job_experiences = data.get("job_experiences", [])
+        job_experiences = data.get(
+            "job_experiences",
+            [],
+        )
 
         if job_experiences is None:
             job_experiences = []
 
-        if not isinstance(job_experiences, list):
+        if not isinstance(
+            job_experiences,
+            list,
+        ):
             raise ValueError(
                 "job_experiencesは配列形式で指定してください。"
             )
 
         for experience in job_experiences:
-            if not isinstance(experience, dict):
+
+            if not isinstance(
+                experience,
+                dict,
+            ):
                 continue
 
             experience_id = normalize_optional_int(
@@ -407,15 +422,23 @@ async def update_user_info(
             company_name = normalize_optional_value(
                 experience.get("company_name")
             )
+
             industry = normalize_optional_value(
                 experience.get("industry")
             )
+
             work_start_period = normalize_date_value(
-                experience.get("work_start_period")
+                experience.get(
+                    "work_start_period"
+                )
             )
+
             work_end_period = normalize_date_value(
-                experience.get("work_end_period")
+                experience.get(
+                    "work_end_period"
+                )
             )
+
             is_private = normalize_bool(
                 experience.get("is_private"),
                 default=False,
@@ -424,18 +447,30 @@ async def update_user_info(
             # ---------------------------------------------
             # 新形式か旧形式かを判定
             # ---------------------------------------------
-            raw_roles = experience.get("role_histories")
+            raw_roles = experience.get(
+                "role_histories"
+            )
 
             if raw_roles is not None:
-                if not isinstance(raw_roles, list):
+
+                if not isinstance(
+                    raw_roles,
+                    list,
+                ):
                     raise ValueError(
                         "role_historiesは配列形式で指定してください。"
                     )
 
-                roles: List[Dict[str, Any]] = []
+                roles: List[
+                    Dict[str, Any]
+                ] = []
 
                 for raw_role in raw_roles:
-                    if not isinstance(raw_role, dict):
+
+                    if not isinstance(
+                        raw_role,
+                        dict,
+                    ):
                         continue
 
                     normalized_role = normalize_role(
@@ -445,13 +480,18 @@ async def update_user_info(
                     )
 
                     if (
-                        normalized_role.get("id") is not None
-                        or has_role_content(normalized_role)
+                        normalized_role.get("id")
+                        is not None
+                        or has_role_content(
+                            normalized_role
+                        )
                     ):
-                        roles.append(normalized_role)
+                        roles.append(
+                            normalized_role
+                        )
 
             else:
-                # 現行画面から送られる旧形式を1件の役割へ変換
+                # 旧形式を1件のRoleへ変換
                 legacy_role = build_legacy_role(
                     experience,
                     work_start_period,
@@ -460,7 +500,9 @@ async def update_user_info(
 
                 roles = (
                     [legacy_role]
-                    if has_role_content(legacy_role)
+                    if has_role_content(
+                        legacy_role
+                    )
                     else []
                 )
 
@@ -468,8 +510,12 @@ async def update_user_info(
                 [
                     has_value(company_name),
                     has_value(industry),
-                    has_value(work_start_period),
-                    has_value(work_end_period),
+                    has_value(
+                        work_start_period
+                    ),
+                    has_value(
+                        work_end_period
+                    ),
                     bool(roles),
                 ]
             )
@@ -478,24 +524,47 @@ async def update_user_info(
                 continue
 
             # ---------------------------------------------
-            # 3-1. 会社情報を保存
+            # 3-1. 会社情報
             # ---------------------------------------------
-            primary_role = roles[0] if roles else {}
+            primary_role = (
+                roles[0]
+                if roles
+                else {}
+            )
 
-            # 移行期間中の旧カラム同期用
-            legacy_position = primary_role.get("position")
-            legacy_job_category = primary_role.get(
-                "job_category"
+            # 旧カラム同期用
+            legacy_position = (
+                primary_role.get(
+                    "position"
+                )
             )
-            legacy_job_sub_category = primary_role.get(
-                "job_sub_category"
+
+            legacy_job_category = (
+                primary_role.get(
+                    "job_category"
+                )
             )
-            legacy_salary = primary_role.get("salary_range")
-            legacy_satisfaction = primary_role.get(
-                "satisfaction_level"
+
+            legacy_job_sub_category = (
+                primary_role.get(
+                    "job_sub_category"
+                )
+            )
+
+            legacy_salary = (
+                primary_role.get(
+                    "salary_range"
+                )
+            )
+
+            legacy_satisfaction = (
+                primary_role.get(
+                    "satisfaction_level"
+                )
             )
 
             if experience_id is not None:
+
                 cursor.execute(
                     """
                     UPDATE job_experiences
@@ -530,6 +599,7 @@ async def update_user_info(
                 )
 
                 if cursor.rowcount == 0:
+
                     cursor.execute(
                         """
                         SELECT id
@@ -548,10 +618,15 @@ async def update_user_info(
                             "更新対象の職歴が見つかりません。"
                         )
 
-                job_experience_id = experience_id
+                job_experience_id = (
+                    experience_id
+                )
 
             else:
-                if not has_value(company_name):
+
+                if not has_value(
+                    company_name
+                ):
                     raise ValueError(
                         "新しい職歴には会社名が必要です。"
                     )
@@ -591,14 +666,18 @@ async def update_user_info(
                     ),
                 )
 
-                job_experience_id = cursor.lastrowid
+                job_experience_id = (
+                    cursor.lastrowid
+                )
 
             # ---------------------------------------------
-            # 3-2. 役割履歴を保存
+            # 3-2. Role履歴
             # ---------------------------------------------
             if raw_roles is None:
-                # 旧画面の場合は、従来どおり最初の役割を更新する
+
+                # 旧画面の場合は最初のRoleを更新
                 if roles:
+
                     role = roles[0]
 
                     cursor.execute(
@@ -612,13 +691,20 @@ async def update_user_info(
                             id ASC
                         LIMIT 1
                         """,
-                        (job_experience_id,),
+                        (
+                            job_experience_id,
+                        ),
                     )
 
-                    existing_role = cursor.fetchone()
+                    existing_role = (
+                        cursor.fetchone()
+                    )
 
                     if existing_role:
-                        role_history_id = existing_role[0]
+
+                        role_history_id = (
+                            existing_role[0]
+                        )
 
                         cursor.execute(
                             """
@@ -640,23 +726,46 @@ async def update_user_info(
                               AND job_experience_id = %s
                             """,
                             (
-                                role.get("department"),
-                                role.get("position"),
-                                role.get("job_category"),
-                                role.get("job_sub_category"),
-                                role.get("role_description"),
-                                role.get("start_period"),
-                                role.get("end_period"),
-                                role.get("salary_range"),
-                                role.get("satisfaction_level"),
-                                role.get("work_style"),
-                                role.get("display_order"),
+                                role.get(
+                                    "department"
+                                ),
+                                role.get(
+                                    "position"
+                                ),
+                                role.get(
+                                    "job_category"
+                                ),
+                                role.get(
+                                    "job_sub_category"
+                                ),
+                                role.get(
+                                    "role_description"
+                                ),
+                                role.get(
+                                    "start_period"
+                                ),
+                                role.get(
+                                    "end_period"
+                                ),
+                                role.get(
+                                    "salary_range"
+                                ),
+                                role.get(
+                                    "satisfaction_level"
+                                ),
+                                role.get(
+                                    "work_style"
+                                ),
+                                role.get(
+                                    "display_order"
+                                ),
                                 role_history_id,
                                 job_experience_id,
                             ),
                         )
 
                     else:
+
                         cursor.execute(
                             """
                             INSERT INTO role_histories (
@@ -681,35 +790,66 @@ async def update_user_info(
                             """,
                             (
                                 job_experience_id,
-                                role.get("department"),
-                                role.get("position"),
-                                role.get("job_category"),
-                                role.get("job_sub_category"),
-                                role.get("role_description"),
-                                role.get("start_period"),
-                                role.get("end_period"),
-                                role.get("salary_range"),
-                                role.get("satisfaction_level"),
-                                role.get("work_style"),
-                                role.get("display_order"),
+                                role.get(
+                                    "department"
+                                ),
+                                role.get(
+                                    "position"
+                                ),
+                                role.get(
+                                    "job_category"
+                                ),
+                                role.get(
+                                    "job_sub_category"
+                                ),
+                                role.get(
+                                    "role_description"
+                                ),
+                                role.get(
+                                    "start_period"
+                                ),
+                                role.get(
+                                    "end_period"
+                                ),
+                                role.get(
+                                    "salary_range"
+                                ),
+                                role.get(
+                                    "satisfaction_level"
+                                ),
+                                role.get(
+                                    "work_style"
+                                ),
+                                role.get(
+                                    "display_order"
+                                ),
                             ),
                         )
 
             else:
-                # 新形式の場合は、role_histories配列を順番に保存
+
+                # 新形式
                 for role_index, role in enumerate(
                     roles,
                     start=1,
                 ):
-                    role_history_id = role.get("id")
+
+                    role_history_id = (
+                        role.get("id")
+                    )
+
                     display_order = (
-                        role.get("display_order")
+                        role.get(
+                            "display_order"
+                        )
                         or role_index
                     )
 
-                    if role_history_id is not None:
-                        # 他ユーザー・他会社の役割を更新しないよう、
-                        # job_experience_idもWHERE条件へ含める
+                    if (
+                        role_history_id
+                        is not None
+                    ):
+
                         cursor.execute(
                             """
                             UPDATE role_histories
@@ -730,16 +870,36 @@ async def update_user_info(
                               AND job_experience_id = %s
                             """,
                             (
-                                role.get("department"),
-                                role.get("position"),
-                                role.get("job_category"),
-                                role.get("job_sub_category"),
-                                role.get("role_description"),
-                                role.get("start_period"),
-                                role.get("end_period"),
-                                role.get("salary_range"),
-                                role.get("satisfaction_level"),
-                                role.get("work_style"),
+                                role.get(
+                                    "department"
+                                ),
+                                role.get(
+                                    "position"
+                                ),
+                                role.get(
+                                    "job_category"
+                                ),
+                                role.get(
+                                    "job_sub_category"
+                                ),
+                                role.get(
+                                    "role_description"
+                                ),
+                                role.get(
+                                    "start_period"
+                                ),
+                                role.get(
+                                    "end_period"
+                                ),
+                                role.get(
+                                    "salary_range"
+                                ),
+                                role.get(
+                                    "satisfaction_level"
+                                ),
+                                role.get(
+                                    "work_style"
+                                ),
                                 display_order,
                                 role_history_id,
                                 job_experience_id,
@@ -747,6 +907,7 @@ async def update_user_info(
                         )
 
                         if cursor.rowcount == 0:
+
                             cursor.execute(
                                 """
                                 SELECT id
@@ -760,14 +921,20 @@ async def update_user_info(
                                 ),
                             )
 
-                            if cursor.fetchone() is None:
+                            if (
+                                cursor.fetchone()
+                                is None
+                            ):
                                 raise ValueError(
                                     "更新対象の役割履歴が"
                                     "見つかりません。"
                                 )
 
                     else:
-                        if not has_role_content(role):
+
+                        if not has_role_content(
+                            role
+                        ):
                             continue
 
                         cursor.execute(
@@ -794,65 +961,288 @@ async def update_user_info(
                             """,
                             (
                                 job_experience_id,
-                                role.get("department"),
-                                role.get("position"),
-                                role.get("job_category"),
-                                role.get("job_sub_category"),
-                                role.get("role_description"),
-                                role.get("start_period"),
-                                role.get("end_period"),
-                                role.get("salary_range"),
-                                role.get("satisfaction_level"),
-                                role.get("work_style"),
+                                role.get(
+                                    "department"
+                                ),
+                                role.get(
+                                    "position"
+                                ),
+                                role.get(
+                                    "job_category"
+                                ),
+                                role.get(
+                                    "job_sub_category"
+                                ),
+                                role.get(
+                                    "role_description"
+                                ),
+                                role.get(
+                                    "start_period"
+                                ),
+                                role.get(
+                                    "end_period"
+                                ),
+                                role.get(
+                                    "salary_range"
+                                ),
+                                role.get(
+                                    "satisfaction_level"
+                                ),
+                                role.get(
+                                    "work_style"
+                                ),
                                 display_order,
                             ),
                         )
 
-                # この段階では、画面から消えた役割の物理削除はしない。
-                # 削除処理はUI実装時に別途、明示的に追加する。
+                # 現時点では、画面から消えたRoleの
+                # 物理削除は行わない。
 
         # =========================================================
         # 4. 現在のキャリア観・今後
+        #
+        # 正式保存先:
+        # current_career_views
+        #
+        # 新形式:
+        # current_career_view
+        # current_concerns
+        # future_goals
+        # desired_direction
+        # desired_role
+        # skills_to_develop
+        # environment_to_avoid
+        # five_year_goal
+        #
+        # 旧形式:
+        # career_satisfaction_feedback
+        # concerns
+        # career_description
+        # career_type
+        #
+        # 送られていない項目は既存DB値を維持する。
         # =========================================================
-        current_career_view = normalize_optional_value(
-            data.get("career_satisfaction_feedback")
-        )
-        future_goals = normalize_optional_value(
-            data.get("career_description")
-        )
-        desired_direction = normalize_optional_value(
-            data.get("career_type")
+
+        current_view_payload_keys = {
+            "current_career_view",
+            "current_concerns",
+            "future_goals",
+            "desired_direction",
+            "desired_role",
+            "skills_to_develop",
+            "environment_to_avoid",
+            "five_year_goal",
+
+            # 旧フィールド
+            "career_satisfaction_feedback",
+            "concerns",
+            "career_description",
+            "career_type",
+        }
+
+        has_current_view_payload = any(
+            key in data
+            for key in current_view_payload_keys
         )
 
-        has_current_career_view_content = any(
-            [
-                has_value(current_career_view),
-                has_value(future_goals),
-                has_value(desired_direction),
-            ]
-        )
+        if has_current_view_payload:
 
-        if has_current_career_view_content:
+            cursor.execute(
+                """
+                SELECT
+                    current_career_view,
+                    current_concerns,
+                    future_goals,
+                    desired_direction,
+                    desired_role,
+                    skills_to_develop,
+                    environment_to_avoid,
+                    five_year_goal
+                FROM current_career_views
+                WHERE user_id = %s
+                LIMIT 1
+                """,
+                (
+                    current_user.id,
+                ),
+            )
+
+            existing_current_view = (
+                cursor.fetchone()
+            )
+
+            existing_values = {
+                "current_career_view": (
+                    existing_current_view[0]
+                    if existing_current_view
+                    else None
+                ),
+
+                "current_concerns": (
+                    existing_current_view[1]
+                    if existing_current_view
+                    else None
+                ),
+
+                "future_goals": (
+                    existing_current_view[2]
+                    if existing_current_view
+                    else None
+                ),
+
+                "desired_direction": (
+                    existing_current_view[3]
+                    if existing_current_view
+                    else None
+                ),
+
+                "desired_role": (
+                    existing_current_view[4]
+                    if existing_current_view
+                    else None
+                ),
+
+                "skills_to_develop": (
+                    existing_current_view[5]
+                    if existing_current_view
+                    else None
+                ),
+
+                "environment_to_avoid": (
+                    existing_current_view[6]
+                    if existing_current_view
+                    else None
+                ),
+
+                "five_year_goal": (
+                    existing_current_view[7]
+                    if existing_current_view
+                    else None
+                ),
+            }
+
+            def get_current_view_value(
+                new_key: str,
+                legacy_key: Optional[str] = None,
+            ) -> Any:
+                """
+                新キーがあれば新キーを使う。
+
+                新キーがなく、
+                旧キーだけ送られてきた場合は旧キーを使う。
+
+                どちらもなければ既存DB値を維持する。
+
+                空文字を明示的に送信した場合はNoneとなるため、
+                入力済み値を削除する操作にも対応する。
+                """
+
+                if new_key in data:
+                    return normalize_optional_value(
+                        data.get(new_key)
+                    )
+
+                if (
+                    legacy_key
+                    and legacy_key in data
+                ):
+                    return normalize_optional_value(
+                        data.get(legacy_key)
+                    )
+
+                return existing_values.get(
+                    new_key
+                )
+
+            current_career_view = (
+                get_current_view_value(
+                    "current_career_view",
+                    "career_satisfaction_feedback",
+                )
+            )
+
+            current_concerns = (
+                get_current_view_value(
+                    "current_concerns",
+                    "concerns",
+                )
+            )
+
+            future_goals = (
+                get_current_view_value(
+                    "future_goals",
+                    "career_description",
+                )
+            )
+
+            desired_direction = (
+                get_current_view_value(
+                    "desired_direction",
+                    "career_type",
+                )
+            )
+
+            desired_role = (
+                get_current_view_value(
+                    "desired_role"
+                )
+            )
+
+            skills_to_develop = (
+                get_current_view_value(
+                    "skills_to_develop"
+                )
+            )
+
+            environment_to_avoid = (
+                get_current_view_value(
+                    "environment_to_avoid"
+                )
+            )
+
+            five_year_goal = (
+                get_current_view_value(
+                    "five_year_goal"
+                )
+            )
+
             cursor.execute(
                 """
                 INSERT INTO current_career_views (
                     user_id,
                     current_career_view,
+                    current_concerns,
                     future_goals,
                     desired_direction,
+                    desired_role,
+                    skills_to_develop,
+                    environment_to_avoid,
+                    five_year_goal,
                     status,
                     needs_review
                 )
                 VALUES (
-                    %s, %s, %s, %s, 'draft', 0
+                    %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s,
+                    'draft', 0
                 )
                 ON DUPLICATE KEY UPDATE
                     current_career_view =
                         VALUES(current_career_view),
+                    current_concerns =
+                        VALUES(current_concerns),
                     future_goals =
                         VALUES(future_goals),
                     desired_direction =
                         VALUES(desired_direction),
+                    desired_role =
+                        VALUES(desired_role),
+                    skills_to_develop =
+                        VALUES(skills_to_develop),
+                    environment_to_avoid =
+                        VALUES(environment_to_avoid),
+                    five_year_goal =
+                        VALUES(five_year_goal),
                     status = 'draft',
                     needs_review = 0,
                     updated_at = CURRENT_TIMESTAMP
@@ -860,30 +1250,55 @@ async def update_user_info(
                 (
                     current_user.id,
                     current_career_view,
+                    current_concerns,
                     future_goals,
                     desired_direction,
+                    desired_role,
+                    skills_to_develop,
+                    environment_to_avoid,
+                    five_year_goal,
                 ),
             )
 
         # =========================================================
         # 5. キャリアのスタート地点
+        #    Legacy互換
+        #
+        # 新My Career GPSからは送信しない。
+        # 旧画面との互換性のため処理だけ残す。
         # =========================================================
-        start_point_id = data.get("start_point_id")
+
+        start_point_id = data.get(
+            "start_point_id"
+        )
+
         start_reason = normalize_optional_value(
             data.get("start_reason")
         )
-        first_job_feedback = normalize_optional_value(
-            data.get("first_job_feedback")
+
+        first_job_feedback = (
+            normalize_optional_value(
+                data.get(
+                    "first_job_feedback"
+                )
+            )
         )
 
         has_start_point_content = any(
             [
-                has_value(start_reason),
-                has_value(first_job_feedback),
+                has_value(
+                    start_reason
+                ),
+                has_value(
+                    first_job_feedback
+                ),
             ]
         )
 
-        if has_value(start_point_id):
+        if has_value(
+            start_point_id
+        ):
+
             cursor.execute(
                 """
                 UPDATE career_start_point
@@ -902,6 +1317,7 @@ async def update_user_info(
             )
 
         elif has_start_point_content:
+
             cursor.execute(
                 """
                 INSERT INTO career_start_point (
@@ -919,38 +1335,74 @@ async def update_user_info(
             )
 
         # =========================================================
-        # 6. Career GPSの意思決定
+        # 6. Career Decision
+        #    Legacy互換
+        #
+        # 正式編集:
+        # Career_decision_edit.html
+        # /career-decisions/ 系API
+        #
+        # 新My Career GPSは transition_* を送らない。
+        # 旧クライアントとの互換性のため処理だけ残す。
         # =========================================================
-        decision_id = data.get("transition_id")
+
+        decision_id = data.get(
+            "transition_id"
+        )
 
         decision_type = normalize_optional_value(
-            data.get("transition_type")
+            data.get(
+                "transition_type"
+            )
         )
+
         trigger_text = normalize_optional_value(
-            data.get("transition_story")
+            data.get(
+                "transition_story"
+            )
         )
+
         final_reason = normalize_optional_value(
-            data.get("reason_for_job_change")
+            data.get(
+                "reason_for_job_change"
+            )
         )
+
         result_text = normalize_optional_value(
-            data.get("job_experience_feedback")
+            data.get(
+                "job_experience_feedback"
+            )
         )
 
         has_decision_content = any(
             [
-                has_value(decision_type),
-                has_value(trigger_text),
-                has_value(final_reason),
-                has_value(result_text),
+                has_value(
+                    decision_type
+                ),
+                has_value(
+                    trigger_text
+                ),
+                has_value(
+                    final_reason
+                ),
+                has_value(
+                    result_text
+                ),
             ]
         )
 
         if has_decision_content:
+
             normalized_decision_type = (
-                decision_type or "その他"
+                decision_type
+                or
+                "その他"
             )
 
-            if has_value(decision_id):
+            if has_value(
+                decision_id
+            ):
+
                 cursor.execute(
                     """
                     UPDATE career_decisions
@@ -976,6 +1428,7 @@ async def update_user_info(
                 )
 
                 if cursor.rowcount == 0:
+
                     cursor.execute(
                         """
                         SELECT id
@@ -989,7 +1442,11 @@ async def update_user_info(
                         ),
                     )
 
-                    if cursor.fetchone() is None:
+                    if (
+                        cursor.fetchone()
+                        is None
+                    ):
+
                         cursor.execute(
                             """
                             INSERT INTO career_decisions (
@@ -1017,6 +1474,7 @@ async def update_user_info(
                         )
 
             else:
+
                 cursor.execute(
                     """
                     INSERT INTO career_decisions (
@@ -1045,94 +1503,188 @@ async def update_user_info(
 
         # =========================================================
         # 7. 旧達成・失敗経験
+        #
+        # career_achievements はLegacy互換。
+        #
+        # 新My Career GPSの「今の迷い」は
+        # current_career_views.current_concerns
+        # に保存する。
+        #
+        # 旧クライアントが
+        # current_concernsを送らず、
+        # concernsのみ送るケースだけ旧保存する。
         # =========================================================
-        achievement_id = data.get("achievement_id")
 
-        proudest_achievement = normalize_optional_value(
-            data.get("proudest_achievement")
+        achievement_id = data.get(
+            "achievement_id"
         )
-        failure_experience = normalize_optional_value(
-            data.get("failure_experience")
+
+        proudest_achievement = (
+            normalize_optional_value(
+                data.get(
+                    "proudest_achievement"
+                )
+            )
         )
-        lesson_learned = normalize_optional_value(
-            data.get("lesson_learned")
+
+        failure_experience = (
+            normalize_optional_value(
+                data.get(
+                    "failure_experience"
+                )
+            )
         )
-        concerns = normalize_optional_value(
-            data.get("concerns")
+
+        lesson_learned = (
+            normalize_optional_value(
+                data.get(
+                    "lesson_learned"
+                )
+            )
+        )
+
+        is_legacy_concerns_request = (
+            "concerns" in data
+            and
+            "current_concerns"
+            not in data
+        )
+
+        legacy_concerns = (
+            normalize_optional_value(
+                data.get("concerns")
+            )
+            if is_legacy_concerns_request
+            else None
+        )
+
+        has_legacy_achievement_payload = (
+            any(
+                key in data
+                for key in (
+                    "achievement_id",
+                    "proudest_achievement",
+                    "failure_experience",
+                    "lesson_learned",
+                )
+            )
+            or is_legacy_concerns_request
         )
 
         has_achievement_content = any(
             [
-                has_value(proudest_achievement),
-                has_value(failure_experience),
-                has_value(lesson_learned),
-                has_value(concerns),
+                has_value(
+                    proudest_achievement
+                ),
+                has_value(
+                    failure_experience
+                ),
+                has_value(
+                    lesson_learned
+                ),
+                has_value(
+                    legacy_concerns
+                ),
             ]
         )
 
-        if has_value(achievement_id):
-            cursor.execute(
-                """
-                UPDATE career_achievements
-                SET
-                    proudest_achievement = %s,
-                    failure_experience = %s,
-                    lesson_learned = %s,
-                    concerns = %s
-                WHERE achievement_id = %s
-                  AND user_id = %s
-                """,
-                (
-                    proudest_achievement,
-                    failure_experience,
-                    lesson_learned,
-                    concerns,
-                    achievement_id,
-                    current_user.id,
-                ),
-            )
+        if has_legacy_achievement_payload:
 
-        elif has_achievement_content:
-            cursor.execute(
-                """
-                INSERT INTO career_achievements (
-                    user_id,
-                    proudest_achievement,
-                    failure_experience,
-                    lesson_learned,
-                    concerns
+            if has_value(
+                achievement_id
+            ):
+
+                cursor.execute(
+                    """
+                    UPDATE career_achievements
+                    SET
+                        proudest_achievement = %s,
+                        failure_experience = %s,
+                        lesson_learned = %s,
+                        concerns = CASE
+                            WHEN %s = 1 THEN %s
+                            ELSE concerns
+                        END
+                    WHERE achievement_id = %s
+                      AND user_id = %s
+                    """,
+                    (
+                        proudest_achievement,
+                        failure_experience,
+                        lesson_learned,
+                        (
+                            1
+                            if is_legacy_concerns_request
+                            else 0
+                        ),
+                        legacy_concerns,
+                        achievement_id,
+                        current_user.id,
+                    ),
                 )
-                VALUES (%s, %s, %s, %s, %s)
-                """,
-                (
-                    current_user.id,
-                    proudest_achievement,
-                    failure_experience,
-                    lesson_learned,
-                    concerns,
-                ),
-            )
+
+            elif has_achievement_content:
+
+                cursor.execute(
+                    """
+                    INSERT INTO career_achievements (
+                        user_id,
+                        proudest_achievement,
+                        failure_experience,
+                        lesson_learned,
+                        concerns
+                    )
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (
+                        current_user.id,
+                        proudest_achievement,
+                        failure_experience,
+                        lesson_learned,
+                        legacy_concerns,
+                    ),
+                )
 
         # =========================================================
         # 8. 旧学び・成長
+        #    Legacy互換
+        #
+        # 新My Career GPSでは
+        # skills_to_developを
+        # current_career_viewsへ保存。
         # =========================================================
-        growth_id = data.get("growth_id")
+
+        growth_id = data.get(
+            "growth_id"
+        )
 
         skill = normalize_optional_value(
             data.get("skill")
         )
-        growth_description = normalize_optional_value(
-            data.get("growth_description")
+
+        growth_description = (
+            normalize_optional_value(
+                data.get(
+                    "growth_description"
+                )
+            )
         )
 
         has_growth_content = any(
             [
-                has_value(skill),
-                has_value(growth_description),
+                has_value(
+                    skill
+                ),
+                has_value(
+                    growth_description
+                ),
             ]
         )
 
-        if has_value(growth_id):
+        if has_value(
+            growth_id
+        ):
+
             cursor.execute(
                 """
                 UPDATE learning_and_growth
@@ -1151,6 +1703,7 @@ async def update_user_info(
             )
 
         elif has_growth_content:
+
             cursor.execute(
                 """
                 INSERT INTO learning_and_growth (
@@ -1168,18 +1721,21 @@ async def update_user_info(
             )
 
         # =========================================================
-        # 9. コミット
+        # 9. COMMIT
         # =========================================================
+
         db.commit()
 
         return JSONResponse(
             content={
-                "message": "プロフィールが更新されました"
+                "message":
+                    "プロフィールが更新されました"
             },
             status_code=200,
         )
 
     except ValueError as exc:
+
         db.rollback()
 
         logger.warning(
@@ -1191,13 +1747,16 @@ async def update_user_info(
 
         return JSONResponse(
             content={
-                "message": "入力内容を確認してください。",
-                "detail": str(exc),
+                "message":
+                    "入力内容を確認してください。",
+                "detail":
+                    str(exc),
             },
             status_code=400,
         )
 
     except Exception as exc:
+
         db.rollback()
 
         logger.exception(
@@ -1208,12 +1767,15 @@ async def update_user_info(
 
         return JSONResponse(
             content={
-                "message": "プロフィールの更新に失敗しました。",
-                "detail": str(exc),
+                "message":
+                    "プロフィールの更新に失敗しました。",
+                "detail":
+                    str(exc),
             },
             status_code=500,
         )
 
     finally:
+
         cursor.close()
         db.close()

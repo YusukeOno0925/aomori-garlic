@@ -3,45 +3,44 @@
    ========================================================= */
 
    :root {
-    --mypage-bg: #f7f5f1;
+    --gps-navy-950: #06182b;
+    --gps-navy-900: #071b30;
+    --gps-navy-800: #0d2744;
+    --gps-navy-700: #123b63;
 
-    --mypage-surface: #ffffff;
-    --mypage-surface-soft: #fbfaf7;
-    --mypage-surface-warm: #f2eee7;
-    --mypage-surface-olive: #eef0e6;
+    --gps-blue-700: #174f85;
+    --gps-blue-600: #1d5f9e;
+    --gps-blue-500: #2a72b5;
+    --gps-blue-100: #dcecf8;
+    --gps-blue-050: #eef5fb;
+    --gps-blue-025: #f6faff;
 
-    --mypage-text: #2f2924;
-    --mypage-text-sub: #6f655c;
-    --mypage-text-muted: #978d84;
+    --gps-text: #17283a;
+    --gps-text-strong: #071b30;
 
-    --mypage-brown: #574637;
-    --mypage-brown-dark: #403229;
+    --gps-muted: #637386;
+    --gps-muted-light: #8796a6;
 
-    --mypage-olive: #74804f;
-    --mypage-olive-dark: #596238;
-    --mypage-olive-light: #a6af82;
+    --gps-line: #dce5ee;
+    --gps-line-strong: #cbd9e6;
 
-    --mypage-line:
-        rgba(87, 70, 55, 0.12);
+    --gps-white: #ffffff;
 
-    --mypage-line-strong:
-        rgba(116, 128, 79, 0.26);
+    --gps-bg: #f7f9fc;
+    --gps-bg-soft: #f9fbfd;
 
-    --mypage-radius-sm: 14px;
-    --mypage-radius-md: 20px;
-    --mypage-radius-lg: 28px;
+    --gps-radius-sm: 12px;
+    --gps-radius-md: 18px;
+    --gps-radius-lg: 26px;
 
-    --mypage-shadow-sm:
-        0 8px 24px
-        rgba(45, 36, 28, 0.05);
+    --gps-shadow-sm:
+        0 8px 24px rgba(7, 27, 48, 0.045);
 
-    --mypage-shadow-md:
-        0 18px 46px
-        rgba(45, 36, 28, 0.075);
+    --gps-shadow-card:
+        0 14px 36px rgba(7, 27, 48, 0.065);
 
-    --mypage-shadow-lg:
-        0 28px 68px
-        rgba(45, 36, 28, 0.11);
+    --gps-shadow-hover:
+        0 18px 46px rgba(7, 27, 48, 0.10);
 }
 
 
@@ -50,17 +49,15 @@
    ========================================================= */
 
 body {
-    background:
-        var(--mypage-bg);
-
-    color:
-        var(--mypage-text);
+    margin: 0;
+    background: var(--gps-bg);
+    color: var(--gps-text);
 
     font-family:
-        'Roboto',
+        "Roboto",
         -apple-system,
         BlinkMacSystemFont,
-        'Segoe UI',
+        "Segoe UI",
         sans-serif;
 }
 
@@ -72,14 +69,13 @@ main.my-career-gps-page {
     margin-left: 220px;
     margin-top: 100px;
 
-    padding:
-        0
-        32px
-        72px;
+    padding: 0 32px 80px;
 
     background: transparent;
+
     border: none;
     border-radius: 0;
+
     box-shadow: none;
 }
 
@@ -91,41 +87,35 @@ main.my-career-gps-page *::after {
 }
 
 
+main.my-career-gps-page a {
+    text-decoration: none;
+}
+
+
 /* =========================================================
    SHARED
    ========================================================= */
 
 .section-kicker {
-    margin:
-        0
-        0
-        8px;
+    margin: 0 0 8px;
 
-    color:
-        var(--mypage-olive-dark);
+    color: var(--gps-blue-600);
 
-    font-size:
-        0.65rem;
+    font-size: 0.64rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.17em;
-
-    line-height:
-        1.4;
+    letter-spacing: 0.17em;
+    line-height: 1.4;
 }
 
 
 .mypage-section {
-    max-width:
-        1280px;
+    max-width: 1280px;
 
     margin:
         0
         auto
-        72px;
+        78px;
 }
 
 
@@ -135,52 +125,153 @@ main.my-career-gps-page *::after {
     align-items: flex-end;
     justify-content: space-between;
 
-    gap:
-        30px;
+    gap: 32px;
 
-    margin-bottom:
-        24px;
+    margin-bottom: 26px;
 }
 
 
 .section-heading h2 {
     margin: 0;
 
-    color:
-        var(--mypage-text);
+    color: var(--gps-text-strong);
 
-    font-size:
-        clamp(
-            1.65rem,
-            2.4vw,
-            2.15rem
-        );
+    font-size: clamp(
+        1.65rem,
+        2.4vw,
+        2.2rem
+    );
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    letter-spacing:
-        -0.025em;
-
-    line-height:
-        1.32;
+    letter-spacing: -0.03em;
+    line-height: 1.3;
 }
 
 
 .section-heading__description {
-    max-width:
-        470px;
+    max-width: 470px;
 
     margin: 0;
 
-    color:
-        var(--mypage-text-sub);
+    color: var(--gps-muted);
 
-    font-size:
-        0.82rem;
+    font-size: 0.82rem;
+    line-height: 1.8;
+}
 
-    line-height:
-        1.75;
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.mypage-primary-button,
+.mypage-primary-link-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    min-height: 48px;
+
+    padding: 0 23px;
+
+    border:
+        1px solid
+        var(--gps-blue-600);
+
+    border-radius: 999px;
+
+    background: var(--gps-blue-600);
+
+    color: var(--gps-white);
+
+    font-family: inherit;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px
+        rgba(29, 95, 158, 0.18);
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.mypage-primary-button:hover,
+.mypage-primary-link-button:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--gps-blue-700);
+
+    background: var(--gps-blue-700);
+
+    box-shadow:
+        0 14px 32px
+        rgba(29, 95, 158, 0.24);
+}
+
+
+.mypage-primary-button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+.mypage-secondary-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    min-height: 46px;
+
+    padding: 0 20px;
+
+    border:
+        1px solid
+        var(--gps-line-strong);
+
+    border-radius: 999px;
+
+    background: var(--gps-white);
+
+    color: var(--gps-navy-800);
+
+    font-size: 0.74rem;
+    font-weight: 800;
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+.mypage-secondary-button:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--gps-blue-100);
+
+    background: var(--gps-blue-025);
 }
 
 
@@ -189,24 +280,24 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .mypage-hero {
+    position: relative;
+
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1.15fr)
-        minmax(330px, 0.62fr);
+        minmax(0, 1.12fr)
+        minmax(340px, 0.62fr);
 
     align-items: center;
 
-    gap:
-        46px;
+    gap: 46px;
 
-    max-width:
-        1280px;
+    max-width: 1280px;
 
     margin:
         0
         auto
-        72px;
+        78px;
 
     padding:
         54px
@@ -216,25 +307,54 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        rgba(87, 70, 55, 0.10);
+        var(--gps-line);
 
     border-radius:
-        var(--mypage-radius-lg);
+        var(--gps-radius-lg);
 
     background:
         linear-gradient(
             135deg,
-            #f7f5f1 0%,
-            #f4f1ea 55%,
-            #edf0e5 100%
+            #ffffff 0%,
+            #f7fbff 52%,
+            #edf5fb 100%
         );
 
     box-shadow:
-        var(--mypage-shadow-md);
+        var(--gps-shadow-card);
+}
+
+
+.mypage-hero::before {
+    position: absolute;
+
+    top: -190px;
+    right: -130px;
+
+    width: 430px;
+    height: 430px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29, 95, 158, 0.10) 0%,
+            rgba(29, 95, 158, 0.03) 47%,
+            rgba(29, 95, 158, 0) 72%
+        );
+
+    pointer-events: none;
+
+    content: "";
 }
 
 
 .mypage-hero__main {
+    position: relative;
+
+    z-index: 1;
+
     min-width: 0;
 }
 
@@ -242,44 +362,33 @@ main.my-career-gps-page *::after {
 .mypage-hero__main h1 {
     margin: 0;
 
-    color:
-        var(--mypage-text);
+    color: var(--gps-navy-900);
 
-    font-size:
-        clamp(
-            2.35rem,
-            4vw,
-            3.7rem
-        );
+    font-size: clamp(
+        2.4rem,
+        4vw,
+        3.75rem
+    );
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    letter-spacing:
-        -0.045em;
-
-    line-height:
-        1.18;
+    letter-spacing: -0.05em;
+    line-height: 1.16;
 }
 
 
 .mypage-hero__lead {
-    max-width:
-        650px;
+    max-width: 650px;
 
     margin:
-        21px
+        22px
         0
         0;
 
-    color:
-        var(--mypage-text-sub);
+    color: var(--gps-muted);
 
-    font-size:
-        0.9rem;
-
-    line-height:
-        1.95;
+    font-size: 0.9rem;
+    line-height: 1.95;
 }
 
 
@@ -288,125 +397,37 @@ main.my-career-gps-page *::after {
 
     align-items: center;
 
-    gap:
-        12px;
+    gap: 12px;
 
-    margin-top:
-        28px;
+    margin-top: 30px;
 }
 
 
 /* =========================================================
-   PRIMARY BUTTON
-   ========================================================= */
-
-.mypage-primary-button {
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-    justify-content:
-        center;
-
-    gap:
-        10px;
-
-    min-height:
-        48px;
-
-    padding:
-        0
-        23px;
-
-    border:
-        none;
-
-    border-radius:
-        999px;
-
-    background:
-        var(--mypage-olive-dark);
-
-    color:
-        #ffffff;
-
-    font-family:
-        inherit;
-
-    font-size:
-        0.79rem;
-
-    font-weight:
-        800;
-
-    line-height:
-        1;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 11px 25px
-        rgba(89, 98, 56, 0.20);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
-}
-
-
-.mypage-primary-button:hover {
-    transform:
-        translateY(-2px);
-
-    background:
-        #4f5931;
-
-    box-shadow:
-        0 15px 32px
-        rgba(89, 98, 56, 0.27);
-}
-
-
-.mypage-primary-button:disabled {
-    opacity:
-        0.55;
-
-    cursor:
-        not-allowed;
-
-    transform:
-        none;
-
-    box-shadow:
-        none;
-}
-
-
-/* =========================================================
-   HERO SIDE / GPS STATUS
+   HERO SIDE
    ========================================================= */
 
 .mypage-hero__side {
+    position: relative;
+
+    z-index: 1;
+
     padding:
         27px
         26px;
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.74);
+        rgba(255, 255, 255, 0.85);
 
-    border-radius:
-        22px;
+    border-radius: 22px;
 
     background:
-        rgba(255, 255, 255, 0.86);
+        rgba(255, 255, 255, 0.93);
 
     box-shadow:
-        0 22px 48px
-        rgba(44, 33, 25, 0.10);
+        0 20px 48px
+        rgba(7, 27, 48, 0.085);
 
     backdrop-filter:
         blur(14px);
@@ -419,17 +440,12 @@ main.my-career-gps-page *::after {
         0
         6px;
 
-    color:
-        var(--mypage-olive-dark);
+    color: var(--gps-blue-600);
 
-    font-size:
-        0.61rem;
+    font-size: 0.6rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.15em;
+    letter-spacing: 0.15em;
 }
 
 
@@ -439,306 +455,888 @@ main.my-career-gps-page *::after {
         0
         23px;
 
-    color:
-        var(--mypage-text);
+    color: var(--gps-text-strong);
 
-    font-size:
-        1.13rem;
+    font-size: 1.15rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.5;
-}
-
-
-.mypage-gps-progress {
-    padding:
-        18px
-        18px;
-
-    border:
-        1px solid
-        var(--mypage-line);
-
-    border-radius:
-        15px;
-
-    background:
-        var(--mypage-surface-soft);
-}
-
-
-.mypage-gps-progress__header {
-    display:
-        flex;
-
-    align-items:
-        baseline;
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-}
-
-
-.mypage-gps-progress__header span {
-    color:
-        var(--mypage-text-sub);
-
-    font-size:
-        0.68rem;
-
-    font-weight:
-        700;
-}
-
-
-.mypage-gps-progress__header strong {
-    color:
-        var(--mypage-brown);
-
-    font-size:
-        1.45rem;
-
-    font-weight:
-        800;
-}
-
-
-.mypage-progress-bar {
-    width:
-        100%;
-
-    height:
-        7px;
-
-    margin-top:
-        13px;
-
-    overflow:
-        hidden;
-
-    border-radius:
-        999px;
-
-    background:
-        #e5e1d9;
-}
-
-
-.mypage-progress-bar__value {
-    display:
-        block;
-
-    width:
-        0;
-
-    height:
-        100%;
-
-    border-radius:
-        inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--mypage-olive),
-            var(--mypage-olive-light)
-        );
-
-    transition:
-        width
-        0.5s ease;
-}
-
-
-.mypage-hero__side-message {
-    margin:
-        17px
-        2px
-        0;
-
-    color:
-        var(--mypage-text-muted);
-
-    font-size:
-        0.67rem;
-
-    line-height:
-        1.7;
+    line-height: 1.5;
 }
 
 
 /* =========================================================
-   CAREER SNAPSHOT
+   CURRENT POSITION
    ========================================================= */
 
-.mypage-snapshot-grid {
-    display:
-        grid;
+.mypage-current-position {
+    display: flex;
 
-    grid-template-columns:
-        repeat(
-            4,
-            minmax(0, 1fr)
-        );
+    flex-direction: column;
 
-    gap:
-        14px;
+    gap: 15px;
 }
 
 
-.mypage-snapshot-card {
+.mypage-current-position__primary {
+    padding:
+        16px
+        17px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 14px;
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.mypage-current-position__label {
+    margin:
+        0
+        0
+        5px;
+
+    color: var(--gps-muted-light);
+
+    font-size: 0.58rem;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+
+.mypage-current-position__primary strong {
+    display: block;
+
     min-width: 0;
 
-    min-height:
-        175px;
+    color: var(--gps-text-strong);
+
+    font-size: 0.92rem;
+    font-weight: 800;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+.mypage-current-position__meta {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+}
+
+
+.mypage-current-position__meta > div {
+    padding:
+        13px
+        9px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 12px;
+
+    background: var(--gps-white);
+
+    text-align: center;
+}
+
+
+.mypage-current-position__meta span {
+    display: block;
+
+    color: var(--gps-muted-light);
+
+    font-size: 0.52rem;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+
+.mypage-current-position__meta strong {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--gps-navy-800);
+
+    font-size: 0.86rem;
+    font-weight: 800;
+
+    line-height: 1.3;
+}
+
+
+.mypage-current-position__meta strong span {
+    display: inline;
+
+    color: inherit;
+
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.mypage-gps-progress {
+    margin-top: 16px;
 
     padding:
-        22px
+        15px
+        16px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 13px;
+
+    background:
+        var(--gps-blue-025);
+}
+
+
+.mypage-gps-progress__header {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.mypage-gps-progress__header span {
+    color: var(--gps-muted);
+
+    font-size: 0.62rem;
+    font-weight: 700;
+}
+
+
+.mypage-gps-progress__header strong {
+    color: var(--gps-navy-800);
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+
+.mypage-progress-bar {
+    width: 100%;
+    height: 6px;
+
+    margin-top: 10px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e4edf5;
+}
+
+
+.mypage-progress-bar__value {
+    display: block;
+
+    width: 0;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--gps-blue-600),
+            var(--gps-blue-500)
+        );
+
+    transition:
+        width 0.4s ease;
+}
+
+
+/* =========================================================
+   CURRENT CROSSROAD
+   ========================================================= */
+
+.mypage-crossroad-section {
+    position: relative;
+}
+
+
+.mypage-crossroad-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.06fr)
+        minmax(320px, 0.72fr);
+
+    gap: 18px;
+
+    align-items: stretch;
+}
+
+
+.mypage-crossroad-main {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 310px;
+
+    padding:
+        34px
+        34px
+        30px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--gps-blue-100);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gps-navy-900) 0%,
+            var(--gps-navy-800) 58%,
+            var(--gps-blue-700) 100%
+        );
+
+    box-shadow:
+        var(--gps-shadow-card);
+}
+
+
+.mypage-crossroad-main::after {
+    position: absolute;
+
+    right: -80px;
+    bottom: -120px;
+
+    width: 280px;
+    height: 280px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 50%;
+
+    content: "";
+}
+
+
+.mypage-crossroad-main__label {
+    position: relative;
+
+    z-index: 1;
+
+    margin:
+        0
+        0
+        24px;
+
+    color: #b9d6ef;
+
+    font-size: 0.63rem;
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+}
+
+
+.mypage-crossroad-main__text {
+    position: relative;
+    z-index: 1;
+
+    display: -webkit-box;
+    max-width: 760px;
+    margin: 0;
+    overflow: hidden;
+
+    color: var(--gps-white);
+
+    font-size: clamp(0.95rem, 1.15vw, 1.12rem);
+    font-weight: 700;
+    line-height: 1.65;
+    letter-spacing: -0.01em;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+}
+
+
+.mypage-crossroad-main__link {
+    position: relative;
+
+    z-index: 1;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    width: fit-content;
+
+    min-height: 45px;
+
+    margin-top: auto;
+
+    padding-top: 28px;
+
+    color: #cfe6f8;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    transition:
+        color 0.18s ease;
+}
+
+
+.mypage-crossroad-main__link:hover {
+    color:
+        var(--gps-white);
+}
+
+
+.mypage-crossroad-main__link[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   DECISION COMPASS
+   ========================================================= */
+
+.mypage-decision-compass {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 11px;
+}
+
+
+.mypage-compass-card {
+    min-width: 0;
+
+    padding:
+        20px
         21px;
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     border-radius:
-        var(--mypage-radius-md);
+        var(--gps-radius-md);
 
     background:
-        var(--mypage-surface);
+        var(--gps-white);
 
     box-shadow:
-        var(--mypage-shadow-sm);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+        var(--gps-shadow-sm);
 }
 
 
-.mypage-snapshot-card:hover {
-    transform:
-        translateY(-3px);
+.mypage-compass-card__label {
+    margin:
+        0
+        0
+        11px;
 
-    border-color:
-        var(--mypage-line-strong);
+    color:
+        var(--gps-blue-600);
+
+    font-size: 0.55rem;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+}
+
+
+.mypage-compass-card > span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size: 0.61rem;
+    font-weight: 700;
+}
+
+
+.mypage-compass-card strong {
+    display: block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size: 0.98rem;
+    font-weight: 800;
+
+    line-height: 1.55;
+
+    overflow-wrap: anywhere;
+}
+
+
+.mypage-compass-card > p:last-child {
+    margin: 0;
+
+    color:
+        var(--gps-text);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    line-height: 1.65;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   PAST DECISIONS
+   ========================================================= */
+
+.mypage-past-decisions-panel {
+    padding:
+        38px
+        40px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--gps-white) 0%,
+            var(--gps-blue-025) 100%
+        );
 
     box-shadow:
-        var(--mypage-shadow-md);
+        var(--gps-shadow-card);
 }
 
 
-.mypage-snapshot-card__label {
-    margin:
-        0
-        0
-        27px;
+.mypage-past-decisions-panel__header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.mypage-past-decisions-panel__header h2 {
+    margin: 0;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-text-strong);
 
     font-size:
-        0.58rem;
+        clamp(
+            1.65rem,
+            2.4vw,
+            2.15rem
+        );
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    letter-spacing:
-        0.13em;
+    letter-spacing: -0.03em;
+    line-height: 1.35;
 }
 
 
-.mypage-snapshot-card__value {
-    display:
-        flex;
-
-    align-items:
-        baseline;
-
-    gap:
-        7px;
-}
-
-
-.mypage-snapshot-card__value strong {
-    color:
-        var(--mypage-text);
-
-    font-size:
-        2.1rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        -0.035em;
-
-    line-height:
-        1;
-}
-
-
-.mypage-snapshot-card__value span {
-    color:
-        var(--mypage-text-muted);
-
-    font-size:
-        0.66rem;
-
-    font-weight:
-        600;
-}
-
-
-.mypage-snapshot-card__career-type {
-    display:
-        -webkit-box;
+.mypage-past-decisions-panel__description {
+    max-width: 650px;
 
     margin:
-        0;
-
-    overflow:
-        hidden;
-
-    color:
-        var(--mypage-text);
-
-    font-size:
-        1rem;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.55;
-
-    -webkit-line-clamp:
-        2;
-
-    -webkit-box-orient:
-        vertical;
-}
-
-
-.mypage-snapshot-card__description {
-    margin:
-        14px
+        13px
         0
         0;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted);
 
-    font-size:
-        0.65rem;
+    font-size: 0.8rem;
+    line-height: 1.8;
+}
 
-    line-height:
-        1.55;
+
+.mypage-past-decisions-panel__count {
+    flex: 0 0 auto;
+
+    min-width: 110px;
+
+    padding:
+        17px
+        18px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 15px;
+
+    background:
+        var(--gps-white);
+
+    text-align: center;
+}
+
+
+.mypage-past-decisions-panel__count > span {
+    display: block;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size: 0.57rem;
+    font-weight: 700;
+}
+
+
+.mypage-past-decisions-panel__count > div {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: center;
+
+    gap: 5px;
+
+    margin-top: 5px;
+}
+
+
+.mypage-past-decisions-panel__count strong {
+    color:
+        var(--gps-navy-800);
+
+    font-size: 1.8rem;
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+
+.mypage-past-decisions-panel__count small {
+    color:
+        var(--gps-muted-light);
+
+    font-size: 0.62rem;
+}
+
+
+/* =========================================================
+   DECISION PREVIEW
+   ========================================================= */
+
+.mypage-decision-preview-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+
+.mypage-decision-preview-card {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 250px;
+
+    padding:
+        23px
+        23px
+        21px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-md);
+
+    background:
+        var(--gps-white);
+
+    box-shadow:
+        var(--gps-shadow-sm);
+}
+
+
+.mypage-decision-preview-card:only-child {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    max-width: 760px;
+}
+
+
+.mypage-decision-preview-card__meta {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size: 0.6rem;
+    font-weight: 700;
+}
+
+
+.mypage-decision-preview-card__type {
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 25px;
+
+    padding:
+        4px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        var(--gps-blue-050);
+
+    color:
+        var(--gps-blue-700);
+
+    font-weight: 800;
+}
+
+
+.mypage-decision-preview-card h3 {
+    display: -webkit-box;
+
+    margin: 0;
+    overflow: hidden;
+
+    color: var(--gps-text-strong);
+
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.55;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+
+.mypage-decision-preview-card__summary {
+    display: -webkit-box;
+
+    margin: 12px 0 0;
+    overflow: hidden;
+
+    color: var(--gps-muted);
+
+    font-size: 0.72rem;
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+
+.mypage-decision-preview-card__reflection {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 16px;
+
+    padding:
+        10px
+        11px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 10px;
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.mypage-decision-preview-card__reflection span {
+    color:
+        var(--gps-muted-light);
+
+    font-size: 0.57rem;
+    font-weight: 700;
+}
+
+
+.mypage-decision-preview-card__reflection strong {
+    color:
+        var(--gps-navy-800);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+.mypage-decision-preview-card > a {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: auto;
+
+    padding-top: 20px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+
+.mypage-decision-empty {
+    grid-column: 1 / -1;
+
+    padding:
+        34px
+        28px;
+
+    border:
+        1px dashed
+        var(--gps-line-strong);
+
+    border-radius:
+        var(--gps-radius-md);
+
+    background:
+        rgba(255, 255, 255, 0.7);
+
+    text-align: center;
+}
+
+
+.mypage-decision-empty__kicker {
+    margin:
+        0
+        0
+        6px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size: 0.57rem;
+    font-weight: 800;
+
+    letter-spacing: 0.13em;
+}
+
+
+.mypage-decision-empty h3 {
+    margin: 0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size: 1.05rem;
+}
+
+
+.mypage-decision-empty p:last-child {
+    max-width: 480px;
+
+    margin:
+        10px
+        auto
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size: 0.72rem;
+    line-height: 1.75;
+}
+
+
+.mypage-past-decisions-panel__actions {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 23px;
 }
 
 
@@ -747,27 +1345,22 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .career-journey-summary {
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    gap:
-        16px;
+    gap: 15px;
 }
 
 
 .career-journey-company {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         52px
         minmax(0, 1fr);
 
-    gap:
-        18px;
+    gap: 18px;
 
     padding:
         26px
@@ -775,50 +1368,39 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
-    border-radius:
-        21px;
+    border-radius: 20px;
 
     background:
-        var(--mypage-surface);
+        var(--gps-white);
 
     box-shadow:
-        var(--mypage-shadow-sm);
+        var(--gps-shadow-sm);
 }
 
 
 .career-journey-company__index {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
-    justify-content:
-        center;
+    align-items: center;
+    justify-content: center;
 
-    width:
-        44px;
-    height:
-        44px;
+    width: 44px;
+    height: 44px;
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
-        var(--mypage-surface-olive);
+        var(--gps-blue-050);
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-700);
 
-    font-size:
-        0.7rem;
+    font-size: 0.7rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.07em;
+    letter-spacing: 0.07em;
 }
 
 
@@ -828,39 +1410,31 @@ main.my-career-gps-page *::after {
 
 
 .career-journey-company__header {
-    display:
-        flex;
+    position: static;
 
-    align-items:
-        flex-start;
-    justify-content:
-        space-between;
+    display: flex;
 
-    gap:
-        20px;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-height: 0;
 
     margin: 0;
 
     padding:
         0
         0
-        20px;
+        19px;
 
     border-bottom:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
-    background:
-        none;
+    background: none;
 
-    box-shadow:
-        none;
-
-    position:
-        static;
-
-    min-height:
-        0;
+    box-shadow: none;
 }
 
 
@@ -871,16 +1445,12 @@ main.my-career-gps-page *::after {
         4px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.57rem;
+    font-size: 0.56rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.13em;
+    letter-spacing: 0.13em;
 }
 
 
@@ -888,16 +1458,14 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1.2rem;
+    font-size: 1.17rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
+    line-height: 1.4;
 
-    line-height:
-        1.4;
+    overflow-wrap: anywhere;
 }
 
 
@@ -908,31 +1476,24 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.7rem;
+    font-size: 0.69rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
 
 
 .career-journey-company__period {
-    flex:
-        0 0 auto;
+    flex: 0 0 auto;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.66rem;
+    font-size: 0.64rem;
+    font-weight: 600;
 
-    font-weight:
-        600;
-
-    line-height:
-        1.6;
+    line-height: 1.6;
 }
 
 
@@ -941,133 +1502,96 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .career-journey-company__roles {
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    gap:
-        0;
+    gap: 0;
 
-    margin-top:
-        19px;
+    margin-top: 18px;
 }
 
 
 .career-journey-role {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         24px
         minmax(0, 1fr);
 
-    gap:
-        14px;
+    gap: 14px;
 }
 
 
 .career-journey-role__line {
-    position:
-        relative;
+    position: relative;
 
-    display:
-        flex;
+    display: flex;
 
-    justify-content:
-        center;
+    justify-content: center;
 }
 
 
 .career-journey-role__line::after {
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        15px;
+    top: 15px;
+    bottom: -15px;
 
-    bottom:
-        -15px;
-
-    width:
-        1px;
+    width: 1px;
 
     background:
-        rgba(
-            116,
-            128,
-            79,
-            0.25
-        );
+        var(--gps-blue-100);
 
-    content:
-        '';
+    content: "";
 }
 
 
 .career-journey-role:last-child
 .career-journey-role__line::after {
-    display:
-        none;
+    display: none;
 }
 
 
 .career-journey-role__dot {
-    position:
-        relative;
+    position: relative;
 
-    z-index:
-        1;
+    z-index: 1;
 
-    width:
-        9px;
-    height:
-        9px;
+    width: 9px;
+    height: 9px;
 
-    margin-top:
-        6px;
+    margin-top: 6px;
 
     border:
         2px solid
-        #ffffff;
+        var(--gps-white);
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
-        var(--mypage-olive);
+        var(--gps-blue-600);
 
     box-shadow:
         0 0 0 1px
-        rgba(
-            116,
-            128,
-            79,
-            0.34
-        );
+        var(--gps-blue-100);
 }
 
 
 .career-journey-role__content {
     min-width: 0;
 
-    padding-bottom:
-        22px;
+    padding-bottom: 22px;
 }
 
 
 .career-journey-role__header {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        flex-start;
-    justify-content:
-        space-between;
+    align-items: flex-start;
+    justify-content: space-between;
 
-    gap:
-        16px;
+    gap: 16px;
 }
 
 
@@ -1078,16 +1602,12 @@ main.my-career-gps-page *::after {
         3px;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.52rem;
+    font-size: 0.51rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.12em;
+    letter-spacing: 0.12em;
 }
 
 
@@ -1095,31 +1615,24 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        0.92rem;
+    font-size: 0.9rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.45;
+    line-height: 1.45;
 }
 
 
 .career-journey-role__period {
-    flex:
-        0 0 auto;
+    flex: 0 0 auto;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.61rem;
+    font-size: 0.6rem;
 
-    line-height:
-        1.55;
+    line-height: 1.55;
 }
 
 
@@ -1131,19 +1644,16 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.67rem;
+    font-size: 0.66rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
 
 
 .career-journey-role__description {
-    max-width:
-        750px;
+    max-width: 750px;
 
     margin:
         9px
@@ -1151,13 +1661,11 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.7rem;
+    font-size: 0.69rem;
 
-    line-height:
-        1.7;
+    line-height: 1.7;
 }
 
 
@@ -1166,48 +1674,35 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.69rem;
+    font-size: 0.68rem;
 }
 
 
 /* =========================================================
-   JOURNEY EMPTY / LOADING
+   EMPTY / LOADING
    ========================================================= */
 
 .mypage-loading-state,
 .career-journey-empty {
     padding:
-        42px
-        30px;
+        40px
+        28px;
 
     border:
         1px dashed
-        rgba(
-            116,
-            128,
-            79,
-            0.26
-        );
+        var(--gps-line-strong);
 
-    border-radius:
-        18px;
+    border-radius: 18px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.48
-        );
+        rgba(255, 255, 255, 0.7);
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    text-align:
-        center;
+    text-align: center;
 }
 
 
@@ -1218,364 +1713,90 @@ main.my-career-gps-page *::after {
         7px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.59rem;
+    font-size: 0.58rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.14em;
+    letter-spacing: 0.14em;
 }
 
 
 .career-journey-empty h3 {
-    margin:
-        0;
+    margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1.15rem;
+    font-size: 1.1rem;
 }
 
 
 .career-journey-empty p:last-child {
-    max-width:
-        480px;
+    max-width: 480px;
 
     margin:
         12px
         auto
         0;
 
-    font-size:
-        0.75rem;
+    font-size: 0.73rem;
 
-    line-height:
-        1.75;
+    line-height: 1.75;
 }
 
 
 /* =========================================================
-   CAREER DECISION PANEL
-   ========================================================= */
-
-.career-decision-panel {
-    display:
-        grid;
-
-    grid-template-columns:
-        minmax(0, 1.1fr)
-        minmax(250px, 0.48fr);
-
-    align-items:
-        center;
-
-    gap:
-        45px;
-
-    padding:
-        42px
-        46px;
-
-    border:
-        1px solid
-        rgba(
-            116,
-            128,
-            79,
-            0.15
-        );
-
-    border-radius:
-        var(--mypage-radius-lg);
-
-    background:
-        linear-gradient(
-            135deg,
-            #eef0e6 0%,
-            #f4f3eb 55%,
-            #f8f6f1 100%
-        );
-}
-
-
-.career-decision-panel__main h2 {
-    margin: 0;
-
-    color:
-        var(--mypage-text);
-
-    font-size:
-        clamp(
-            1.7rem,
-            2.6vw,
-            2.25rem
-        );
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        -0.025em;
-
-    line-height:
-        1.35;
-}
-
-
-.career-decision-panel__description {
-    max-width:
-        650px;
-
-    margin:
-        14px
-        0
-        0;
-
-    color:
-        var(--mypage-text-sub);
-
-    font-size:
-        0.8rem;
-
-    line-height:
-        1.85;
-}
-
-
-.career-decision-panel__points {
-    display:
-        flex;
-
-    flex-wrap:
-        wrap;
-
-    gap:
-        7px;
-
-    margin-top:
-        20px;
-}
-
-
-.career-decision-panel__points span {
-    padding:
-        6px
-        10px;
-
-    border:
-        1px solid
-        rgba(
-            116,
-            128,
-            79,
-            0.16
-        );
-
-    border-radius:
-        999px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.70
-        );
-
-    color:
-        var(--mypage-olive-dark);
-
-    font-size:
-        0.61rem;
-
-    font-weight:
-        700;
-}
-
-
-/* =========================================================
-   DECISION ACTION
-   ========================================================= */
-
-.career-decision-panel__action {
-    padding:
-        23px;
-
-    border:
-        1px solid
-        rgba(
-            116,
-            128,
-            79,
-            0.16
-        );
-
-    border-radius:
-        18px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.78
-        );
-}
-
-
-.career-decision-panel__action > p {
-    margin:
-        0
-        0
-        8px;
-
-    color:
-        var(--mypage-text-muted);
-
-    font-size:
-        0.62rem;
-
-    font-weight:
-        700;
-}
-
-
-.career-decision-panel__count {
-    display:
-        flex;
-
-    align-items:
-        baseline;
-
-    gap:
-        6px;
-}
-
-
-.career-decision-panel__count strong {
-    color:
-        var(--mypage-brown);
-
-    font-size:
-        2.2rem;
-
-    font-weight:
-        800;
-
-    line-height:
-        1;
-}
-
-
-.career-decision-panel__count span {
-    color:
-        var(--mypage-text-muted);
-
-    font-size:
-        0.67rem;
-}
-
-
-.career-decision-panel__button {
-    display:
-        flex;
-
-    align-items:
-        center;
-    justify-content:
-        space-between;
-
-    gap:
-        12px;
-
-    min-height:
-        47px;
-
-    margin-top:
-        19px;
-
-    padding:
-        0
-        16px;
-
-    border-radius:
-        999px;
-
-    background:
-        var(--mypage-brown);
-
-    color:
-        #ffffff;
-
-    font-size:
-        0.7rem;
-
-    font-weight:
-        800;
-
-    text-decoration:
-        none;
-
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease;
-}
-
-
-.career-decision-panel__button:hover {
-    transform:
-        translateY(-2px);
-
-    background:
-        var(--mypage-brown-dark);
-}
-
-
-/* =========================================================
-   LOOKING AHEAD
+   NEXT DIRECTION
    ========================================================= */
 
 .future-career-grid {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
-            3,
+            2,
             minmax(0, 1fr)
         );
 
-    gap:
-        14px;
+    gap: 14px;
 }
 
 
 .future-career-card {
-    min-height:
-        180px;
+    min-width: 0;
+    min-height: 140px;
 
     padding:
-        23px
-        22px;
+        22px
+        21px;
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     border-radius:
-        var(--mypage-radius-md);
+        var(--gps-radius-md);
 
     background:
-        var(--mypage-surface);
+        var(--gps-white);
 
     box-shadow:
-        var(--mypage-shadow-sm);
+        var(--gps-shadow-sm);
+}
+
+
+.future-career-card:first-child {
+    grid-column:
+        1 / -1;
+
+    min-height: 135px;
+
+    border-color:
+        var(--gps-blue-100);
+
+    background:
+        var(--gps-blue-025);
 }
 
 
@@ -1583,19 +1804,15 @@ main.my-career-gps-page *::after {
     margin:
         0
         0
-        23px;
+        20px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.59rem;
+    font-size: 0.58rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.11em;
+    letter-spacing: 0.1em;
 }
 
 
@@ -1603,42 +1820,35 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1rem;
+    font-size: 1rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
+    line-height: 1.6;
 
-    line-height:
-        1.6;
+    overflow-wrap: anywhere;
 }
 
 
 .future-career-card > p:last-child {
-    display:
-        -webkit-box;
+    display: -webkit-box;
 
     margin: 0;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-text);
 
-    font-size:
-        0.74rem;
+    font-size: 0.73rem;
 
-    line-height:
-        1.75;
+    line-height: 1.75;
 
-    -webkit-line-clamp:
-        5;
+    overflow-wrap: anywhere;
 
-    -webkit-box-orient:
-        vertical;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
 }
 
 
@@ -1647,55 +1857,47 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .mypage-editor {
-    max-width:
-        1180px;
+    max-width: 1180px;
 
     margin:
         0
         auto
-        72px;
+        78px;
 
     padding:
-        34px
+        35px
         36px
         38px;
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     border-radius:
-        var(--mypage-radius-lg);
+        var(--gps-radius-lg);
 
     background:
-        var(--mypage-surface);
+        var(--gps-white);
 
     box-shadow:
-        var(--mypage-shadow-md);
+        var(--gps-shadow-card);
 }
 
 
-/* hidden属性を確実に効かせる */
 .mypage-editor[hidden] {
-    display:
-        none !important;
+    display: none !important;
 }
 
 
 .mypage-editor__header {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        flex-start;
-    justify-content:
-        space-between;
+    align-items: flex-start;
+    justify-content: space-between;
 
-    gap:
-        24px;
+    gap: 24px;
 
-    margin-bottom:
-        28px;
+    margin-bottom: 28px;
 }
 
 
@@ -1703,16 +1905,12 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1.8rem;
+    font-size: 1.75rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.4;
+    line-height: 1.4;
 }
 
 
@@ -1723,22 +1921,18 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.75rem;
+    font-size: 0.74rem;
 
-    line-height:
-        1.7;
+    line-height: 1.7;
 }
 
 
 .mypage-editor-close {
-    flex:
-        0 0 auto;
+    flex: 0 0 auto;
 
-    min-height:
-        38px;
+    min-height: 38px;
 
     padding:
         0
@@ -1746,34 +1940,26 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        var(--mypage-line-strong);
+        var(--gps-line-strong);
 
-    border-radius:
-        999px;
+    border-radius: 999px;
 
     background:
-        #ffffff;
+        var(--gps-white);
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-navy-800);
 
-    font-size:
-        0.68rem;
+    font-size: 0.67rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-    transition:
-        background-color 0.2s ease;
+    cursor: pointer;
 }
 
 
 .mypage-editor-close:hover {
     background:
-        var(--mypage-surface-olive);
+        var(--gps-blue-025);
 }
 
 
@@ -1782,121 +1968,75 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .tab-menu {
-    display:
-        flex;
+    display: grid;
 
-    flex-wrap:
-        nowrap;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    gap:
-        5px;
+    gap: 5px;
 
     margin:
         0
         0
         30px;
 
-    padding:
-        5px;
-
-    overflow-x:
-        auto;
+    padding: 5px;
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
-    border-radius:
-        14px;
+    border-radius: 14px;
 
     background:
-        #f3f1eb;
-
-    scrollbar-width:
-        none;
-}
-
-
-.tab-menu::-webkit-scrollbar {
-    display:
-        none;
+        var(--gps-bg);
 }
 
 
 .tab-menu button {
-    flex:
-        1 0 auto;
-
-    min-width:
-        160px;
-
-    min-height:
-        42px;
+    min-height: 42px;
 
     padding:
         0
         16px;
 
-    border:
-        none;
+    border: none;
 
-    border-radius:
-        10px;
+    border-radius: 10px;
 
-    background:
-        transparent;
+    background: transparent;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        0.72rem;
+    font-size: 0.71rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    white-space:
-        nowrap;
-
-    cursor:
-        pointer;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease;
+    cursor: pointer;
 }
 
 
 .tab-menu button:hover {
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.60
-        );
+        rgba(255, 255, 255, 0.72);
 }
 
 
 .tab-menu button.active {
     background:
-        #ffffff;
+        var(--gps-white);
 
     color:
-        var(--mypage-brown);
+        var(--gps-navy-800);
 
     box-shadow:
         0 3px 11px
-        rgba(
-            45,
-            36,
-            28,
-            0.07
-        );
+        rgba(7, 27, 48, 0.07);
 }
 
 
@@ -1905,14 +2045,12 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .tab-content {
-    display:
-        none;
+    display: none;
 }
 
 
 .tab-content.active {
-    display:
-        block;
+    display: block;
 }
 
 
@@ -1932,22 +2070,18 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1.22rem;
+    font-size: 1.2rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.45;
+    line-height: 1.45;
 }
 
 
-.editor-section-heading > p:last-child:not(.section-kicker) {
-    max-width:
-        680px;
+.editor-section-heading
+> p:last-child:not(.section-kicker) {
+    max-width: 680px;
 
     margin:
         7px
@@ -1955,35 +2089,29 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.72rem;
+    font-size: 0.71rem;
 
-    line-height:
-        1.7;
+    line-height: 1.7;
 }
 
 
 .editor-section-divider {
-    width:
-        100%;
-
-    height:
-        1px;
+    width: 100%;
+    height: 1px;
 
     margin:
         35px
         0;
 
     background:
-        var(--mypage-line);
+        var(--gps-line);
 }
 
 
 .editor-grid {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -2002,28 +2130,23 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 #mypage-form {
-    width:
-        100%;
+    width: 100%;
 }
 
 
 .floating-label {
-    position:
-        relative;
+    position: relative;
 
-    margin-bottom:
-        20px;
+    margin-bottom: 20px;
 }
 
 
 .floating-label input,
 .floating-label select,
 .floating-label textarea {
-    width:
-        100%;
+    width: 100%;
 
-    min-height:
-        50px;
+    min-height: 50px;
 
     padding:
         16px
@@ -2032,42 +2155,35 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        #d9d5cd;
+        var(--gps-line-strong);
 
-    border-radius:
-        10px;
+    border-radius: 10px;
 
-    outline:
-        none;
+    outline: none;
 
     background:
-        #ffffff;
+        var(--gps-white);
 
     color:
-        var(--mypage-text);
+        var(--gps-text);
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        0.83rem;
+    font-size: 0.82rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 
     transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
 }
 
 
 .floating-label textarea {
-    min-height:
-        128px;
+    min-height: 128px;
 
-    resize:
-        vertical;
+    resize: vertical;
 }
 
 
@@ -2075,75 +2191,51 @@ main.my-career-gps-page *::after {
 .floating-label select:focus,
 .floating-label textarea:focus {
     border-color:
-        rgba(
-            116,
-            128,
-            79,
-            0.65
-        );
+        var(--gps-blue-500);
 
     box-shadow:
         0 0 0 4px
-        rgba(
-            116,
-            128,
-            79,
-            0.08
-        );
+        rgba(29, 95, 158, 0.08);
 }
 
 
 .floating-label label {
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        16px;
+    top: 16px;
+    left: 13px;
 
-    left:
-        13px;
-
-    z-index:
-        1;
+    z-index: 1;
 
     max-width:
-        calc(
-            100% - 26px
-        );
+        calc(100% - 26px);
 
     padding:
         0
         4px;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     background:
-        #ffffff;
+        var(--gps-white);
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.76rem;
+    font-size: 0.75rem;
 
-    line-height:
-        1.3;
+    line-height: 1.3;
 
-    pointer-events:
-        none;
+    pointer-events: none;
 
-    text-overflow:
-        ellipsis;
+    text-overflow: ellipsis;
 
-    white-space:
-        nowrap;
+    white-space: nowrap;
 
     transition:
-        top 0.2s ease,
-        left 0.2s ease,
-        color 0.2s ease,
-        font-size 0.2s ease;
+        top 0.18s ease,
+        color 0.18s ease,
+        font-size 0.18s ease;
 }
 
 
@@ -2153,17 +2245,13 @@ main.my-career-gps-page *::after {
 .floating-label textarea:not(:placeholder-shown) + label,
 .floating-label select:focus + label,
 .floating-label select:valid + label {
-    top:
-        -8px;
-
-    left:
-        10px;
+    top: -8px;
+    left: 10px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.59rem;
+    font-size: 0.58rem;
 }
 
 
@@ -2175,16 +2263,15 @@ main.my-career-gps-page *::after {
 .floating-label textarea[readonly],
 .floating-label select:disabled {
     border-color:
-        #e3dfd7;
+        var(--gps-line);
 
     background:
-        #f7f6f2;
+        var(--gps-bg-soft);
 
     color:
-        #645f58;
+        var(--gps-muted);
 
-    cursor:
-        default;
+    cursor: default;
 }
 
 
@@ -2192,16 +2279,15 @@ main.my-career-gps-page *::after {
 .floating-label textarea[readonly] + label,
 .floating-label select:disabled + label {
     background:
-        #f7f6f2;
+        var(--gps-bg-soft);
 }
 
 
 .floating-label select:disabled {
-    opacity:
-        1;
+    opacity: 1;
 
     -webkit-text-fill-color:
-        #645f58;
+        var(--gps-muted);
 }
 
 
@@ -2210,49 +2296,38 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .checkbox-group {
-    margin-bottom:
-        20px;
+    margin-bottom: 20px;
 }
 
 
 .checkbox-group label {
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        9px;
+    gap: 9px;
 
     color:
-        var(--mypage-text-sub);
+        var(--gps-muted);
 
-    font-size:
-        0.72rem;
+    font-size: 0.71rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 
 .checkbox-group input[type="checkbox"] {
-    flex:
-        0 0 auto;
+    flex: 0 0 auto;
 
-    width:
-        17px;
-
-    height:
-        17px;
+    width: 17px;
+    height: 17px;
 
     margin: 0;
 
     accent-color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 }
 
 
@@ -2261,24 +2336,21 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .company-card {
-    margin-bottom:
-        22px;
+    margin-bottom: 22px;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
-    border-radius:
-        17px;
+    border-radius: 17px;
 
     background:
-        #ffffff;
+        var(--gps-white);
 
     box-shadow:
-        var(--mypage-shadow-sm);
+        var(--gps-shadow-sm);
 }
 
 
@@ -2290,23 +2362,13 @@ main.my-career-gps-page *::after {
 
     border-bottom:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     background:
         linear-gradient(
             135deg,
-            rgba(
-                238,
-                240,
-                230,
-                0.90
-            ),
-            rgba(
-                255,
-                255,
-                255,
-                0.92
-            )
+            var(--gps-blue-025),
+            var(--gps-white)
         );
 }
 
@@ -2318,16 +2380,12 @@ main.my-career-gps-page *::after {
         4px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.57rem;
+    font-size: 0.56rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.13em;
+    letter-spacing: 0.13em;
 }
 
 
@@ -2335,16 +2393,12 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        1.12rem;
+    font-size: 1.1rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.45;
+    line-height: 1.45;
 }
 
 
@@ -2355,19 +2409,16 @@ main.my-career-gps-page *::after {
         0;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.65rem;
+    font-size: 0.64rem;
 
-    line-height:
-        1.6;
+    line-height: 1.6;
 }
 
 
 .company-fields {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -2387,8 +2438,7 @@ main.my-career-gps-page *::after {
 
 
 .company-private-field {
-    margin:
-        0;
+    margin: 0;
 
     padding:
         0
@@ -2398,7 +2448,7 @@ main.my-career-gps-page *::after {
 
 
 /* =========================================================
-   ROLES
+   ROLE SECTION
    ========================================================= */
 
 .roles-section {
@@ -2409,27 +2459,22 @@ main.my-career-gps-page *::after {
 
     border-top:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     background:
-        #f8f7f3;
+        var(--gps-bg-soft);
 }
 
 
 .roles-section-header {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
-    justify-content:
-        space-between;
+    align-items: center;
+    justify-content: space-between;
 
-    gap:
-        16px;
+    gap: 16px;
 
-    margin-bottom:
-        16px;
+    margin-bottom: 16px;
 }
 
 
@@ -2440,16 +2485,12 @@ main.my-career-gps-page *::after {
         3px;
 
     color:
-        var(--mypage-text-muted);
+        var(--gps-muted-light);
 
-    font-size:
-        0.54rem;
+    font-size: 0.53rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.12em;
+    letter-spacing: 0.12em;
 }
 
 
@@ -2457,29 +2498,22 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        0.92rem;
-
-    font-weight:
-        800;
+    font-size: 0.9rem;
+    font-weight: 800;
 }
 
 
 .add-role-button,
 .add-company-button,
 #add-job-experience {
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
-    justify-content:
-        center;
+    align-items: center;
+    justify-content: center;
 
-    min-height:
-        38px;
+    min-height: 38px;
 
     padding:
         0
@@ -2487,28 +2521,22 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    border-radius:
-        999px;
+    border-radius: 999px;
 
     background:
-        #ffffff;
+        var(--gps-white);
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-700);
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        0.65rem;
+    font-size: 0.64rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 
@@ -2516,19 +2544,16 @@ main.my-career-gps-page *::after {
 .add-company-button:hover,
 #add-job-experience:hover {
     background:
-        var(--mypage-surface-olive);
+        var(--gps-blue-025);
 }
 
 
 .roles-container {
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    gap:
-        14px;
+    gap: 14px;
 }
 
 
@@ -2544,30 +2569,27 @@ main.my-career-gps-page *::after {
 
     border:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 
     border-left:
         3px solid
-        var(--mypage-olive);
+        var(--gps-blue-600);
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 
     background:
-        #ffffff;
+        var(--gps-white);
 }
 
 
 .role-card-header {
-    margin-bottom:
-        16px;
+    margin-bottom: 16px;
 
-    padding-bottom:
-        12px;
+    padding-bottom: 12px;
 
     border-bottom:
         1px solid
-        var(--mypage-line);
+        var(--gps-line);
 }
 
 
@@ -2578,16 +2600,12 @@ main.my-career-gps-page *::after {
         3px;
 
     color:
-        var(--mypage-olive-dark);
+        var(--gps-blue-600);
 
-    font-size:
-        0.54rem;
+    font-size: 0.53rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.11em;
+    letter-spacing: 0.11em;
 }
 
 
@@ -2595,19 +2613,15 @@ main.my-career-gps-page *::after {
     margin: 0;
 
     color:
-        var(--mypage-text);
+        var(--gps-text-strong);
 
-    font-size:
-        0.9rem;
-
-    font-weight:
-        800;
+    font-size: 0.88rem;
+    font-weight: 800;
 }
 
 
 .role-grid {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -2622,107 +2636,7 @@ main.my-career-gps-page *::after {
 
 
 .role-description-field {
-    margin-bottom:
-        16px;
-}
-
-
-/* =========================================================
-   EXPLANATION
-   ========================================================= */
-
-.section-explain,
-.collapsible-block {
-    margin-bottom:
-        20px;
-
-    padding:
-        14px
-        16px;
-
-    border:
-        1px solid
-        rgba(
-            116,
-            128,
-            79,
-            0.14
-        );
-
-    border-left:
-        3px solid
-        var(--mypage-olive);
-
-    border-radius:
-        10px;
-
-    background:
-        var(--mypage-surface-olive);
-
-    color:
-        var(--mypage-text-sub);
-
-    font-size:
-        0.72rem;
-
-    line-height:
-        1.75;
-}
-
-
-.collapsible-details {
-    margin-top:
-        13px;
-
-    padding:
-        13px
-        14px;
-
-    border:
-        1px solid
-        var(--mypage-line);
-
-    border-radius:
-        9px;
-
-    background:
-        #ffffff;
-}
-
-
-.collapsible-details ul {
-    margin:
-        0;
-
-    padding-left:
-        18px;
-}
-
-
-.toggle-btn {
-    display:
-        inline-block;
-
-    margin-top:
-        8px;
-
-    color:
-        var(--mypage-olive-dark);
-
-    font-size:
-        0.68rem;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-    text-decoration:
-        underline;
-
-    text-underline-offset:
-        3px;
+    margin-bottom: 16px;
 }
 
 
@@ -2731,46 +2645,17 @@ main.my-career-gps-page *::after {
    ========================================================= */
 
 .editor-save-area {
-    display:
-        flex;
+    display: flex;
 
-    justify-content:
-        flex-end;
+    justify-content: flex-end;
 
-    margin-top:
-        30px;
+    margin-top: 30px;
 
-    padding-top:
-        25px;
+    padding-top: 25px;
 
     border-top:
         1px solid
-        var(--mypage-line);
-}
-
-
-/* =========================================================
-   DATE INPUT
-   ========================================================= */
-
-.floating-label
-input[type="date"] {
-    text-align:
-        left;
-
-    appearance:
-        none;
-
-    -webkit-appearance:
-        none;
-}
-
-
-.floating-label
-input[type="date"]
-::-webkit-datetime-edit {
-    padding-left:
-        0;
+        var(--gps-line);
 }
 
 
@@ -2781,11 +2666,8 @@ input[type="date"]
 @media (max-width: 1180px) {
 
     main.my-career-gps-page {
-        padding-right:
-            24px;
-
-        padding-left:
-            24px;
+        padding-right: 24px;
+        padding-left: 24px;
     }
 
 
@@ -2794,8 +2676,7 @@ input[type="date"]
             minmax(0, 1fr)
             minmax(300px, 0.58fr);
 
-        gap:
-            30px;
+        gap: 30px;
 
         padding:
             46px
@@ -2803,18 +2684,10 @@ input[type="date"]
     }
 
 
-    .mypage-snapshot-grid {
+    .mypage-crossroad-layout {
         grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-    }
-
-
-    .career-decision-panel {
-        gap:
-            30px;
+            minmax(0, 1fr)
+            minmax(280px, 0.72fr);
     }
 
 }
@@ -2833,26 +2706,31 @@ input[type="date"]
 
 
     .mypage-hero__side {
-        max-width:
-            600px;
+        max-width: 650px;
     }
 
 
-    .career-decision-panel {
+    .mypage-crossroad-layout {
         grid-template-columns:
             1fr;
     }
 
 
-    .career-decision-panel__action {
-        max-width:
-            420px;
+    .mypage-decision-compass {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
     }
 
 
     .future-career-grid {
         grid-template-columns:
-            1fr;
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
     }
 
 }
@@ -2865,81 +2743,66 @@ input[type="date"]
 @media (max-width: 768px) {
 
     main.my-career-gps-page {
-        width:
-            100%;
+        width: 100%;
 
-        margin-left:
-            0;
-
-        margin-top:
-            80px;
+        margin-left: 0;
+        margin-top: 80px;
 
         padding:
             0
             14px
-            48px;
+            52px;
     }
 
 
-    /* ---------------------------
-       HERO
-       --------------------------- */
+    /* -----------------------------------------------------
+       Hero
+       ----------------------------------------------------- */
 
     .mypage-hero {
         grid-template-columns:
             1fr;
 
-        gap:
-            25px;
+        gap: 25px;
 
-        margin-bottom:
-            48px;
+        margin-bottom: 52px;
 
         padding:
-            30px
+            31px
             20px;
 
-        border-radius:
-            20px;
+        border-radius: 20px;
     }
 
 
     .mypage-hero__main h1 {
-        font-size:
-            2rem;
+        font-size: 2rem;
 
-        line-height:
-            1.23;
+        line-height: 1.23;
     }
 
 
     .mypage-hero__lead {
-        margin-top:
-            16px;
+        margin-top: 16px;
 
-        font-size:
-            0.77rem;
+        font-size: 0.77rem;
 
-        line-height:
-            1.8;
+        line-height: 1.8;
     }
 
 
     .mypage-hero__lead br {
-        display:
-            none;
+        display: none;
     }
 
 
     .mypage-hero__actions {
-        margin-top:
-            21px;
+        margin-top: 22px;
     }
 
 
     .mypage-primary-button {
-        width:
-            100%;
+        width: 100%;
     }
 
 
@@ -2948,205 +2811,199 @@ input[type="date"]
             20px
             18px;
 
-        border-radius:
-            17px;
+        border-radius: 17px;
     }
 
 
-    /* ---------------------------
-       SHARED
-       --------------------------- */
+    /* -----------------------------------------------------
+       Shared
+       ----------------------------------------------------- */
 
     .mypage-section {
-        margin-bottom:
-            50px;
+        margin-bottom: 54px;
     }
 
 
     .section-heading {
-        display:
-            block;
+        display: block;
 
-        margin-bottom:
-            20px;
+        margin-bottom: 20px;
     }
 
 
     .section-heading h2 {
-        font-size:
-            1.45rem;
+        font-size: 1.45rem;
     }
 
 
     .section-heading__description {
-        margin-top:
-            9px;
+        margin-top: 9px;
 
-        font-size:
-            0.73rem;
+        font-size: 0.72rem;
 
-        line-height:
-            1.7;
+        line-height: 1.7;
     }
 
 
-    /* ---------------------------
-       SNAPSHOT
-       --------------------------- */
+    /* -----------------------------------------------------
+       Crossroad
+       ----------------------------------------------------- */
 
-    .mypage-snapshot-grid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-
-        gap:
-            9px;
-    }
-
-
-    .mypage-snapshot-card {
-        min-height:
-            150px;
+    .mypage-crossroad-main {
+        min-height: 270px;
 
         padding:
-            18px
-            15px;
+            27px
+            21px
+            23px;
 
-        border-radius:
-            16px;
+        border-radius: 20px;
     }
 
 
-    .mypage-snapshot-card__label {
-        margin-bottom:
+    .mypage-crossroad-main__label {
+        margin-bottom: 18px;
+    }
+
+
+    .mypage-crossroad-main__text {
+        font-size: 1.05rem;
+
+        line-height: 1.65;
+
+        -webkit-line-clamp: 6;
+    }
+
+
+    .mypage-crossroad-main__link {
+        padding-top: 24px;
+    }
+
+
+    .mypage-decision-compass {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    /* -----------------------------------------------------
+       Decisions
+       ----------------------------------------------------- */
+
+    .mypage-past-decisions-panel {
+        padding:
+            27px
             20px;
 
-        font-size:
-            0.52rem;
+        border-radius: 20px;
     }
 
 
-    .mypage-snapshot-card__value strong {
-        font-size:
-            1.6rem;
+    .mypage-past-decisions-panel__header {
+        display: block;
     }
 
 
-    .mypage-snapshot-card__career-type {
-        font-size:
-            0.82rem;
+    .mypage-past-decisions-panel__header h2 {
+        font-size: 1.45rem;
     }
 
 
-    /* ---------------------------
-       JOURNEY
-       --------------------------- */
+    .mypage-past-decisions-panel__count {
+        width: fit-content;
+
+        min-width: 100px;
+
+        margin-top: 20px;
+    }
+
+
+    .mypage-decision-preview-list {
+        grid-template-columns:
+            1fr;
+
+        gap: 11px;
+    }
+
+
+    .mypage-decision-preview-card {
+        min-height: 0;
+
+        padding:
+            20px
+            18px;
+    }
+
+
+    .mypage-past-decisions-panel__actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .mypage-secondary-button,
+    .mypage-primary-link-button {
+        width: 100%;
+    }
+
+
+    /* -----------------------------------------------------
+       Journey
+       ----------------------------------------------------- */
 
     .career-journey-company {
         grid-template-columns:
             40px
             minmax(0, 1fr);
 
-        gap:
-            12px;
+        gap: 12px;
 
         padding:
             21px
             17px;
 
-        border-radius:
-            17px;
+        border-radius: 17px;
     }
 
 
     .career-journey-company__index {
-        width:
-            35px;
+        width: 35px;
+        height: 35px;
 
-        height:
-            35px;
-
-        font-size:
-            0.61rem;
+        font-size: 0.6rem;
     }
 
 
     .career-journey-company__header {
-        display:
-            block;
+        display: block;
 
-        padding-bottom:
-            16px;
+        padding-bottom: 16px;
     }
 
 
     .career-journey-company__period {
-        display:
-            block;
+        display: block;
 
-        margin-top:
-            7px;
+        margin-top: 7px;
     }
 
 
     .career-journey-role__header {
-        display:
-            block;
+        display: block;
     }
 
 
     .career-journey-role__period {
-        display:
-            block;
+        display: block;
 
-        margin-top:
-            5px;
+        margin-top: 5px;
     }
 
 
-    /* ---------------------------
-       DECISION
-       --------------------------- */
-
-    .career-decision-panel {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            25px;
-
-        padding:
-            29px
-            21px;
-
-        border-radius:
-            20px;
-    }
-
-
-    .career-decision-panel__main h2 {
-        font-size:
-            1.48rem;
-    }
-
-
-    .career-decision-panel__description {
-        font-size:
-            0.73rem;
-    }
-
-
-    .career-decision-panel__action {
-        max-width:
-            none;
-    }
-
-
-    /* ---------------------------
-       FUTURE
-       --------------------------- */
+    /* -----------------------------------------------------
+       Future
+       ----------------------------------------------------- */
 
     .future-career-grid {
         grid-template-columns:
@@ -3155,85 +3012,75 @@ input[type="date"]
 
 
     .future-career-card {
-        min-height:
-            0;
+        min-height: 0;
 
         padding:
             19px
             17px;
 
-        border-radius:
-            16px;
+        border-radius: 16px;
+    }
+
+
+    .future-career-card:first-child {
+        grid-column: auto;
+
+        min-height: 0;
     }
 
 
     .future-career-card__label {
-        margin-bottom:
-            14px;
+        margin-bottom: 13px;
     }
 
 
-    /* ---------------------------
-       EDITOR
-       --------------------------- */
+    /* -----------------------------------------------------
+       Editor
+       ----------------------------------------------------- */
 
     .mypage-editor {
-        margin-bottom:
-            50px;
+        margin-bottom: 50px;
 
         padding:
             25px
             17px
             28px;
 
-        border-radius:
-            20px;
+        border-radius: 20px;
     }
 
 
     .mypage-editor__header {
-        display:
-            block;
+        display: block;
     }
 
 
     .mypage-editor__header h2 {
-        font-size:
-            1.45rem;
+        font-size: 1.45rem;
     }
 
 
     .mypage-editor-close {
-        width:
-            100%;
+        width: 100%;
 
-        margin-top:
-            17px;
+        margin-top: 17px;
     }
 
 
     .tab-menu {
-        gap:
-            4px;
+        grid-template-columns:
+            1fr;
 
-        margin-bottom:
-            24px;
+        gap: 4px;
+
+        margin-bottom: 24px;
     }
 
 
     .tab-menu button {
-        min-width:
-            140px;
+        min-height: 40px;
 
-        min-height:
-            39px;
-
-        padding:
-            0
-            11px;
-
-        font-size:
-            0.65rem;
+        font-size: 0.66rem;
     }
 
 
@@ -3243,28 +3090,24 @@ input[type="date"]
         grid-template-columns:
             1fr;
 
-        gap:
-            0;
+        gap: 0;
     }
 
 
     .floating-label {
-        margin-bottom:
-            18px;
+        margin-bottom: 18px;
     }
 
 
     .floating-label input,
     .floating-label select,
     .floating-label textarea {
-        font-size:
-            0.78rem;
+        font-size: 0.78rem;
     }
 
 
     .floating-label textarea {
-        min-height:
-            110px;
+        min-height: 110px;
     }
 
 
@@ -3301,19 +3144,16 @@ input[type="date"]
 
 
     .roles-section-header {
-        align-items:
-            stretch;
+        align-items: stretch;
 
-        flex-direction:
-            column;
+        flex-direction: column;
     }
 
 
     .add-role-button,
     .add-company-button,
     #add-job-experience {
-        width:
-            100%;
+        width: 100%;
     }
 
 
@@ -3326,15 +3166,13 @@ input[type="date"]
 
 
     .editor-save-area {
-        justify-content:
-            stretch;
+        justify-content: stretch;
     }
 
 
     .editor-save-area
     .mypage-primary-button {
-        width:
-            100%;
+        width: 100%;
     }
 
 }
@@ -3350,7 +3188,7 @@ input[type="date"]
         padding:
             0
             11px
-            42px;
+            44px;
     }
 
 
@@ -3362,20 +3200,32 @@ input[type="date"]
 
 
     .mypage-hero__main h1 {
-        font-size:
-            1.72rem;
+        font-size: 1.72rem;
     }
 
 
-    .mypage-snapshot-grid {
-        grid-template-columns:
-            1fr;
+    .mypage-current-position__meta {
+        gap: 5px;
     }
 
 
-    .mypage-snapshot-card {
-        min-height:
-            0;
+    .mypage-current-position__meta > div {
+        padding:
+            11px
+            5px;
+    }
+
+
+    .mypage-crossroad-main {
+        padding:
+            25px
+            18px
+            21px;
+    }
+
+
+    .mypage-crossroad-main__text {
+        font-size: 1rem;
     }
 
 
@@ -3386,8 +3236,7 @@ input[type="date"]
 
 
     .career-journey-company__index {
-        margin-bottom:
-            2px;
+        margin-bottom: 2px;
     }
 
 
@@ -3396,21 +3245,14 @@ input[type="date"]
             18px
             minmax(0, 1fr);
 
-        gap:
-            10px;
+        gap: 10px;
     }
 
 
-    .career-decision-panel {
+    .mypage-past-decisions-panel {
         padding:
-            26px
-            17px;
-    }
-
-
-    .career-decision-panel__points {
-        gap:
-            6px;
+            24px
+            16px;
     }
 
 
@@ -3431,23 +3273,56 @@ input[type="date"]
 @media (max-width: 360px) {
 
     .mypage-hero__main h1 {
-        font-size:
-            1.58rem;
+        font-size: 1.58rem;
     }
 
 
-    .career-decision-panel__points span {
-        font-size:
-            0.56rem;
+    .mypage-current-position__meta {
+        grid-template-columns:
+            1fr;
     }
 
 
-    .tab-menu button {
-        min-width:
-            125px;
+    .mypage-current-position__meta > div {
+        display: flex;
 
-        font-size:
-            0.61rem;
+        align-items: center;
+        justify-content: space-between;
+
+        text-align: left;
+    }
+
+
+    .mypage-current-position__meta strong {
+        margin-top: 0;
+    }
+
+
+    .mypage-crossroad-main__text {
+        font-size: 0.98rem;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .mypage-primary-button,
+    .mypage-primary-link-button,
+    .mypage-secondary-button,
+    .mypage-progress-bar__value {
+        transition: none;
+    }
+
+
+    .mypage-primary-button:hover,
+    .mypage-primary-link-button:hover,
+    .mypage-secondary-button:hover {
+        transform: none;
     }
 
 }

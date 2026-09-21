@@ -1,2351 +1,3935 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
 
-    // ============================================================
-    // 1. DOM / 画面状態
-    // ============================================================
+        'use strict';
 
-    const tabLinks =
-        document.querySelectorAll('.tab-link');
 
-    const tabContents =
-        document.querySelectorAll('.tab-content');
+        /* ============================================================
+           1. DOM
+           ============================================================ */
 
-
-    const editButtonTop =
-        document.getElementById('edit-button-top');
-
-    const editButtonBottom =
-        document.getElementById('edit-button-bottom');
-
-    const saveButtonTop =
-        document.getElementById('save-button-top');
-
-    const saveButtonBottom =
-        document.getElementById('save-button-bottom');
-
-    const closeEditorButton =
-        document.getElementById('close-editor-button');
-
-
-    const form =
-        document.getElementById('mypage-form');
-
-    const profileEditor =
-        document.getElementById('profile-editor');
-
-
-    const jobExperiencesContainer =
-        document.getElementById(
-            'job-experiences-container'
-        );
-
-    const addJobExperienceButton =
-        document.getElementById(
-            'add-job-experience'
-        );
-
-
-    // ============================================================
-    // Career GPS表示用
-    // ============================================================
-
-    const profileCompletionElement =
-        document.getElementById(
-            'profile-completion'
-        );
-
-    const profileCompletionBar =
-        document.getElementById(
-            'profile-completion-bar'
-        );
-
-
-    const companyCountElement =
-        document.getElementById(
-            'career-company-count'
-        );
-
-    const roleCountElement =
-        document.getElementById(
-            'career-role-count'
-        );
-
-
-    const careerDecisionCountElement =
-        document.getElementById(
-            'career-decision-count'
-        );
-
-    const careerDecisionCountLargeElement =
-        document.getElementById(
-            'career-decision-count-large'
-        );
-
-
-    const careerTypeSummaryElement =
-        document.getElementById(
-            'career-type-summary'
-        );
-
-
-    const careerJourneySummary =
-        document.getElementById(
-            'career-journey-summary'
-        );
-
-
-    const futureCareerType =
-        document.getElementById(
-            'future-career-type'
-        );
-
-    const futureCareerDescription =
-        document.getElementById(
-            'future-career-description'
-        );
-
-    const futureCareerSkill =
-        document.getElementById(
-            'future-career-skill'
-        );
-
-
-    let companyIndexCounter = 0;
-
-    let isEditing = false;
-
-    let isSaving = false;
-
-
-
-    // ============================================================
-    // 2. 選択肢
-    // ============================================================
-
-    const industryOptions = [
-        '金融',
-        'コンサルティング・専門事務所',
-        'IT・通信・インターネット',
-        'マスコミ・広告関連',
-        'メディカル',
-        '生活インフラ、運輸、不動産、建設',
-        '行政機関、社団法人、非営利団体',
-        'メーカー・商社',
-        'サービス、小売、外食',
-        'その他'
-    ];
-
-
-    const jobCategoryOptions = [
-        '営業',
-        '管理・事務',
-        '経営・企画',
-        'マーケティング',
-        'ITエンジニア',
-        '機械・電気・電子・半導体（技術職）',
-        '化学・薬品・食品（技術職）',
-        '建築・土木・設備（技術職）',
-        'メディカル（専門職）',
-        '金融（専門職）',
-        '不動産（専門職）',
-        'コンサルタント・専門職',
-        'クリエイティブ',
-        'サービス・小売・運輸・その他'
-    ];
-
-
-    const salaryOptions = [
-        '100万未満',
-        '100〜200万円',
-        '201〜300万円',
-        '301〜400万円',
-        '401〜500万円',
-        '501〜600万円',
-        '601〜700万円',
-        '701〜800万円',
-        '801〜900万円',
-        '901〜1000万円',
-        '1001〜1500万円',
-        '1500万円以上'
-    ];
-
-
-    const workStyleOptions = [
-        '出社中心',
-        'ハイブリッド',
-        'フルリモート',
-        'フレックス',
-        'シフト勤務',
-        'その他'
-    ];
-
-
-
-    // ============================================================
-    // 3. 共通関数
-    // ============================================================
-
-    function escapeHtml(value) {
-
-        return String(
-            value ?? ''
-        )
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-
-    }
-
-
-    function normalizeDateForInput(value) {
-
-        if (
-            !value
-            || value === '0000-00-00'
-        ) {
-            return '';
-        }
-
-        return String(value).slice(0, 10);
-
-    }
-
-
-    function formatDateForDisplay(value) {
-
-        if (
-            !value
-            || value === '0000-00-00'
-        ) {
-            return '';
-        }
-
-
-        const normalized =
-            String(value).slice(0, 10);
-
-        const parts =
-            normalized.split('-');
-
-
-        if (parts.length < 2) {
-            return normalized;
-        }
-
-
-        return `${parts[0]}.${parts[1]}`;
-
-    }
-
-
-    function formatPeriod(
-        startValue,
-        endValue
-    ) {
-
-        const start =
-            formatDateForDisplay(
-                startValue
-            );
-
-        const end =
-            formatDateForDisplay(
-                endValue
+        const tabLinks =
+            document.querySelectorAll(
+                '.tab-link'
             );
 
 
-        if (!start && !end) {
-            return '';
-        }
-
-
-        if (start && !end) {
-            return `${start} – 現在`;
-        }
-
-
-        if (!start && end) {
-            return `– ${end}`;
-        }
-
-
-        return `${start} – ${end}`;
-
-    }
-
-
-    function createOptions(
-        options,
-        selectedValue
-    ) {
-
-        const selected =
-            String(
-                selectedValue ?? ''
+        const tabContents =
+            document.querySelectorAll(
+                '.tab-content'
             );
 
 
-        return options
-            .map(option => {
-
-                const selectedAttribute =
-                    String(option) === selected
-                        ? 'selected'
-                        : '';
-
-
-                return `
-                    <option
-                        value="${escapeHtml(option)}"
-                        ${selectedAttribute}
-                    >
-                        ${escapeHtml(option)}
-                    </option>
-                `;
-
-            })
-            .join('');
-
-    }
-
-
-    function createSatisfactionOptions(
-        selectedValue
-    ) {
-
-        return [1, 2, 3, 4, 5]
-            .map(option => {
-
-                const selectedAttribute =
-                    String(option)
-                    === String(
-                        selectedValue ?? ''
-                    )
-                        ? 'selected'
-                        : '';
-
-
-                return `
-                    <option
-                        value="${option}"
-                        ${selectedAttribute}
-                    >
-                        ${option}
-                    </option>
-                `;
-
-            })
-            .join('');
-
-    }
-
-
-    function setValue(
-        id,
-        value
-    ) {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (element) {
-            element.value =
-                value ?? '';
-        }
-
-    }
-
-
-    function getValue(selector) {
-
-        const element =
-            document.querySelector(
-                selector
+        const editButtonTop =
+            document.getElementById(
+                'edit-button-top'
             );
 
 
-        return element
-            ? element.value
-            : '';
-
-    }
-
-
-    function getChecked(selector) {
-
-        const element =
-            document.querySelector(
-                selector
+        const editButtonBottom =
+            document.getElementById(
+                'edit-button-bottom'
             );
 
 
-        return Boolean(
-            element
-            && element.checked
-        );
-
-    }
+        const saveButtonTop =
+            document.getElementById(
+                'save-button-top'
+            );
 
 
-    function hasValue(value) {
-
-        return (
-            value !== null
-            && value !== undefined
-            && String(value).trim() !== ''
-        );
-
-    }
+        const saveButtonBottom =
+            document.getElementById(
+                'save-button-bottom'
+            );
 
 
-
-    // ============================================================
-    // 4. Career GPS用
-    //    Role取得
-    // ============================================================
-
-    function getRolesForDisplay(
-        jobExperience
-    ) {
-
-        if (
-            Array.isArray(
-                jobExperience.role_histories
-            )
-            && jobExperience
-                .role_histories
-                .length > 0
-        ) {
-
-            return jobExperience
-                .role_histories;
-
-        }
+        const closeEditorButton =
+            document.getElementById(
+                'close-editor-button'
+            );
 
 
-        /*
-         * 旧データとの互換性
-         */
-
-        const hasLegacyRole = [
-
-            jobExperience.position,
-
-            jobExperience.job_category,
-
-            jobExperience.job_sub_category,
-
-            jobExperience.salary,
-
-            jobExperience.satisfaction_level
-
-        ].some(
-            value =>
-                value !== null
-                && value !== undefined
-                && value !== ''
-        );
+        const form =
+            document.getElementById(
+                'mypage-form'
+            );
 
 
-        if (!hasLegacyRole) {
-            return [];
-        }
+        const profileEditor =
+            document.getElementById(
+                'profile-editor'
+            );
 
 
-        return [
+        const jobExperiencesContainer =
+            document.getElementById(
+                'job-experiences-container'
+            );
 
-            {
 
-                id:
-                    '',
+        const addJobExperienceButton =
+            document.getElementById(
+                'add-job-experience'
+            );
 
-                department:
-                    '',
 
-                position:
-                    jobExperience.position
-                    || '',
+        /* ------------------------------------------------------------
+           Hero / Current Position
+           ------------------------------------------------------------ */
 
-                job_category:
-                    jobExperience.job_category
-                    || '',
+        const profileCompletionElement =
+            document.getElementById(
+                'profile-completion'
+            );
 
-                job_sub_category:
-                    jobExperience.job_sub_category
-                    || '',
 
-                role_description:
-                    '',
+        const profileCompletionBar =
+            document.getElementById(
+                'profile-completion-bar'
+            );
 
-                start_period:
-                    jobExperience.work_start_period
-                    || '',
 
-                end_period:
-                    jobExperience.work_end_period
-                    || '',
+        const companyCountElement =
+            document.getElementById(
+                'career-company-count'
+            );
 
-                salary_range:
-                    jobExperience.salary
-                    || '',
 
-                satisfaction_level:
-                    jobExperience.satisfaction_level
-                    || '',
+        const roleCountElement =
+            document.getElementById(
+                'career-role-count'
+            );
 
-                work_style:
-                    '',
 
-                display_order:
-                    1
+        const careerDecisionCountElement =
+            document.getElementById(
+                'career-decision-count'
+            );
 
-            }
+
+        const careerDecisionCountLargeElement =
+            document.getElementById(
+                'career-decision-count-large'
+            );
+
+
+        const currentCompanyNameElement =
+            document.getElementById(
+                'current-company-name'
+            );
+
+
+        const currentRoleNameElement =
+            document.getElementById(
+                'current-role-name'
+            );
+
+
+        /* ------------------------------------------------------------
+           Current Crossroad
+           ------------------------------------------------------------ */
+
+        const currentCrossroadText =
+            document.getElementById(
+                'current-crossroad-text'
+            );
+
+
+        const currentCrossroadStoriesLink =
+            document.getElementById(
+                'current-crossroad-stories-link'
+            );
+
+
+        const careerTypeSummaryElement =
+            document.getElementById(
+                'career-type-summary'
+            );
+
+
+        const currentCareerViewText =
+            document.getElementById(
+                'current-career-view-text'
+            );
+
+
+        const environmentToAvoidText =
+            document.getElementById(
+                'environment-to-avoid-text'
+            );
+
+
+        /* ------------------------------------------------------------
+           Career Decisions
+           ------------------------------------------------------------ */
+
+        const decisionPreviewList =
+            document.getElementById(
+                'mypage-decision-preview-list'
+            );
+
+
+        /* ------------------------------------------------------------
+           Journey
+           ------------------------------------------------------------ */
+
+        const careerJourneySummary =
+            document.getElementById(
+                'career-journey-summary'
+            );
+
+
+        /* ------------------------------------------------------------
+           Future
+           ------------------------------------------------------------ */
+
+        const futureCareerType =
+            document.getElementById(
+                'future-career-type'
+            );
+
+
+        const futureDesiredRole =
+            document.getElementById(
+                'future-desired-role'
+            );
+
+
+        const futureCareerDescription =
+            document.getElementById(
+                'future-career-description'
+            );
+
+
+        const futureCareerSkill =
+            document.getElementById(
+                'future-career-skill'
+            );
+
+
+        const futureFiveYearGoal =
+            document.getElementById(
+                'future-five-year-goal'
+            );
+
+
+        /* ============================================================
+           2. STATE
+           ============================================================ */
+
+        let companyIndexCounter =
+            0;
+
+
+        let isEditing =
+            false;
+
+
+        let isSaving =
+            false;
+
+
+        let baseUrl =
+            '';
+
+
+        let loadedUserData =
+            null;
+
+
+
+        /* ============================================================
+           3. OPTIONS
+           ============================================================ */
+
+        const industryOptions = [
+
+            '金融',
+
+            'コンサルティング・専門事務所',
+
+            'IT・通信・インターネット',
+
+            'マスコミ・広告関連',
+
+            'メディカル',
+
+            '生活インフラ、運輸、不動産、建設',
+
+            '行政機関、社団法人、非営利団体',
+
+            'メーカー・商社',
+
+            'サービス、小売、外食',
+
+            'その他'
 
         ];
 
-    }
+
+        const jobCategoryOptions = [
+
+            '営業',
+
+            '管理・事務',
+
+            '経営・企画',
+
+            'マーケティング',
+
+            'ITエンジニア',
+
+            '機械・電気・電子・半導体（技術職）',
+
+            '化学・薬品・食品（技術職）',
+
+            '建築・土木・設備（技術職）',
+
+            'メディカル（専門職）',
+
+            '金融（専門職）',
+
+            '不動産（専門職）',
+
+            'コンサルタント・専門職',
+
+            'クリエイティブ',
+
+            'サービス・小売・運輸・その他'
+
+        ];
+
+
+        const salaryOptions = [
+
+            '100万未満',
+
+            '100〜200万円',
+
+            '201〜300万円',
+
+            '301〜400万円',
+
+            '401〜500万円',
+
+            '501〜600万円',
+
+            '601〜700万円',
+
+            '701〜800万円',
+
+            '801〜900万円',
+
+            '901〜1000万円',
+
+            '1001〜1500万円',
+
+            '1500万円以上'
+
+        ];
+
+
+        const workStyleOptions = [
+
+            '出社中心',
+
+            'ハイブリッド',
+
+            'フルリモート',
+
+            'フレックス',
+
+            'シフト勤務',
+
+            'その他'
+
+        ];
 
 
 
-    // ============================================================
-    // 5. Career Snapshot
-    // ============================================================
+        /* ============================================================
+           4. COMMON
+           ============================================================ */
 
-    function updateCareerSnapshot(data) {
+        function escapeHtml(
+            value
+        ) {
 
-        const jobs =
-            Array.isArray(
-                data.job_experiences
+            return String(
+                value ?? ''
             )
-                ? data.job_experiences
-                : [];
-
-
-        const validJobs =
-            jobs.filter(job => {
-
-                return [
-
-                    job.company_name,
-                    job.industry,
-                    job.work_start_period,
-                    job.work_end_period
-
-                ].some(hasValue)
-                || getRolesForDisplay(job)
-                    .length > 0;
-
-            });
-
-
-        const roleCount =
-            validJobs.reduce(
-                (
-                    total,
-                    job
-                ) => {
-
-                    return total
-                        + getRolesForDisplay(
-                            job
-                        ).length;
-
-                },
-                0
-            );
-
-
-        if (companyCountElement) {
-
-            companyCountElement.textContent =
-                String(
-                    validJobs.length
+                .replace(
+                    /&/g,
+                    '&amp;'
+                )
+                .replace(
+                    /</g,
+                    '&lt;'
+                )
+                .replace(
+                    />/g,
+                    '&gt;'
+                )
+                .replace(
+                    /"/g,
+                    '&quot;'
+                )
+                .replace(
+                    /'/g,
+                    '&#039;'
                 );
 
         }
 
 
-        if (roleCountElement) {
-
-            roleCountElement.textContent =
-                String(roleCount);
-
-        }
-
-
-        const careerType =
-            hasValue(
-                data.career_type
-            )
-                ? data.career_type
-                : '未設定';
-
-
-        if (
-            careerTypeSummaryElement
+        function normalizeText(
+            value
         ) {
 
-            careerTypeSummaryElement
-                .textContent =
-                    careerType;
+            if (
+                value === null
+                ||
+                value === undefined
+            ) {
+
+                return '';
+
+            }
+
+
+            const text =
+                String(
+                    value
+                )
+                    .trim();
+
+
+            if (
+                !text
+                ||
+                [
+                    'null',
+                    'undefined',
+                    'none',
+                    'n/a'
+                ].includes(
+                    text.toLowerCase()
+                )
+            ) {
+
+                return '';
+
+            }
+
+
+            return text;
 
         }
 
 
-        updateProfileCompletion(
-            data,
-            validJobs,
-            roleCount
-        );
+        function hasValue(
+            value
+        ) {
 
-    }
-
-
-
-    // ============================================================
-    // 6. プロフィール完成度
-    // ============================================================
-
-    function updateProfileCompletion(
-        data,
-        jobs,
-        roleCount
-    ) {
-
-        /*
-         * 完成度は、
-         * Career GPSとして重要な
-         * 10項目を対象に算出。
-         */
-
-        const checkpoints = [
-
-            hasValue(
-                data.username
-            ),
-
-            hasValue(
-                data.birthdate
-            ),
-
-            hasValue(
-                data.institution
-            ),
-
-            jobs.length > 0,
-
-            roleCount > 0,
-
-            (
-                hasValue(
-                    data.start_reason
+            return Boolean(
+                normalizeText(
+                    value
                 )
-                || hasValue(
-                    data.first_job_feedback
-                )
-            ),
+            );
 
-            (
-                hasValue(
-                    data.transition_story
-                )
-                || hasValue(
-                    data.reason_for_job_change
-                )
-            ),
+        }
 
-            (
-                hasValue(
-                    data.proudest_achievement
-                )
-                || hasValue(
-                    data.failure_experience
-                )
-                || hasValue(
-                    data.lesson_learned
-                )
-            ),
 
-            hasValue(
-                data.career_type
-            ),
+        function setText(
+            element,
+            value,
+            fallback =
+                'まだ登録されていません。'
+        ) {
 
-            (
-                hasValue(
-                    data.skill
-                )
-                || hasValue(
-                    data.growth_description
-                )
+            if (!element) {
+                return;
+            }
+
+
+            const text =
+                normalizeText(
+                    value
+                );
+
+
+            element.textContent =
+                text
+                || fallback;
+
+        }
+
+
+        function setValue(
+            id,
+            value
+        ) {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (!element) {
+                return;
+            }
+
+
+            element.value =
+                value ?? '';
+
+        }
+
+
+        function getValue(
+            selector
+        ) {
+
+            const element =
+                document.querySelector(
+                    selector
+                );
+
+
+            return element
+                ? element.value
+                : '';
+
+        }
+
+
+        function getChecked(
+            selector
+        ) {
+
+            const element =
+                document.querySelector(
+                    selector
+                );
+
+
+            return Boolean(
+                element
+                &&
+                element.checked
+            );
+
+        }
+
+
+        function normalizeDateForInput(
+            value
+        ) {
+
+            if (
+                !value
+                ||
+                value ===
+                '0000-00-00'
+            ) {
+
+                return '';
+
+            }
+
+
+            return String(
+                value
             )
+                .slice(
+                    0,
+                    10
+                );
 
-        ];
-
-
-        const completedCount =
-            checkpoints
-                .filter(Boolean)
-                .length;
+        }
 
 
-        const percentage =
-            Math.round(
-                (
-                    completedCount
-                    / checkpoints.length
+        function dateSortValue(
+            value
+        ) {
+
+            const normalized =
+                normalizeDateForInput(
+                    value
+                );
+
+
+            if (!normalized) {
+                return 0;
+            }
+
+
+            const timestamp =
+                new Date(
+                    `${normalized}T00:00:00`
                 )
-                * 100
+                    .getTime();
+
+
+            return Number.isFinite(
+                timestamp
+            )
+                ? timestamp
+                : 0;
+
+        }
+
+
+        function formatDateForDisplay(
+            value
+        ) {
+
+            const normalized =
+                normalizeDateForInput(
+                    value
+                );
+
+
+            if (!normalized) {
+                return '';
+            }
+
+
+            const parts =
+                normalized.split(
+                    '-'
+                );
+
+
+            if (
+                parts.length
+                <
+                2
+            ) {
+
+                return normalized;
+
+            }
+
+
+            return (
+                `${parts[0]}.${parts[1]}`
+            );
+
+        }
+
+
+        function formatDecisionDate(
+            value
+        ) {
+
+            const normalized =
+                normalizeDateForInput(
+                    value
+                );
+
+
+            if (!normalized) {
+                return '';
+            }
+
+
+            const parts =
+                normalized.split(
+                    '-'
+                );
+
+
+            if (
+                parts.length
+                <
+                2
+            ) {
+
+                return normalized;
+
+            }
+
+
+            return (
+                `${parts[0]}年${Number(parts[1])}月`
+            );
+
+        }
+
+
+        function formatPeriod(
+            startValue,
+            endValue
+        ) {
+
+            const start =
+                formatDateForDisplay(
+                    startValue
+                );
+
+
+            const end =
+                formatDateForDisplay(
+                    endValue
+                );
+
+
+            if (
+                !start
+                &&
+                !end
+            ) {
+
+                return '';
+
+            }
+
+
+            if (
+                start
+                &&
+                !end
+            ) {
+
+                return (
+                    `${start} – 現在`
+                );
+
+            }
+
+
+            if (
+                !start
+                &&
+                end
+            ) {
+
+                return (
+                    `– ${end}`
+                );
+
+            }
+
+
+            return (
+                `${start} – ${end}`
+            );
+
+        }
+
+
+        function truncateText(
+            value,
+            maxLength
+        ) {
+
+            const text =
+                normalizeText(
+                    value
+                );
+
+
+            if (
+                !text
+                ||
+                text.length
+                <=
+                maxLength
+            ) {
+
+                return text;
+
+            }
+
+
+            return (
+                text
+                    .slice(
+                        0,
+                        maxLength
+                    )
+                    .trim()
+                +
+                '…'
+            );
+
+        }
+
+
+        function createOptions(
+            options,
+            selectedValue
+        ) {
+
+            const selected =
+                String(
+                    selectedValue ?? ''
+                );
+
+
+            return options
+                .map(
+                    option => {
+
+                        const selectedAttribute =
+                            String(
+                                option
+                            )
+                            ===
+                            selected
+
+                                ? 'selected'
+                                : '';
+
+
+                        return `
+                            <option
+                                value="${escapeHtml(option)}"
+                                ${selectedAttribute}
+                            >
+                                ${escapeHtml(option)}
+                            </option>
+                        `;
+
+                    }
+                )
+                .join('');
+
+        }
+
+
+        function createSatisfactionOptions(
+            selectedValue
+        ) {
+
+            return [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+                .map(
+                    option => {
+
+                        const selectedAttribute =
+
+                            String(
+                                option
+                            )
+                            ===
+                            String(
+                                selectedValue
+                                ??
+                                ''
+                            )
+
+                                ? 'selected'
+                                : '';
+
+
+                        return `
+                            <option
+                                value="${option}"
+                                ${selectedAttribute}
+                            >
+                                ${option}
+                            </option>
+                        `;
+
+                    }
+                )
+                .join('');
+
+        }
+
+
+
+        /* ============================================================
+           5. ROLE / COMPANY HELPERS
+           ============================================================ */
+
+        function getRolesForDisplay(
+            jobExperience
+        ) {
+
+            if (
+                Array.isArray(
+                    jobExperience
+                        ?.role_histories
+                )
+                &&
+                jobExperience
+                    .role_histories
+                    .length
+                >
+                0
+            ) {
+
+                return (
+                    jobExperience
+                        .role_histories
+                );
+
+            }
+
+
+            /*
+             * 旧データ互換
+             */
+            const hasLegacyRole = [
+
+                jobExperience
+                    ?.position,
+
+                jobExperience
+                    ?.job_category,
+
+                jobExperience
+                    ?.job_sub_category,
+
+                jobExperience
+                    ?.salary,
+
+                jobExperience
+                    ?.satisfaction_level
+
+            ].some(
+                hasValue
             );
 
 
-        if (
-            profileCompletionElement
+            if (!hasLegacyRole) {
+                return [];
+            }
+
+
+            return [
+
+                {
+
+                    id:
+                        '',
+
+                    department:
+                        '',
+
+                    position:
+                        jobExperience.position
+                        ||
+                        '',
+
+                    job_category:
+                        jobExperience.job_category
+                        ||
+                        '',
+
+                    job_sub_category:
+                        jobExperience.job_sub_category
+                        ||
+                        '',
+
+                    role_description:
+                        '',
+
+                    start_period:
+                        jobExperience.work_start_period
+                        ||
+                        '',
+
+                    end_period:
+                        jobExperience.work_end_period
+                        ||
+                        '',
+
+                    salary_range:
+                        jobExperience.salary
+                        ||
+                        '',
+
+                    satisfaction_level:
+                        jobExperience.satisfaction_level
+                        ||
+                        '',
+
+                    work_style:
+                        '',
+
+                    display_order:
+                        1
+
+                }
+
+            ];
+
+        }
+
+
+        function getValidJobs(
+            data
         ) {
 
-            profileCompletionElement
-                .textContent =
-                    `${percentage}%`;
-
-        }
-
-
-        if (
-            profileCompletionBar
-        ) {
-
-            profileCompletionBar
-                .style.width =
-                    `${percentage}%`;
-
-        }
-
-    }
-
-
-
-    // ============================================================
-    // 7. Career Journey生成
-    // ============================================================
-
-    function renderCareerJourney(data) {
-
-        if (!careerJourneySummary) {
-            return;
-        }
-
-
-        const jobs =
-            Array.isArray(
-                data.job_experiences
-            )
-                ? data.job_experiences
-                : [];
-
-
-        const validJobs =
-            jobs.filter(job => {
-
-                return hasValue(
-                    job.company_name
+            const jobs =
+                Array.isArray(
+                    data
+                        ?.job_experiences
                 )
-                || getRolesForDisplay(job)
-                    .length > 0;
-
-            });
+                    ? data.job_experiences
+                    : [];
 
 
-        if (
-            validJobs.length === 0
-        ) {
+            return jobs.filter(
+                job => {
 
-            careerJourneySummary
-                .innerHTML = `
+                    return [
 
-                    <div
-                        class="career-journey-empty"
+                        job.company_name,
+
+                        job.industry,
+
+                        job.work_start_period,
+
+                        job.work_end_period
+
+                    ].some(
+                        hasValue
+                    )
+                    ||
+                    getRolesForDisplay(
+                        job
+                    )
+                        .length
                     >
+                    0;
 
-                        <p
-                            class="career-journey-empty__kicker"
-                        >
-                            YOUR JOURNEY
-                        </p>
+                }
+            );
 
-                        <h3>
-                            まだキャリアが
-                            登録されていません
-                        </h3>
-
-                        <p>
-                            これまで経験した会社や
-                            役割を登録すると、
-                            ここにあなたのCareer Journeyが
-                            表示されます。
-                        </p>
-
-                    </div>
-
-                `;
-
-
-            return;
         }
 
 
-        careerJourneySummary
-            .innerHTML =
-                validJobs
-                    .map(
+        function isCurrentJob(
+            job
+        ) {
+
+            if (!job) {
+                return false;
+            }
+
+
+            /*
+             * 終了日なし = 現職
+             */
+            return !hasValue(
+                job.work_end_period
+            );
+
+        }
+
+
+        function getCurrentJob(
+            jobs
+        ) {
+
+            if (
+                !Array.isArray(
+                    jobs
+                )
+                ||
+                jobs.length
+                ===
+                0
+            ) {
+
+                return null;
+
+            }
+
+
+            /*
+             * 現職が複数あっても
+             * 開始日の一番新しい会社を採用。
+             */
+            const currentJobs =
+                jobs
+                    .filter(
+                        isCurrentJob
+                    )
+                    .sort(
                         (
-                            job,
-                            companyIndex
+                            a,
+                            b
                         ) => {
 
-                            const roles =
-                                getRolesForDisplay(
-                                    job
+                            const dateDiff =
+                                dateSortValue(
+                                    a.work_start_period
+                                )
+                                -
+                                dateSortValue(
+                                    b.work_start_period
                                 );
 
 
-                            const companyName =
-                                hasValue(
-                                    job.company_name
+                            if (dateDiff !== 0) {
+                                return dateDiff;
+                            }
+
+
+                            return (
+                                Number(
+                                    a.id
+                                    ||
+                                    0
                                 )
-                                    ? job.company_name
-                                    : '会社名未設定';
-
-
-                            const industry =
-                                hasValue(
-                                    job.industry
+                                -
+                                Number(
+                                    b.id
+                                    ||
+                                    0
                                 )
-                                    ? job.industry
-                                    : '業界未設定';
+                            );
+
+                        }
+                    );
 
 
-                            const period =
-                                formatPeriod(
-                                    job.work_start_period,
-                                    job.work_end_period
+            if (
+                currentJobs.length
+                >
+                0
+            ) {
+
+                return (
+                    currentJobs[
+                        currentJobs.length
+                        -
+                        1
+                    ]
+                );
+
+            }
+
+
+            /*
+             * 現職がなければ
+             * 最後の在籍先。
+             */
+            const sorted =
+                [
+                    ...jobs
+                ]
+                    .sort(
+                        (
+                            a,
+                            b
+                        ) => {
+
+                            const dateDiff =
+                                dateSortValue(
+                                    a.work_start_period
+                                )
+                                -
+                                dateSortValue(
+                                    b.work_start_period
                                 );
 
 
-                            const roleHtml =
-                                roles.length > 0
+                            if (dateDiff !== 0) {
+                                return dateDiff;
+                            }
 
-                                    ? roles
-                                        .map(
+
+                            return (
+                                Number(
+                                    a.id
+                                    ||
+                                    0
+                                )
+                                -
+                                Number(
+                                    b.id
+                                    ||
+                                    0
+                                )
+                            );
+
+                        }
+                    );
+
+
+            return (
+                sorted[
+                    sorted.length
+                    -
+                    1
+                ]
+                ||
+                null
+            );
+
+        }
+
+
+        function getCurrentRole(
+            job
+        ) {
+
+            if (!job) {
+                return null;
+            }
+
+
+            const roles =
+                getRolesForDisplay(
+                    job
+                );
+
+
+            if (
+                roles.length
+                ===
+                0
+            ) {
+
+                return null;
+
+            }
+
+
+            const currentRoles =
+                roles
+                    .filter(
+                        role =>
+                            !hasValue(
+                                role.end_period
+                            )
+                    )
+                    .sort(
+                        (
+                            a,
+                            b
+                        ) => {
+
+                            const dateDiff =
+                                dateSortValue(
+                                    a.start_period
+                                )
+                                -
+                                dateSortValue(
+                                    b.start_period
+                                );
+
+
+                            if (dateDiff !== 0) {
+                                return dateDiff;
+                            }
+
+
+                            return (
+                                Number(
+                                    a.display_order
+                                    ||
+                                    a.id
+                                    ||
+                                    0
+                                )
+                                -
+                                Number(
+                                    b.display_order
+                                    ||
+                                    b.id
+                                    ||
+                                    0
+                                )
+                            );
+
+                        }
+                    );
+
+
+            if (
+                currentRoles.length
+                >
+                0
+            ) {
+
+                return (
+                    currentRoles[
+                        currentRoles.length
+                        -
+                        1
+                    ]
+                );
+
+            }
+
+
+            const sorted =
+                [
+                    ...roles
+                ]
+                    .sort(
+                        (
+                            a,
+                            b
+                        ) => {
+
+                            const dateDiff =
+                                dateSortValue(
+                                    a.start_period
+                                )
+                                -
+                                dateSortValue(
+                                    b.start_period
+                                );
+
+
+                            if (dateDiff !== 0) {
+                                return dateDiff;
+                            }
+
+
+                            return (
+                                Number(
+                                    a.display_order
+                                    ||
+                                    a.id
+                                    ||
+                                    0
+                                )
+                                -
+                                Number(
+                                    b.display_order
+                                    ||
+                                    b.id
+                                    ||
+                                    0
+                                )
+                            );
+
+                        }
+                    );
+
+
+            return (
+                sorted[
+                    sorted.length
+                    -
+                    1
+                ]
+                ||
+                null
+            );
+
+        }
+
+
+        function getRoleDisplayName(
+            role,
+            job
+        ) {
+
+            if (role) {
+
+                const values = [
+
+                    role.position,
+
+                    role.job_category,
+
+                    role.job_sub_category
+
+                ]
+                    .map(
+                        normalizeText
+                    )
+                    .filter(
+                        Boolean
+                    );
+
+
+                if (
+                    values.length
+                    >
+                    0
+                ) {
+
+                    return values[0];
+
+                }
+
+            }
+
+
+            const legacyValues = [
+
+                job?.position,
+
+                job?.job_category,
+
+                job?.job_sub_category
+
+            ]
+                .map(
+                    normalizeText
+                )
+                .filter(
+                    Boolean
+                );
+
+
+            return (
+                legacyValues[0]
+                ||
+                '未設定'
+            );
+
+        }
+
+
+
+        /* ============================================================
+           6. CURRENT POSITION
+           ============================================================ */
+
+        function renderCurrentPosition(
+            data
+        ) {
+
+            const jobs =
+                getValidJobs(
+                    data
+                );
+
+
+            const roleCount =
+                jobs.reduce(
+                    (
+                        total,
+                        job
+                    ) => {
+
+                        return (
+                            total
+                            +
+                            getRolesForDisplay(
+                                job
+                            )
+                                .length
+                        );
+
+                    },
+                    0
+                );
+
+
+            if (
+                companyCountElement
+            ) {
+
+                companyCountElement
+                    .textContent =
+                        String(
+                            jobs.length
+                        );
+
+            }
+
+
+            if (
+                roleCountElement
+            ) {
+
+                roleCountElement
+                    .textContent =
+                        String(
+                            roleCount
+                        );
+
+            }
+
+
+            const currentJob =
+                getCurrentJob(
+                    jobs
+                );
+
+
+            const currentRole =
+                getCurrentRole(
+                    currentJob
+                );
+
+
+            setText(
+                currentCompanyNameElement,
+                currentJob
+                    ?.company_name,
+                '未設定'
+            );
+
+
+            setText(
+                currentRoleNameElement,
+                getRoleDisplayName(
+                    currentRole,
+                    currentJob
+                ),
+                '未設定'
+            );
+
+
+            updateProfileCompletion(
+                data,
+                jobs,
+                roleCount
+            );
+
+        }
+
+
+
+        /* ============================================================
+           7. PROFILE COMPLETION
+           ============================================================ */
+
+        function updateProfileCompletion(
+            data,
+            jobs,
+            roleCount
+        ) {
+
+            const currentView =
+                data
+                    ?.current_career_view_detail
+                ||
+                {};
+
+
+            const decisions =
+                Array.isArray(
+                    data
+                        ?.career_decisions
+                )
+                    ? data.career_decisions
+                    : [];
+
+
+            const currentConcerns =
+                normalizeText(
+                    currentView
+                        .current_concerns
+                )
+                ||
+                normalizeText(
+                    data.concerns
+                );
+
+
+            const desiredDirection =
+                normalizeText(
+                    currentView
+                        .desired_direction
+                )
+                ||
+                normalizeText(
+                    data.career_type
+                );
+
+
+            const futureGoals =
+                normalizeText(
+                    currentView
+                        .future_goals
+                )
+                ||
+                normalizeText(
+                    data.career_description
+                );
+
+
+            /*
+             * 新Career GPSの完成度。
+             *
+             * 過去Legacy項目は計算対象にしない。
+             */
+            const checkpoints = [
+
+                hasValue(
+                    data.username
+                ),
+
+                (
+                    hasValue(
+                        data.birthdate
+                    )
+                    ||
+                    hasValue(
+                        data.gender
+                    )
+                ),
+
+                jobs.length
+                >
+                0,
+
+                roleCount
+                >
+                0,
+
+                hasValue(
+                    currentConcerns
+                ),
+
+                hasValue(
+                    desiredDirection
+                ),
+
+                (
+                    hasValue(
+                        futureGoals
+                    )
+                    ||
+                    hasValue(
+                        currentView
+                            .desired_role
+                    )
+                    ||
+                    hasValue(
+                        currentView
+                            .five_year_goal
+                    )
+                ),
+
+                decisions.length
+                >
+                0
+
+            ];
+
+
+            const completed =
+                checkpoints
+                    .filter(
+                        Boolean
+                    )
+                    .length;
+
+
+            const percentage =
+                Math.round(
+                    (
+                        completed
+                        /
+                        checkpoints.length
+                    )
+                    *
+                    100
+                );
+
+
+            if (
+                profileCompletionElement
+            ) {
+
+                profileCompletionElement
+                    .textContent =
+                        `${percentage}%`;
+
+            }
+
+
+            if (
+                profileCompletionBar
+            ) {
+
+                profileCompletionBar
+                    .style.width =
+                        `${percentage}%`;
+
+            }
+
+        }
+
+
+
+        /* ============================================================
+           8. CURRENT CROSSROAD
+           ============================================================ */
+
+        function detectCrossroadTheme(
+            data,
+            concern
+        ) {
+
+            /*
+             * 将来current_dilemma_theme等を追加した場合は
+             * その値を最優先。
+             */
+            const structuredTheme =
+                normalizeText(
+                    data
+                        ?.current_career_view_detail
+                        ?.current_dilemma_theme
+                );
+
+
+            if (
+                structuredTheme
+            ) {
+
+                return structuredTheme;
+
+            }
+
+
+            /*
+             * 現時点では自由文しかないため、
+             * 明確な「転職」の表現に限って
+             * changeへ接続する。
+             *
+             * AI推定ではなく固定文字判定。
+             */
+            const normalized =
+                normalizeText(
+                    concern
+                );
+
+
+            if (
+                normalized.includes(
+                    '転職'
+                )
+            ) {
+
+                return 'change';
+
+            }
+
+
+            return '';
+
+        }
+
+
+        function renderCurrentCrossroad(
+            data
+        ) {
+
+            const currentView =
+                data
+                    ?.current_career_view_detail
+                ||
+                {};
+
+
+            const concern =
+                normalizeText(
+                    currentView
+                        .current_concerns
+                )
+                ||
+                normalizeText(
+                    data.concerns
+                );
+
+
+            const careerView =
+                normalizeText(
+                    currentView
+                        .current_career_view
+                )
+                ||
+                normalizeText(
+                    data.career_satisfaction_feedback
+                );
+
+
+            const desiredDirection =
+                normalizeText(
+                    currentView
+                        .desired_direction
+                )
+                ||
+                normalizeText(
+                    data.career_type
+                );
+
+
+            const environmentToAvoid =
+                normalizeText(
+                    currentView
+                        .environment_to_avoid
+                );
+
+
+            setText(
+                currentCrossroadText,
+                concern
+            );
+
+
+            setText(
+                currentCareerViewText,
+                careerView
+            );
+
+
+            setText(
+                careerTypeSummaryElement,
+                desiredDirection,
+                '未設定'
+            );
+
+
+            setText(
+                environmentToAvoidText,
+                environmentToAvoid
+            );
+
+
+            if (
+                !currentCrossroadStoriesLink
+            ) {
+
+                return;
+
+            }
+
+
+            const theme =
+                detectCrossroadTheme(
+                    data,
+                    concern
+                );
+
+
+            if (!theme) {
+
+                currentCrossroadStoriesLink
+                    .hidden =
+                        true;
+
+                currentCrossroadStoriesLink
+                    .removeAttribute(
+                        'href'
+                    );
+
+                return;
+
+            }
+
+
+            currentCrossroadStoriesLink
+                .href =
+                    `Career_overview.html?theme=${encodeURIComponent(theme)}`;
+
+
+            currentCrossroadStoriesLink
+                .hidden =
+                    false;
+
+        }
+
+
+
+        /* ============================================================
+           9. CAREER DECISIONS
+           ============================================================ */
+
+        function getDecisionTitle(
+            decision
+        ) {
+
+            const title =
+                normalizeText(
+                    decision
+                        ?.title
+                );
+
+
+            if (title) {
+                return title;
+            }
+
+
+            const type =
+                normalizeText(
+                    decision
+                        ?.decision_type
+                );
+
+
+            switch (type) {
+
+                case '転職':
+
+                    return (
+                        '転職という選択'
+                    );
+
+
+                case '現職継続':
+                case '継続':
+                case '残留':
+                case '現職に残る':
+
+                    return (
+                        '今の会社に残るという選択'
+                    );
+
+
+                case '異動':
+
+                    return (
+                        '社内で新しい道を選んだ'
+                    );
+
+
+                default:
+
+                    return (
+                        type
+                            ? `${type}という選択`
+                            : 'キャリアの意思決定'
+                    );
+
+            }
+
+        }
+
+
+        function getDecisionSummary(
+            decision
+        ) {
+
+            const candidates = [
+
+                decision
+                    ?.dilemma_text,
+
+                decision
+                    ?.priority_text,
+
+                decision
+                    ?.final_reason,
+
+                decision
+                    ?.result_text,
+
+                decision
+                    ?.learning_text
+
+            ];
+
+
+            const text =
+                candidates
+                    .map(
+                        normalizeText
+                    )
+                    .find(
+                        Boolean
+                    );
+
+
+            return text
+                ? truncateText(
+                    text,
+                    110
+                )
+                : '詳細はまだ登録されていません。';
+
+        }
+
+
+        function sortDecisionsNewest(
+            decisions
+        ) {
+
+            return [
+                ...decisions
+            ]
+                .sort(
+                    (
+                        a,
+                        b
+                    ) => {
+
+                        const dateDifference =
+
+                            dateSortValue(
+                                b.occurred_at
+                            )
+                            -
+                            dateSortValue(
+                                a.occurred_at
+                            );
+
+
+                        if (
+                            dateDifference
+                            !==
+                            0
+                        ) {
+
+                            return (
+                                dateDifference
+                            );
+
+                        }
+
+
+                        return (
+
+                            Number(
+                                b.id
+                                ||
+                                0
+                            )
+                            -
+                            Number(
+                                a.id
+                                ||
+                                0
+                            )
+
+                        );
+
+                    }
+                );
+
+        }
+
+
+        function renderDecisionPreview(
+            data
+        ) {
+
+            const decisions =
+                Array.isArray(
+                    data
+                        ?.career_decisions
+                )
+                    ? data.career_decisions
+                    : [];
+
+
+            const count =
+                decisions.length;
+
+
+            if (
+                careerDecisionCountElement
+            ) {
+
+                careerDecisionCountElement
+                    .textContent =
+                        String(
+                            count
+                        );
+
+            }
+
+
+            if (
+                careerDecisionCountLargeElement
+            ) {
+
+                careerDecisionCountLargeElement
+                    .textContent =
+                        String(
+                            count
+                        );
+
+            }
+
+
+            if (
+                !decisionPreviewList
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                count
+                ===
+                0
+            ) {
+
+                decisionPreviewList
+                    .innerHTML = `
+
+                        <div class="mypage-decision-empty">
+
+                            <p class="mypage-decision-empty__kicker">
+                                YOUR DECISIONS
+                            </p>
+
+                            <h3>
+                                まだ意思決定が登録されていません
+                            </h3>
+
+                            <p>
+                                転職・異動・昇進など、
+                                印象に残っている選択を
+                                1つ振り返ってみましょう。
+                            </p>
+
+                        </div>
+
+                    `;
+
+
+                return;
+
+            }
+
+
+            const previewDecisions =
+                sortDecisionsNewest(
+                    decisions
+                )
+                    .slice(
+                        0,
+                        2
+                    );
+
+
+            decisionPreviewList
+                .innerHTML =
+                    previewDecisions
+                        .map(
+                            decision => {
+
+                                const title =
+                                    getDecisionTitle(
+                                        decision
+                                    );
+
+
+                                const summary =
+                                    getDecisionSummary(
+                                        decision
+                                    );
+
+
+                                const date =
+                                    formatDecisionDate(
+                                        decision
+                                            .occurred_at
+                                    );
+
+
+                                const decisionType =
+                                    normalizeText(
+                                        decision
+                                            .decision_type
+                                    );
+
+
+                                const sameChoice =
+                                    normalizeText(
+                                        decision
+                                            .same_choice_answer
+                                    );
+
+
+                                return `
+
+                                    <article
+                                        class="mypage-decision-preview-card"
+                                    >
+
+                                        <div
+                                            class="mypage-decision-preview-card__meta"
+                                        >
+
+                                            ${
+                                                decisionType
+
+                                                    ? `
+                                                        <span
+                                                            class="mypage-decision-preview-card__type"
+                                                        >
+                                                            ${escapeHtml(decisionType)}
+                                                        </span>
+                                                    `
+
+                                                    : ''
+                                            }
+
+
+                                            ${
+                                                date
+
+                                                    ? `
+                                                        <span>
+                                                            ${escapeHtml(date)}
+                                                        </span>
+                                                    `
+
+                                                    : ''
+                                            }
+
+                                        </div>
+
+
+                                        <h3>
+                                            ${escapeHtml(title)}
+                                        </h3>
+
+
+                                        <p
+                                            class="mypage-decision-preview-card__summary"
+                                        >
+                                            ${escapeHtml(summary)}
+                                        </p>
+
+
+                                        ${
+                                            sameChoice
+
+                                                ? `
+                                                    <div
+                                                        class="mypage-decision-preview-card__reflection"
+                                                    >
+
+                                                        <span>
+                                                            今なら同じ選択をする
+                                                        </span>
+
+                                                        <strong>
+                                                            ${escapeHtml(sameChoice)}
+                                                        </strong>
+
+                                                    </div>
+                                                `
+
+                                                : ''
+                                        }
+
+
+                                        <a
+                                            href="Career_decision_edit.html?id=${encodeURIComponent(
+                                                decision.id
+                                            )}"
+                                        >
+                                            この意思決定を見る
+
+                                            <span aria-hidden="true">
+                                                →
+                                            </span>
+                                        </a>
+
+                                    </article>
+
+                                `;
+
+                            }
+                        )
+                        .join('');
+
+        }
+
+
+
+        /* ============================================================
+           10. CAREER JOURNEY
+           ============================================================ */
+
+        function renderCareerJourney(
+            data
+        ) {
+
+            if (
+                !careerJourneySummary
+            ) {
+
+                return;
+
+            }
+
+
+            const jobs =
+                getValidJobs(
+                    data
+                );
+
+
+            if (
+                jobs.length
+                ===
+                0
+            ) {
+
+                careerJourneySummary
+                    .innerHTML = `
+
+                        <div
+                            class="career-journey-empty"
+                        >
+
+                            <p
+                                class="career-journey-empty__kicker"
+                            >
+                                YOUR JOURNEY
+                            </p>
+
+                            <h3>
+                                まだキャリアが
+                                登録されていません
+                            </h3>
+
+                            <p>
+                                これまで経験した会社や
+                                Roleを登録すると、
+                                ここにCareer Journeyが
+                                表示されます。
+                            </p>
+
+                        </div>
+
+                    `;
+
+
+                return;
+
+            }
+
+
+            const sortedJobs =
+                [
+                    ...jobs
+                ]
+                    .sort(
+                        (
+                            a,
+                            b
+                        ) => {
+
+                            const dateDiff =
+                                dateSortValue(
+                                    a.work_start_period
+                                )
+                                -
+                                dateSortValue(
+                                    b.work_start_period
+                                );
+
+
+                            if (
+                                dateDiff
+                                !==
+                                0
+                            ) {
+
+                                return dateDiff;
+
+                            }
+
+
+                            return (
+                                Number(
+                                    a.id
+                                    ||
+                                    0
+                                )
+                                -
+                                Number(
+                                    b.id
+                                    ||
+                                    0
+                                )
+                            );
+
+                        }
+                    );
+
+
+            careerJourneySummary
+                .innerHTML =
+                    sortedJobs
+                        .map(
+                            (
+                                job,
+                                companyIndex
+                            ) => {
+
+                                const roles =
+                                    getRolesForDisplay(
+                                        job
+                                    );
+
+
+                                const sortedRoles =
+                                    [
+                                        ...roles
+                                    ]
+                                        .sort(
                                             (
-                                                role,
-                                                roleIndex
+                                                a,
+                                                b
                                             ) => {
 
-                                                const roleTitle =
+                                                const orderDiff =
 
-                                                    role.position
-                                                    || role.job_category
-                                                    || role.job_sub_category
-                                                    || `役割 ${roleIndex + 1}`;
-
-
-                                                const roleCategory =
-                                                    role.job_category
-                                                    || role.job_sub_category
-                                                    || '職種未設定';
-
-
-                                                const rolePeriod =
-                                                    formatPeriod(
-                                                        role.start_period,
-                                                        role.end_period
+                                                    Number(
+                                                        a.display_order
+                                                        ||
+                                                        0
+                                                    )
+                                                    -
+                                                    Number(
+                                                        b.display_order
+                                                        ||
+                                                        0
                                                     );
 
 
-                                                const roleDescription =
-                                                    role.role_description
-                                                    || '';
+                                                if (
+                                                    orderDiff
+                                                    !==
+                                                    0
+                                                ) {
+
+                                                    return (
+                                                        orderDiff
+                                                    );
+
+                                                }
 
 
-                                                return `
+                                                return (
 
-                                                    <div
-                                                        class="career-journey-role"
-                                                    >
+                                                    dateSortValue(
+                                                        a.start_period
+                                                    )
+                                                    -
+                                                    dateSortValue(
+                                                        b.start_period
+                                                    )
+
+                                                );
+
+                                            }
+                                        );
+
+
+                                const companyName =
+                                    normalizeText(
+                                        job.company_name
+                                    )
+                                    ||
+                                    '会社名未設定';
+
+
+                                const industry =
+                                    normalizeText(
+                                        job.industry
+                                    );
+
+
+                                const period =
+                                    formatPeriod(
+
+                                        job.work_start_period,
+
+                                        job.work_end_period
+
+                                    );
+
+
+                                const roleHtml =
+
+                                    sortedRoles.length
+                                    >
+                                    0
+
+                                        ? sortedRoles
+                                            .map(
+                                                (
+                                                    role,
+                                                    roleIndex
+                                                ) => {
+
+                                                    const roleTitle =
+                                                        getRoleDisplayName(
+                                                            role,
+                                                            job
+                                                        );
+
+
+                                                    const roleCategory =
+
+                                                        normalizeText(
+                                                            role.job_category
+                                                        )
+
+                                                        ||
+
+                                                        normalizeText(
+                                                            role.job_sub_category
+                                                        );
+
+
+                                                    const rolePeriod =
+                                                        formatPeriod(
+
+                                                            role.start_period,
+
+                                                            role.end_period
+
+                                                        );
+
+
+                                                    const roleDescription =
+                                                        normalizeText(
+                                                            role.role_description
+                                                        );
+
+
+                                                    return `
 
                                                         <div
-                                                            class="career-journey-role__line"
-                                                        >
-
-                                                            <span
-                                                                class="career-journey-role__dot"
-                                                            ></span>
-
-                                                        </div>
-
-
-                                                        <div
-                                                            class="career-journey-role__content"
+                                                            class="career-journey-role"
                                                         >
 
                                                             <div
-                                                                class="career-journey-role__header"
+                                                                class="career-journey-role__line"
                                                             >
 
-                                                                <div>
+                                                                <span
+                                                                    class="career-journey-role__dot"
+                                                                ></span>
 
-                                                                    <p
-                                                                        class="career-journey-role__label"
-                                                                    >
-                                                                        ROLE ${roleIndex + 1}
-                                                                    </p>
+                                                            </div>
 
-                                                                    <h4>
-                                                                        ${escapeHtml(roleTitle)}
-                                                                    </h4>
+
+                                                            <div
+                                                                class="career-journey-role__content"
+                                                            >
+
+                                                                <div
+                                                                    class="career-journey-role__header"
+                                                                >
+
+                                                                    <div>
+
+                                                                        <p
+                                                                            class="career-journey-role__label"
+                                                                        >
+                                                                            ROLE ${roleIndex + 1}
+                                                                        </p>
+
+                                                                        <h4>
+                                                                            ${escapeHtml(roleTitle)}
+                                                                        </h4>
+
+                                                                    </div>
+
+
+                                                                    ${
+                                                                        rolePeriod
+
+                                                                            ? `
+                                                                                <span
+                                                                                    class="career-journey-role__period"
+                                                                                >
+                                                                                    ${escapeHtml(rolePeriod)}
+                                                                                </span>
+                                                                            `
+
+                                                                            : ''
+                                                                    }
 
                                                                 </div>
 
 
                                                                 ${
-                                                                    rolePeriod
+                                                                    roleCategory
 
-                                                                    ? `
-                                                                        <span
-                                                                            class="career-journey-role__period"
-                                                                        >
-                                                                            ${escapeHtml(rolePeriod)}
-                                                                        </span>
-                                                                    `
+                                                                        ? `
+                                                                            <p
+                                                                                class="career-journey-role__category"
+                                                                            >
+                                                                                ${escapeHtml(roleCategory)}
+                                                                            </p>
+                                                                        `
 
-                                                                    : ''
+                                                                        : ''
+                                                                }
+
+
+                                                                ${
+                                                                    normalizeText(
+                                                                        role.department
+                                                                    )
+
+                                                                        ? `
+                                                                            <p
+                                                                                class="career-journey-role__department"
+                                                                            >
+                                                                                ${escapeHtml(role.department)}
+                                                                            </p>
+                                                                        `
+
+                                                                        : ''
+                                                                }
+
+
+                                                                ${
+                                                                    roleDescription
+
+                                                                        ? `
+                                                                            <p
+                                                                                class="career-journey-role__description"
+                                                                            >
+                                                                                ${escapeHtml(roleDescription)}
+                                                                            </p>
+                                                                        `
+
+                                                                        : ''
                                                                 }
 
                                                             </div>
 
-
-                                                            <p
-                                                                class="career-journey-role__category"
-                                                            >
-                                                                ${escapeHtml(roleCategory)}
-                                                            </p>
-
-
-                                                            ${
-                                                                role.department
-
-                                                                ? `
-                                                                    <p
-                                                                        class="career-journey-role__department"
-                                                                    >
-                                                                        ${escapeHtml(role.department)}
-                                                                    </p>
-                                                                `
-
-                                                                : ''
-                                                            }
-
-
-                                                            ${
-                                                                roleDescription
-
-                                                                ? `
-                                                                    <p
-                                                                        class="career-journey-role__description"
-                                                                    >
-                                                                        ${escapeHtml(roleDescription)}
-                                                                    </p>
-                                                                `
-
-                                                                : ''
-                                                            }
-
                                                         </div>
 
-                                                    </div>
+                                                    `;
 
-                                                `;
+                                                }
+                                            )
+                                            .join('')
 
-                                            }
-                                        )
-                                        .join('')
-
-                                    : `
-
-                                        <div
-                                            class="career-journey-role career-journey-role--empty"
-                                        >
+                                        : `
 
                                             <div
-                                                class="career-journey-role__line"
+                                                class="
+                                                    career-journey-role
+                                                    career-journey-role--empty
+                                                "
                                             >
 
-                                                <span
-                                                    class="career-journey-role__dot"
-                                                ></span>
-
-                                            </div>
-
-
-                                            <div
-                                                class="career-journey-role__content"
-                                            >
-
-                                                <p>
-                                                    役割情報は
-                                                    まだ登録されていません。
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                    `;
-
-
-                            return `
-
-                                <article
-                                    class="career-journey-company"
-                                >
-
-                                    <div
-                                        class="career-journey-company__index"
-                                    >
-                                        ${String(
-                                            companyIndex + 1
-                                        ).padStart(
-                                            2,
-                                            '0'
-                                        )}
-                                    </div>
-
-
-                                    <div
-                                        class="career-journey-company__body"
-                                    >
-
-                                        <header
-                                            class="career-journey-company__header"
-                                        >
-
-                                            <div>
-
-                                                <p
-                                                    class="career-journey-company__kicker"
+                                                <div
+                                                    class="career-journey-role__line"
                                                 >
-                                                    COMPANY ${companyIndex + 1}
-                                                </p>
 
-                                                <h3>
-                                                    ${escapeHtml(companyName)}
-                                                </h3>
-
-                                                <p
-                                                    class="career-journey-company__industry"
-                                                >
-                                                    ${escapeHtml(industry)}
-                                                </p>
-
-                                            </div>
-
-
-                                            ${
-                                                period
-
-                                                ? `
                                                     <span
-                                                        class="career-journey-company__period"
-                                                    >
-                                                        ${escapeHtml(period)}
-                                                    </span>
-                                                `
+                                                        class="career-journey-role__dot"
+                                                    ></span>
 
-                                                : ''
-                                            }
+                                                </div>
 
-                                        </header>
 
+                                                <div
+                                                    class="career-journey-role__content"
+                                                >
+
+                                                    <p>
+                                                        Role情報は
+                                                        まだ登録されていません。
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                        `;
+
+
+                                return `
+
+                                    <article
+                                        class="career-journey-company"
+                                    >
 
                                         <div
-                                            class="career-journey-company__roles"
+                                            class="career-journey-company__index"
                                         >
 
-                                            ${roleHtml}
+                                            ${String(
+                                                companyIndex + 1
+                                            ).padStart(
+                                                2,
+                                                '0'
+                                            )}
 
                                         </div>
 
-                                    </div>
 
-                                </article>
+                                        <div
+                                            class="career-journey-company__body"
+                                        >
 
-                            `;
+                                            <div
+                                                class="career-journey-company__header"
+                                            >
 
-                        }
-                    )
-                    .join('');
+                                                <div>
 
-    }
+                                                    <p
+                                                        class="career-journey-company__kicker"
+                                                    >
+                                                        COMPANY ${companyIndex + 1}
+                                                    </p>
 
-
-
-    // ============================================================
-    // 8. LOOKING AHEAD
-    // ============================================================
-
-    function renderFutureCareer(data) {
-
-        const careerType =
-            hasValue(
-                data.career_type
-            )
-                ? data.career_type
-                : 'まだ設定されていません。';
+                                                    <h3>
+                                                        ${escapeHtml(companyName)}
+                                                    </h3>
 
 
-        const description =
-            hasValue(
-                data.career_description
-            )
-                ? data.career_description
-                : 'まだ登録されていません。';
+                                                    ${
+                                                        industry
+
+                                                            ? `
+                                                                <p
+                                                                    class="career-journey-company__industry"
+                                                                >
+                                                                    ${escapeHtml(industry)}
+                                                                </p>
+                                                            `
+
+                                                            : ''
+                                                    }
+
+                                                </div>
 
 
-        let skillText =
-            'まだ登録されていません。';
+                                                ${
+                                                    period
+
+                                                        ? `
+                                                            <span
+                                                                class="career-journey-company__period"
+                                                            >
+                                                                ${escapeHtml(period)}
+                                                            </span>
+                                                        `
+
+                                                        : ''
+                                                }
+
+                                            </div>
 
 
-        if (
-            hasValue(
-                data.skill
-            )
-            && hasValue(
-                data.growth_description
-            )
-        ) {
+                                            <div
+                                                class="career-journey-company__roles"
+                                            >
 
-            skillText =
-                `${data.skill} — `
-                + `${data.growth_description}`;
+                                                ${roleHtml}
 
-        } else if (
-            hasValue(
-                data.skill
-            )
-        ) {
+                                            </div>
 
-            skillText =
-                data.skill;
+                                        </div>
 
-        } else if (
-            hasValue(
-                data.growth_description
-            )
-        ) {
+                                    </article>
 
-            skillText =
-                data.growth_description;
+                                `;
 
-        }
-
-
-        if (futureCareerType) {
-
-            futureCareerType
-                .textContent =
-                    careerType;
+                            }
+                        )
+                        .join('');
 
         }
 
 
-        if (
-            futureCareerDescription
+
+        /* ============================================================
+           11. NEXT DIRECTION
+           ============================================================ */
+
+        function renderNextDirection(
+            data
         ) {
 
-            futureCareerDescription
-                .textContent =
-                    description;
+            const currentView =
+                data
+                    ?.current_career_view_detail
+                ||
+                {};
+
+
+            const desiredDirection =
+                normalizeText(
+                    currentView
+                        .desired_direction
+                )
+                ||
+                normalizeText(
+                    data.career_type
+                );
+
+
+            const desiredRole =
+                normalizeText(
+                    currentView
+                        .desired_role
+                );
+
+
+            const futureGoals =
+                normalizeText(
+                    currentView
+                        .future_goals
+                )
+                ||
+                normalizeText(
+                    data.career_description
+                );
+
+
+            let skills =
+                normalizeText(
+                    currentView
+                        .skills_to_develop
+                );
+
+
+            /*
+             * 旧learning_and_growthは
+             * 表示fallbackとしてのみ残す。
+             */
+            if (!skills) {
+
+                const legacySkill =
+                    normalizeText(
+                        data.skill
+                    );
+
+
+                const legacyGrowth =
+                    normalizeText(
+                        data.growth_description
+                    );
+
+
+                if (
+                    legacySkill
+                    &&
+                    legacyGrowth
+                ) {
+
+                    skills =
+                        `${legacySkill} — ${legacyGrowth}`;
+
+                } else {
+
+                    skills =
+                        legacySkill
+                        ||
+                        legacyGrowth;
+
+                }
+
+            }
+
+
+            const fiveYearGoal =
+                normalizeText(
+                    currentView
+                        .five_year_goal
+                );
+
+
+            setText(
+                futureCareerType,
+                desiredDirection,
+                '未設定'
+            );
+
+
+            setText(
+                futureDesiredRole,
+                desiredRole
+            );
+
+
+            setText(
+                futureCareerDescription,
+                futureGoals
+            );
+
+
+            setText(
+                futureCareerSkill,
+                skills
+            );
+
+
+            setText(
+                futureFiveYearGoal,
+                fiveYearGoal
+            );
 
         }
 
 
-        if (futureCareerSkill) {
 
-            futureCareerSkill
-                .textContent =
-                    skillText;
+        /* ============================================================
+           12. TAB
+           ============================================================ */
 
-        }
+        function switchTab(
+            tabId
+        ) {
 
-    }
+            tabLinks
+                .forEach(
+                    link => {
 
+                        link.classList
+                            .toggle(
 
+                                'active',
 
-    // ============================================================
-    // 9. Career Decision件数
-    // ============================================================
+                                link.dataset.tab
+                                ===
+                                tabId
 
-    async function loadCareerDecisionCount(
-        baseUrl
-    ) {
+                            );
 
-        try {
-
-            const response =
-                await fetch(
-                    `${baseUrl}/career-decisions/`,
-                    {
-                        method:
-                            'GET',
-
-                        credentials:
-                            'include',
-
-                        headers: {
-                            Accept:
-                                'application/json'
-                        }
                     }
                 );
 
 
-            if (
-                response.status === 401
-            ) {
+            tabContents
+                .forEach(
+                    content => {
 
-                window.location.href =
-                    'Login.html';
+                        content.classList
+                            .toggle(
+
+                                'active',
+
+                                content.id
+                                ===
+                                tabId
+
+                            );
+
+                    }
+                );
+
+        }
+
+
+        tabLinks
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        'click',
+                        function () {
+
+                            switchTab(
+                                this.dataset.tab
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        /* ============================================================
+           13. EDITOR
+           ============================================================ */
+
+        function openEditor() {
+
+            if (
+                !profileEditor
+            ) {
 
                 return;
-            }
-
-
-            const responseData =
-                await response
-                    .json()
-                    .catch(
-                        () => null
-                    );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-
-                    responseData?.detail
-
-                    || 'キャリアの振り返り件数を取得できませんでした。'
-
-                );
 
             }
 
 
-            const decisions =
-                Array.isArray(
-                    responseData?.decisions
-                )
-                    ? responseData.decisions
-                    : [];
+            profileEditor.hidden =
+                false;
 
 
-            const count =
-                Number.isInteger(
-                    responseData?.count
-                )
-
-                    ? responseData.count
-
-                    : decisions.length;
+            isEditing =
+                true;
 
 
-            if (
-                careerDecisionCountElement
-            ) {
-
-                careerDecisionCountElement
-                    .textContent =
-                        String(count);
-
-            }
-
-
-            if (
-                careerDecisionCountLargeElement
-            ) {
-
-                careerDecisionCountLargeElement
-                    .textContent =
-                        String(count);
-
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                'Career Decision件数取得エラー:',
-                error
+            setReadOnly(
+                false
             );
 
 
-            if (
-                careerDecisionCountElement
-            ) {
-
-                careerDecisionCountElement
-                    .textContent =
-                        '--';
-
-            }
+            updateEditorButtons();
 
 
-            if (
-                careerDecisionCountLargeElement
-            ) {
+            requestAnimationFrame(
+                () => {
 
-                careerDecisionCountLargeElement
-                    .textContent =
-                        '--';
+                    profileEditor
+                        .scrollIntoView(
+                            {
+                                behavior:
+                                    'smooth',
 
-            }
-
-        }
-
-    }
-
-
-
-    // ============================================================
-    // 10. タブ切替
-    // ============================================================
-
-    function switchTab(tabId) {
-
-        tabLinks.forEach(
-            link => {
-
-                link.classList.toggle(
-
-                    'active',
-
-                    link.dataset.tab
-                    === tabId
-
-                );
-
-            }
-        );
-
-
-        tabContents.forEach(
-            content => {
-
-                content.classList.toggle(
-
-                    'active',
-
-                    content.id
-                    === tabId
-
-                );
-
-            }
-        );
-
-    }
-
-
-    tabLinks.forEach(
-        link => {
-
-            link.addEventListener(
-                'click',
-                function () {
-
-                    switchTab(
-                        this.dataset.tab
-                    );
+                                block:
+                                    'start'
+                            }
+                        );
 
                 }
             );
 
         }
-    );
 
 
+        function closeEditor() {
 
-    // ============================================================
-    // 11. Editor開閉
-    // ============================================================
+            if (
+                !profileEditor
+            ) {
 
-    function openEditor() {
-
-        if (!profileEditor) {
-            return;
-        }
-
-
-        profileEditor.hidden =
-            false;
-
-
-        isEditing =
-            true;
-
-
-        setReadOnly(false);
-
-        updateEditorButtons();
-
-
-        requestAnimationFrame(
-            () => {
-
-                profileEditor
-                    .scrollIntoView({
-                        behavior:
-                            'smooth',
-
-                        block:
-                            'start'
-                    });
+                return;
 
             }
-        );
-
-    }
 
 
-    function closeEditor() {
+            /*
+             * 保存していない変更は
+             * API取得済みデータへ戻す。
+             */
+            if (
+                loadedUserData
+            ) {
 
-        if (!profileEditor) {
-            return;
-        }
+                populateForm(
+                    loadedUserData,
+                    false
+                );
 
-
-        isEditing =
-            false;
-
-
-        setReadOnly(true);
-
-        updateEditorButtons();
-
-
-        profileEditor.hidden =
-            true;
-
-    }
+            }
 
 
-
-    // ============================================================
-    // 12. 編集 / 閲覧モード
-    // ============================================================
-
-    function getAllFormFields() {
-
-        return document.querySelectorAll(
-
-            '#mypage-form input, '
-            + '#mypage-form textarea, '
-            + '#mypage-form select'
-
-        );
-
-    }
+            isEditing =
+                false;
 
 
-    function setReadOnly(isReadOnly) {
-
-        getAllFormFields()
-            .forEach(
-                field => {
-
-                    if (
-                        field.type
-                        === 'hidden'
-                    ) {
-                        return;
-                    }
-
-
-                    if (
-                        field.tagName
-                            === 'SELECT'
-                        || field.type
-                            === 'checkbox'
-                    ) {
-
-                        field.disabled =
-                            isReadOnly;
-
-                        return;
-                    }
-
-
-                    if (isReadOnly) {
-
-                        field.setAttribute(
-                            'readonly',
-                            'readonly'
-                        );
-
-                    } else {
-
-                        field.removeAttribute(
-                            'readonly'
-                        );
-
-                    }
-
-                }
+            setReadOnly(
+                true
             );
 
 
-        if (
-            addJobExperienceButton
+            updateEditorButtons();
+
+
+            profileEditor.hidden =
+                true;
+
+        }
+
+
+        function getAllFormFields() {
+
+            return document
+                .querySelectorAll(
+
+                    '#mypage-form input, '
+                    +
+                    '#mypage-form textarea, '
+                    +
+                    '#mypage-form select'
+
+                );
+
+        }
+
+
+        function setReadOnly(
+            isReadOnly
         ) {
 
-            addJobExperienceButton
-                .style.display =
-                    isReadOnly
-                        ? 'none'
-                        : 'inline-flex';
+            getAllFormFields()
+                .forEach(
+                    field => {
 
-        }
+                        if (
+                            field.type
+                            ===
+                            'hidden'
+                        ) {
+
+                            return;
+
+                        }
 
 
-        document
-            .querySelectorAll(
-                '.add-role-button'
-            )
-            .forEach(
-                button => {
+                        if (
+                            field.tagName
+                            ===
+                            'SELECT'
+                            ||
+                            field.type
+                            ===
+                            'checkbox'
+                        ) {
 
-                    button.style.display =
+                            field.disabled =
+                                isReadOnly;
+
+                            return;
+
+                        }
+
+
+                        if (
+                            isReadOnly
+                        ) {
+
+                            field.setAttribute(
+                                'readonly',
+                                'readonly'
+                            );
+
+                        } else {
+
+                            field.removeAttribute(
+                                'readonly'
+                            );
+
+                        }
+
+                    }
+                );
+
+
+            if (
+                addJobExperienceButton
+            ) {
+
+                addJobExperienceButton
+                    .style.display =
+
                         isReadOnly
+
                             ? 'none'
                             : 'inline-flex';
 
-                }
-            );
-
-    }
+            }
 
 
+            document
+                .querySelectorAll(
+                    '.add-role-button'
+                )
+                .forEach(
+                    button => {
 
-    function updateEditorButtons() {
+                        button
+                            .style.display =
 
-        if (editButtonTop) {
+                                isReadOnly
 
-            editButtonTop.style.display =
+                                    ? 'none'
+                                    : 'inline-flex';
+
+                    }
+                );
+
+        }
+
+
+        function updateEditorButtons() {
+
+            if (
+                editButtonTop
+            ) {
+
+                editButtonTop
+                    .style.display =
+
+                        isEditing
+
+                            ? 'none'
+                            : 'inline-flex';
+
+            }
+
+
+            if (
+                editButtonBottom
+            ) {
+
+                editButtonBottom
+                    .style.display =
+                        'none';
+
+            }
+
+
+            const saveDisplay =
+
                 isEditing
-                    ? 'none'
-                    : 'inline-flex';
+
+                    ? 'inline-flex'
+                    : 'none';
+
+
+            if (
+                saveButtonTop
+            ) {
+
+                saveButtonTop
+                    .style.display =
+                        saveDisplay;
+
+
+                saveButtonTop
+                    .disabled =
+                        isSaving;
+
+            }
+
+
+            if (
+                saveButtonBottom
+            ) {
+
+                saveButtonBottom
+                    .style.display =
+                        saveDisplay;
+
+
+                saveButtonBottom
+                    .disabled =
+                        isSaving;
+
+            }
 
         }
 
 
-        /*
-         * 下部EditはHTML互換用。
-         * 通常は表示しない。
-         */
+        function setSavingState(
+            saving
+        ) {
 
-        if (editButtonBottom) {
+            isSaving =
+                saving;
 
-            editButtonBottom.style.display =
-                'none';
+
+            [
+                saveButtonTop,
+                saveButtonBottom
+            ]
+                .filter(
+                    Boolean
+                )
+                .forEach(
+                    button => {
+
+                        button.disabled =
+                            saving;
+
+
+                        button.textContent =
+
+                            saving
+
+                                ? '保存中...'
+                                : '変更を保存する';
+
+                    }
+                );
+
+        }
+
+
+        if (
+            editButtonTop
+        ) {
+
+            editButtonTop
+                .addEventListener(
+                    'click',
+                    openEditor
+                );
 
         }
 
 
-        const saveDisplay =
-            isEditing
-                ? 'inline-flex'
-                : 'none';
+        if (
+            closeEditorButton
+        ) {
 
-
-        if (saveButtonTop) {
-
-            saveButtonTop.style.display =
-                saveDisplay;
-
-            saveButtonTop.disabled =
-                isSaving;
+            closeEditorButton
+                .addEventListener(
+                    'click',
+                    closeEditor
+                );
 
         }
 
 
-        if (saveButtonBottom) {
 
-            saveButtonBottom.style.display =
-                saveDisplay;
+        /* ============================================================
+           14. ROLE CARD
+           ============================================================ */
 
-            saveButtonBottom.disabled =
-                isSaving;
+        function createRoleCard(
+            companyIndex,
+            roleIndex,
+            role = {}
+        ) {
 
-        }
+            const roleCard =
+                document.createElement(
+                    'div'
+                );
 
-    }
 
+            roleCard.className =
+                'role-card';
 
 
-    function setSavingState(saving) {
+            roleCard.dataset
+                .roleIndex =
+                    String(
+                        roleIndex
+                    );
 
-        isSaving =
-            saving;
 
+            roleCard.innerHTML = `
 
-        [
-            saveButtonTop,
-            saveButtonBottom
-        ]
-            .filter(Boolean)
-            .forEach(
-                button => {
-
-                    button.disabled =
-                        saving;
-
-
-                    button.textContent =
-                        saving
-                            ? '保存中...'
-                            : '変更を保存する';
-
-                }
-            );
-
-    }
-
-
-
-    if (editButtonTop) {
-
-        editButtonTop
-            .addEventListener(
-                'click',
-                openEditor
-            );
-
-    }
-
-
-    if (closeEditorButton) {
-
-        closeEditorButton
-            .addEventListener(
-                'click',
-                closeEditor
-            );
-
-    }
-
-
-
-    // ============================================================
-    // 13. Role Card
-    // ============================================================
-
-    function createRoleCard(
-        companyIndex,
-        roleIndex,
-        role = {}
-    ) {
-
-        const roleCard =
-            document.createElement(
-                'div'
-            );
-
-
-        roleCard.className =
-            'role-card';
-
-
-        roleCard.dataset.roleIndex =
-            String(roleIndex);
-
-
-        roleCard.innerHTML = `
-
-            <div class="role-card-header">
-
-                <div>
-
-                    <p class="role-card-kicker">
-                        ROLE ${roleIndex + 1}
-                    </p>
-
-                    <h4>
-                        役割 ${roleIndex + 1}
-                    </h4>
-
-                </div>
-
-            </div>
-
-
-            <input
-                type="hidden"
-                name="
-                    job_experiences[${companyIndex}]
-                    [role_histories][${roleIndex}]
-                    [id]
-                "
-                value="${escapeHtml(
-                    role.id || ''
-                )}"
-            >
-
-
-            <input
-                type="hidden"
-                name="
-                    job_experiences[${companyIndex}]
-                    [role_histories][${roleIndex}]
-                    [display_order]
-                "
-                value="${escapeHtml(
-                    role.display_order
-                    || roleIndex + 1
-                )}"
-            >
-
-
-            <div class="role-grid">
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="text"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [department]
-                        "
-                        value="${escapeHtml(
-                            role.department
-                            || ''
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        部署・組織名
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="text"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [position]
-                        "
-                        value="${escapeHtml(
-                            role.position
-                            || ''
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        役職・ポジション
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <select
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [job_category]
-                        "
-                    >
-
-                        <option value="">
-                        </option>
-
-                        ${createOptions(
-                            jobCategoryOptions,
-                            role.job_category
-                        )}
-
-                    </select>
-
-                    <label>
-                        職種
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="text"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [job_sub_category]
-                        "
-                        value="${escapeHtml(
-                            role.job_sub_category
-                            || ''
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        職種分類・専門領域
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="date"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [start_period]
-                        "
-                        value="${escapeHtml(
-                            normalizeDateForInput(
-                                role.start_period
-                            )
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        役割の開始日
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="date"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [end_period]
-                        "
-                        value="${escapeHtml(
-                            normalizeDateForInput(
-                                role.end_period
-                            )
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        役割の終了日
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <select
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [salary_range]
-                        "
-                    >
-
-                        <option value="">
-                        </option>
-
-                        ${createOptions(
-                            salaryOptions,
-                            role.salary_range
-                        )}
-
-                    </select>
-
-                    <label>
-                        年収レンジ
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <select
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [satisfaction_level]
-                        "
-                    >
-
-                        <option value="">
-                        </option>
-
-                        ${createSatisfactionOptions(
-                            role.satisfaction_level
-                        )}
-
-                    </select>
-
-                    <label>
-                        仕事満足度
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <select
-                        name="
-                            job_experiences[${companyIndex}]
-                            [role_histories][${roleIndex}]
-                            [work_style]
-                        "
-                    >
-
-                        <option value="">
-                        </option>
-
-                        ${createOptions(
-                            workStyleOptions,
-                            role.work_style
-                        )}
-
-                    </select>
-
-                    <label>
-                        働き方
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="
-                    floating-label
-                    role-description-field
-                "
-            >
-
-                <textarea
-                    name="
-                        job_experiences[${companyIndex}]
-                        [role_histories][${roleIndex}]
-                        [role_description]
-                    "
-                    placeholder=" "
-                >${escapeHtml(
-                    role.role_description
-                    || ''
-                )}</textarea>
-
-                <label>
-                    この役割で担ったこと・取り組んだこと
-                </label>
-
-            </div>
-
-        `;
-
-
-        /*
-         * name属性の改行を除去
-         */
-
-        roleCard
-            .querySelectorAll(
-                '[name]'
-            )
-            .forEach(
-                element => {
-
-                    element.name =
-                        element.name
-                            .replace(
-                                /\s+/g,
-                                ''
-                            );
-
-                }
-            );
-
-
-        return roleCard;
-
-    }
-
-
-
-    // ============================================================
-    // 14. Company Card
-    // ============================================================
-
-    function createCompanyCard(
-        jobExperience = {}
-    ) {
-
-        const companyIndex =
-            companyIndexCounter;
-
-
-        const companyCard =
-            document.createElement(
-                'section'
-            );
-
-
-        companyCard.className =
-            'job-info-group company-card';
-
-
-        companyCard.dataset.index =
-            String(companyIndex);
-
-
-        companyCard.innerHTML = `
-
-            <div class="company-card-header">
-
-                <div>
-
-                    <p class="company-card-kicker">
-                        COMPANY ${companyIndex + 1}
-                    </p>
-
-
-                    <h3
-                        class="company-card-title"
-                    >
-                        ${escapeHtml(
-                            jobExperience.company_name
-                            || `会社 ${companyIndex + 1}`
-                        )}
-                    </h3>
-
-
-                    <p
-                        class="company-card-description"
-                    >
-                        会社での在籍情報と、
-                        その中で経験した役割を
-                        分けて登録します。
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <input
-                type="hidden"
-                name="
-                    job_experiences[${companyIndex}]
-                    [id]
-                "
-                value="${escapeHtml(
-                    jobExperience.id
-                    || ''
-                )}"
-            >
-
-
-            <div class="company-fields">
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="text"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [company_name]
-                        "
-                        value="${escapeHtml(
-                            jobExperience.company_name
-                            || ''
-                        )}"
-                        placeholder=" "
-                        required
-                    >
-
-                    <label>
-                        会社名
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <select
-                        name="
-                            job_experiences[${companyIndex}]
-                            [industry]
-                        "
-                    >
-
-                        <option value="">
-                        </option>
-
-                        ${createOptions(
-                            industryOptions,
-                            jobExperience.industry
-                        )}
-
-                    </select>
-
-                    <label>
-                        業界
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="date"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [work_start_period]
-                        "
-                        value="${escapeHtml(
-                            normalizeDateForInput(
-                                jobExperience.work_start_period
-                            )
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        入社日
-                    </label>
-
-                </div>
-
-
-                <div class="floating-label">
-
-                    <input
-                        type="date"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [work_end_period]
-                        "
-                        value="${escapeHtml(
-                            normalizeDateForInput(
-                                jobExperience.work_end_period
-                            )
-                        )}"
-                        placeholder=" "
-                    >
-
-                    <label>
-                        退社日
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="
-                    checkbox-group
-                    company-private-field
-                "
-            >
-
-                <label>
-
-                    <input
-                        type="checkbox"
-                        name="
-                            job_experiences[${companyIndex}]
-                            [is_private]
-                        "
-                        ${
-                            jobExperience.is_private
-                                ? 'checked'
-                                : ''
-                        }
-                    >
-
-                    この会社名を非公開にする
-
-                </label>
-
-            </div>
-
-
-            <div class="roles-section">
-
-                <div
-                    class="roles-section-header"
-                >
+                <div class="role-card-header">
 
                     <div>
 
-                        <p
-                            class="roles-section-kicker"
-                        >
-                            ROLE HISTORY
+                        <p class="role-card-kicker">
+                            ROLE ${roleIndex + 1}
                         </p>
 
                         <h4>
-                            この会社で経験した役割
+                            役割 ${roleIndex + 1}
                         </h4>
 
                     </div>
 
+                </div>
 
-                    <button
-                        type="button"
-                        class="add-role-button"
-                    >
-                        ＋ 役割を追加
-                    </button>
+
+                <input
+                    type="hidden"
+                    name="
+                        job_experiences[${companyIndex}]
+                        [role_histories][${roleIndex}]
+                        [id]
+                    "
+                    value="${escapeHtml(
+                        role.id
+                        ||
+                        ''
+                    )}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="
+                        job_experiences[${companyIndex}]
+                        [role_histories][${roleIndex}]
+                        [display_order]
+                    "
+                    value="${escapeHtml(
+                        role.display_order
+                        ||
+                        roleIndex + 1
+                    )}"
+                >
+
+
+                <div class="role-grid">
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="text"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [department]
+                            "
+                            value="${escapeHtml(
+                                role.department
+                                ||
+                                ''
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            部署・組織名
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="text"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [position]
+                            "
+                            value="${escapeHtml(
+                                role.position
+                                ||
+                                ''
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            役職・ポジション
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <select
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [job_category]
+                            "
+                        >
+
+                            <option value="">
+                            </option>
+
+                            ${createOptions(
+                                jobCategoryOptions,
+                                role.job_category
+                            )}
+
+                        </select>
+
+                        <label>
+                            職種
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="text"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [job_sub_category]
+                            "
+                            value="${escapeHtml(
+                                role.job_sub_category
+                                ||
+                                ''
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            職種分類・専門領域
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="date"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [start_period]
+                            "
+                            value="${escapeHtml(
+                                normalizeDateForInput(
+                                    role.start_period
+                                )
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            役割の開始日
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="date"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [end_period]
+                            "
+                            value="${escapeHtml(
+                                normalizeDateForInput(
+                                    role.end_period
+                                )
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            役割の終了日
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <select
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [salary_range]
+                            "
+                        >
+
+                            <option value="">
+                            </option>
+
+                            ${createOptions(
+                                salaryOptions,
+                                role.salary_range
+                            )}
+
+                        </select>
+
+                        <label>
+                            年収レンジ
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <select
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [satisfaction_level]
+                            "
+                        >
+
+                            <option value="">
+                            </option>
+
+                            ${createSatisfactionOptions(
+                                role.satisfaction_level
+                            )}
+
+                        </select>
+
+                        <label>
+                            仕事満足度
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <select
+                            name="
+                                job_experiences[${companyIndex}]
+                                [role_histories][${roleIndex}]
+                                [work_style]
+                            "
+                        >
+
+                            <option value="">
+                            </option>
+
+                            ${createOptions(
+                                workStyleOptions,
+                                role.work_style
+                            )}
+
+                        </select>
+
+                        <label>
+                            働き方
+                        </label>
+
+                    </div>
+
 
                 </div>
 
 
                 <div
-                    class="roles-container"
+                    class="
+                        floating-label
+                        role-description-field
+                    "
                 >
+
+                    <textarea
+                        name="
+                            job_experiences[${companyIndex}]
+                            [role_histories][${roleIndex}]
+                            [role_description]
+                        "
+                        placeholder=" "
+                    >${escapeHtml(
+                        role.role_description
+                        ||
+                        ''
+                    )}</textarea>
+
+                    <label>
+                        この役割で担ったこと・取り組んだこと
+                    </label>
+
                 </div>
 
-            </div>
-
-        `;
+            `;
 
 
-        companyCard
-            .querySelectorAll(
-                '[name]'
-            )
-            .forEach(
-                element => {
+            roleCard
+                .querySelectorAll(
+                    '[name]'
+                )
+                .forEach(
+                    element => {
 
-                    element.name =
-                        element.name
-                            .replace(
-                                /\s+/g,
-                                ''
-                            );
+                        element.name =
+                            element.name
+                                .replace(
+                                    /\s+/g,
+                                    ''
+                                );
 
-                }
-            );
-
-
-        const rolesContainer =
-            companyCard
-                .querySelector(
-                    '.roles-container'
+                    }
                 );
 
 
-        const roles =
-            getRolesForDisplay(
-                jobExperience
-            );
+            return roleCard;
+
+        }
 
 
-        roles.forEach(
-            (
-                role,
-                roleIndex
-            ) => {
 
-                rolesContainer
-                    .appendChild(
+        /* ============================================================
+           15. COMPANY CARD
+           ============================================================ */
 
-                        createRoleCard(
-                            companyIndex,
-                            roleIndex,
-                            role
-                        )
+        function createCompanyCard(
+            jobExperience = {}
+        ) {
 
-                    );
+            if (
+                !jobExperiencesContainer
+            ) {
+
+                return;
 
             }
-        );
 
 
-        const addRoleButton =
-            companyCard
-                .querySelector(
-                    '.add-role-button'
+            const companyIndex =
+                companyIndexCounter;
+
+
+            const companyCard =
+                document.createElement(
+                    'section'
                 );
 
 
-        addRoleButton
-            .addEventListener(
-                'click',
-                function () {
-
-                    const roleIndex =
-                        rolesContainer
-                            .querySelectorAll(
-                                '.role-card'
-                            )
-                            .length;
+            companyCard.className =
+                'job-info-group company-card';
 
 
-                    const companyStartDate =
-                        companyCard
-                            .querySelector(
-
-                                `input[name="`
-                                + `job_experiences`
-                                + `[${companyIndex}]`
-                                + `[work_start_period]`
-                                + `"]`
-
-                            )
-                            ?.value
-                        || '';
+            companyCard.dataset.index =
+                String(
+                    companyIndex
+                );
 
 
-                    const companyEndDate =
-                        companyCard
-                            .querySelector(
+            companyCard.innerHTML = `
 
-                                `input[name="`
-                                + `job_experiences`
-                                + `[${companyIndex}]`
-                                + `[work_end_period]`
-                                + `"]`
+                <div class="company-card-header">
 
-                            )
-                            ?.value
-                        || '';
+                    <div>
 
+                        <p class="company-card-kicker">
+                            COMPANY ${companyIndex + 1}
+                        </p>
+
+                        <h3 class="company-card-title">
+
+                            ${escapeHtml(
+                                jobExperience.company_name
+                                ||
+                                `会社 ${companyIndex + 1}`
+                            )}
+
+                        </h3>
+
+                        <p class="company-card-description">
+                            会社での在籍情報と、
+                            その中で経験したRoleを
+                            分けて登録します。
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <input
+                    type="hidden"
+                    name="
+                        job_experiences[${companyIndex}]
+                        [id]
+                    "
+                    value="${escapeHtml(
+                        jobExperience.id
+                        ||
+                        ''
+                    )}"
+                >
+
+
+                <div class="company-fields">
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="text"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [company_name]
+                            "
+                            value="${escapeHtml(
+                                jobExperience.company_name
+                                ||
+                                ''
+                            )}"
+                            placeholder=" "
+                            required
+                        >
+
+                        <label>
+                            会社名
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <select
+                            name="
+                                job_experiences[${companyIndex}]
+                                [industry]
+                            "
+                        >
+
+                            <option value="">
+                            </option>
+
+                            ${createOptions(
+                                industryOptions,
+                                jobExperience.industry
+                            )}
+
+                        </select>
+
+                        <label>
+                            業界
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="date"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [work_start_period]
+                            "
+                            value="${escapeHtml(
+                                normalizeDateForInput(
+                                    jobExperience
+                                        .work_start_period
+                                )
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            入社日
+                        </label>
+
+                    </div>
+
+
+                    <div class="floating-label">
+
+                        <input
+                            type="date"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [work_end_period]
+                            "
+                            value="${escapeHtml(
+                                normalizeDateForInput(
+                                    jobExperience
+                                        .work_end_period
+                                )
+                            )}"
+                            placeholder=" "
+                        >
+
+                        <label>
+                            退社日
+                        </label>
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    class="
+                        checkbox-group
+                        company-private-field
+                    "
+                >
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            name="
+                                job_experiences[${companyIndex}]
+                                [is_private]
+                            "
+                            ${
+                                jobExperience
+                                    .is_private
+
+                                    ? 'checked'
+                                    : ''
+                            }
+                        >
+
+                        この会社名を非公開にする
+
+                    </label>
+
+                </div>
+
+
+                <div class="roles-section">
+
+                    <div class="roles-section-header">
+
+                        <div>
+
+                            <p class="roles-section-kicker">
+                                ROLE HISTORY
+                            </p>
+
+                            <h4>
+                                この会社で経験したRole
+                            </h4>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="add-role-button"
+                        >
+                            ＋ Roleを追加
+                        </button>
+
+                    </div>
+
+
+                    <div class="roles-container">
+                    </div>
+
+                </div>
+
+            `;
+
+
+            companyCard
+                .querySelectorAll(
+                    '[name]'
+                )
+                .forEach(
+                    element => {
+
+                        element.name =
+                            element.name
+                                .replace(
+                                    /\s+/g,
+                                    ''
+                                );
+
+                    }
+                );
+
+
+            const rolesContainer =
+                companyCard
+                    .querySelector(
+                        '.roles-container'
+                    );
+
+
+            const roles =
+                getRolesForDisplay(
+                    jobExperience
+                );
+
+
+            roles.forEach(
+                (
+                    role,
+                    roleIndex
+                ) => {
 
                     rolesContainer
                         .appendChild(
@@ -2356,66 +3940,191 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 roleIndex,
 
-                                {
-
-                                    start_period:
-                                        companyStartDate,
-
-                                    end_period:
-                                        companyEndDate,
-
-                                    display_order:
-                                        roleIndex + 1
-
-                                }
+                                role
 
                             )
 
                         );
 
-
-                    setReadOnly(false);
-
                 }
             );
 
 
-        const companyNameInput =
-            companyCard
-                .querySelector(
+            const addRoleButton =
+                companyCard
+                    .querySelector(
+                        '.add-role-button'
+                    );
 
-                    `input[name="`
-                    + `job_experiences`
-                    + `[${companyIndex}]`
-                    + `[company_name]`
-                    + `"]`
 
+            addRoleButton
+                .addEventListener(
+                    'click',
+                    function () {
+
+                        const roleIndex =
+                            rolesContainer
+                                .querySelectorAll(
+                                    '.role-card'
+                                )
+                                .length;
+
+
+                        const companyStartDate =
+
+                            companyCard
+                                .querySelector(
+
+                                    `input[name="`
+                                    +
+                                    `job_experiences`
+                                    +
+                                    `[${companyIndex}]`
+                                    +
+                                    `[work_start_period]`
+                                    +
+                                    `"]`
+
+                                )
+                                ?.value
+                            ||
+                            '';
+
+
+                        const companyEndDate =
+
+                            companyCard
+                                .querySelector(
+
+                                    `input[name="`
+                                    +
+                                    `job_experiences`
+                                    +
+                                    `[${companyIndex}]`
+                                    +
+                                    `[work_end_period]`
+                                    +
+                                    `"]`
+
+                                )
+                                ?.value
+                            ||
+                            '';
+
+
+                        rolesContainer
+                            .appendChild(
+
+                                createRoleCard(
+
+                                    companyIndex,
+
+                                    roleIndex,
+
+                                    {
+
+                                        start_period:
+                                            companyStartDate,
+
+                                        end_period:
+                                            companyEndDate,
+
+                                        display_order:
+                                            roleIndex + 1
+
+                                    }
+
+                                )
+
+                            );
+
+
+                        setReadOnly(
+                            false
+                        );
+
+                    }
                 );
 
 
-        const companyTitle =
-            companyCard
-                .querySelector(
-                    '.company-card-title'
+            const companyNameInput =
+                companyCard
+                    .querySelector(
+
+                        `input[name="`
+                        +
+                        `job_experiences`
+                        +
+                        `[${companyIndex}]`
+                        +
+                        `[company_name]`
+                        +
+                        `"]`
+
+                    );
+
+
+            const companyTitle =
+                companyCard
+                    .querySelector(
+                        '.company-card-title'
+                    );
+
+
+            if (
+                companyNameInput
+                &&
+                companyTitle
+            ) {
+
+                companyNameInput
+                    .addEventListener(
+                        'input',
+                        function () {
+
+                            companyTitle
+                                .textContent =
+
+                                    this.value
+                                        .trim()
+
+                                    ||
+
+                                    `会社 ${companyIndex + 1}`;
+
+                        }
+                    );
+
+            }
+
+
+            jobExperiencesContainer
+                .appendChild(
+                    companyCard
                 );
+
+
+            companyIndexCounter +=
+                1;
+
+
+            setReadOnly(
+                !isEditing
+            );
+
+        }
 
 
         if (
-            companyNameInput
-            && companyTitle
+            addJobExperienceButton
         ) {
 
-            companyNameInput
+            addJobExperienceButton
                 .addEventListener(
-                    'input',
+                    'click',
                     function () {
 
-                        companyTitle
-                            .textContent =
-
-                                this.value.trim()
-
-                                || `会社 ${companyIndex + 1}`;
+                        createCompanyCard();
 
                     }
                 );
@@ -2423,1261 +4132,1370 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        jobExperiencesContainer
-            .appendChild(
-                companyCard
-            );
 
+        /* ============================================================
+           16. COLLECT ROLE
+           ============================================================ */
 
-        companyIndexCounter += 1;
+        function collectRoleHistories(
+            companyCard,
+            companyIndex
+        ) {
 
+            const roles =
+                [];
 
-        setReadOnly(
-            !isEditing
-        );
 
-    }
+            companyCard
+                .querySelectorAll(
+                    '.role-card'
+                )
+                .forEach(
+                    (
+                        roleCard,
+                        roleIndex
+                    ) => {
 
+                        const prefix =
 
+                            `job_experiences`
+                            +
+                            `[${companyIndex}]`
+                            +
+                            `[role_histories]`
+                            +
+                            `[${roleIndex}]`;
 
-    if (
-        addJobExperienceButton
-    ) {
 
-        addJobExperienceButton
-            .addEventListener(
-                'click',
-                function () {
+                        const role = {
 
-                    createCompanyCard();
+                            id:
 
-                }
-            );
+                                roleCard
+                                    .querySelector(
 
-    }
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[id]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
+                                ||
 
-    // ============================================================
-    // 15. Roleデータ収集
-    // ============================================================
+                                null,
 
-    function collectRoleHistories(
-        companyCard,
-        companyIndex
-    ) {
 
-        const roles = [];
+                            department:
 
+                                roleCard
+                                    .querySelector(
 
-        companyCard
-            .querySelectorAll(
-                '.role-card'
-            )
-            .forEach(
-                (
-                    roleCard,
-                    roleIndex
-                ) => {
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[department]`
+                                        +
+                                        `"]`
 
-                    const prefix =
-                        `job_experiences`
-                        + `[${companyIndex}]`
-                        + `[role_histories]`
-                        + `[${roleIndex}]`;
+                                    )
+                                    ?.value
 
+                                ||
 
-                    const role = {
+                                '',
 
-                        id:
-                            roleCard
-                                .querySelector(
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[id]`
-                                    + `"]`
+                            position:
 
-                                )
-                                ?.value
-                            || null,
+                                roleCard
+                                    .querySelector(
 
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[position]`
+                                        +
+                                        `"]`
 
-                        department:
-                            roleCard
-                                .querySelector(
+                                    )
+                                    ?.value
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[department]`
-                                    + `"]`
+                                ||
 
-                                )
-                                ?.value
-                            || '',
+                                '',
 
 
-                        position:
-                            roleCard
-                                .querySelector(
+                            job_category:
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[position]`
-                                    + `"]`
+                                roleCard
+                                    .querySelector(
 
-                                )
-                                ?.value
-                            || '',
+                                        `select[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[job_category]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
-                        job_category:
-                            roleCard
-                                .querySelector(
+                                ||
 
-                                    `select[name="`
-                                    + `${prefix}`
-                                    + `[job_category]`
-                                    + `"]`
+                                '',
 
-                                )
-                                ?.value
-                            || '',
 
+                            job_sub_category:
 
-                        job_sub_category:
-                            roleCard
-                                .querySelector(
+                                roleCard
+                                    .querySelector(
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[job_sub_category]`
-                                    + `"]`
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[job_sub_category]`
+                                        +
+                                        `"]`
 
-                                )
-                                ?.value
-                            || '',
+                                    )
+                                    ?.value
 
+                                ||
 
-                        role_description:
-                            roleCard
-                                .querySelector(
+                                '',
 
-                                    `textarea[name="`
-                                    + `${prefix}`
-                                    + `[role_description]`
-                                    + `"]`
 
-                                )
-                                ?.value
-                            || '',
+                            role_description:
 
+                                roleCard
+                                    .querySelector(
 
-                        start_period:
-                            roleCard
-                                .querySelector(
+                                        `textarea[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[role_description]`
+                                        +
+                                        `"]`
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[start_period]`
-                                    + `"]`
+                                    )
+                                    ?.value
 
-                                )
-                                ?.value
-                            || '',
+                                ||
 
+                                '',
 
-                        end_period:
-                            roleCard
-                                .querySelector(
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[end_period]`
-                                    + `"]`
+                            start_period:
 
-                                )
-                                ?.value
-                            || '',
+                                roleCard
+                                    .querySelector(
 
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[start_period]`
+                                        +
+                                        `"]`
 
-                        salary_range:
-                            roleCard
-                                .querySelector(
+                                    )
+                                    ?.value
 
-                                    `select[name="`
-                                    + `${prefix}`
-                                    + `[salary_range]`
-                                    + `"]`
+                                ||
 
-                                )
-                                ?.value
-                            || '',
+                                '',
 
 
-                        satisfaction_level:
-                            roleCard
-                                .querySelector(
+                            end_period:
 
-                                    `select[name="`
-                                    + `${prefix}`
-                                    + `[satisfaction_level]`
-                                    + `"]`
+                                roleCard
+                                    .querySelector(
 
-                                )
-                                ?.value
-                            || '',
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[end_period]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
-                        work_style:
-                            roleCard
-                                .querySelector(
+                                ||
 
-                                    `select[name="`
-                                    + `${prefix}`
-                                    + `[work_style]`
-                                    + `"]`
+                                '',
 
-                                )
-                                ?.value
-                            || '',
 
+                            salary_range:
 
-                        display_order:
-                            roleIndex + 1
+                                roleCard
+                                    .querySelector(
 
-                    };
+                                        `select[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[salary_range]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
-                    const hasRoleContent = [
+                                ||
 
-                        role.id,
-                        role.department,
-                        role.position,
-                        role.job_category,
-                        role.job_sub_category,
-                        role.role_description,
-                        role.start_period,
-                        role.end_period,
-                        role.salary_range,
-                        role.satisfaction_level,
-                        role.work_style
+                                '',
 
-                    ].some(
-                        value =>
-                            value !== null
-                            && String(value)
-                                .trim()
-                                !== ''
-                    );
 
+                            satisfaction_level:
 
-                    if (hasRoleContent) {
+                                roleCard
+                                    .querySelector(
 
-                        roles.push(role);
+                                        `select[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[satisfaction_level]`
+                                        +
+                                        `"]`
 
-                    }
+                                    )
+                                    ?.value
 
-                }
-            );
+                                ||
 
+                                '',
 
-        return roles;
 
-    }
+                            work_style:
 
+                                roleCard
+                                    .querySelector(
 
+                                        `select[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[work_style]`
+                                        +
+                                        `"]`
 
-    // ============================================================
-    // 16. Companyデータ収集
-    // ============================================================
+                                    )
+                                    ?.value
 
-    function collectJobExperiences() {
+                                ||
 
-        const jobExperiences =
-            [];
+                                '',
 
 
-        document
-            .querySelectorAll(
-                '.company-card'
-            )
-            .forEach(
-                companyCard => {
+                            display_order:
+                                roleIndex
+                                +
+                                1
 
-                    const companyIndex =
-                        companyCard.dataset.index;
+                        };
 
 
-                    const prefix =
-                        `job_experiences`
-                        + `[${companyIndex}]`;
+                        const hasContent = [
 
+                            role.id,
 
-                    const roleHistories =
-                        collectRoleHistories(
-                            companyCard,
-                            companyIndex
+                            role.department,
+
+                            role.position,
+
+                            role.job_category,
+
+                            role.job_sub_category,
+
+                            role.role_description,
+
+                            role.start_period,
+
+                            role.end_period,
+
+                            role.salary_range,
+
+                            role.satisfaction_level,
+
+                            role.work_style
+
+                        ].some(
+                            hasValue
                         );
 
 
-                    const primaryRole =
-                        roleHistories[0]
-                        || {};
+                        if (
+                            hasContent
+                        ) {
+
+                            roles.push(
+                                role
+                            );
+
+                        }
+
+                    }
+                );
 
 
-                    const experience = {
+            return roles;
 
-                        id:
-                            companyCard
-                                .querySelector(
-
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[id]`
-                                    + `"]`
-
-                                )
-                                ?.value
-                            || null,
+        }
 
 
-                        company_name:
-                            companyCard
-                                .querySelector(
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[company_name]`
-                                    + `"]`
+        /* ============================================================
+           17. COLLECT COMPANIES
+           ============================================================ */
 
-                                )
-                                ?.value
-                            || '',
+        function collectJobExperiences() {
+
+            const jobExperiences =
+                [];
 
 
-                        industry:
-                            companyCard
-                                .querySelector(
+            document
+                .querySelectorAll(
+                    '.company-card'
+                )
+                .forEach(
+                    companyCard => {
 
-                                    `select[name="`
-                                    + `${prefix}`
-                                    + `[industry]`
-                                    + `"]`
-
-                                )
-                                ?.value
-                            || '',
+                        const companyIndex =
+                            companyCard.dataset
+                                .index;
 
 
-                        work_start_period:
-                            companyCard
-                                .querySelector(
+                        const prefix =
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[work_start_period]`
-                                    + `"]`
-
-                                )
-                                ?.value
-                            || '',
+                            `job_experiences`
+                            +
+                            `[${companyIndex}]`;
 
 
-                        work_end_period:
-                            companyCard
-                                .querySelector(
+                        const roleHistories =
+                            collectRoleHistories(
 
-                                    `input[name="`
-                                    + `${prefix}`
-                                    + `[work_end_period]`
-                                    + `"]`
+                                companyCard,
 
-                                )
-                                ?.value
-                            || '',
+                                companyIndex
+
+                            );
 
 
-                        is_private:
-                            Boolean(
+                        const primaryRole =
+                            roleHistories[0]
+                            ||
+                            {};
+
+
+                        const experience = {
+
+                            id:
 
                                 companyCard
                                     .querySelector(
 
                                         `input[name="`
-                                        + `${prefix}`
-                                        + `[is_private]`
-                                        + `"]`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[id]`
+                                        +
+                                        `"]`
 
                                     )
-                                    ?.checked
+                                    ?.value
 
-                            ),
+                                ||
 
-
-                        role_histories:
-                            roleHistories,
+                                null,
 
 
-                        /*
-                         * 旧API互換
-                         */
+                            company_name:
 
-                        position:
-                            primaryRole.position
-                            || '',
+                                companyCard
+                                    .querySelector(
 
-                        salary:
-                            primaryRole.salary_range
-                            || '',
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[company_name]`
+                                        +
+                                        `"]`
 
-                        job_category:
-                            primaryRole.job_category
-                            || '',
+                                    )
+                                    ?.value
 
-                        job_sub_category:
-                            primaryRole.job_sub_category
-                            || '',
+                                ||
 
-                        satisfaction_level:
-                            primaryRole.satisfaction_level
-                            || ''
-
-                    };
+                                '',
 
 
-                    const hasCompanyContent = [
+                            industry:
 
-                        experience.id,
-                        experience.company_name,
-                        experience.industry,
-                        experience.work_start_period,
-                        experience.work_end_period,
-                        roleHistories.length > 0
+                                companyCard
+                                    .querySelector(
 
-                    ].some(Boolean);
+                                        `select[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[industry]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
-                    if (
-                        hasCompanyContent
-                    ) {
+                                ||
 
-                        jobExperiences
-                            .push(
-                                experience
-                            );
-
-                    }
-
-                }
-            );
+                                '',
 
 
-        return jobExperiences;
+                            work_start_period:
 
-    }
+                                companyCard
+                                    .querySelector(
 
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[work_start_period]`
+                                        +
+                                        `"]`
 
+                                    )
+                                    ?.value
 
-    // ============================================================
-    // 17. APIデータ → フォーム
-    // ============================================================
+                                ||
 
-    function populateForm(data) {
-
-        // ------------------------
-        // 基本情報
-        // ------------------------
-
-        setValue(
-            'username',
-            data.username
-        );
-
-        setValue(
-            'email',
-            data.email
-        );
-
-        setValue(
-            'family_name',
-            data.family_name
-        );
-
-        setValue(
-            'given_name',
-            data.given_name
-        );
-
-        setValue(
-            'birthdate',
-            normalizeDateForInput(
-                data.birthdate
-            )
-        );
-
-        setValue(
-            'gender',
-            data.gender
-        );
+                                '',
 
 
-        const newsletter =
-            document.getElementById(
-                'newsletter_subscription'
-            );
+                            work_end_period:
+
+                                companyCard
+                                    .querySelector(
+
+                                        `input[name="`
+                                        +
+                                        `${prefix}`
+                                        +
+                                        `[work_end_period]`
+                                        +
+                                        `"]`
+
+                                    )
+                                    ?.value
+
+                                ||
+
+                                '',
 
 
-        if (newsletter) {
+                            is_private:
 
-            newsletter.checked =
-                Boolean(
-                    data.newsletter_subscription
-                );
+                                Boolean(
 
-        }
+                                    companyCard
+                                        .querySelector(
 
+                                            `input[name="`
+                                            +
+                                            `${prefix}`
+                                            +
+                                            `[is_private]`
+                                            +
+                                            `"]`
 
-        // ------------------------
-        // 学歴
-        // ------------------------
+                                        )
+                                        ?.checked
 
-        setValue(
-            'institution',
-            data.institution
-        );
-
-        setValue(
-            'degree',
-            data.degree
-        );
-
-        setValue(
-            'major',
-            data.major
-        );
-
-        setValue(
-            'education_start',
-            normalizeDateForInput(
-                data.education_start
-            )
-        );
-
-        setValue(
-            'education_end',
-            normalizeDateForInput(
-                data.education_end
-            )
-        );
-
-        setValue(
-            'education_id',
-            data.education_id
-        );
+                                ),
 
 
-        const hideInstitution =
-            document.getElementById(
-                'hide_institution'
-            );
+                            role_histories:
+                                roleHistories,
 
 
-        if (hideInstitution) {
+                            /*
+                             * API旧形式互換。
+                             */
+                            position:
+                                primaryRole.position
+                                ||
+                                '',
 
-            hideInstitution.checked =
-                Boolean(
-                    data.hide_institution
-                );
+                            salary:
+                                primaryRole.salary_range
+                                ||
+                                '',
 
-        }
+                            job_category:
+                                primaryRole.job_category
+                                ||
+                                '',
+
+                            job_sub_category:
+                                primaryRole.job_sub_category
+                                ||
+                                '',
+
+                            satisfaction_level:
+                                primaryRole.satisfaction_level
+                                ||
+                                ''
+
+                        };
 
 
-        // ------------------------
-        // 会社・Role
-        // ------------------------
+                        const hasContent = [
 
-        jobExperiencesContainer
-            .innerHTML =
-                '';
+                            experience.id,
 
+                            experience.company_name,
 
-        companyIndexCounter =
-            0;
+                            experience.industry,
 
+                            experience.work_start_period,
 
-        if (
-            Array.isArray(
-                data.job_experiences
-            )
-        ) {
+                            experience.work_end_period,
 
-            data.job_experiences
-                .forEach(
-                    jobExperience => {
+                            roleHistories.length
+                            >
+                            0
 
-                        createCompanyCard(
-                            jobExperience
+                        ].some(
+                            Boolean
                         );
 
-                    }
-                );
 
-        }
+                        if (
+                            hasContent
+                        ) {
 
-
-        // ------------------------
-        // Future
-        // ------------------------
-
-        setValue(
-            'career_type',
-            data.career_type
-        );
-
-        setValue(
-            'career_description',
-            data.career_description
-        );
-
-        setValue(
-            'career_aspirations_id',
-            data.career_aspirations_id
-        );
-
-        setValue(
-            'career_satisfaction_feedback',
-            data.career_satisfaction_feedback
-        );
-
-
-        // ------------------------
-        // Start Point
-        // ------------------------
-
-        setValue(
-            'start_point_id',
-            data.start_point_id
-        );
-
-        setValue(
-            'start_reason',
-            data.start_reason
-        );
-
-        setValue(
-            'first_job_feedback',
-            data.first_job_feedback
-        );
-
-
-        // ------------------------
-        // Turning Point
-        // ------------------------
-
-        setValue(
-            'transition_id',
-            data.transition_id
-        );
-
-        setValue(
-            'transition_type',
-            data.transition_type
-        );
-
-        setValue(
-            'transition_story',
-            data.transition_story
-        );
-
-        setValue(
-            'reason_for_job_change',
-            data.reason_for_job_change
-        );
-
-        setValue(
-            'job_experience_feedback',
-            data.job_experience_feedback
-        );
-
-
-        // ------------------------
-        // Achievement
-        // ------------------------
-
-        setValue(
-            'achievement_id',
-            data.achievement_id
-        );
-
-        setValue(
-            'proudest_achievement',
-            data.proudest_achievement
-        );
-
-        setValue(
-            'failure_experience',
-            data.failure_experience
-        );
-
-        setValue(
-            'lesson_learned',
-            data.lesson_learned
-        );
-
-        setValue(
-            'concerns',
-            data.concerns
-        );
-
-
-        // ------------------------
-        // Growth
-        // ------------------------
-
-        setValue(
-            'skill',
-            data.skill
-        );
-
-        setValue(
-            'growth_description',
-            data.growth_description
-        );
-
-        setValue(
-            'growth_id',
-            data.growth_id
-        );
-
-
-        // ====================================================
-        // Career GPS表示を生成
-        // ====================================================
-
-        updateCareerSnapshot(data);
-
-        renderCareerJourney(data);
-
-        renderFutureCareer(data);
-
-
-        setReadOnly(true);
-
-        updateEditorButtons();
-
-    }
-
-
-
-    // ============================================================
-    // 18. 保存データ作成
-    // ============================================================
-
-    function buildRequestData() {
-
-        const formData =
-            new FormData(form);
-
-
-        return {
-
-            username:
-                formData.get(
-                    'username'
-                )
-                || '',
-
-
-            email:
-                formData.get(
-                    'email'
-                )
-                || '',
-
-
-            family_name:
-                formData.get(
-                    'family_name'
-                )
-                || '',
-
-
-            given_name:
-                formData.get(
-                    'given_name'
-                )
-                || '',
-
-
-            birthdate:
-                formData.get(
-                    'birthdate'
-                )
-                || '',
-
-
-            gender:
-                getValue(
-                    '#gender'
-                ),
-
-
-            newsletter_subscription:
-                getChecked(
-                    '#newsletter_subscription'
-                ),
-
-
-            institution:
-                formData.get(
-                    'institution'
-                )
-                || '',
-
-
-            hide_institution:
-                getChecked(
-                    '#hide_institution'
-                ),
-
-
-            degree:
-                formData.get(
-                    'degree'
-                )
-                || '',
-
-
-            major:
-                formData.get(
-                    'major'
-                )
-                || '',
-
-
-            education_start:
-                formData.get(
-                    'education_start'
-                )
-                || '',
-
-
-            education_end:
-                formData.get(
-                    'education_end'
-                )
-                || '',
-
-
-            education_id:
-                formData.get(
-                    'education_id'
-                )
-                || '',
-
-
-            job_experiences:
-                collectJobExperiences(),
-
-
-            career_type:
-                getValue(
-                    '#career_type'
-                ),
-
-
-            career_description:
-                formData.get(
-                    'career_description'
-                )
-                || '',
-
-
-            career_satisfaction_feedback:
-                formData.get(
-                    'career_satisfaction_feedback'
-                )
-                || '',
-
-
-            career_aspirations_id:
-                formData.get(
-                    'career_aspirations_id'
-                )
-                || '',
-
-
-            start_point_id:
-                formData.get(
-                    'start_point_id'
-                )
-                || '',
-
-
-            start_reason:
-                formData.get(
-                    'start_reason'
-                )
-                || '',
-
-
-            first_job_feedback:
-                formData.get(
-                    'first_job_feedback'
-                )
-                || '',
-
-
-            transition_id:
-                formData.get(
-                    'transition_id'
-                )
-                || '',
-
-
-            transition_type:
-                getValue(
-                    '#transition_type'
-                ),
-
-
-            transition_story:
-                formData.get(
-                    'transition_story'
-                )
-                || '',
-
-
-            reason_for_job_change:
-                formData.get(
-                    'reason_for_job_change'
-                )
-                || '',
-
-
-            job_experience_feedback:
-                formData.get(
-                    'job_experience_feedback'
-                )
-                || '',
-
-
-            achievement_id:
-                formData.get(
-                    'achievement_id'
-                )
-                || '',
-
-
-            proudest_achievement:
-                formData.get(
-                    'proudest_achievement'
-                )
-                || '',
-
-
-            failure_experience:
-                formData.get(
-                    'failure_experience'
-                )
-                || '',
-
-
-            lesson_learned:
-                formData.get(
-                    'lesson_learned'
-                )
-                || '',
-
-
-            concerns:
-                formData.get(
-                    'concerns'
-                )
-                || '',
-
-
-            skill:
-                formData.get(
-                    'skill'
-                )
-                || '',
-
-
-            growth_description:
-                formData.get(
-                    'growth_description'
-                )
-                || '',
-
-
-            growth_id:
-                formData.get(
-                    'growth_id'
-                )
-                || ''
-
-        };
-
-    }
-
-
-
-    // ============================================================
-    // 19. 折りたたみ
-    // ============================================================
-
-    function initializeCollapsible() {
-
-        document
-            .querySelectorAll(
-                '.toggle-btn'
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        'click',
-                        function () {
-
-                            const block =
-                                this.closest(
-                                    '.collapsible-block'
+                            jobExperiences
+                                .push(
+                                    experience
                                 );
-
-
-                            if (!block) {
-                                return;
-                            }
-
-
-                            const details =
-                                block.querySelector(
-                                    '.collapsible-details'
-                                );
-
-
-                            if (!details) {
-                                return;
-                            }
-
-
-                            details.style.display =
-
-                                details.style.display
-                                    === 'block'
-
-                                    ? 'none'
-
-                                    : 'block';
 
                         }
-                    );
-
-                }
-            );
-
-    }
-
-
-
-    // ============================================================
-    // 20. 保存
-    // ============================================================
-
-    async function saveProfile(
-        baseUrl,
-        event
-    ) {
-
-        event.preventDefault();
-
-
-        if (isSaving) {
-            return;
-        }
-
-
-        const optionalRequired = [
-
-            document.getElementById(
-                'career_type'
-            ),
-
-            document.getElementById(
-                'transition_type'
-            )
-
-        ];
-
-
-        optionalRequired
-            .forEach(
-                element => {
-
-                    if (!element) {
-                        return;
-                    }
-
-
-                    element.dataset.wasRequired =
-                        String(
-                            element.required
-                        );
-
-
-                    element.required =
-                        false;
-
-                }
-            );
-
-
-        const isValid =
-            form.reportValidity();
-
-
-        optionalRequired
-            .forEach(
-                element => {
-
-                    if (
-                        element
-                        && element.dataset
-                            .wasRequired
-                            === 'true'
-                    ) {
-
-                        element.required =
-                            true;
 
                     }
-
-                }
-            );
-
-
-        if (!isValid) {
-            return;
-        }
-
-
-        const requestData =
-            buildRequestData();
-
-
-        try {
-
-            setSavingState(true);
-
-
-            const response =
-                await fetch(
-
-                    `${baseUrl}`
-                    + `/update-user-info/`,
-
-                    {
-
-                        method:
-                            'POST',
-
-                        headers: {
-
-                            'Content-Type':
-                                'application/json'
-
-                        },
-
-                        body:
-                            JSON.stringify(
-                                requestData
-                            ),
-
-                        credentials:
-                            'include'
-
-                    }
-
                 );
 
 
-            const responseData =
-                await response
-                    .json()
-                    .catch(
-                        () => ({})
+            return jobExperiences;
+
+        }
+
+
+
+        /* ============================================================
+           18. POPULATE FORM
+           ============================================================ */
+
+        function populateForm(
+            data,
+            renderPage = true
+        ) {
+
+            if (!data) {
+                return;
+            }
+
+
+            /* --------------------------------------------------------
+               Basic
+               -------------------------------------------------------- */
+
+            setValue(
+                'username',
+                data.username
+            );
+
+
+            setValue(
+                'email',
+                data.email
+            );
+
+
+            setValue(
+                'family_name',
+                data.family_name
+            );
+
+
+            setValue(
+                'given_name',
+                data.given_name
+            );
+
+
+            setValue(
+                'birthdate',
+                normalizeDateForInput(
+                    data.birthdate
+                )
+            );
+
+
+            setValue(
+                'gender',
+                data.gender
+            );
+
+
+            const newsletter =
+                document.getElementById(
+                    'newsletter_subscription'
+                );
+
+
+            if (
+                newsletter
+            ) {
+
+                newsletter.checked =
+                    Boolean(
+                        data.newsletter_subscription
                     );
 
+            }
 
-            if (!response.ok) {
 
-                throw new Error(
+            /* --------------------------------------------------------
+               Education
+               -------------------------------------------------------- */
 
-                    responseData.detail
+            setValue(
+                'institution',
+                data.institution
+            );
 
-                    || responseData.message
 
-                    || 'プロフィールを保存できませんでした。'
+            setValue(
+                'degree',
+                data.degree
+            );
 
+
+            setValue(
+                'major',
+                data.major
+            );
+
+
+            setValue(
+                'education_start',
+                normalizeDateForInput(
+                    data.education_start
+                )
+            );
+
+
+            setValue(
+                'education_end',
+                normalizeDateForInput(
+                    data.education_end
+                )
+            );
+
+
+            setValue(
+                'education_id',
+                data.education_id
+            );
+
+
+            const hideInstitution =
+                document.getElementById(
+                    'hide_institution'
+                );
+
+
+            if (
+                hideInstitution
+            ) {
+
+                hideInstitution.checked =
+                    Boolean(
+                        data.hide_institution
+                    );
+
+            }
+
+
+            /* --------------------------------------------------------
+               Companies
+               -------------------------------------------------------- */
+
+            if (
+                jobExperiencesContainer
+            ) {
+
+                jobExperiencesContainer
+                    .innerHTML =
+                        '';
+
+
+                companyIndexCounter =
+                    0;
+
+
+                if (
+                    Array.isArray(
+                        data.job_experiences
+                    )
+                ) {
+
+                    data.job_experiences
+                        .forEach(
+                            jobExperience => {
+
+                                createCompanyCard(
+                                    jobExperience
+                                );
+
+                            }
+                        );
+
+                }
+
+            }
+
+
+            /* --------------------------------------------------------
+               Current / Future
+               -------------------------------------------------------- */
+
+            const currentView =
+                data.current_career_view_detail
+                ||
+                {};
+
+
+            setValue(
+
+                'career_satisfaction_feedback',
+
+                normalizeText(
+                    currentView.current_career_view
+                )
+
+                ||
+
+                normalizeText(
+                    data.career_satisfaction_feedback
+                )
+
+            );
+
+
+            setValue(
+
+                'concerns',
+
+                normalizeText(
+                    currentView.current_concerns
+                )
+
+                ||
+
+                normalizeText(
+                    data.concerns
+                )
+
+            );
+
+
+            setValue(
+
+                'career_type',
+
+                normalizeText(
+                    currentView.desired_direction
+                )
+
+                ||
+
+                normalizeText(
+                    data.career_type
+                )
+
+            );
+
+
+            setValue(
+
+                'career_description',
+
+                normalizeText(
+                    currentView.future_goals
+                )
+
+                ||
+
+                normalizeText(
+                    data.career_description
+                )
+
+            );
+
+
+            setValue(
+                'desired_role',
+                currentView.desired_role
+            );
+
+
+            setValue(
+                'skills_to_develop',
+                currentView.skills_to_develop
+            );
+
+
+            setValue(
+                'environment_to_avoid',
+                currentView.environment_to_avoid
+            );
+
+
+            setValue(
+                'five_year_goal',
+                currentView.five_year_goal
+            );
+
+
+            setValue(
+                'career_aspirations_id',
+                currentView.id
+                ||
+                data.career_aspirations_id
+                ||
+                ''
+            );
+
+
+            if (
+                renderPage
+            ) {
+
+                renderCurrentPosition(
+                    data
+                );
+
+
+                renderCurrentCrossroad(
+                    data
+                );
+
+
+                renderDecisionPreview(
+                    data
+                );
+
+
+                renderCareerJourney(
+                    data
+                );
+
+
+                renderNextDirection(
+                    data
                 );
 
             }
 
 
-            alert(
-                'Career GPSを更新しました。'
+            setReadOnly(
+                true
             );
 
 
-            window.location.reload();
-
-
-        } catch (error) {
-
-            console.error(
-                'Career GPS保存エラー:',
-                error
-            );
-
-
-            alert(
-
-                error.message
-
-                || '保存中にエラーが発生しました。'
-
-            );
-
-
-        } finally {
-
-            setSavingState(false);
+            updateEditorButtons();
 
         }
 
-    }
+
+
+        /* ============================================================
+           19. REQUEST DATA
+           ============================================================ */
+
+        function buildRequestData() {
+
+            const formData =
+                new FormData(
+                    form
+                );
+
+
+            const concern =
+                formData.get(
+                    'concerns'
+                )
+                ||
+                '';
+
+
+            const currentCareerView =
+                formData.get(
+                    'career_satisfaction_feedback'
+                )
+                ||
+                '';
+
+
+            const desiredDirection =
+                getValue(
+                    '#career_type'
+                );
+
+
+            const futureGoals =
+                formData.get(
+                    'career_description'
+                )
+                ||
+                '';
+
+
+            return {
+
+                username:
+                    formData.get(
+                        'username'
+                    )
+                    ||
+                    '',
+
+
+                email:
+                    formData.get(
+                        'email'
+                    )
+                    ||
+                    '',
+
+
+                family_name:
+                    formData.get(
+                        'family_name'
+                    )
+                    ||
+                    '',
+
+
+                given_name:
+                    formData.get(
+                        'given_name'
+                    )
+                    ||
+                    '',
+
+
+                birthdate:
+                    formData.get(
+                        'birthdate'
+                    )
+                    ||
+                    '',
+
+
+                gender:
+                    getValue(
+                        '#gender'
+                    ),
+
+
+                newsletter_subscription:
+                    getChecked(
+                        '#newsletter_subscription'
+                    ),
+
+
+                institution:
+                    formData.get(
+                        'institution'
+                    )
+                    ||
+                    '',
+
+
+                hide_institution:
+                    getChecked(
+                        '#hide_institution'
+                    ),
+
+
+                degree:
+                    formData.get(
+                        'degree'
+                    )
+                    ||
+                    '',
+
+
+                major:
+                    formData.get(
+                        'major'
+                    )
+                    ||
+                    '',
+
+
+                education_start:
+                    formData.get(
+                        'education_start'
+                    )
+                    ||
+                    '',
+
+
+                education_end:
+                    formData.get(
+                        'education_end'
+                    )
+                    ||
+                    '',
+
+
+                education_id:
+                    formData.get(
+                        'education_id'
+                    )
+                    ||
+                    '',
+
+
+                job_experiences:
+                    collectJobExperiences(),
+
+
+                /*
+                 * ----------------------------------------------------
+                 * 現行API互換フィールド
+                 * ----------------------------------------------------
+                 */
+
+                career_satisfaction_feedback:
+                    currentCareerView,
+
+
+                career_type:
+                    desiredDirection,
+
+
+                career_description:
+                    futureGoals,
+
+
+                career_aspirations_id:
+                    formData.get(
+                        'career_aspirations_id'
+                    )
+                    ||
+                    '',
+
+
+                /*
+                 * 旧update_user_info.pyでもconcernsは保存できるため
+                 * backend切替まで維持。
+                 */
+                concerns:
+                    concern,
+
+
+                /*
+                 * ----------------------------------------------------
+                 * 新current_career_views正式フィールド
+                 *
+                 * 次にupdate_user_info.pyを対応させる。
+                 * 現在のAPIでは未知フィールドは無視されるため、
+                 * 先にfrontendを入れても既存処理は壊さない。
+                 * ----------------------------------------------------
+                 */
+
+                current_career_view:
+                    currentCareerView,
+
+
+                current_concerns:
+                    concern,
+
+
+                desired_direction:
+                    desiredDirection,
+
+
+                future_goals:
+                    futureGoals,
+
+
+                desired_role:
+                    formData.get(
+                        'desired_role'
+                    )
+                    ||
+                    '',
+
+
+                skills_to_develop:
+                    formData.get(
+                        'skills_to_develop'
+                    )
+                    ||
+                    '',
+
+
+                environment_to_avoid:
+                    formData.get(
+                        'environment_to_avoid'
+                    )
+                    ||
+                    '',
+
+
+                five_year_goal:
+                    formData.get(
+                        'five_year_goal'
+                    )
+                    ||
+                    ''
+
+            };
+
+        }
 
 
 
-    // ============================================================
-    // 21. 初期化
-    // ============================================================
+        /* ============================================================
+           20. SAVE
+           ============================================================ */
 
-    setReadOnly(true);
+        async function saveProfile(
+            event
+        ) {
 
-    updateEditorButtons();
-
-    initializeCollapsible();
+            event.preventDefault();
 
 
-    fetch('/get-environment')
+            if (
+                isSaving
+            ) {
 
-        .then(
-            response => {
+                return;
 
-                if (!response.ok) {
+            }
+
+
+            const careerType =
+                document.getElementById(
+                    'career_type'
+                );
+
+
+            if (
+                careerType
+            ) {
+
+                careerType.required =
+                    false;
+
+            }
+
+
+            const isValid =
+                form.reportValidity();
+
+
+            if (
+                !isValid
+            ) {
+
+                return;
+
+            }
+
+
+            const requestData =
+                buildRequestData();
+
+
+            try {
+
+                setSavingState(
+                    true
+                );
+
+
+                const response =
+                    await fetch(
+
+                        `${baseUrl}`
+                        +
+                        `/update-user-info/`,
+
+                        {
+
+                            method:
+                                'POST',
+
+                            headers: {
+
+                                'Content-Type':
+                                    'application/json'
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    requestData
+                                ),
+
+                            credentials:
+                                'include'
+
+                        }
+
+                    );
+
+
+                const responseData =
+                    await response
+                        .json()
+                        .catch(
+                            () => ({})
+                        );
+
+
+                if (
+                    response.status
+                    ===
+                    401
+                ) {
+
+                    window.location.href =
+                        'Login.html';
+
+                    return;
+
+                }
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+
+                        responseData.detail
+
+                        ||
+
+                        responseData.message
+
+                        ||
+
+                        'Career GPSを保存できませんでした。'
+
+                    );
+
+                }
+
+
+                alert(
+                    'Career GPSを更新しました。'
+                );
+
+
+                window.location.reload();
+
+
+            } catch (
+                error
+            ) {
+
+                console.error(
+                    'Career GPS保存エラー:',
+                    error
+                );
+
+
+                alert(
+
+                    error.message
+
+                    ||
+
+                    '保存中にエラーが発生しました。'
+
+                );
+
+
+            } finally {
+
+                setSavingState(
+                    false
+                );
+
+            }
+
+        }
+
+
+
+        /* ============================================================
+           21. INITIALIZE
+           ============================================================ */
+
+        async function initialize() {
+
+            setReadOnly(
+                true
+            );
+
+
+            updateEditorButtons();
+
+
+            try {
+
+                /* ----------------------------------------------------
+                   Environment
+                   ---------------------------------------------------- */
+
+                const environmentResponse =
+                    await fetch(
+                        '/get-environment',
+                        {
+                            credentials:
+                                'include'
+                        }
+                    );
+
+
+                if (
+                    !environmentResponse.ok
+                ) {
 
                     throw new Error(
                         '環境情報を取得できませんでした。'
@@ -3686,131 +5504,135 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
 
-                return response.json();
-
-            }
-        )
-
-
-        .then(
-            environmentData => {
-
-                const baseUrl =
-                    environmentData.base_url;
+                const environmentData =
+                    await environmentResponse
+                        .json();
 
 
-                // Career Decision件数
-                loadCareerDecisionCount(
-                    baseUrl
+                baseUrl =
+                    String(
+                        environmentData.base_url
+                        ||
+                        ''
+                    )
+                        .replace(
+                            /\/$/,
+                            ''
+                        );
+
+
+                /* ----------------------------------------------------
+                   User
+                   ---------------------------------------------------- */
+
+                const userResponse =
+                    await fetch(
+
+                        `${baseUrl}`
+                        +
+                        `/user-info/`
+                        +
+                        `?include_private=true`,
+
+                        {
+
+                            method:
+                                'GET',
+
+                            credentials:
+                                'include',
+
+                            headers: {
+                                Accept:
+                                    'application/json'
+                            }
+
+                        }
+
+                    );
+
+
+                if (
+                    userResponse.status
+                    ===
+                    401
+                ) {
+
+                    window.location.href =
+                        'Login.html';
+
+                    return;
+
+                }
+
+
+                if (
+                    !userResponse.ok
+                ) {
+
+                    throw new Error(
+                        'ユーザー情報を取得できませんでした。'
+                    );
+
+                }
+
+
+                const userData =
+                    await userResponse
+                        .json();
+
+
+                loadedUserData =
+                    userData;
+
+
+                populateForm(
+                    userData
                 );
 
 
-                // ----------------------------
-                // ユーザー情報
-                // ----------------------------
+                /* ----------------------------------------------------
+                   Save Buttons
+                   ---------------------------------------------------- */
 
-                return fetch(
-
-                    `${baseUrl}`
-                    + `/user-info/`
-                    + `?include_private=true`,
-
-                    {
-
-                        method:
-                            'GET',
-
-                        credentials:
-                            'include'
-
-                    }
-
-                )
-
-
-                    .then(
-                        response => {
-
-                            if (
-                                response.status
-                                === 401
-                            ) {
-
-                                window.location.href =
-                                    'Login.html';
-
-                                return null;
-
-                            }
-
-
-                            if (!response.ok) {
-
-                                throw new Error(
-                                    'ユーザー情報を取得できませんでした。'
-                                );
-
-                            }
-
-
-                            return response.json();
-
-                        }
+                [
+                    saveButtonTop,
+                    saveButtonBottom
+                ]
+                    .filter(
+                        Boolean
                     )
+                    .forEach(
+                        button => {
 
-
-                    .then(
-                        userData => {
-
-                            if (userData) {
-
-                                populateForm(
-                                    userData
-                                );
-
-                            }
-
-
-                            // -------------------------
-                            // Save button
-                            // -------------------------
-
-                            [
-                                saveButtonTop,
-                                saveButtonBottom
-                            ]
-                                .filter(Boolean)
-                                .forEach(
-                                    button => {
-
-                                        button
-                                            .addEventListener(
-                                                'click',
-                                                event => {
-
-                                                    saveProfile(
-                                                        baseUrl,
-                                                        event
-                                                    );
-
-                                                }
-                                            );
-
-                                    }
+                            button
+                                .addEventListener(
+                                    'click',
+                                    saveProfile
                                 );
 
                         }
                     );
 
-            }
-        )
+
+                if (
+                    form
+                ) {
+
+                    form.addEventListener(
+                        'submit',
+                        saveProfile
+                    );
+
+                }
 
 
-        .catch(
-            error => {
+            } catch (
+                error
+            ) {
 
                 console.error(
-                    'マイページ初期化エラー:',
+                    'My Career GPS初期化エラー:',
                     error
                 );
 
@@ -3820,6 +5642,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
             }
-        );
 
-});
+        }
+
+
+
+        initialize();
+
+    }
+);

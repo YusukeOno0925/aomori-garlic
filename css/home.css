@@ -2899,3 +2899,877 @@ body {
     }
 
 }
+
+
+
+
+/* =========================================================
+   SAME CROSSROAD
+   ========================================================= */
+
+   .home-same-crossroad-section[hidden] {
+    display:
+        none !important;
+}
+
+
+.home-same-crossroad-section {
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--gps-bg-blue) 0%,
+            var(--gps-white) 100%
+        );
+
+    border-top:
+        1px solid
+        var(--gps-line);
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+}
+
+
+/* ---------------------------------------------------------
+   Decorative background
+   --------------------------------------------------------- */
+
+.home-same-crossroad-section::before {
+    position:
+        absolute;
+
+    top:
+        -190px;
+
+    right:
+        -140px;
+
+    width:
+        430px;
+
+    height:
+        430px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29, 95, 158, 0.07) 0%,
+            rgba(29, 95, 158, 0.025) 46%,
+            rgba(29, 95, 158, 0) 72%
+        );
+
+    pointer-events:
+        none;
+
+    content:
+        '';
+}
+
+
+/* ---------------------------------------------------------
+   Heading
+   --------------------------------------------------------- */
+
+.home-same-crossroad-heading {
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    max-width:
+        760px;
+}
+
+
+.home-same-crossroad-description {
+    max-width:
+        680px !important;
+}
+
+
+.home-same-crossroad-all-link {
+    position:
+        relative;
+
+    z-index:
+        1;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.home-same-crossroad-grid {
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        18px;
+
+    width:
+        100%;
+}
+
+
+/* 2件しかない場合は広げすぎない */
+.home-same-crossroad-grid
+.home-same-crossroad-card:first-child:nth-last-child(2),
+
+.home-same-crossroad-grid
+.home-same-crossroad-card:first-child:nth-last-child(2)
+~ .home-same-crossroad-card {
+    max-width:
+        none;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.home-same-crossroad-card {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width:
+        0;
+
+    min-height:
+        310px;
+
+    padding:
+        26px
+        25px
+        23px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.96
+        );
+
+    color:
+        inherit;
+
+    text-decoration:
+        none;
+
+    box-shadow:
+        var(--gps-shadow-card);
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.home-same-crossroad-card::before {
+    position:
+        absolute;
+
+    top:
+        0;
+
+    right:
+        0;
+
+    left:
+        0;
+
+    height:
+        4px;
+
+    background:
+        var(--gps-blue-600);
+
+    content:
+        '';
+}
+
+
+.home-same-crossroad-card:hover {
+    transform:
+        translateY(-4px);
+
+    border-color:
+        var(--gps-blue-100);
+
+    box-shadow:
+        var(--gps-shadow-hover);
+}
+
+
+/* =========================================================
+   SELECTED ROUTE
+   ========================================================= */
+
+.home-same-crossroad-card__route {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    padding-bottom:
+        18px;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+}
+
+
+.home-same-crossroad-card__route-label {
+    flex:
+        0 0 auto;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.home-same-crossroad-card__route strong {
+    min-width:
+        0;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    text-align:
+        right;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* ---------------------------------------------------------
+   Route variation
+
+   色を増やしすぎず、
+   Blue / Navyの範囲内に留める。
+   --------------------------------------------------------- */
+
+.home-same-crossroad-card--change::before {
+    background:
+        var(--gps-blue-600);
+}
+
+
+.home-same-crossroad-card--change
+.home-same-crossroad-card__route strong {
+    color:
+        var(--gps-blue-600);
+}
+
+
+.home-same-crossroad-card--stay::before {
+    background:
+        var(--gps-navy-800);
+}
+
+
+.home-same-crossroad-card--stay
+.home-same-crossroad-card__route strong {
+    color:
+        var(--gps-navy-800);
+}
+
+
+.home-same-crossroad-card--internal::before {
+    background:
+        var(--gps-navy-700);
+}
+
+
+.home-same-crossroad-card--internal
+.home-same-crossroad-card__route strong {
+    color:
+        var(--gps-navy-700);
+}
+
+
+/* =========================================================
+   PERSON
+   ========================================================= */
+
+.home-same-crossroad-card__person {
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        7px;
+
+    margin-top:
+        18px;
+}
+
+
+.home-same-crossroad-card__person span {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        25px;
+
+    padding:
+        4px
+        9px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--gps-bg-soft);
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.61rem;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.4;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   DECISION
+   ========================================================= */
+
+.home-same-crossroad-card__decision {
+    min-width:
+        0;
+
+    margin-top:
+        21px;
+}
+
+
+.home-same-crossroad-card__label {
+    margin:
+        0
+        0
+        7px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.12em;
+}
+
+
+.home-same-crossroad-card__decision h3 {
+    display:
+        -webkit-box;
+
+    margin:
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.62;
+
+    letter-spacing:
+        -0.015em;
+
+    overflow-wrap:
+        anywhere;
+
+    word-break:
+        break-word;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        3;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.home-same-crossroad-card__cta {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    margin-top:
+        auto;
+
+    padding-top:
+        22px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-same-crossroad-card__cta
+span:last-child {
+    flex:
+        0 0 auto;
+
+    font-size:
+        1rem;
+
+    transition:
+        transform 0.18s ease;
+}
+
+
+.home-same-crossroad-card:hover
+.home-same-crossroad-card__cta
+span:last-child {
+    transform:
+        translateX(3px);
+}
+
+
+/* =========================================================
+   2 CARDS
+   ========================================================= */
+
+.home-same-crossroad-grid:has(
+    > .home-same-crossroad-card:nth-child(2):last-child
+) {
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    max-width:
+        880px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .home-same-crossroad-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .home-same-crossroad-grid:has(
+        > .home-same-crossroad-card:nth-child(2):last-child
+    ) {
+        max-width:
+            none;
+    }
+
+
+    .home-same-crossroad-card {
+        min-height:
+            290px;
+
+        padding:
+            24px
+            22px
+            21px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .home-same-crossroad-section {
+        padding-top:
+            54px;
+
+        padding-bottom:
+            54px;
+    }
+
+
+    .home-same-crossroad-section
+    .home-section-heading-row {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            20px;
+    }
+
+
+    .home-same-crossroad-heading {
+        max-width:
+            none;
+    }
+
+
+    .home-same-crossroad-description br {
+        display:
+            none;
+    }
+
+
+    .home-same-crossroad-all-link {
+        align-self:
+            flex-start;
+    }
+
+
+    .home-same-crossroad-grid,
+    .home-same-crossroad-grid:has(
+        > .home-same-crossroad-card:nth-child(2):last-child
+    ) {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            13px;
+
+        max-width:
+            none;
+    }
+
+
+    .home-same-crossroad-card {
+        min-height:
+            0;
+
+        padding:
+            22px
+            19px
+            20px;
+
+        border-radius:
+            18px;
+    }
+
+
+    .home-same-crossroad-card__route {
+        padding-bottom:
+            15px;
+    }
+
+
+    .home-same-crossroad-card__person {
+        margin-top:
+            15px;
+    }
+
+
+    .home-same-crossroad-card__decision {
+        margin-top:
+            17px;
+    }
+
+
+    .home-same-crossroad-card__decision h3 {
+        font-size:
+            0.96rem;
+
+        line-height:
+            1.58;
+
+        -webkit-line-clamp:
+            3;
+    }
+
+
+    .home-same-crossroad-card__cta {
+        margin-top:
+            19px;
+
+        padding-top:
+            17px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .home-same-crossroad-card {
+        padding:
+            20px
+            17px
+            18px;
+    }
+
+
+    .home-same-crossroad-card__route {
+        gap:
+            10px;
+    }
+
+
+    .home-same-crossroad-card__route strong {
+        font-size:
+            0.92rem;
+    }
+
+
+    .home-same-crossroad-card__person span {
+        font-size:
+            0.58rem;
+    }
+
+
+    .home-same-crossroad-card__decision h3 {
+        font-size:
+            0.91rem;
+    }
+
+
+    .home-same-crossroad-card__cta {
+        font-size:
+            0.67rem;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .home-same-crossroad-card,
+    .home-same-crossroad-card__cta span {
+        transition:
+            none;
+    }
+
+
+    .home-same-crossroad-card:hover {
+        transform:
+            none;
+    }
+
+
+    .home-same-crossroad-card:hover
+    .home-same-crossroad-card__cta
+    span:last-child {
+        transform:
+            none;
+    }
+
+}
+
+
+
+/* =========================================================
+   HERO TITLE RESPONSIVE COPY
+   ========================================================= */
+
+   .home-hero-title-desktop,
+   .home-hero-title-mobile {
+       color:
+           inherit !important;
+   }
+   
+   
+   .home-hero-title-desktop {
+       display:
+           inline;
+   }
+   
+   
+   .home-hero-title-mobile {
+       display:
+           none;
+   }
+   
+   
+   .home-hero-title-desktop strong,
+   .home-hero-title-mobile strong {
+       color:
+           var(--gps-blue-600);
+   
+       font: inherit;
+   }
+   
+   
+   /* Smartphone */
+   @media (max-width: 700px) {
+   
+       .home-hero-title-desktop {
+           display:
+               none;
+       }
+   
+   
+       .home-hero-title-mobile {
+           display:
+               inline;
+       }
+   
+   
+       .home-hero h1 {
+           font-size:
+               clamp(
+                   1.55rem,
+                   7vw,
+                   1.85rem
+               );
+   
+           line-height:
+               1.27;
+   
+           letter-spacing:
+               -0.045em;
+       }
+   
+   }
+   
+   
+   /* Small Smartphone */
+   @media (max-width: 420px) {
+   
+       .home-hero h1 {
+           font-size:
+               clamp(
+                   1.48rem,
+                   6.9vw,
+                   1.72rem
+               );
+       }
+   
+   }

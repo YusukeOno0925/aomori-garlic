@@ -329,16 +329,39 @@
 
                 <h1 id="home-hero-title">
 
-                    転職するか、残るか。<br>
 
-                    迷ったら、同じことで迷った人の<br>
-
-                    <span>
-                        「選択とその後」
+                    <!-- PC / Tablet -->
+                    <span class="home-hero-title-desktop">
+                
+                        転職するか、残るか。<br>
+                
+                        迷ったら、同じことで迷った人の<br>
+                
+                        <strong>
+                            「選択とその後」
+                        </strong>
+                
+                        を見てみよう。
+                
                     </span>
-
-                    を見てみよう。
-
+                
+                
+                    <!-- Smartphone -->
+                    <span class="home-hero-title-mobile">
+                
+                        転職するか、残るか。<br>
+                
+                        同じ迷いを経験した人の<br>
+                
+                        <strong>
+                            「選択とその後」
+                        </strong>
+                
+                        を見てみよう。
+                
+                    </span>
+                
+                
                 </h1>
 
 
@@ -610,6 +633,103 @@
 
         </section>
 
+
+                <!-- =================================================
+             SAME CROSSROAD
+
+             Career GPSの核：
+             同じ迷いから、違う道を選んだ人を比較する。
+
+             JSでデータ取得後、
+             比較できるStoryがある場合のみ表示する。
+        ================================================== -->
+
+        <section
+            id="home-same-crossroad"
+            class="home-section home-same-crossroad-section"
+            aria-labelledby="home-same-crossroad-title"
+            hidden
+        >
+
+
+            <!-- =============================================
+                 Heading
+            ============================================== -->
+
+            <div class="home-section-heading-row">
+
+
+                <div class="home-same-crossroad-heading">
+
+
+                    <p class="home-eyebrow">
+                        SAME CROSSROAD
+                    </p>
+
+
+                    <h2 id="home-same-crossroad-title">
+
+                        転職するか、残るか。<br>
+
+                        同じ分岐にいた人は、何を選んだ？
+
+                    </h2>
+
+
+                    <p class="home-same-crossroad-description">
+
+                        同じことで迷っていても、
+                        選ぶ道も、その後も人によって違います。<br>
+
+                        実際にそれぞれの道を選んだ人の経験を
+                        比べてみましょう。
+
+                    </p>
+
+
+                </div>
+
+
+                <a
+                    href="Career_overview.html?theme=change"
+                    class="home-section-link home-same-crossroad-all-link"
+                    data-dilemma-theme="change"
+                >
+
+                    すべての選択を比較する
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+            <!-- =============================================
+                 Story Cards
+
+                 home-same-crossroad.js が以下から
+                 代表Storyを最大3件描画する。
+
+                 ・転職した
+                 ・残った
+                 ・社内異動した
+
+                 Storyが存在しないルートは表示しない。
+            ============================================== -->
+
+            <div
+                id="home-same-crossroad-list"
+                class="home-same-crossroad-grid"
+                aria-live="polite"
+            >
+            </div>
+
+
+        </section>
 
 
         <!-- =================================================
@@ -1603,6 +1723,8 @@
     <script src="js/hamburgermenu.js"></script>
 
     <script src="js/home.js"></script>
+
+    <script src="js/home-same-crossroad.js"></script>
 
     <script src="js/metrics.js"></script>
 
