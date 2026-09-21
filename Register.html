@@ -1,113 +1,462 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新規登録 | インノーマル</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/register.css">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"></script>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        無料登録 | Career GPS | インノーマル
+    </title>
+
+    <meta
+        name="description"
+        content="インノーマルのCareer GPSを無料で始めて、自分の現在地、これまでの選択、これからの方向を整理できます。"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/register.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         Google Ads / GA4
+         ========================================================= -->
+
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"
+    ></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-    
-        // --- Google広告の測定ID（既存）---
-        gtag('config', 'AW-16918246955');
 
-        // --- GA4 の測定IDを追加 ---
-        gtag('config', 'G-P2QH62VTEX');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag(
+            'config',
+            'AW-16918246955'
+        );
+
+        gtag(
+            'config',
+            'G-P2QH62VTEX'
+        );
     </script>
 </head>
+
+
 <body>
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
     <header>
+
         <div class="header-content">
-            <a href="Home.html" class="logo-link">
-                <img src="images/company-logo.jpg" alt="インノーマルのロゴ" class="logo-image">
-                <h1 class="logo">インノーマル</h1>
+
+            <a
+                href="Home.html"
+                class="logo-link"
+            >
+                <img
+                    src="images/company-logo.jpg"
+                    alt="インノーマルのロゴ"
+                    class="logo-image"
+                >
+
+                <span
+                    class="logo"
+                    aria-label="インノーマル"
+                >
+                    インノーマル
+                </span>
             </a>
+
         </div>
+
     </header>
+
+
+    <!-- =========================================================
+         REGISTER
+         ========================================================= -->
+
     <main class="register-page">
+
+
+        <!-- =====================================================
+             VALUE
+             ===================================================== -->
+
         <section class="register-hero">
-            <p class="register-kicker">START FOR FREE</p>
-            <h2>近い人のキャリアから、次の選択を考える。</h2>
+
+            <p class="register-kicker">
+                START YOUR CAREER GPS
+            </p>
+
+
+            <h1>
+                自分のキャリアを、<br>
+                次の選択につながる地図に。
+            </h1>
+
+
             <p class="register-lead">
-                無料登録すると、キャリア事例の詳細や、年収・満足度・転職理由まで確認できます。
+
+                少し先を歩く人の経験を参考にしながら、
+                自分の現在地と、これからの選択を整理できます。
+
             </p>
-    
+
+
             <div class="register-benefit-cards">
-                <div>
-                    <span>01</span>
-                    <p>職業を選んだ理由や転職理由まで読める</p>
-                </div>
-                <div>
-                    <span>02</span>
-                    <p>年収レンジと満足度の推移を見られる</p>
-                </div>
-                <div>
-                    <span>03</span>
-                    <p>匿名ニックネームで質問・コメントできる</p>
-                </div>
+
+
+                <article class="register-benefit-card">
+
+                    <span class="register-benefit-card__number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <p class="register-benefit-card__label">
+                            CURRENT CROSSROAD
+                        </p>
+
+                        <h2>
+                            今の迷いを整理する
+                        </h2>
+
+                        <p>
+                            今どんな分岐にいるのか、
+                            次の選択で何を大切にしたいのかを言葉にできます。
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="register-benefit-card">
+
+                    <span class="register-benefit-card__number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <p class="register-benefit-card__label">
+                            PAST DECISIONS
+                        </p>
+
+                        <h2>
+                            これまでの選択を振り返る
+                        </h2>
+
+                        <p>
+                            転職・異動・継続など、
+                            過去の意思決定とその結果をCareer GPSに残せます。
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="register-benefit-card">
+
+                    <span class="register-benefit-card__number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <p class="register-benefit-card__label">
+                            NEXT DIRECTION
+                        </p>
+
+                        <h2>
+                            次に向かう方向を整理する
+                        </h2>
+
+                        <p>
+                            目指したい役割や身につけたいことなど、
+                            これからの方向を自分の地図として整理できます。
+                        </p>
+
+                    </div>
+
+                </article>
+
             </div>
+
         </section>
-    
+
+
+        <!-- =====================================================
+             REGISTER FORM
+             ===================================================== -->
+
         <section class="register-card">
+
             <div class="register-card-header">
-                <p class="register-card-kicker">FREE REGISTER</p>
-                <h2>無料会員登録</h2>
-                <p>30秒で登録できます。本名は公開されません。</p>
+
+                <p class="register-card-kicker">
+                    FREE REGISTER
+                </p>
+
+
+                <h2>
+                    Career GPSをはじめる
+                </h2>
+
+
+                <p>
+                    無料で登録できます。<br>
+                    本名をユーザ名にする必要はありません。
+                </p>
+
             </div>
-    
-            <form id="register-form" method="post">
-                <label>
-                    ユーザ名
-                    <span>ニックネームでOKです</span>
-                    <input type="text" name="username" placeholder="例）career.imnormal" required>
+
+
+            <form
+                id="register-form"
+                method="post"
+            >
+
+
+                <!-- -------------------------------------------------
+                     USERNAME
+                     ------------------------------------------------- -->
+
+                <label class="register-field">
+
+                    <span class="register-field__header">
+
+                        <strong>
+                            ユーザ名
+                        </strong>
+
+                        <small>
+                            ニックネームでOK
+                        </small>
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        name="username"
+                        autocomplete="username"
+                        placeholder="例：career.imnormal"
+                        required
+                    >
+
                 </label>
-    
-                <label>
-                    Emailアドレス
-                    <span>ログインに使用します</span>
-                    <input type="email" name="email" placeholder="mail@example.com" required>
+
+
+                <!-- -------------------------------------------------
+                     EMAIL
+                     ------------------------------------------------- -->
+
+                <label class="register-field">
+
+                    <span class="register-field__header">
+
+                        <strong>
+                            Emailアドレス
+                        </strong>
+
+                        <small>
+                            ログインに使用します
+                        </small>
+
+                    </span>
+
+
+                    <input
+                        type="email"
+                        name="email"
+                        autocomplete="email"
+                        inputmode="email"
+                        placeholder="mail@example.com"
+                        required
+                    >
+
                 </label>
-    
-                <label>
-                    パスワード
-                    <span>8文字以上を推奨しています</span>
-                    <input type="password" name="password" placeholder="パスワードを入力" required>
+
+
+                <!-- -------------------------------------------------
+                     PASSWORD
+                     ------------------------------------------------- -->
+
+                <label class="register-field">
+
+                    <span class="register-field__header">
+
+                        <strong>
+                            パスワード
+                        </strong>
+
+                        <small>
+                            8文字以上を推奨
+                        </small>
+
+                    </span>
+
+
+                    <input
+                        type="password"
+                        name="password"
+                        autocomplete="new-password"
+                        placeholder="パスワードを入力"
+                        required
+                    >
+
                 </label>
-    
-                <button type="submit" id="register-button">
-                    無料で登録する
+
+
+                <!-- -------------------------------------------------
+                     SUBMIT
+                     ------------------------------------------------- -->
+
+                <button
+                    type="submit"
+                    id="register-button"
+                >
+                    Career GPSをはじめる
                 </button>
+
             </form>
-    
-            <p class="register-footer-text">
-                すでにアカウントをお持ちの方は
-                <a href="Login.html">ログイン</a>
+
+
+            <p class="register-login-link">
+
+                すでにアカウントをお持ちの方
+
+                <a href="Login.html">
+                    ログイン →
+                </a>
+
             </p>
+
+
+            <p class="register-note">
+
+                登録後も、プロフィールやCareer GPSの内容は
+                あとから追加・編集できます。
+
+            </p>
+
         </section>
-    
-        <div id="loading-popup" class="loading-popup" style="display: none;">
-            <p>登録中です。少々お待ちください…</p>
-        </div>
-    </main>
-    <footer>
-        <div class="footer-content">
-            <div class="footer-items">
-                <p>&copy; 2026 Imnormal</p>
-                <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
-                    <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
-                </a>
-                <a href="https://www.linkedin.com/company/105660424/admin/page-posts/published/" target="_blank" aria-label="LinkedIn">
-                    <img src="images/linkedin_icon.png" alt="LinkedIn" class="linkedin-icon">
-                </a>
+
+
+        <!-- =====================================================
+             LOADING
+             ===================================================== -->
+
+        <div
+            id="loading-popup"
+            class="loading-popup"
+            style="display: none;"
+            aria-live="polite"
+        >
+
+            <div class="loading-popup__card">
+
+                <span
+                    class="loading-spinner"
+                    aria-hidden="true"
+                ></span>
+
+                <p>
+                    Career GPSを準備しています…
+                </p>
+
             </div>
+
         </div>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div class="footer-items">
+
+                <p>
+                    &copy; 2026 Imnormal
+                </p>
+
+
+                <a
+                    href="https://www.instagram.com/imnormal_official/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                >
+                    <img
+                        src="images/instagram-icon.png"
+                        alt="Instagram"
+                        class="instagram-icon"
+                    >
+                </a>
+
+
+                <a
+                    href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                >
+                    <img
+                        src="images/linkedin_icon.png"
+                        alt="LinkedIn"
+                        class="linkedin-icon"
+                    >
+                </a>
+
+            </div>
+
+        </div>
+
     </footer>
 
+
+    <!-- =========================================================
+         SCRIPT
+         ========================================================= -->
+
     <script src="js/register.js"></script>
+
 </body>
+
 </html>
