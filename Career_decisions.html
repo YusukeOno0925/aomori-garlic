@@ -1,157 +1,497 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>キャリアの振り返り | インノーマル</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        これまでの意思決定 | My Career GPS | インノーマル
+    </title>
 
     <meta
         name="description"
-        content="これまでのキャリアにおける重要な意思決定を記録・管理する画面です。"
+        content="これまでのキャリアで経験した重要な意思決定を振り返り、自分の価値観や判断軸を整理するページです。"
     >
 
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/career_decisions.css">
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet"
+        href="css/career_decisions.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap"
         rel="stylesheet"
     >
 </head>
 
+
 <body>
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
     <header>
+
         <div class="header-content">
-            <a href="Home.html" class="logo-link">
-                <img src="images/company-logo.jpg" alt="インノーマルのロゴ" class="logo-image">
-                <span class="logo" aria-label="インノーマル">インノーマル</span>
-            </a>
-            <p class="lead-text">〜キャリアの未来を共に創る〜</p>
-            <div class="login-button-container">
-                <a href="/Register.html" class="header-register-btn">新規登録</a>
-                <a href="Login.html" id="login-button" class="login-button" style="display: none;">ログイン</a>
-                <a href="#" id="logout-button" class="login-button" style="display: none;">ログアウト</a>
-            </div>
-            <div class="hamburger-menu">☰</div>
-        </div>
-    </header>
-    <aside class="main-menu" id="main-menu">
-        <nav>
-            <ul>
-                <li><a href="Home.html"><img src="images/home-icon.png" alt="ホームアイコン"> ホーム</a></li>
-                <li><a href="Career_overview.html"><img src="images/career-icon.png" alt="キャリアストーリーアイコン"> キャリアストーリー</a></li>
-                <li><a href="Board.html"><img src="images/board-icon.png" alt="掲示板アイコン"> 掲示板（Q&A）</a></li>
-                <li><a href="Mypage.html"><img src="images/mypage-icon.png" alt="マイページアイコン"> My Career GPS</a></li>
-                <li><a href="Announcements.html"><img src="images/notification-icon.png" alt="お知らせアイコン"> お知らせ</a></li>
-                <li><a href="Contact.html"><img src="images/contact-icon.png" alt="問い合わせアイコン"> お問い合わせ</a></li>
-            </ul>
-        </nav>
-    </aside>
-
-    <main class="career-decisions-main">
-        <div class="career-decisions-header">
-            <div>
-                <p class="page-kicker">
-                    CAREER REFLECTION
-                </p>
-
-                <h1>キャリアの振り返り</h1>
-
-                <p class="page-description">
-                    転職・異動・昇進など、これまでの重要な意思決定を記録します。
-                    その時に迷ったこと、重視したこと、結果や学びを振り返ることで、
-                    自分自身の価値観や判断軸を整理できます。
-                </p>
-            </div>
 
             <a
-                href="Career_decision_edit.html"
-                class="add-decision-button"
+                href="Home.html"
+                class="logo-link"
             >
-                ＋ 新しい振り返りを追加
-            </a>
-        </div>
-
-        <div class="career-decisions-summary">
-            <div class="summary-item">
-                <span class="summary-label">
-                    登録済み
-                </span>
-
-                <strong
-                    id="career-decision-total"
-                    class="summary-value"
+                <img
+                    src="images/company-logo.jpg"
+                    alt="インノーマルのロゴ"
+                    class="logo-image"
                 >
-                    0
-                </strong>
 
-                <span class="summary-unit">
-                    件
+                <span
+                    class="logo"
+                    aria-label="インノーマル"
+                >
+                    インノーマル
                 </span>
+            </a>
+
+
+            <p class="lead-text">
+                〜キャリアの未来を共に創る〜
+            </p>
+
+
+            <div class="login-button-container">
+
+                <a
+                    href="/Register.html"
+                    class="header-register-btn"
+                >
+                    新規登録
+                </a>
+
+                <a
+                    href="Login.html"
+                    id="login-button"
+                    class="login-button"
+                    style="display: none;"
+                >
+                    ログイン
+                </a>
+
+                <a
+                    href="#"
+                    id="logout-button"
+                    class="login-button"
+                    style="display: none;"
+                >
+                    ログアウト
+                </a>
+
             </div>
 
-            <div class="summary-message">
-                <p>
-                    重要な意思決定を記録するほど、
-                    Career GPSがあなたの判断傾向を深く理解できるようになります。
-                </p>
+
+            <div class="hamburger-menu">
+                ☰
             </div>
+
         </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         SIDE MENU
+         ========================================================= -->
+
+    <aside
+        class="main-menu"
+        id="main-menu"
+    >
+
+        <nav>
+
+            <ul>
+
+                <li>
+                    <a href="Home.html">
+
+                        <img
+                            src="images/home-icon.png"
+                            alt="ホームアイコン"
+                        >
+
+                        ホーム
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Career_overview.html">
+
+                        <img
+                            src="images/career-icon.png"
+                            alt="キャリアストーリーアイコン"
+                        >
+
+                        キャリアストーリー
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Board.html">
+
+                        <img
+                            src="images/board-icon.png"
+                            alt="掲示板アイコン"
+                        >
+
+                        掲示板（Q&A）
+
+                    </a>
+                </li>
+
+
+                <li class="active">
+
+                    <a href="Mypage.html">
+
+                        <img
+                            src="images/mypage-icon.png"
+                            alt="マイページアイコン"
+                        >
+
+                        My Career GPS
+
+                    </a>
+
+                </li>
+
+
+                <li>
+                    <a href="Announcements.html">
+
+                        <img
+                            src="images/notification-icon.png"
+                            alt="お知らせアイコン"
+                        >
+
+                        お知らせ
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="Contact.html">
+
+                        <img
+                            src="images/contact-icon.png"
+                            alt="問い合わせアイコン"
+                        >
+
+                        お問い合わせ
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN
+         ========================================================= -->
+
+    <main class="career-decisions-main">
+
+
+        <!-- =====================================================
+             HERO
+             ===================================================== -->
+
+        <section class="career-decisions-hero">
+
+            <div class="career-decisions-hero__main">
+
+                <p class="page-kicker">
+                    MY CAREER DECISIONS
+                </p>
+
+
+                <h1>
+                    これまで、どんな分岐で<br>
+                    何を選んできた？
+                </h1>
+
+
+                <p class="page-description">
+
+                    転職、異動、昇進、新しい挑戦。
+
+                    <br>
+
+                    これまでの重要な意思決定を振り返ることで、
+                    自分が何に迷い、何を大切にしてきたのかを整理できます。
+
+                </p>
+
+
+                <div class="career-decisions-hero__actions">
+
+                    <a
+                        href="Career_decision_edit.html"
+                        class="add-decision-button"
+                    >
+                        ＋ 新しい意思決定を振り返る
+                    </a>
+
+
+                    <a
+                        href="Mypage.html"
+                        class="back-to-gps-link"
+                    >
+                        My Career GPSに戻る
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- -------------------------------------------------
+                 SUMMARY
+                 ------------------------------------------------- -->
+
+            <aside class="career-decisions-hero__summary">
+
+                <p class="career-decisions-hero__summary-kicker">
+                    DECISION HISTORY
+                </p>
+
+
+                <h2>
+                    あなたの選択の記録
+                </h2>
+
+
+                <div class="career-decisions-count">
+
+                    <div>
+
+                        <span class="career-decisions-count__label">
+                            登録済み
+                        </span>
+
+                        <div class="career-decisions-count__value">
+
+                            <strong
+                                id="career-decision-total"
+                            >
+                                0
+                            </strong>
+
+                            <span>
+                                件
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p class="career-decisions-hero__summary-text">
+
+                    過去の選択を残していくことで、
+                    自分がどんな状況で何を重視してきたのかが、
+                    少しずつ見えてきます。
+
+                </p>
+
+            </aside>
+
+        </section>
+
+
+        <!-- =====================================================
+             DECISION HISTORY
+             ===================================================== -->
 
         <section class="career-decisions-section">
+
             <div class="section-heading">
+
                 <div>
+
                     <p class="section-kicker">
                         DECISION HISTORY
                     </p>
 
-                    <h2>これまでの意思決定</h2>
+
+                    <h2>
+                        これまでの意思決定
+                    </h2>
+
                 </div>
+
+
+                <p class="section-heading__description">
+
+                    新しい意思決定から順に、
+                    これまでの分岐と選択を振り返ります。
+
+                </p>
+
             </div>
+
+
+            <!-- =================================================
+                 JSでDecision Cardを描画
+                 ================================================= -->
 
             <div
                 id="career-decisions-container"
                 class="career-decisions-container"
             >
+
+                <!-- 初期表示 / JS読込前 -->
+
                 <div
                     id="career-decisions-empty"
                     class="career-decisions-empty"
                 >
-                    <div class="empty-icon" aria-hidden="true">
+
+                    <div
+                        class="empty-icon"
+                        aria-hidden="true"
+                    >
                         ◇
                     </div>
 
+
+                    <p class="career-decisions-empty__kicker">
+                        YOUR FIRST DECISION
+                    </p>
+
+
                     <h3>
-                        まだ振り返りが登録されていません
+                        まだ意思決定が登録されていません
                     </h3>
 
+
                     <p>
+
                         まずは、転職・異動・昇進など、
-                        印象に残っている意思決定を1つ登録してみましょう。
+                        印象に残っている選択を1つ振り返ってみましょう。
+
                     </p>
+
 
                     <a
                         href="Career_decision_edit.html"
                         class="empty-add-button"
                     >
-                        最初の振り返りを追加する
+                        最初の意思決定を振り返る
                     </a>
+
                 </div>
+
             </div>
+
         </section>
 
+
+        <!-- =====================================================
+             BOTTOM ACTION
+             ===================================================== -->
+
+        <section class="career-decisions-bottom">
+
+            <div class="career-decisions-bottom__inner">
+
+                <div>
+
+                    <p class="section-kicker">
+                        YOUR NEXT REFLECTION
+                    </p>
+
+
+                    <h2>
+                        他にも、印象に残っている選択はありますか？
+                    </h2>
+
+
+                    <p>
+
+                        大きな転職だけでなく、
+                        「残る」「異動する」「新しい役割を引き受ける」といった
+                        選択もCareer GPSの大切な記録です。
+
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="Career_decision_edit.html"
+                    class="add-decision-button"
+                >
+                    ＋ 意思決定を追加する
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BACK
+             ===================================================== -->
+
         <div class="back-to-mypage">
+
             <a href="Mypage.html">
-                ← マイページに戻る
+                ← My Career GPSに戻る
             </a>
+
         </div>
+
     </main>
 
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
     <footer>
+
         <div class="footer-content">
+
             <div class="footer-items">
-                <p>&copy; 2025 Imnormal</p>
+
+                <p>
+                    &copy; 2025 Imnormal
+                </p>
+
 
                 <a
                     href="https://www.instagram.com/imnormal_official/"
@@ -165,6 +505,7 @@
                     >
                 </a>
 
+
                 <a
                     href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
                     target="_blank"
@@ -176,12 +517,24 @@
                         class="linkedin-icon"
                     >
                 </a>
+
             </div>
+
         </div>
+
     </footer>
 
+
+    <!-- =========================================================
+         SCRIPT
+         ========================================================= -->
+
     <script src="js/hamburgermenu.js"></script>
+
     <script src="js/session.js"></script>
+
     <script src="js/career_decisions.js"></script>
+
 </body>
+
 </html>
