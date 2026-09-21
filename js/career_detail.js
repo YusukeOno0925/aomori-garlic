@@ -3,24 +3,23 @@
 // career_detail.js
 // ============================================================
 
-
-// ============================================================
-// 0. Global State
-// ============================================================
-
 let careerDetailIsLoggedIn = false;
 let careerOutcomeChart = null;
+let careerDetailCareerId = '';
+let careerDetailDecisionId = '';
+let careerDetailTheme = '';
+let careerDetailPrimaryDecision = null;
 
-
-// ============================================================
-// 1. Initialize
-// ============================================================
 
 document.addEventListener(
     'DOMContentLoaded',
     initializeCareerDetail
 );
 
+
+// ============================================================
+// 1. Initialize
+// ============================================================
 
 async function initializeCareerDetail() {
 
@@ -29,11 +28,27 @@ async function initializeCareerDetail() {
             window.location.search
         );
 
-    const careerId =
-        params.get('id');
+
+    careerDetailCareerId =
+        normalizeText(
+            params.get('id')
+        );
 
 
-    if (!careerId) {
+    careerDetailDecisionId =
+        normalizeText(
+            params.get('decision_id')
+        );
+
+
+    careerDetailTheme =
+        normalizeText(
+            params.get('theme')
+        )
+        .toLowerCase();
+
+
+    if (!careerDetailCareerId) {
 
         showPageError(
             '表示するキャリアが指定されていません。'
@@ -51,7 +66,7 @@ async function initializeCareerDetail() {
 
         const response =
             await fetch(
-                `/career-detail/${encodeURIComponent(careerId)}`,
+                `/career-detail/${encodeURIComponent(careerDetailCareerId)}`,
                 {
                     method: 'GET',
 
@@ -77,23 +92,35 @@ async function initializeCareerDetail() {
 
 
         const companies =
-            Array.isArray(data.companies)
-                ? data.companies
+            Array.isArray(
+                data.companies
+            )
+                ? sortCompaniesChronologically(
+                    data.companies
+                )
                 : [];
 
 
         const decisions =
-            Array.isArray(data.career_decisions)
+            Array.isArray(
+                data.career_decisions
+            )
                 ? sortDecisionsNewestFirst(
                     data.career_decisions
                 )
                 : [];
 
 
-        // ========================================================
+        careerDetailPrimaryDecision =
+            selectPrimaryDecision(
+                decisions,
+                careerDetailDecisionId
+            );
+
+
+        // ====================================================
         // Career Story View
-        // 実際にCareer Storyが存在する場合のみ記録
-        // ========================================================
+        // ====================================================
 
         const hasCareerStory =
             companies.length > 0
@@ -103,27 +130,31 @@ async function initializeCareerDetail() {
 
         if (hasCareerStory) {
 
-            // ----------------------------------------------------
-            // Profile View Count
-            // ----------------------------------------------------
-
             incrementCareerStoryView(
-                careerId
+                careerDetailCareerId
             );
 
 
-            // ----------------------------------------------------
-            // GA4: Career Story Detail View
-            // ----------------------------------------------------
-
-            if (typeof gtag === 'function') {
+            if (
+                typeof gtag
+                ===
+                'function'
+            ) {
 
                 gtag(
                     'event',
                     'career_story_view',
                     {
                         career_id:
-                            careerId,
+                            careerDetailCareerId,
+
+                        decision_id:
+                            careerDetailPrimaryDecision?.id
+                            || '',
+
+                        theme:
+                            careerDetailTheme
+                            || '',
 
                         login_status:
                             careerDetailIsLoggedIn
@@ -135,10 +166,38 @@ async function initializeCareerDetail() {
         }
 
 
+        // ====================================================
+        // Render
+        // ====================================================
+
+        configureCareerDetailNavigation();
+
+
         renderPersonSnapshot(
             data,
             companies,
             decisions
+        );
+
+
+        renderDecisionHero(
+            careerDetailPrimaryDecision
+        );
+
+
+        renderDecisionProcess(
+            careerDetailPrimaryDecision
+        );
+
+
+        renderAfterChoice(
+            careerDetailPrimaryDecision,
+            companies
+        );
+
+
+        renderLookingBack(
+            careerDetailPrimaryDecision
         );
 
 
@@ -147,23 +206,9 @@ async function initializeCareerDetail() {
         );
 
 
-        renderTurningPoints(
-            decisions
-        );
-
-
-        renderCareerCompass(
-            decisions
-        );
-
-
-        renderCareerOutcome(
-            companies
-        );
-
-
-        renderCareerMessage(
-            decisions
+        renderOtherDecisions(
+            decisions,
+            careerDetailPrimaryDecision
         );
 
 
@@ -186,7 +231,7 @@ async function initializeCareerDetail() {
 
 
 // ============================================================
-// 2. Login Status
+// 2. Login
 // ============================================================
 
 async function checkCareerDetailLoginStatus() {
@@ -197,13 +242,16 @@ async function checkCareerDetailLoginStatus() {
             await fetch(
                 '/check-login-status/',
                 {
-                    method: 'GET',
+                    method:
+                        'GET',
 
                     headers: {
-                        Accept: 'application/json'
+                        Accept:
+                            'application/json'
                     },
 
-                    credentials: 'include'
+                    credentials:
+                        'include'
                 }
             );
 
@@ -219,7 +267,309 @@ async function checkCareerDetailLoginStatus() {
 
 
 // ============================================================
-// 3. PERSON / CURRENT SNAPSHOT
+// 3. Decision Selection
+// ============================================================
+
+function selectPrimaryDecision(
+    decisions,
+    requestedDecisionId
+) {
+
+    if (
+        !Array.isArray(
+            decisions
+        )
+        ||
+        decisions.length === 0
+    ) {
+
+        return null;
+    }
+
+
+    if (requestedDecisionId) {
+
+        const requested =
+            decisions.find(
+                decision =>
+                    String(
+                        decision.id
+                    )
+                    ===
+                    String(
+                        requestedDecisionId
+                    )
+            );
+
+
+        if (requested) {
+            return requested;
+        }
+    }
+
+
+    // decision_id がない既存URLとの互換
+    return decisions[0];
+}
+
+
+// ============================================================
+// 4. Decision Path
+// ============================================================
+
+function getDecisionPath(
+    decisionType
+) {
+
+    const type =
+        normalizeDisplayText(
+            decisionType
+        );
+
+
+    if (
+        type
+        ===
+        '転職'
+    ) {
+
+        return {
+            key:
+                'change',
+
+            label:
+                '転職した'
+        };
+    }
+
+
+    if (
+        type === '現職継続'
+        ||
+        type === '継続'
+        ||
+        type === '残留'
+        ||
+        type === '現職に残る'
+    ) {
+
+        return {
+            key:
+                'stay',
+
+            label:
+                '残った'
+        };
+    }
+
+
+    if (
+        type
+        ===
+        '異動'
+    ) {
+
+        return {
+            key:
+                'internal',
+
+            label:
+                '社内異動した'
+        };
+    }
+
+
+    return {
+        key:
+            'other',
+
+        label:
+            type
+            ||
+            'その他'
+    };
+}
+
+
+// ============================================================
+// 5. Hero Title
+// ============================================================
+
+function createDecisionHeroTitle(
+    decision
+) {
+
+    if (!decision) {
+
+        return (
+            'キャリアの意思決定'
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // まずユーザーが入力したタイトル
+    // --------------------------------------------------------
+
+    const title =
+        normalizeDisplayText(
+            decision.title
+        );
+
+
+    if (title) {
+
+        return truncateText(
+            title,
+            54
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // タイトル未入力の場合
+    // --------------------------------------------------------
+
+    const type =
+        normalizeDisplayText(
+            decision.decision_type
+        );
+
+
+    const path =
+        getDecisionPath(
+            type
+        );
+
+
+    if (
+        path.key
+        ===
+        'change'
+    ) {
+
+        return (
+            '転職という選択'
+        );
+    }
+
+
+    if (
+        path.key
+        ===
+        'stay'
+    ) {
+
+        return (
+            '今の会社に残るという選択'
+        );
+    }
+
+
+    if (
+        path.key
+        ===
+        'internal'
+    ) {
+
+        return (
+            '社内で新しい道を選んだ'
+        );
+    }
+
+
+    // 「その他という選択」は表示しない
+    const genericTypes = [
+        'その他',
+        'other',
+        'others'
+    ];
+
+
+    if (
+        type
+        &&
+        !genericTypes.includes(
+            type.toLowerCase()
+        )
+    ) {
+
+        return truncateText(
+            `${type}という選択`,
+            54
+        );
+    }
+
+
+    return (
+        'キャリアの意思決定'
+    );
+}
+
+
+// ============================================================
+// 6. Navigation
+// ============================================================
+
+function configureCareerDetailNavigation() {
+
+    const backLink =
+        getElement(
+            'career-detail-back-link'
+        );
+
+
+    const backLabel =
+        getElement(
+            'career-detail-back-label'
+        );
+
+
+    const nextLink =
+        getElement(
+            'career-next-story-link'
+        );
+
+
+    // theme は推測しない。
+    // Overviewから渡されたthemeだけを引き継ぐ。
+
+    const overviewUrl =
+        careerDetailTheme
+            ? (
+                `Career_overview.html`
+                +
+                `?theme=${encodeURIComponent(careerDetailTheme)}`
+            )
+            : 'Career_overview.html';
+
+
+    if (backLink) {
+
+        backLink.href =
+            overviewUrl;
+    }
+
+
+    if (nextLink) {
+
+        nextLink.href =
+            overviewUrl;
+    }
+
+
+    if (backLabel) {
+
+        backLabel.textContent =
+            careerDetailTheme === 'change'
+                ? '「転職するか迷っている」に戻る'
+                : 'キャリアストーリーに戻る';
+    }
+}
+
+
+// ============================================================
+// 7. Person / Current Snapshot
 // ============================================================
 
 function renderPersonSnapshot(
@@ -281,7 +631,7 @@ function renderPersonSnapshot(
 
 
     const profession =
-        normalizeText(
+        normalizeDisplayText(
             data.profession
         );
 
@@ -293,7 +643,7 @@ function renderPersonSnapshot(
 
 
     const rawName =
-        normalizeText(
+        normalizeDisplayText(
             data.name
         );
 
@@ -306,12 +656,18 @@ function renderPersonSnapshot(
         );
 
 
+    // --------------------------------------------------------
+    // Avatar
+    // --------------------------------------------------------
+
     if (avatar) {
 
         const avatarSource =
             rawName
-            || profession
-            || '?';
+            ||
+            profession
+            ||
+            '?';
 
 
         avatar.textContent =
@@ -321,12 +677,20 @@ function renderPersonSnapshot(
     }
 
 
+    // --------------------------------------------------------
+    // Name
+    // --------------------------------------------------------
+
     if (title) {
 
         title.textContent =
             displayName;
     }
 
+
+    // --------------------------------------------------------
+    // Headline
+    // --------------------------------------------------------
 
     if (headline) {
 
@@ -341,6 +705,10 @@ function renderPersonSnapshot(
     }
 
 
+    // --------------------------------------------------------
+    // Tags
+    // --------------------------------------------------------
+
     if (tags) {
 
         const tagValues = [];
@@ -354,7 +722,11 @@ function renderPersonSnapshot(
         }
 
 
-        if (companies.length > 0) {
+        if (
+            companies.length
+            >
+            0
+        ) {
 
             tagValues.push(
                 `#経験${companies.length}社`
@@ -362,10 +734,14 @@ function renderPersonSnapshot(
         }
 
 
-        if (decisions.length > 0) {
+        if (
+            decisions.length
+            >
+            0
+        ) {
 
             tagValues.push(
-                `#転機${decisions.length}件`
+                `#意思決定${decisions.length}件`
             );
         }
 
@@ -374,14 +750,20 @@ function renderPersonSnapshot(
             tagValues
                 .map(
                     tag => `
+
                         <span class="tag-pill">
                             ${escapeHTML(tag)}
                         </span>
+
                     `
                 )
                 .join('');
     }
 
+
+    // --------------------------------------------------------
+    // Current Snapshot
+    // --------------------------------------------------------
 
     if (!snapshot) {
         return;
@@ -394,8 +776,11 @@ function renderPersonSnapshot(
     if (profession) {
 
         snapshotItems.push({
-            label: '現在の職種',
-            value: profession
+            label:
+                '現在の職種',
+
+            value:
+                profession
         });
     }
 
@@ -403,23 +788,33 @@ function renderPersonSnapshot(
     if (
         latestCompany
         &&
-        normalizeText(
+        normalizeDisplayText(
             latestCompany.name
         )
     ) {
 
         snapshotItems.push({
-            label: '現在の勤務先',
+            label:
+                '現在の勤務先',
+
             value:
-                latestCompany.name
+                normalizeDisplayText(
+                    latestCompany.name
+                )
         });
     }
 
 
-    if (companies.length > 0) {
+    if (
+        companies.length
+        >
+        0
+    ) {
 
         snapshotItems.push({
-            label: '経験社数',
+            label:
+                '経験社数',
+
             value:
                 `${companies.length}社`
         });
@@ -435,9 +830,13 @@ function renderPersonSnapshot(
     ) {
 
         snapshotItems.push({
-            label: '年収レンジ',
+            label:
+                '年収レンジ',
+
             value:
-                latestCareerPoint.salary
+                normalizeDisplayText(
+                    latestCareerPoint.salary
+                )
         });
     }
 
@@ -451,7 +850,9 @@ function renderPersonSnapshot(
     ) {
 
         snapshotItems.push({
-            label: '仕事満足度',
+            label:
+                '仕事満足度',
+
             value:
                 formatSatisfaction(
                     latestCareerPoint.satisfaction_level
@@ -460,10 +861,15 @@ function renderPersonSnapshot(
     }
 
 
-    if (careerYears !== null) {
+    if (
+        careerYears
+        !==
+        null
+    ) {
 
         snapshotItems.push({
-            label: 'キャリア歴',
+            label:
+                'キャリア歴',
 
             value:
                 careerYears === 0
@@ -477,6 +883,7 @@ function renderPersonSnapshot(
         snapshotItems
             .map(
                 item => `
+
                     <div class="snapshot-item">
 
                         <span class="snapshot-item__label">
@@ -490,6 +897,7 @@ function renderPersonSnapshot(
                         </strong>
 
                     </div>
+
                 `
             )
             .join('');
@@ -497,7 +905,7 @@ function renderPersonSnapshot(
 
 
 // ============================================================
-// 4. PERSON Helpers
+// 8. Person Helpers
 // ============================================================
 
 function getCareerDisplayName(
@@ -509,7 +917,9 @@ function getCareerDisplayName(
     if (
         rawName
         &&
-        !looksLikeEmail(rawName)
+        !looksLikeEmail(
+            rawName
+        )
     ) {
 
         return rawName;
@@ -520,12 +930,18 @@ function getCareerDisplayName(
 
 
     if (ageDecade) {
-        parts.push(ageDecade);
+
+        parts.push(
+            ageDecade
+        );
     }
 
 
     if (profession) {
-        parts.push(profession);
+
+        parts.push(
+            profession
+        );
     }
 
 
@@ -534,7 +950,7 @@ function getCareerDisplayName(
         ||
         rawName
         ||
-        'キャリアストーリー'
+        'Career Story'
     );
 }
 
@@ -550,7 +966,19 @@ function createCareerHeadline({
     const pieces = [];
 
 
-    if (companies.length > 0) {
+    if (ageDecade) {
+
+        pieces.push(
+            ageDecade
+        );
+    }
+
+
+    if (
+        companies.length
+        >
+        0
+    ) {
 
         pieces.push(
             `${companies.length}社`
@@ -558,7 +986,11 @@ function createCareerHeadline({
     }
 
 
-    if (careerYears !== null) {
+    if (
+        careerYears
+        !==
+        null
+    ) {
 
         pieces.push(
             careerYears === 0
@@ -587,7 +1019,7 @@ function createCareerHeadline({
     if (
         latestCompany
         &&
-        normalizeText(
+        normalizeDisplayText(
             latestCompany.name
         )
     ) {
@@ -595,407 +1027,251 @@ function createCareerHeadline({
         return (
             `${prefix}`
             +
-            `${normalizeText(latestCompany.name)}でキャリアを歩んできた人。`
+            `${normalizeDisplayText(latestCompany.name)}で`
+            +
+            'キャリアを歩んできた人。'
         );
     }
 
 
-    if (ageDecade) {
-
-        return (
-            `${ageDecade}のキャリアストーリー。`
-        );
-    }
-
-
-    return 'これまでのキャリアと意思決定を振り返ります。';
+    return (
+        prefix
+        ||
+        'これまでのキャリアと意思決定を振り返ります。'
+    );
 }
 
 
 // ============================================================
-// 5. CAREER JOURNEY
+// 9. Decision Hero
 // ============================================================
 
-function renderCareerJourney(
-    companies
+function renderDecisionHero(
+    decision
 ) {
 
-    const section =
+    const title =
         getElement(
-            'career-journey-section'
+            'career-decision-hero-title'
         );
 
 
-    const container =
+    const dilemmaWrapper =
         getElement(
-            'career-journey-timeline'
+            'career-decision-dilemma-wrapper'
         );
 
 
-    if (!container) {
+    const dilemmaElement =
+        getElement(
+            'career-decision-dilemma'
+        );
+
+
+    const pathValue =
+        getElement(
+            'career-decision-path'
+        );
+
+
+    const dateElement =
+        getElement(
+            'career-decision-date'
+        );
+
+
+    const relatedCareer =
+        getElement(
+            'career-decision-related-career'
+        );
+
+
+    const legacyLead =
+        getElement(
+            'career-decision-hero-lead'
+        );
+
+
+    if (!decision) {
+
+        if (title) {
+
+            title.textContent =
+                'この人のCareer Story';
+        }
+
+
+        if (dilemmaWrapper) {
+
+            dilemmaWrapper.hidden =
+                true;
+        }
+
+
+        if (pathValue) {
+
+            pathValue.textContent =
+                '-';
+        }
+
+
+        if (dateElement) {
+
+            dateElement.textContent =
+                '';
+        }
+
+
+        if (relatedCareer) {
+
+            relatedCareer.textContent =
+                '';
+        }
+
+
         return;
     }
 
+
+    const path =
+        getDecisionPath(
+            decision.decision_type
+        );
+
+
+    const dilemma =
+        normalizeDisplayText(
+            decision.dilemma_text
+        );
+
+
+    // --------------------------------------------------------
+    // Title
+    // --------------------------------------------------------
+
+    if (title) {
+
+        title.textContent =
+            createDecisionHeroTitle(
+                decision
+            );
+    }
+
+
+    // --------------------------------------------------------
+    // Dilemma
+    //
+    // Heroでは全文ではなく概要だけ。
+    // 詳細全文はDecision Process 02で表示。
+    // --------------------------------------------------------
 
     if (
-        !Array.isArray(companies)
-        ||
-        companies.length === 0
+        dilemmaWrapper
+        &&
+        dilemmaElement
     ) {
 
-        container.innerHTML = `
-            <p class="career-empty-message">
-                キャリア情報はまだ登録されていません。
-            </p>
-        `;
+        if (dilemma) {
 
-        return;
-    }
-
-
-    const journeyNodes =
-        createJourneyNodes(
-            companies
-        );
-
-
-    if (journeyNodes.length === 0) {
-
-        if (section) {
-            section.hidden = true;
-        }
-
-        return;
-    }
-
-
-    const nodesHtml =
-        journeyNodes
-            .map(
-                node => {
-
-                    const period =
-                        node.start
-                            ? formatCareerPeriod(
-                                node.start,
-                                node.end
-                            )
-                            : formatCompanyPeriodFromNode(
-                                node
-                            );
-
-
-                    return `
-                        <article class="journey-node">
-
-                            <span class="journey-node__year">
-                                ${escapeHTML(
-                                    node.startYear
-                                        ? String(node.startYear)
-                                        : ''
-                                )}
-                            </span>
-
-                            <div class="journey-node__marker"></div>
-
-                            <h3 class="journey-node__company">
-                                ${escapeHTML(
-                                    node.company
-                                )}
-                            </h3>
-
-                            ${
-                                node.role
-                                    ? `
-                                        <p class="journey-node__role">
-                                            ${escapeHTML(
-                                                node.role
-                                            )}
-                                        </p>
-                                    `
-                                    : ''
-                            }
-
-                            ${
-                                node.department
-                                    ? `
-                                        <p class="journey-node__department">
-                                            ${escapeHTML(
-                                                node.department
-                                            )}
-                                        </p>
-                                    `
-                                    : ''
-                            }
-
-                            ${
-                                period
-                                    ? `
-                                        <span class="journey-node__period">
-                                            ${escapeHTML(period)}
-                                        </span>
-                                    `
-                                    : ''
-                            }
-
-                        </article>
-                    `;
-                }
-            )
-            .join('');
-
-
-    container.innerHTML = `
-        <div
-            class="journey-track"
-            style="--journey-count: ${journeyNodes.length};"
-        >
-            ${nodesHtml}
-        </div>
-    `;
-
-
-    if (section) {
-        section.hidden = false;
-    }
-}
-
-
-// ============================================================
-// 6. Journey Node Generation
-// ============================================================
-
-function createJourneyNodes(
-    companies
-) {
-
-    const nodes = [];
-
-
-    companies.forEach(
-        company => {
-
-            const companyName =
-                normalizeText(
-                    company.name
-                )
-                || '勤務先';
-
-
-            const roles =
-                Array.isArray(company.roles)
-                    ? company.roles
-                    : [];
-
-
-            if (roles.length > 0) {
-
-                roles.forEach(
-                    role => {
-
-                        nodes.push({
-
-                            company:
-                                companyName,
-
-                            role:
-                                normalizeText(
-                                    role.position
-                                )
-                                ||
-                                normalizeText(
-                                    role.job_category
-                                ),
-
-                            department:
-                                normalizeText(
-                                    role.department
-                                ),
-
-                            start:
-                                role.start_period,
-
-                            end:
-                                role.end_period,
-
-                            startYear:
-                                getYearFromDate(
-                                    role.start_period
-                                )
-                                ||
-                                company.startYear,
-
-                            endYear:
-                                getYearFromDate(
-                                    role.end_period
-                                )
-                                ||
-                                company.endYear
-                        });
-                    }
-                );
-            }
-
-            else {
-
-                nodes.push({
-
-                    company:
-                        companyName,
-
-                    role:
-                        normalizeText(
-                            company.position
-                        )
-                        ||
-                        normalizeText(
-                            company.job_category
-                        ),
-
-                    department:
-                        normalizeText(
-                            company.department
-                        ),
-
-                    start:
-                        company.work_start_period
-                        || null,
-
-                    end:
-                        company.work_end_period
-                        || null,
-
-                    startYear:
-                        company.startYear,
-
-                    endYear:
-                        company.endYear
-                });
-            }
-        }
-    );
-
-
-    const deduped = [];
-
-
-    nodes.forEach(
-        node => {
-
-            const sameBaseIndex =
-                deduped.findIndex(
-                    existing =>
-                        normalizeComparable(
-                            existing.company
-                        )
-                        ===
-                        normalizeComparable(
-                            node.company
-                        )
-
-                        &&
-
-                        String(
-                            existing.startYear || ''
-                        )
-                        ===
-                        String(
-                            node.startYear || ''
-                        )
+            dilemmaElement.textContent =
+                truncateText(
+                    dilemma,
+                    96
                 );
 
 
-            if (sameBaseIndex === -1) {
+            dilemmaWrapper.hidden =
+                false;
 
-                deduped.push(node);
+        } else {
 
-                return;
-            }
-
-
-            const existing =
-                deduped[sameBaseIndex];
+            dilemmaElement.textContent =
+                '';
 
 
-            if (
-                !normalizeText(
-                    existing.role
-                )
-                &&
-                normalizeText(
-                    node.role
-                )
-            ) {
-
-                deduped[sameBaseIndex] =
-                    node;
-
-                return;
-            }
-
-
-            if (
-                normalizeComparable(
-                    existing.role
-                )
-                !==
-                normalizeComparable(
-                    node.role
-                )
-                &&
-                normalizeText(
-                    node.role
-                )
-            ) {
-
-                deduped.push(node);
-            }
+            dilemmaWrapper.hidden =
+                true;
         }
-    );
+    }
 
 
-    deduped.sort(
-        (a, b) => {
+    // --------------------------------------------------------
+    // Selected path
+    // --------------------------------------------------------
 
-            const yearDifference =
-                getSortableYear(
-                    a.startYear
-                )
-                -
-                getSortableYear(
-                    b.startYear
-                );
+    if (pathValue) {
+
+        pathValue.textContent =
+            path.label;
 
 
-            if (yearDifference !== 0) {
+        pathValue.dataset.path =
+            path.key;
+    }
 
-                return yearDifference;
-            }
+
+    // --------------------------------------------------------
+    // Legacy
+    // --------------------------------------------------------
+
+    if (legacyLead) {
+
+        legacyLead.textContent =
+            '';
+    }
 
 
-            return (
-                getSortableDate(
-                    a.start
-                )
-                -
-                getSortableDate(
-                    b.start
-                )
+    // --------------------------------------------------------
+    // Decision Date
+    // --------------------------------------------------------
+
+    if (dateElement) {
+
+        dateElement.textContent =
+            formatDecisionDate(
+                decision.occurred_at
             );
-        }
-    );
+    }
 
 
-    return deduped;
+    // --------------------------------------------------------
+    // Company / Department / Position
+    // --------------------------------------------------------
+
+    if (relatedCareer) {
+
+        const related =
+            [
+                decision.company_name,
+                decision.department,
+                decision.position
+            ]
+            .map(
+                normalizeDisplayText
+            )
+            .filter(Boolean)
+            .join(' / ');
+
+
+        relatedCareer.textContent =
+            related;
+    }
 }
 
 
 // ============================================================
-// 7. TURNING POINTS
+// 10. Decision Process
+//
+// 01 きっかけ
+// 02 迷い
+// 03 判断軸
+// 04 最後の決め手
+//
+// Result / Unexpected / Learning はここには置かない。
 // ============================================================
 
-function renderTurningPoints(
-    decisions
+function renderDecisionProcess(
+    decision
 ) {
 
     const section =
@@ -1015,628 +1291,242 @@ function renderTurningPoints(
         ||
         !container
     ) {
-        return;
-    }
-
-
-    if (
-        !Array.isArray(decisions)
-        ||
-        decisions.length === 0
-    ) {
-
-        section.hidden = true;
-        container.innerHTML = '';
 
         return;
     }
 
 
-    container.innerHTML =
-        decisions
-            .map(
-                (decision, index) =>
-                    createTurningPointCard(
-                        decision,
-                        index,
-                        {
-                            isLoggedIn:
-                                careerDetailIsLoggedIn,
+    if (!decision) {
 
-                            isPrimaryPreview:
-                                index === 0
-                        }
-                    )
-            )
-            .join('');
+        section.hidden =
+            true;
 
 
-    section.hidden = false;
-}
+        container.innerHTML =
+            '';
 
 
-// ============================================================
-// 8. Turning Point Card
-// ============================================================
-
-function createTurningPointCard(
-    decision,
-    index,
-    options = {}
-) {
-
-    const {
-        isLoggedIn = false,
-        isPrimaryPreview = false
-    } = options;
+        return;
+    }
 
 
-    const type =
-        normalizeText(
-            decision.decision_type
-        )
-        ||
-        'キャリアの選択';
+    const steps = [
+
+        {
+            step:
+                '01',
+
+            key:
+                'trigger',
+
+            phase:
+                'きっかけ',
+
+            question:
+                'なぜ、この選択を考えた？',
+
+            value:
+                decision.trigger_text,
+
+            public:
+                true
+        },
 
 
-    const title =
-        normalizeText(
-            decision.title
-        )
-        ||
-        `${type}の振り返り`;
+        {
+            step:
+                '02',
+
+            key:
+                'dilemma',
+
+            phase:
+                '迷い',
+
+            question:
+                '何に迷った？',
+
+            value:
+                decision.dilemma_text,
+
+            public:
+                true
+        },
 
 
-    const date =
-        formatDecisionDate(
-            decision.occurred_at
+        {
+            step:
+                '03',
+
+            key:
+                'priority',
+
+            phase:
+                '判断軸',
+
+            question:
+                '何を大切にした？',
+
+            value:
+                decision.priority_text,
+
+            public:
+                true
+        },
+
+
+        {
+            step:
+                '04',
+
+            key:
+                'decision',
+
+            phase:
+                '決断',
+
+            question:
+                '最後の決め手は？',
+
+            value:
+                decision.final_reason,
+
+            public:
+                false
+        }
+
+    ];
+
+
+    const availableSteps =
+        steps.filter(
+            step =>
+                isAvailableValue(
+                    step.value
+                )
         );
 
 
-    const relatedCareer =
-        [
-            decision.company_name,
-            decision.department,
-            decision.position
-        ]
-        .map(normalizeText)
-        .filter(Boolean)
-        .join(' / ');
+    if (
+        availableSteps.length
+        ===
+        0
+    ) {
+
+        section.hidden =
+            true;
+
+
+        container.innerHTML =
+            '';
+
+
+        return;
+    }
+
+
+    const visibleSteps =
+        availableSteps.filter(
+            step =>
+                careerDetailIsLoggedIn
+                ||
+                step.public
+        );
 
 
     if (
-        !isLoggedIn
-        &&
-        !isPrimaryPreview
+        visibleSteps.length
+        ===
+        0
     ) {
 
-        return `
-            <article
-                class="
-                    turning-point-card
-                    turning-point-card--preview
-                "
-            >
+        section.hidden =
+            true;
 
-                <div class="turning-point-card__header">
 
-                    <div class="turning-point-card__number">
-                        ${String(index + 1).padStart(2, '0')}
-                    </div>
+        container.innerHTML =
+            '';
 
-                    <div class="turning-point-card__meta">
 
-                        <span class="turning-point-card__type">
-                            ${escapeHTML(type)}
-                        </span>
-
-                        <h3 class="turning-point-card__title">
-                            ${escapeHTML(title)}
-                        </h3>
-
-                    </div>
-
-                    ${
-                        date
-                            ? `
-                                <time class="turning-point-card__date">
-                                    ${escapeHTML(date)}
-                                </time>
-                            `
-                            : ''
-                    }
-
-                </div>
-
-                ${
-                    relatedCareer
-                        ? `
-                            <div class="turning-point-card__career">
-                                ${escapeHTML(relatedCareer)}
-                            </div>
-                        `
-                        : ''
-                }
-
-                <div class="turning-point-card__locked-note">
-
-                    <span>🔒</span>
-
-                    <span>
-                        この転機の詳細は無料登録後に読めます
-                    </span>
-
-                </div>
-
-            </article>
-        `;
+        return;
     }
 
 
-    const storySteps = [
+    container.innerHTML = `
 
-        {
-            step: '01',
-            key: 'why',
-            icon: '💡',
-            shortLabel: 'きっかけ',
-            label: 'なぜ、この選択を考えた？',
-            value: decision.trigger_text,
-            public: true
-        },
-
-        {
-            step: '02',
-            key: 'consideration',
-            icon: '◐',
-            shortLabel: '葛藤',
-            label: '何に迷った？',
-            value: decision.dilemma_text,
-            public: true
-        },
-
-        {
-            step: '03',
-            key: 'priority',
-            icon: '◆',
-            shortLabel: '判断軸',
-            label: '何を大切にした？',
-            value: decision.priority_text,
-            public: true
-        },
-
-        {
-            step: '04',
-            key: 'decision',
-            icon: '◎',
-            shortLabel: '決断',
-            label: '最後の決め手は？',
-            value: decision.final_reason,
-            public: false
-        },
-
-        {
-            step: '05',
-            key: 'outcome',
-            icon: '↗',
-            shortLabel: '結果',
-            label: '結果どうだった？',
-            value: decision.result_text,
-            public: false
-        },
-
-        {
-            step: '06',
-            key: 'learning',
-            icon: '✦',
-            shortLabel: '学び',
-            label: 'そこから何を学んだ？',
-            value: decision.learning_text,
-            public: false
-        }
-
-    ]
-    .filter(
-        step =>
-            normalizeText(
-                step.value
-            )
-    )
-    .filter(
-        step =>
-            isLoggedIn
-            ||
-            step.public
-    );
-
-
-    const storyHtml =
-        storySteps
-            .map(
-                step => `
-                    <div
-                        class="
-                            turning-story-step
-                            turning-story-step--${step.key}
-                        "
-                    >
-
-                        <div class="turning-story-step__rail">
-
-                            <span class="turning-story-step__number">
-                                ${step.step}
-                            </span>
-
-                            <span class="turning-story-step__line">
-                            </span>
-
-                        </div>
-
-                        <div class="turning-story-step__body">
-
-                            <div class="turning-story-step__heading">
-
-                                <span class="turning-story-step__icon">
-                                    ${step.icon}
-                                </span>
-
-                                <div class="turning-story-step__heading-text">
-
-                                    <span class="turning-story-step__phase">
-                                        ${escapeHTML(
-                                            step.shortLabel
-                                        )}
-                                    </span>
-
-                                    <h4 class="turning-story-step__question">
-                                        ${escapeHTML(
-                                            step.label
-                                        )}
-                                    </h4>
-
-                                </div>
-
-                            </div>
-
-                            <p class="turning-story-step__answer">${escapeHTML(normalizeText(step.value))}</p>
-
-                        </div>
-
-                    </div>
-                `
-            )
-            .join('');
-
-
-    const supplementaryHtml =
-        isLoggedIn
-            ? createTurningPointSupplementary(
-                decision
-            )
-            : '';
-
-
-    const sameChoiceHtml =
-        (
-            isLoggedIn
-            &&
-            isAvailableValue(
-                decision.same_choice_answer
-            )
-        )
-            ? `
-                <div class="turning-point-card__same-choice">
-
-                    <span>
-                        今なら同じ選択をする？
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            String(
-                                decision.same_choice_answer
-                            )
-                        )}
-                    </strong>
-
-                </div>
-            `
-            : '';
-
-
-    return `
-        <article class="turning-point-card">
-
-            <div class="turning-point-card__header">
-
-                <div class="turning-point-card__number">
-                    ${String(index + 1).padStart(2, '0')}
-                </div>
-
-                <div class="turning-point-card__meta">
-
-                    <span class="turning-point-card__type">
-                        ${escapeHTML(type)}
-                    </span>
-
-                    <h3 class="turning-point-card__title">
-                        ${escapeHTML(title)}
-                    </h3>
-
-                </div>
-
-                ${
-                    date
-                        ? `
-                            <time class="turning-point-card__date">
-                                ${escapeHTML(date)}
-                            </time>
-                        `
-                        : ''
-                }
-
-            </div>
+        <article class="career-decision-story-card">
 
             ${
-                relatedCareer
-                    ? `
-                        <div class="turning-point-card__career">
-                            ${escapeHTML(relatedCareer)}
-                        </div>
-                    `
-                    : ''
-            }
-
-            ${
-                storyHtml
-                    ? `
-                        <div class="turning-story">
-                            ${storyHtml}
-                        </div>
-                    `
-                    : ''
-            }
-
-            ${supplementaryHtml}
-
-            ${sameChoiceHtml}
-
-        </article>
-    `;
-}
-
-
-// ============================================================
-// 9. Turning Supplementary
-// ============================================================
-
-function createTurningPointSupplementary(
-    decision
-) {
-
-    const items = [];
-
-
-    if (
-        normalizeText(
-            decision.unexpected_result
-        )
-    ) {
-
-        items.push({
-            icon: '!',
-            label: '想定外だったこと',
-            value:
-                decision.unexpected_result
-        });
-    }
-
-
-    if (
-        normalizeText(
-            decision.same_choice_reason
-        )
-    ) {
-
-        items.push({
-            icon: '↺',
-            label: '今振り返って、そう思う理由',
-            value:
-                decision.same_choice_reason
-        });
-    }
-
-
-    if (items.length === 0) {
-
-        return '';
-    }
-
-
-    return `
-        <div class="turning-supplementary">
-
-            ${
-                items
+                visibleSteps
                     .map(
-                        item => `
-                            <div class="turning-supplementary__item">
+                        step => `
 
-                                <div class="turning-supplementary__heading">
+                            <article
+                                class="
+                                    career-decision-step
+                                    career-decision-step--${step.key}
+                                "
+                            >
 
-                                    <span class="turning-supplementary__icon">
-                                        ${item.icon}
+                                <div class="career-decision-step__rail">
+
+                                    <span class="career-decision-step__number">
+                                        ${step.step}
                                     </span>
 
-                                    <strong>
-                                        ${escapeHTML(
-                                            item.label
-                                        )}
-                                    </strong>
+                                    <span class="career-decision-step__line">
+                                    </span>
 
                                 </div>
 
-                                <p>
-                                    ${escapeHTML(
-                                        normalizeText(
-                                            item.value
-                                        )
-                                    )}
-                                </p>
 
-                            </div>
+                                <div class="career-decision-step__body">
+
+                                    <p class="career-decision-step__phase">
+                                        ${escapeHTML(step.phase)}
+                                    </p>
+
+
+                                    <h3 class="career-decision-step__question">
+                                        ${escapeHTML(step.question)}
+                                    </h3>
+
+
+                                    <p class="career-decision-step__answer">
+                                        ${
+                                            escapeHTML(
+                                                normalizeDisplayText(
+                                                    step.value
+                                                )
+                                            )
+                                        }
+                                    </p>
+
+                                </div>
+
+                            </article>
+
                         `
                     )
                     .join('')
             }
 
-        </div>
+        </article>
+
     `;
+
+
+    section.hidden =
+        false;
 }
 
 
 // ============================================================
-// 10. CAREER COMPASS
+// 11. After the Choice
 // ============================================================
 
-function renderCareerCompass(
-    decisions
-) {
-
-    const section =
-        getElement(
-            'career-compass-section'
-        );
-
-
-    const valuesContainer =
-        getElement(
-            'career-compass-values'
-        );
-
-
-    const keywordContainer =
-        getElement(
-            'career-compass-keywords'
-        );
-
-
-    if (
-        !section
-        ||
-        !valuesContainer
-        ||
-        !keywordContainer
-    ) {
-        return;
-    }
-
-
-    const values = [];
-
-
-    decisions.forEach(
-        decision => {
-
-            const value =
-                normalizeText(
-                    decision.priority_text
-                );
-
-
-            if (
-                value
-                &&
-                !values.includes(value)
-            ) {
-
-                values.push(value);
-            }
-        }
-    );
-
-
-    if (values.length === 0) {
-
-        section.hidden = true;
-
-        return;
-    }
-
-
-    const visibleValues =
-        careerDetailIsLoggedIn
-            ? values.slice(0, 3)
-            : values.slice(0, 1);
-
-
-    valuesContainer.innerHTML =
-        visibleValues
-            .map(
-                (value, index) => `
-                    <div class="compass-value">
-
-                        <span class="compass-value__rank">
-                            ${String(index + 1).padStart(2, '0')}
-                        </span>
-
-                        <span class="compass-value__text">
-                            ${escapeHTML(
-                                truncateText(
-                                    value,
-                                    110
-                                )
-                            )}
-                        </span>
-
-                    </div>
-                `
-            )
-            .join('');
-
-
-    const decisionTypes =
-        [
-            ...new Set(
-                decisions
-                    .map(
-                        decision =>
-                            normalizeText(
-                                decision.decision_type
-                            )
-                    )
-                    .filter(Boolean)
-            )
-        ]
-        .slice(
-            0,
-            careerDetailIsLoggedIn
-                ? 5
-                : 3
-        );
-
-
-    keywordContainer.innerHTML =
-        decisionTypes
-            .map(
-                type => `
-                    <span class="compass-keyword">
-                        #${escapeHTML(type)}
-                    </span>
-                `
-            )
-            .join('');
-
-
-    section.hidden = false;
-}
-
-
-// ============================================================
-// 11. CAREER OUTCOME
-// ============================================================
-
-function renderCareerOutcome(
+function renderAfterChoice(
+    decision,
     companies
 ) {
 
@@ -1646,9 +1536,198 @@ function renderCareerOutcome(
         );
 
 
+    if (!section) {
+
+        return;
+    }
+
+
+    const hasStory =
+        renderAfterChoiceStory(
+            decision
+        );
+
+
+    const hasOutcome =
+        renderCareerOutcomeData(
+            companies,
+            decision
+        );
+
+
+    section.hidden =
+        !(
+            hasStory
+            ||
+            hasOutcome
+        );
+}
+
+
+// ============================================================
+// 12. After the Choice - Story
+// ============================================================
+
+function renderAfterChoiceStory(
+    decision
+) {
+
+    const story =
+        getElement(
+            'career-after-choice-story'
+        );
+
+
+    const resultWrapper =
+        getElement(
+            'career-after-choice-result-wrapper'
+        );
+
+
+    const result =
+        getElement(
+            'career-after-choice-result'
+        );
+
+
+    const unexpectedWrapper =
+        getElement(
+            'career-after-choice-unexpected-wrapper'
+        );
+
+
+    const unexpected =
+        getElement(
+            'career-after-choice-unexpected'
+        );
+
+
+    const learningWrapper =
+        getElement(
+            'career-after-choice-learning-wrapper'
+        );
+
+
+    const learning =
+        getElement(
+            'career-after-choice-learning'
+        );
+
+
+    if (!story) {
+
+        return false;
+    }
+
+
+    // Result / Unexpected / Learning は
+    // 登録後の価値として扱う。
+
+    if (
+        !decision
+        ||
+        !careerDetailIsLoggedIn
+    ) {
+
+        story.hidden =
+            true;
+
+
+        return false;
+    }
+
+
+    const resultText =
+        normalizeDisplayText(
+            decision.result_text
+        );
+
+
+    const unexpectedText =
+        normalizeDisplayText(
+            decision.unexpected_result
+        );
+
+
+    const learningText =
+        normalizeDisplayText(
+            decision.learning_text
+        );
+
+
+    const hasResult =
+        Boolean(
+            resultText
+        );
+
+
+    const hasUnexpected =
+        Boolean(
+            unexpectedText
+        );
+
+
+    const hasLearning =
+        Boolean(
+            learningText
+        );
+
+
+    setTextBlock(
+        resultWrapper,
+        result,
+        resultText
+    );
+
+
+    setTextBlock(
+        unexpectedWrapper,
+        unexpected,
+        unexpectedText
+    );
+
+
+    setTextBlock(
+        learningWrapper,
+        learning,
+        learningText
+    );
+
+
+    const hasStory =
+        hasResult
+        ||
+        hasUnexpected
+        ||
+        hasLearning;
+
+
+    story.hidden =
+        !hasStory;
+
+
+    return hasStory;
+}
+
+
+// ============================================================
+// 13. Career Outcome Data
+// ============================================================
+
+function renderCareerOutcomeData(
+    companies,
+    decision
+) {
+
     const kpis =
         getElement(
             'career-outcome-kpis'
+        );
+
+
+    const comparison =
+        getElement(
+            'career-outcome-comparison'
         );
 
 
@@ -1664,32 +1743,63 @@ function renderCareerOutcome(
         );
 
 
-    if (
-        !section
-        ||
-        !kpis
-    ) {
-        return;
+    if (!kpis) {
+
+        return false;
     }
 
 
-    const careerPoints =
+    const points =
         createCareerOutcomePoints(
             companies
         );
 
 
-    if (careerPoints.length === 0) {
+    if (
+        points.length
+        ===
+        0
+    ) {
 
-        section.hidden = true;
+        kpis.innerHTML =
+            '';
 
-        return;
+
+        if (comparison) {
+
+            comparison.hidden =
+                true;
+
+
+            comparison.innerHTML =
+                '';
+        }
+
+
+        if (chartWrapper) {
+
+            chartWrapper.hidden =
+                true;
+        }
+
+
+        if (lock) {
+
+            lock.hidden =
+                true;
+        }
+
+
+        destroyCareerOutcomeChart();
+
+
+        return false;
     }
 
 
-    const latestCareerPoint =
+    const latestPoint =
         getLatestCareerPointFromPoints(
-            careerPoints
+            points
         );
 
 
@@ -1697,34 +1807,40 @@ function renderCareerOutcome(
 
 
     if (
-        latestCareerPoint
+        latestPoint
         &&
         isAvailableValue(
-            latestCareerPoint.salary
+            latestPoint.salary
         )
     ) {
 
         kpiItems.push({
-            label: '現在の年収レンジ',
+            label:
+                '現在の年収レンジ',
+
             value:
-                latestCareerPoint.salary
+                normalizeDisplayText(
+                    latestPoint.salary
+                )
         });
     }
 
 
     if (
-        latestCareerPoint
+        latestPoint
         &&
         isAvailableValue(
-            latestCareerPoint.satisfaction_level
+            latestPoint.satisfaction_level
         )
     ) {
 
         kpiItems.push({
-            label: '現在の仕事満足度',
+            label:
+                '現在の仕事満足度',
+
             value:
                 formatSatisfaction(
-                    latestCareerPoint.satisfaction_level
+                    latestPoint.satisfaction_level
                 )
         });
     }
@@ -1734,169 +1850,529 @@ function renderCareerOutcome(
         kpiItems
             .map(
                 item => `
+
                     <div class="outcome-kpi">
 
                         <span class="outcome-kpi__label">
-                            ${escapeHTML(
-                                item.label
-                            )}
+                            ${escapeHTML(item.label)}
                         </span>
 
                         <strong class="outcome-kpi__value">
-                            ${escapeHTML(
-                                String(
-                                    item.value
+                            ${
+                                escapeHTML(
+                                    String(item.value)
                                 )
-                            )}
+                            }
                         </strong>
 
                     </div>
+
                 `
             )
             .join('');
 
 
-    const trendPoints =
-        careerPoints.filter(
-            point =>
-                isAvailableValue(
-                    point.salary
-                )
-                ||
-                isAvailableValue(
-                    point.satisfaction_level
-                )
+    renderOutcomeComparison(
+        comparison,
+        points,
+        decision
+    );
+
+
+    renderOutcomeTrend(
+        chartWrapper,
+        points
+    );
+
+
+    if (lock) {
+
+        lock.hidden =
+            true;
+    }
+
+
+    return true;
+}
+
+
+// ============================================================
+// 14. Before / After
+// ============================================================
+
+function renderOutcomeComparison(
+    container,
+    points,
+    decision
+) {
+
+    if (!container) {
+
+        return;
+    }
+
+
+    const pair =
+        getBeforeAfterPoints(
+            points,
+            decision
         );
 
 
     if (
-        trendPoints.length < 2
+        !pair.before
+        ||
+        !pair.after
+    ) {
+
+        container.hidden =
+            true;
+
+
+        container.innerHTML =
+            '';
+
+
+        return;
+    }
+
+
+    container.innerHTML = `
+
+        <div class="career-outcome-comparison__column">
+
+            <p class="career-outcome-comparison__eyebrow">
+                BEFORE
+            </p>
+
+            <h3 class="career-outcome-comparison__title">
+                選択前
+            </h3>
+
+            ${
+                createOutcomeComparisonValue(
+                    '年収',
+                    pair.before.salary
+                )
+            }
+
+            ${
+                createOutcomeComparisonValue(
+                    '仕事満足度',
+
+                    isAvailableValue(
+                        pair.before.satisfaction_level
+                    )
+                        ? formatSatisfaction(
+                            pair.before.satisfaction_level
+                        )
+                        : ''
+                )
+            }
+
+        </div>
+
+
+        <div class="career-outcome-comparison__arrow">
+            →
+        </div>
+
+
+        <div
+            class="
+                career-outcome-comparison__column
+                career-outcome-comparison__column--after
+            "
+        >
+
+            <p class="career-outcome-comparison__eyebrow">
+                AFTER
+            </p>
+
+            <h3 class="career-outcome-comparison__title">
+                選択後
+            </h3>
+
+            ${
+                createOutcomeComparisonValue(
+                    '年収',
+                    pair.after.salary
+                )
+            }
+
+            ${
+                createOutcomeComparisonValue(
+                    '仕事満足度',
+
+                    isAvailableValue(
+                        pair.after.satisfaction_level
+                    )
+                        ? formatSatisfaction(
+                            pair.after.satisfaction_level
+                        )
+                        : ''
+                )
+            }
+
+        </div>
+
+    `;
+
+
+    container.hidden =
+        false;
+}
+
+
+function createOutcomeComparisonValue(
+    label,
+    value
+) {
+
+    if (
+        !isAvailableValue(
+            value
+        )
+    ) {
+
+        return '';
+    }
+
+
+    return `
+
+        <div class="career-outcome-comparison__value">
+
+            <span>
+                ${escapeHTML(label)}
+            </span>
+
+            <strong>
+                ${
+                    escapeHTML(
+                        normalizeDisplayText(
+                            value
+                        )
+                    )
+                }
+            </strong>
+
+        </div>
+
+    `;
+}
+
+
+// ============================================================
+// 15. Before / After Point Selection
+// ============================================================
+
+function getBeforeAfterPoints(
+    points,
+    decision
+) {
+
+    if (
+        !Array.isArray(
+            points
+        )
+        ||
+        points.length < 2
+    ) {
+
+        return {
+            before:
+                null,
+
+            after:
+                null
+        };
+    }
+
+
+    const decisionDate =
+        getSortableDate(
+            decision?.occurred_at
+        );
+
+
+    if (
+        decisionDate
+        >
+        0
+    ) {
+
+        const beforeCandidates =
+            points.filter(
+                point => {
+
+                    const pointDate =
+                        getPointSortableDate(
+                            point
+                        );
+
+
+                    return (
+                        pointDate > 0
+                        &&
+                        pointDate <= decisionDate
+                    );
+                }
+            );
+
+
+        const afterCandidates =
+            points.filter(
+                point =>
+                    getPointSortableDate(
+                        point
+                    )
+                    >
+                    decisionDate
+            );
+
+
+        const before =
+            beforeCandidates.length > 0
+                ? beforeCandidates[
+                    beforeCandidates.length - 1
+                ]
+                : null;
+
+
+        const after =
+            afterCandidates.length > 0
+                ? afterCandidates[0]
+                : null;
+
+
+        if (
+            before
+            &&
+            after
+        ) {
+
+            return {
+                before,
+                after
+            };
+        }
+    }
+
+
+    // Decision日時との紐付けが取れない場合のFallback
+
+    return {
+        before:
+            points[0],
+
+        after:
+            points[
+                points.length - 1
+            ]
+    };
+}
+
+
+// ============================================================
+// 16. Outcome Trend
+// ============================================================
+
+function renderOutcomeTrend(
+    chartWrapper,
+    points
+) {
+
+    if (!chartWrapper) {
+
+        return;
+    }
+
+
+    const satisfactionPoints =
+        points.filter(
+            point =>
+                parseSatisfaction(
+                    point.satisfaction_level
+                )
+                !==
+                null
+        );
+
+
+    // ========================================================
+    // 比較できる履歴が不足
+    // ========================================================
+
+    if (
+        satisfactionPoints.length
+        <
+        2
     ) {
 
         destroyCareerOutcomeChart();
 
 
-        if (chartWrapper) {
-
-            chartWrapper.hidden = false;
-
-            chartWrapper.classList.remove(
-                'is-locked'
-            );
+        setOutcomeWrapperCompact(
+            chartWrapper
+        );
 
 
-            chartWrapper.innerHTML = `
-                <div class="career-outcome-empty">
+        chartWrapper.innerHTML = `
 
-                    <p class="career-outcome-empty__label">
-                        CURRENT STATUS
-                    </p>
+            <div class="career-outcome-empty">
 
-                    <p class="career-outcome-empty__text">
-                        現在は比較できるキャリア履歴が1件のため、
-                        年収・仕事満足度の推移はまだ表示されません。
-                    </p>
+                <p class="career-outcome-empty__label">
+                    CURRENT STATUS
+                </p>
 
-                    <p class="career-outcome-empty__sub">
-                        過去の役割履歴が増えると、
-                        キャリアの変化を時系列で確認できます。
-                    </p>
+                <p class="career-outcome-empty__text">
+                    現在は比較できる仕事満足度の履歴が十分ではありません。
+                </p>
 
-                </div>
-            `;
-        }
+                <p class="career-outcome-empty__sub">
+                    過去の役割履歴が増えると、
+                    変化を時系列で確認できます。
+                </p>
 
+            </div>
 
-        if (lock) {
-            lock.hidden = true;
-        }
+        `;
 
 
-        section.hidden = false;
+        chartWrapper.hidden =
+            false;
+
 
         return;
     }
 
 
-    if (!careerDetailIsLoggedIn) {
+    // ========================================================
+    // Guest
+    // ========================================================
+
+    if (
+        !careerDetailIsLoggedIn
+    ) {
 
         destroyCareerOutcomeChart();
 
 
-        if (chartWrapper) {
-
-            chartWrapper.hidden = false;
-
-            chartWrapper.classList.remove(
-                'is-locked'
-            );
+        setOutcomeWrapperCompact(
+            chartWrapper
+        );
 
 
-            chartWrapper.innerHTML = `
-                <div class="career-outcome-guest">
+        chartWrapper.innerHTML = `
 
-                    <div class="career-outcome-guest__icon">
-                        🔒
-                    </div>
+            <div class="career-outcome-guest">
 
-                    <p class="career-outcome-guest__title">
-                        年収・満足度の変化を見る
-                    </p>
-
-                    <p class="career-outcome-guest__text">
-                        この人がキャリアの選択を重ねる中で、
-                        年収や仕事満足度がどう変化してきたのかを確認できます。
-                    </p>
-
-                    <a
-                        href="/Register.html"
-                        class="career-outcome-guest__cta"
-                    >
-                        無料で続きを見る
-                    </a>
-
+                <div class="career-outcome-guest__icon">
+                    🔒
                 </div>
-            `;
-        }
+
+                <p class="career-outcome-guest__title">
+                    選択後の変化を詳しく見る
+                </p>
+
+                <p class="career-outcome-guest__text">
+                    仕事満足度がキャリアの変化とともに
+                    どう動いたのかを確認できます。
+                </p>
+
+                <a
+                    href="/Register.html"
+                    class="career-outcome-guest__cta"
+                >
+                    無料で続きを見る
+                </a>
+
+            </div>
+
+        `;
 
 
-        if (lock) {
-            lock.hidden = true;
-        }
+        chartWrapper.hidden =
+            false;
 
-
-        section.hidden = false;
 
         return;
     }
 
 
+    // ========================================================
+    // Logged in
+    // ========================================================
+
     restoreCareerOutcomeCanvas();
 
 
-    renderCareerOutcomeChart(
-        trendPoints
+    resetOutcomeWrapperForChart(
+        chartWrapper
     );
 
 
-    if (lock) {
-        lock.hidden = true;
-    }
-
-
-    section.hidden = false;
+    renderCareerOutcomeChart(
+        satisfactionPoints
+    );
 }
 
 
 // ============================================================
-// 12. Career Outcome Point Generation
+// 17. Outcome Wrapper
+// ============================================================
+
+function setOutcomeWrapperCompact(
+    wrapper
+) {
+
+    wrapper.classList.add(
+        'is-compact'
+    );
+
+
+    wrapper.style.height =
+        'auto';
+
+
+    wrapper.style.minHeight =
+        '0';
+}
+
+
+function resetOutcomeWrapperForChart(
+    wrapper
+) {
+
+    wrapper.classList.remove(
+        'is-compact'
+    );
+
+
+    wrapper.style.height =
+        '';
+
+
+    wrapper.style.minHeight =
+        '';
+}
+
+
+// ============================================================
+// 18. Career Outcome Points
 // ============================================================
 
 function createCareerOutcomePoints(
     companies
 ) {
 
-    if (!Array.isArray(companies)) {
+    if (
+        !Array.isArray(
+            companies
+        )
+    ) {
+
         return [];
     }
 
@@ -1908,7 +2384,9 @@ function createCareerOutcomePoints(
         company => {
 
             const roles =
-                Array.isArray(company.roles)
+                Array.isArray(
+                    company.roles
+                )
                     ? company.roles
                     : [];
 
@@ -1926,10 +2404,21 @@ function createCareerOutcomePoints(
                 );
 
 
-            if (validRoles.length > 0) {
+            // ------------------------------------------------
+            // Role履歴がある場合
+            // ------------------------------------------------
+
+            if (
+                validRoles.length
+                >
+                0
+            ) {
 
                 validRoles.forEach(
-                    (role, roleIndex) => {
+                    (
+                        role,
+                        roleIndex
+                    ) => {
 
                         points.push({
 
@@ -1940,49 +2429,58 @@ function createCareerOutcomePoints(
                                 company.id,
 
                             company:
-                                normalizeText(
+                                normalizeDisplayText(
                                     company.name
                                 )
-                                || '勤務先',
+                                ||
+                                '勤務先',
 
                             roleId:
                                 role.id,
 
                             role:
-                                normalizeText(
+                                normalizeDisplayText(
                                     role.position
                                 )
                                 ||
-                                normalizeText(
+                                normalizeDisplayText(
                                     role.job_category
                                 )
                                 ||
                                 `役割${roleIndex + 1}`,
 
                             department:
-                                normalizeText(
+                                normalizeDisplayText(
                                     role.department
                                 ),
 
                             start:
-                                role.start_period,
+                                normalizeDateValue(
+                                    role.start_period
+                                ),
 
                             end:
-                                role.end_period,
+                                normalizeDateValue(
+                                    role.end_period
+                                ),
 
                             startYear:
                                 getYearFromDate(
                                     role.start_period
                                 )
                                 ||
-                                company.startYear,
+                                normalizeYearValue(
+                                    company.startYear
+                                ),
 
                             endYear:
                                 getYearFromDate(
                                     role.end_period
                                 )
                                 ||
-                                company.endYear,
+                                normalizeYearValue(
+                                    company.endYear
+                                ),
 
                             salary:
                                 role.salary,
@@ -1994,13 +2492,19 @@ function createCareerOutcomePoints(
                                 Number(
                                     role.display_order
                                 )
+
                         });
                     }
                 );
 
+
                 return;
             }
 
+
+            // ------------------------------------------------
+            // Role履歴がない場合はCompany値
+            // ------------------------------------------------
 
             if (
                 isAvailableValue(
@@ -2021,37 +2525,48 @@ function createCareerOutcomePoints(
                         company.id,
 
                     company:
-                        normalizeText(
+                        normalizeDisplayText(
                             company.name
                         )
-                        || '勤務先',
+                        ||
+                        '勤務先',
 
                     roleId:
                         null,
 
                     role:
-                        normalizeText(
+                        normalizeDisplayText(
                             company.position
                         )
                         ||
-                        normalizeText(
+                        normalizeDisplayText(
                             company.job_category
                         ),
 
                     department:
-                        '',
+                        normalizeDisplayText(
+                            company.department
+                        ),
 
                     start:
-                        null,
+                        normalizeDateValue(
+                            company.work_start_period
+                        ),
 
                     end:
-                        null,
+                        normalizeDateValue(
+                            company.work_end_period
+                        ),
 
                     startYear:
-                        company.startYear,
+                        normalizeYearValue(
+                            company.startYear
+                        ),
 
                     endYear:
-                        company.endYear,
+                        normalizeYearValue(
+                            company.endYear
+                        ),
 
                     salary:
                         company.salary,
@@ -2061,6 +2576,7 @@ function createCareerOutcomePoints(
 
                     displayOrder:
                         0
+
                 });
             }
         }
@@ -2076,20 +2592,24 @@ function createCareerOutcomePoints(
 }
 
 
+// ============================================================
+// 19. Outcome Point Sorting
+// ============================================================
+
 function compareCareerOutcomePoints(
     a,
     b
 ) {
 
     const aDate =
-        getSortableDate(
-            a.start
+        getPointSortableDate(
+            a
         );
 
 
     const bDate =
-        getSortableDate(
-            b.start
+        getPointSortableDate(
+            b
         );
 
 
@@ -2101,88 +2621,91 @@ function compareCareerOutcomePoints(
         aDate !== bDate
     ) {
 
-        return aDate - bDate;
-    }
-
-
-    const aYear =
-        getSortableYear(
-            a.startYear
+        return (
+            aDate
+            -
+            bDate
         );
-
-
-    const bYear =
-        getSortableYear(
-            b.startYear
-        );
-
-
-    if (aYear !== bYear) {
-
-        return aYear - bYear;
-    }
-
-
-    const aCompany =
-        Number(
-            a.companyId || 0
-        );
-
-
-    const bCompany =
-        Number(
-            b.companyId || 0
-        );
-
-
-    if (aCompany !== bCompany) {
-
-        return aCompany - bCompany;
-    }
-
-
-    const aOrder =
-        Number.isFinite(
-            a.displayOrder
-        )
-            ? a.displayOrder
-            : 9999;
-
-
-    const bOrder =
-        Number.isFinite(
-            b.displayOrder
-        )
-            ? b.displayOrder
-            : 9999;
-
-
-    if (aOrder !== bOrder) {
-
-        return aOrder - bOrder;
     }
 
 
     return (
-        Number(a.roleId || 0)
+        Number(
+            a.companyId
+            ||
+            0
+        )
         -
-        Number(b.roleId || 0)
+        Number(
+            b.companyId
+            ||
+            0
+        )
     );
 }
 
+
+function getPointSortableDate(
+    point
+) {
+
+    const date =
+        getSortableDate(
+            point?.start
+        );
+
+
+    if (
+        date
+        >
+        0
+    ) {
+
+        return date;
+    }
+
+
+    const year =
+        Number(
+            point?.startYear
+        );
+
+
+    if (
+        Number.isFinite(
+            year
+        )
+    ) {
+
+        return (
+            new Date(
+                year,
+                0,
+                1
+            )
+            .getTime()
+        );
+    }
+
+
+    return 0;
+}
+
+
+// ============================================================
+// 20. Latest Career Point
+// ============================================================
 
 function getLatestCareerPoint(
     companies
 ) {
 
-    const points =
-        createCareerOutcomePoints(
-            companies
-        );
-
-
-    return getLatestCareerPointFromPoints(
-        points
+    return (
+        getLatestCareerPointFromPoints(
+            createCareerOutcomePoints(
+                companies
+            )
+        )
     );
 }
 
@@ -2192,7 +2715,9 @@ function getLatestCareerPointFromPoints(
 ) {
 
     if (
-        !Array.isArray(points)
+        !Array.isArray(
+            points
+        )
         ||
         points.length === 0
     ) {
@@ -2203,24 +2728,29 @@ function getLatestCareerPointFromPoints(
 
     const currentPoints =
         points.filter(
-            point =>
-                isCurrentCareerPoint(
-                    point
-                )
+            isCurrentCareerPoint
         );
 
 
-    if (currentPoints.length > 0) {
+    if (
+        currentPoints.length
+        >
+        0
+    ) {
 
-        return currentPoints[
-            currentPoints.length - 1
-        ];
+        return (
+            currentPoints[
+                currentPoints.length - 1
+            ]
+        );
     }
 
 
-    return points[
-        points.length - 1
-    ];
+    return (
+        points[
+            points.length - 1
+        ]
+    );
 }
 
 
@@ -2229,33 +2759,52 @@ function isCurrentCareerPoint(
 ) {
 
     const end =
-        normalizeText(
-            point.end
+        normalizeDisplayText(
+            point?.end
         )
         .toLowerCase();
 
 
     const endYear =
-        normalizeText(
-            point.endYear
+        normalizeDisplayText(
+            point?.endYear
         )
         .toLowerCase();
 
 
-    return (
-        !end
+    if (
+        [
+            '現時点',
+            '現在',
+            'present'
+        ]
+        .includes(
+            endYear
+        )
+    ) {
+
+        return true;
+    }
+
+
+    if (
+        end
         ||
-        endYear === '現時点'
-        ||
-        endYear === '現在'
-        ||
-        endYear === 'present'
-    );
+        /^\d{4}$/.test(
+            endYear
+        )
+    ) {
+
+        return false;
+    }
+
+
+    return true;
 }
 
 
 // ============================================================
-// 13. Outcome Chart
+// 21. Satisfaction Chart
 // ============================================================
 
 function renderCareerOutcomeChart(
@@ -2281,8 +2830,11 @@ function renderCareerOutcomeChart(
     ) {
 
         if (wrapper) {
-            wrapper.hidden = true;
+
+            wrapper.hidden =
+                true;
         }
+
 
         return;
     }
@@ -2291,17 +2843,19 @@ function renderCareerOutcomeChart(
     const validPoints =
         points.filter(
             point =>
-                isAvailableValue(
-                    point.salary
-                )
-                ||
-                isAvailableValue(
+                parseSatisfaction(
                     point.satisfaction_level
                 )
+                !==
+                null
         );
 
 
-    if (validPoints.length < 2) {
+    if (
+        validPoints.length
+        <
+        2
+    ) {
 
         destroyCareerOutcomeChart();
 
@@ -2311,19 +2865,7 @@ function renderCareerOutcomeChart(
 
     const labels =
         validPoints.map(
-            point =>
-                createOutcomePointLabel(
-                    point
-                )
-        );
-
-
-    const salaryValues =
-        validPoints.map(
-            point =>
-                salaryToNumber(
-                    point.salary
-                )
+            createOutcomePointLabel
         );
 
 
@@ -2331,24 +2873,6 @@ function renderCareerOutcomeChart(
         validPoints.map(
             point =>
                 parseSatisfaction(
-                    point.satisfaction_level
-                )
-        );
-
-
-    const salaryOriginalLabels =
-        validPoints.map(
-            point =>
-                normalizeText(
-                    point.salary
-                )
-        );
-
-
-    const satisfactionOriginalLabels =
-        validPoints.map(
-            point =>
-                formatSatisfaction(
                     point.satisfaction_level
                 )
         );
@@ -2362,54 +2886,16 @@ function renderCareerOutcomeChart(
             canvas,
             {
 
-                type: 'line',
+                type:
+                    'line',
 
 
                 data: {
 
                     labels,
 
+
                     datasets: [
-
-                        {
-                            label: '年収',
-
-                            data:
-                                salaryValues,
-
-                            yAxisID:
-                                'salary',
-
-                            borderColor:
-                                '#59483a',
-
-                            backgroundColor:
-                                '#59483a',
-
-                            borderWidth:
-                                2.4,
-
-                            pointRadius:
-                                5,
-
-                            pointHoverRadius:
-                                6,
-
-                            pointBorderWidth:
-                                2,
-
-                            pointBackgroundColor:
-                                '#ffffff',
-
-                            pointBorderColor:
-                                '#40382f',
-
-                            spanGaps:
-                                true,
-
-                            tension:
-                                0
-                        },
 
                         {
                             label:
@@ -2418,14 +2904,11 @@ function renderCareerOutcomeChart(
                             data:
                                 satisfactionValues,
 
-                            yAxisID:
-                                'satisfaction',
-
                             borderColor:
-                                '#75824f',
+                                '#1d5f9e',
 
                             backgroundColor:
-                                '#75824f',
+                                '#1d5f9e',
 
                             borderWidth:
                                 2.4,
@@ -2443,7 +2926,7 @@ function renderCareerOutcomeChart(
                                 '#ffffff',
 
                             pointBorderColor:
-                                '#748542',
+                                '#1d5f9e',
 
                             spanGaps:
                                 true,
@@ -2458,31 +2941,20 @@ function renderCareerOutcomeChart(
 
                 options: {
 
-                    responsive: true,
+                    responsive:
+                        true,
 
-                    maintainAspectRatio: false,
+                    maintainAspectRatio:
+                        false,
 
 
                     interaction: {
 
-                        mode: 'index',
+                        mode:
+                            'index',
 
-                        intersect: false
-                    },
-
-
-                    layout: {
-
-                        padding: {
-
-                            top: 28,
-
-                            right: 12,
-
-                            bottom: 8,
-
-                            left: 4
-                        }
+                        intersect:
+                            false
                     },
 
 
@@ -2505,18 +2977,22 @@ function renderCareerOutcomeChart(
                                 pointStyle:
                                     'circle',
 
-                                boxWidth: 8,
+                                boxWidth:
+                                    8,
 
-                                boxHeight: 8,
+                                boxHeight:
+                                    8,
 
-                                padding: 20,
+                                padding:
+                                    20,
 
                                 color:
-                                    '#66615c',
+                                    '#637386',
 
                                 font: {
 
-                                    size: 11,
+                                    size:
+                                        11,
 
                                     weight:
                                         '600'
@@ -2527,7 +3003,8 @@ function renderCareerOutcomeChart(
 
                         tooltip: {
 
-                            enabled: true,
+                            enabled:
+                                true,
 
 
                             callbacks: {
@@ -2540,57 +3017,32 @@ function renderCareerOutcomeChart(
 
 
                                     const point =
-                                        validPoints[index];
+                                        validPoints[
+                                            index
+                                        ];
 
 
                                     if (!point) {
+
                                         return '';
                                     }
 
 
-                                    const parts = [
+                                    return [
                                         point.company,
                                         point.role
                                     ]
-                                    .filter(Boolean);
-
-
-                                    return parts.join(
-                                        ' / '
-                                    );
+                                    .filter(Boolean)
+                                    .join(' / ');
                                 },
 
 
                                 label(context) {
 
-                                    if (
-                                        context.datasetIndex === 0
-                                    ) {
-
-                                        return (
-                                            `年収：`
-                                            +
-                                            (
-                                                salaryOriginalLabels[
-                                                    context.dataIndex
-                                                ]
-                                                ||
-                                                '-'
-                                            )
-                                        );
-                                    }
-
-
                                     return (
                                         `満足度：`
                                         +
-                                        (
-                                            satisfactionOriginalLabels[
-                                                context.dataIndex
-                                            ]
-                                            ||
-                                            '-'
-                                        )
+                                        `${context.parsed.y} / 5`
                                     );
                                 }
                             }
@@ -2619,84 +3071,39 @@ function renderCareerOutcomeChart(
                             ticks: {
 
                                 color:
-                                    '#817b74',
+                                    '#637386',
 
                                 font: {
 
-                                    size: 10
+                                    size:
+                                        10
                                 },
 
-                                maxRotation: 0,
+                                maxRotation:
+                                    0,
 
-                                minRotation: 0,
+                                minRotation:
+                                    0,
 
-                                autoSkip: false
+                                autoSkip:
+                                    false
                             }
                         },
 
 
-                        salary: {
+                        y: {
 
-                            type:
-                                'linear',
+                            min:
+                                0,
 
-                            position:
-                                'left',
-
-                            beginAtZero:
-                                false,
+                            max:
+                                5.5,
 
 
                             grid: {
 
                                 color:
-                                    'rgba(41,39,34,0.06)'
-                            },
-
-
-                            border: {
-
-                                display:
-                                    false
-                            },
-
-
-                            ticks: {
-
-                                color:
-                                    '#969089',
-
-                                font: {
-
-                                    size: 10
-                                },
-
-
-                                callback(value) {
-
-                                    return `${value}万`;
-                                }
-                            }
-                        },
-
-
-                        satisfaction: {
-
-                            type:
-                                'linear',
-
-                            position:
-                                'right',
-
-                            min: 0,
-
-                            max: 5.5,
-
-
-                            grid: {
-
-                                drawOnChartArea:
-                                    false
+                                    'rgba(13,39,68,0.07)'
                             },
 
 
@@ -2713,17 +3120,12 @@ function renderCareerOutcomeChart(
                                     1,
 
                                 color:
-                                    '#969089',
+                                    '#8997a6',
 
                                 font: {
 
-                                    size: 10
-                                },
-
-
-                                callback(value) {
-
-                                    return `${value}`;
+                                    size:
+                                        10
                                 }
                             }
                         }
@@ -2735,14 +3137,11 @@ function renderCareerOutcomeChart(
 
     if (wrapper) {
 
-        wrapper.hidden = false;
+        wrapper.hidden =
+            false;
     }
 }
 
-
-// ============================================================
-// 14. Outcome Helpers
-// ============================================================
 
 function destroyCareerOutcomeChart() {
 
@@ -2750,7 +3149,8 @@ function destroyCareerOutcomeChart() {
 
         careerOutcomeChart.destroy();
 
-        careerOutcomeChart = null;
+        careerOutcomeChart =
+            null;
     }
 }
 
@@ -2764,6 +3164,7 @@ function restoreCareerOutcomeCanvas() {
 
 
     if (!wrapper) {
+
         return;
     }
 
@@ -2776,7 +3177,9 @@ function restoreCareerOutcomeCanvas() {
 
     if (existingCanvas) {
 
-        wrapper.hidden = false;
+        wrapper.hidden =
+            false;
+
 
         return;
     }
@@ -2787,7 +3190,8 @@ function restoreCareerOutcomeCanvas() {
     `;
 
 
-    wrapper.hidden = false;
+    wrapper.hidden =
+        false;
 }
 
 
@@ -2802,13 +3206,15 @@ function createOutcomePointLabel(
             )
             : (
                 point.startYear
-                    ? String(point.startYear)
+                    ? String(
+                        point.startYear
+                    )
                     : ''
             );
 
 
     const role =
-        normalizeText(
+        normalizeDisplayText(
             point.role
         );
 
@@ -2826,18 +3232,12 @@ function createOutcomePointLabel(
     }
 
 
-    if (start) {
-        return start;
-    }
-
-
-    if (role) {
-        return role;
-    }
-
-
     return (
-        normalizeText(
+        start
+        ||
+        role
+        ||
+        normalizeDisplayText(
             point.company
         )
         ||
@@ -2846,86 +3246,45 @@ function createOutcomePointLabel(
 }
 
 
-function salaryToNumber(
-    value
-) {
-
-    if (
-        !isAvailableValue(
-            value
-        )
-    ) {
-
-        return null;
-    }
-
-
-    const text =
-        String(value)
-            .replace(/,/g, '')
-            .replace(/万円/g, '')
-            .replace(/万/g, '')
-            .replace(/円/g, '')
-            .trim();
-
-
-    const numbers =
-        text.match(
-            /\d+(?:\.\d+)?/g
-        );
-
-
-    if (
-        !numbers
-        ||
-        numbers.length === 0
-    ) {
-
-        return null;
-    }
-
-
-    const parsed =
-        numbers
-            .map(Number)
-            .filter(
-                Number.isFinite
-            );
-
-
-    if (parsed.length === 0) {
-
-        return null;
-    }
-
-
-    if (parsed.length === 1) {
-
-        return parsed[0];
-    }
-
-
-    return Math.round(
-        (
-            parsed[0]
-            +
-            parsed[1]
-        )
-        /
-        2
-    );
-}
-
-
 // ============================================================
-// 15. MESSAGE
+// 22. Looking Back
 // ============================================================
 
-function renderCareerMessage(
-    decisions
+function renderLookingBack(
+    decision
 ) {
 
     const section =
+        getElement(
+            'career-looking-back-section'
+        );
+
+
+    const answerWrapper =
+        getElement(
+            'career-looking-back-answer-wrapper'
+        );
+
+
+    const answer =
+        getElement(
+            'career-looking-back-answer'
+        );
+
+
+    const reasonWrapper =
+        getElement(
+            'career-looking-back-reason-wrapper'
+        );
+
+
+    const reason =
+        getElement(
+            'career-looking-back-reason'
+        );
+
+
+    const messageSection =
         getElement(
             'career-message-section'
         );
@@ -2937,86 +3296,789 @@ function renderCareerMessage(
         );
 
 
-    if (
-        !section
-        ||
-        !message
-    ) {
-
-        return;
-    }
-
-
-    if (
-        !Array.isArray(decisions)
-        ||
-        decisions.length === 0
-    ) {
-
-        section.hidden = true;
-
-        return;
-    }
-
-
-    const target =
-        decisions.find(
-            decision =>
-                normalizeText(
-                    decision.advice_text
-                )
+    const messageLock =
+        getElement(
+            'career-message-lock'
         );
 
 
-    if (!target) {
-
-        section.hidden = true;
-        message.innerHTML = '';
+    if (!section) {
 
         return;
     }
 
 
-    const fullText =
-        normalizeText(
-            target.advice_text
+    // Looking Back自体を登録後の価値にする
+
+    if (
+        !decision
+        ||
+        !careerDetailIsLoggedIn
+    ) {
+
+        section.hidden =
+            true;
+
+
+        return;
+    }
+
+
+    const answerText =
+        normalizeDisplayText(
+            decision.same_choice_answer
         );
 
 
-    const displayText =
-        careerDetailIsLoggedIn
-            ? fullText
-            : createMessagePreview(
-                fullText
-            );
+    const reasonText =
+        normalizeDisplayText(
+            decision.same_choice_reason
+        );
 
 
-    message.innerHTML = `
-        <p>${escapeHTML(displayText)}</p>
-    `;
+    const adviceText =
+        normalizeDisplayText(
+            decision.advice_text
+        );
 
 
-    section.hidden = false;
+    // --------------------------------------------------------
+    // Same choice?
+    // --------------------------------------------------------
+
+    setTextBlock(
+        answerWrapper,
+        answer,
+        answerText
+    );
+
+
+    // --------------------------------------------------------
+    // Reason
+    // --------------------------------------------------------
+
+    setTextBlock(
+        reasonWrapper,
+        reason,
+        reasonText
+    );
+
+
+    // --------------------------------------------------------
+    // Advice to past self
+    // --------------------------------------------------------
+
+    if (
+        messageSection
+        &&
+        message
+    ) {
+
+        if (adviceText) {
+
+            message.innerHTML = `
+
+                <p>
+                    ${escapeHTML(adviceText)}
+                </p>
+
+            `;
+
+
+            messageSection.hidden =
+                false;
+
+        } else {
+
+            message.innerHTML =
+                '';
+
+
+            messageSection.hidden =
+                true;
+        }
+    }
+
+
+    if (messageLock) {
+
+        messageLock.hidden =
+            true;
+    }
+
+
+    const hasContent =
+        Boolean(
+            answerText
+            ||
+            reasonText
+            ||
+            adviceText
+        );
+
+
+    section.hidden =
+        !hasContent;
 }
 
 
 // ============================================================
-// 16. Access UI
+// 23. Career Context / Journey
+// ============================================================
+
+function renderCareerJourney(
+    companies
+) {
+
+    const section =
+        getElement(
+            'career-journey-section'
+        );
+
+
+    const container =
+        getElement(
+            'career-journey-timeline'
+        );
+
+
+    if (!container) {
+
+        return;
+    }
+
+
+    if (
+        !Array.isArray(
+            companies
+        )
+        ||
+        companies.length === 0
+    ) {
+
+        if (section) {
+
+            section.hidden =
+                true;
+        }
+
+
+        container.innerHTML =
+            '';
+
+
+        return;
+    }
+
+
+    const journeyNodes =
+        createJourneyNodes(
+            companies
+        );
+
+
+    if (
+        journeyNodes.length
+        ===
+        0
+    ) {
+
+        if (section) {
+
+            section.hidden =
+                true;
+        }
+
+
+        container.innerHTML =
+            '';
+
+
+        return;
+    }
+
+
+    const nodesHtml =
+        journeyNodes
+            .map(
+                node => {
+
+                    const period =
+                        node.start
+                            ? formatCareerPeriod(
+                                node.start,
+                                node.end
+                            )
+                            : formatCompanyPeriodFromNode(
+                                node
+                            );
+
+
+                    return `
+
+                        <article class="journey-node">
+
+                            <span class="journey-node__year">
+                                ${
+                                    escapeHTML(
+                                        node.startYear
+                                            ? String(node.startYear)
+                                            : ''
+                                    )
+                                }
+                            </span>
+
+
+                            <div class="journey-node__marker">
+                            </div>
+
+
+                            <h3 class="journey-node__company">
+                                ${escapeHTML(node.company)}
+                            </h3>
+
+
+                            ${
+                                node.role
+                                    ? `
+
+                                        <p class="journey-node__role">
+                                            ${escapeHTML(node.role)}
+                                        </p>
+
+                                    `
+                                    : ''
+                            }
+
+
+                            ${
+                                node.department
+                                    ? `
+
+                                        <p class="journey-node__department">
+                                            ${escapeHTML(node.department)}
+                                        </p>
+
+                                    `
+                                    : ''
+                            }
+
+
+                            ${
+                                period
+                                    ? `
+
+                                        <span class="journey-node__period">
+                                            ${escapeHTML(period)}
+                                        </span>
+
+                                    `
+                                    : ''
+                            }
+
+                        </article>
+
+                    `;
+                }
+            )
+            .join('');
+
+
+    container.innerHTML = `
+
+        <div
+            class="journey-track"
+            style="--journey-count: ${journeyNodes.length};"
+        >
+
+            ${nodesHtml}
+
+        </div>
+
+    `;
+
+
+    if (section) {
+
+        section.hidden =
+            false;
+    }
+}
+
+
+// ============================================================
+// 24. Journey Nodes
+// ============================================================
+
+function createJourneyNodes(
+    companies
+) {
+
+    const nodes = [];
+
+
+    companies.forEach(
+        company => {
+
+            const companyName =
+                normalizeDisplayText(
+                    company.name
+                )
+                ||
+                '勤務先';
+
+
+            const roles =
+                Array.isArray(
+                    company.roles
+                )
+                    ? company.roles
+                    : [];
+
+
+            if (
+                roles.length
+                >
+                0
+            ) {
+
+                roles.forEach(
+                    role => {
+
+                        nodes.push({
+
+                            company:
+                                companyName,
+
+                            role:
+                                normalizeDisplayText(
+                                    role.position
+                                )
+                                ||
+                                normalizeDisplayText(
+                                    role.job_category
+                                ),
+
+                            department:
+                                normalizeDisplayText(
+                                    role.department
+                                ),
+
+                            start:
+                                normalizeDateValue(
+                                    role.start_period
+                                ),
+
+                            end:
+                                normalizeDateValue(
+                                    role.end_period
+                                ),
+
+                            startYear:
+                                getYearFromDate(
+                                    role.start_period
+                                )
+                                ||
+                                normalizeYearValue(
+                                    company.startYear
+                                ),
+
+                            endYear:
+                                getYearFromDate(
+                                    role.end_period
+                                )
+                                ||
+                                normalizeYearValue(
+                                    company.endYear
+                                )
+
+                        });
+                    }
+                );
+
+
+                return;
+            }
+
+
+            nodes.push({
+
+                company:
+                    companyName,
+
+                role:
+                    normalizeDisplayText(
+                        company.position
+                    )
+                    ||
+                    normalizeDisplayText(
+                        company.job_category
+                    ),
+
+                department:
+                    normalizeDisplayText(
+                        company.department
+                    ),
+
+                start:
+                    normalizeDateValue(
+                        company.work_start_period
+                    ),
+
+                end:
+                    normalizeDateValue(
+                        company.work_end_period
+                    ),
+
+                startYear:
+                    normalizeYearValue(
+                        company.startYear
+                    ),
+
+                endYear:
+                    normalizeYearValue(
+                        company.endYear
+                    )
+
+            });
+        }
+    );
+
+
+    // --------------------------------------------------------
+    // Duplicate removal
+    // --------------------------------------------------------
+
+    const deduped = [];
+
+
+    nodes.forEach(
+        node => {
+
+            const duplicate =
+                deduped.some(
+                    existing =>
+                        (
+                            normalizeComparable(
+                                existing.company
+                            )
+                            ===
+                            normalizeComparable(
+                                node.company
+                            )
+                        )
+                        &&
+                        (
+                            normalizeComparable(
+                                existing.role
+                            )
+                            ===
+                            normalizeComparable(
+                                node.role
+                            )
+                        )
+                        &&
+                        (
+                            String(
+                                existing.startYear
+                                ||
+                                ''
+                            )
+                            ===
+                            String(
+                                node.startYear
+                                ||
+                                ''
+                            )
+                        )
+                );
+
+
+            if (!duplicate) {
+
+                deduped.push(
+                    node
+                );
+            }
+        }
+    );
+
+
+    // --------------------------------------------------------
+    // Chronological
+    // --------------------------------------------------------
+
+    deduped.sort(
+        (
+            a,
+            b
+        ) => {
+
+            const aDate =
+                getSortableDate(
+                    a.start
+                );
+
+
+            const bDate =
+                getSortableDate(
+                    b.start
+                );
+
+
+            if (
+                aDate > 0
+                &&
+                bDate > 0
+                &&
+                aDate !== bDate
+            ) {
+
+                return (
+                    aDate
+                    -
+                    bDate
+                );
+            }
+
+
+            return (
+                getSortableYear(
+                    a.startYear
+                )
+                -
+                getSortableYear(
+                    b.startYear
+                )
+            );
+        }
+    );
+
+
+    return deduped;
+}
+
+
+// ============================================================
+// 25. Other Decisions
+// ============================================================
+
+function renderOtherDecisions(
+    decisions,
+    primaryDecision
+) {
+
+    const section =
+        getElement(
+            'career-other-decisions-section'
+        );
+
+
+    const container =
+        getElement(
+            'career-other-decisions-list'
+        );
+
+
+    if (
+        !section
+        ||
+        !container
+    ) {
+
+        return;
+    }
+
+
+    const others =
+        Array.isArray(
+            decisions
+        )
+            ? decisions.filter(
+                decision =>
+                    String(
+                        decision.id
+                    )
+                    !==
+                    String(
+                        primaryDecision?.id
+                        ||
+                        ''
+                    )
+            )
+            : [];
+
+
+    if (
+        others.length
+        ===
+        0
+    ) {
+
+        section.hidden =
+            true;
+
+
+        container.innerHTML =
+            '';
+
+
+        return;
+    }
+
+
+    container.innerHTML =
+        others
+            .slice(
+                0,
+                4
+            )
+            .map(
+                decision => {
+
+                    const path =
+                        getDecisionPath(
+                            decision.decision_type
+                        );
+
+
+                    const title =
+                        normalizeDisplayText(
+                            decision.title
+                        )
+                        ||
+                        normalizeDisplayText(
+                            decision.dilemma_text
+                        )
+                        ||
+                        createDecisionHeroTitle(
+                            decision
+                        );
+
+
+                    const url =
+                        createCareerDetailUrl(
+                            careerDetailCareerId,
+                            decision.id,
+                            careerDetailTheme
+                        );
+
+
+                    return `
+
+                        <a
+                            class="career-other-decision-card"
+                            href="${escapeHTML(url)}"
+                        >
+
+                            <div class="career-other-decision-card__meta">
+
+                                <span class="career-other-decision-card__path">
+                                    ${escapeHTML(path.label)}
+                                </span>
+
+
+                                <span class="career-other-decision-card__date">
+                                    ${
+                                        escapeHTML(
+                                            formatDecisionDate(
+                                                decision.occurred_at
+                                            )
+                                        )
+                                    }
+                                </span>
+
+                            </div>
+
+
+                            <h3 class="career-other-decision-card__title">
+                                ${
+                                    escapeHTML(
+                                        truncateText(
+                                            title,
+                                            80
+                                        )
+                                    )
+                                }
+                            </h3>
+
+
+                            <span class="career-other-decision-card__link">
+                                この選択を見る →
+                            </span>
+
+                        </a>
+
+                    `;
+                }
+            )
+            .join('');
+
+
+    section.hidden =
+        false;
+}
+
+
+// ============================================================
+// 26. Career Detail URL
+// ============================================================
+
+function createCareerDetailUrl(
+    careerId,
+    decisionId,
+    theme
+) {
+
+    const params =
+        new URLSearchParams();
+
+
+    params.set(
+        'id',
+        String(
+            careerId
+        )
+    );
+
+
+    if (decisionId) {
+
+        params.set(
+            'decision_id',
+            String(
+                decisionId
+            )
+        );
+    }
+
+
+    if (theme) {
+
+        params.set(
+            'theme',
+            theme
+        );
+    }
+
+
+    return (
+        `Career_detail.html?`
+        +
+        params.toString()
+    );
+}
+
+
+// ============================================================
+// 27. Access UI
 // ============================================================
 
 function updateCareerAccessUI() {
 
     updateCareerValueWall();
-
-    updateOutcomeAccess();
-
-    updateMessageAccess();
 }
 
-
-// ============================================================
-// 17. Turning Point Value Wall
-// ============================================================
 
 function updateCareerValueWall() {
 
@@ -3027,168 +4089,41 @@ function updateCareerValueWall() {
 
 
     if (!wall) {
+
         return;
     }
+
+
+    const decision =
+        careerDetailPrimaryDecision;
+
+
+    const hasLockedContent =
+        decision
+        &&
+        [
+            decision.final_reason,
+            decision.result_text,
+            decision.unexpected_result,
+            decision.learning_text,
+            decision.same_choice_answer,
+            decision.same_choice_reason,
+            decision.advice_text
+        ]
+        .some(
+            isAvailableValue
+        );
 
 
     wall.hidden =
-        careerDetailIsLoggedIn;
-}
-
-
-// ============================================================
-// 18. Outcome Access
-// ============================================================
-
-function updateOutcomeAccess() {
-
-    const wrapper =
-        getElement(
-            'career-outcome-chart-wrapper'
-        );
-
-
-    const lock =
-        getElement(
-            'career-outcome-lock'
-        );
-
-
-    if (!wrapper) {
-        return;
-    }
-
-
-    const emptyState =
-        wrapper.querySelector(
-            '.career-outcome-empty'
-        );
-
-
-    const guestState =
-        wrapper.querySelector(
-            '.career-outcome-guest'
-        );
-
-
-    if (
-        emptyState
+        careerDetailIsLoggedIn
         ||
-        guestState
-    ) {
-
-        wrapper.classList.remove(
-            'is-locked'
-        );
-
-
-        if (lock) {
-            lock.hidden = true;
-        }
-
-
-        return;
-    }
-
-
-    if (careerDetailIsLoggedIn) {
-
-        wrapper.classList.remove(
-            'is-locked'
-        );
-
-
-        if (lock) {
-            lock.hidden = true;
-        }
-    }
-
-    else {
-
-        wrapper.classList.add(
-            'is-locked'
-        );
-
-
-        if (lock) {
-            lock.hidden = false;
-        }
-    }
+        !hasLockedContent;
 }
 
 
 // ============================================================
-// 19. Message Access
-// ============================================================
-
-function updateMessageAccess() {
-
-    const section =
-        getElement(
-            'career-message-section'
-        );
-
-
-    const message =
-        getElement(
-            'career-message'
-        );
-
-
-    const lock =
-        getElement(
-            'career-message-lock'
-        );
-
-
-    if (
-        !section
-        ||
-        !message
-    ) {
-
-        return;
-    }
-
-
-    if (careerDetailIsLoggedIn) {
-
-        section.classList.remove(
-            'is-locked'
-        );
-
-
-        message.classList.remove(
-            'is-locked'
-        );
-
-
-        if (lock) {
-            lock.hidden = true;
-        }
-    }
-
-    else {
-
-        section.classList.add(
-            'is-locked'
-        );
-
-
-        message.classList.add(
-            'is-locked'
-        );
-
-
-        if (lock) {
-            lock.hidden = false;
-        }
-    }
-}
-
-
-// ============================================================
-// 20. Sorting
+// 28. Decision Sorting
 // ============================================================
 
 function sortDecisionsNewestFirst(
@@ -3199,7 +4134,10 @@ function sortDecisionsNewestFirst(
         ...decisions
     ]
     .sort(
-        (a, b) => {
+        (
+            a,
+            b
+        ) => {
 
             const aDate =
                 getSortableDate(
@@ -3214,28 +4152,40 @@ function sortDecisionsNewestFirst(
 
 
             if (
-                aDate !== bDate
+                aDate
+                !==
+                bDate
             ) {
 
                 return (
-                    bDate - aDate
+                    bDate
+                    -
+                    aDate
                 );
             }
 
 
             return (
                 Number(
-                    b.id || 0
+                    b.id
+                    ||
+                    0
                 )
                 -
                 Number(
-                    a.id || 0
+                    a.id
+                    ||
+                    0
                 )
             );
         }
     );
 }
 
+
+// ============================================================
+// 29. Company Sorting
+// ============================================================
 
 function sortCompaniesChronologically(
     companies
@@ -3245,7 +4195,38 @@ function sortCompaniesChronologically(
         ...companies
     ]
     .sort(
-        (a, b) => {
+        (
+            a,
+            b
+        ) => {
+
+            const aDate =
+                getSortableDate(
+                    a.work_start_period
+                );
+
+
+            const bDate =
+                getSortableDate(
+                    b.work_start_period
+                );
+
+
+            if (
+                aDate > 0
+                &&
+                bDate > 0
+                &&
+                aDate !== bDate
+            ) {
+
+                return (
+                    aDate
+                    -
+                    bDate
+                );
+            }
+
 
             const aYear =
                 getSortableYear(
@@ -3259,8 +4240,32 @@ function sortCompaniesChronologically(
                 );
 
 
+            if (
+                aYear
+                !==
+                bYear
+            ) {
+
+                return (
+                    aYear
+                    -
+                    bYear
+                );
+            }
+
+
             return (
-                aYear - bYear
+                Number(
+                    a.id
+                    ||
+                    0
+                )
+                -
+                Number(
+                    b.id
+                    ||
+                    0
+                )
             );
         }
     );
@@ -3268,7 +4273,7 @@ function sortCompaniesChronologically(
 
 
 // ============================================================
-// 21. Company Helpers
+// 30. Latest Company
 // ============================================================
 
 function getLatestCompany(
@@ -3276,27 +4281,14 @@ function getLatestCompany(
 ) {
 
     if (
-        !Array.isArray(companies)
+        !Array.isArray(
+            companies
+        )
         ||
         companies.length === 0
     ) {
 
         return null;
-    }
-
-
-    const current =
-        companies.find(
-            company =>
-                isCurrentCareer(
-                    company
-                )
-        );
-
-
-    if (current) {
-
-        return current;
     }
 
 
@@ -3306,6 +4298,30 @@ function getLatestCompany(
         );
 
 
+    // 現職扱いの会社が複数ある場合は、
+    // その中で最も新しい会社を採用する
+    const currentCompanies =
+        sorted.filter(
+            isCurrentCareer
+        );
+
+
+    if (
+        currentCompanies.length
+        >
+        0
+    ) {
+
+        return (
+            currentCompanies[
+                currentCompanies.length - 1
+            ]
+        );
+    }
+
+
+    // 現職がない場合は
+    // 最も新しい職歴を返す
     return (
         sorted[
             sorted.length - 1
@@ -3320,31 +4336,62 @@ function isCurrentCareer(
     company
 ) {
 
-    const end =
-        normalizeText(
-            company.endYear
+    const rawEnd =
+        normalizeDisplayText(
+            company?.work_end_period
+        );
+
+
+    const endYear =
+        normalizeDisplayText(
+            company?.endYear
         )
         .toLowerCase();
 
 
-    return (
-        !end
+    if (
+        [
+            '現時点',
+            '現在',
+            'present'
+        ]
+        .includes(
+            endYear
+        )
+    ) {
+
+        return true;
+    }
+
+
+    if (
+        rawEnd
         ||
-        end === '現時点'
-        ||
-        end === '現在'
-        ||
-        end === 'present'
-    );
+        /^\d{4}$/.test(
+            endYear
+        )
+    ) {
+
+        return false;
+    }
+
+
+    return true;
 }
 
+
+// ============================================================
+// 31. Career Years
+// ============================================================
 
 function calculateCareerYears(
     companies
 ) {
 
     if (
-        !Array.isArray(companies)
+        !Array.isArray(
+            companies
+        )
         ||
         companies.length === 0
     ) {
@@ -3353,45 +4400,163 @@ function calculateCareerYears(
     }
 
 
-    const years =
-        companies
-            .map(
-                company =>
-                    Number(
-                        company.startYear
+    const dates = [];
+
+
+    companies.forEach(
+        company => {
+
+            const companyDate =
+                parseDateOnly(
+                    company.work_start_period
+                );
+
+
+            if (companyDate) {
+
+                dates.push(
+                    companyDate
+                );
+            }
+
+
+            const roles =
+                Array.isArray(
+                    company.roles
+                )
+                    ? company.roles
+                    : [];
+
+
+            roles.forEach(
+                role => {
+
+                    const roleDate =
+                        parseDateOnly(
+                            role.start_period
+                        );
+
+
+                    if (roleDate) {
+
+                        dates.push(
+                            roleDate
+                        );
+                    }
+                }
+            );
+        }
+    );
+
+
+    let firstDate =
+        null;
+
+
+    if (
+        dates.length
+        >
+        0
+    ) {
+
+        firstDate =
+            new Date(
+                Math.min(
+                    ...dates.map(
+                        date =>
+                            date.getTime()
                     )
-            )
-            .filter(
-                Number.isFinite
+                )
             );
 
+    } else {
 
-    if (years.length === 0) {
+        const years =
+            companies
+                .map(
+                    company =>
+                        Number(
+                            normalizeYearValue(
+                                company.startYear
+                            )
+                        )
+                )
+                .filter(
+                    year =>
+                        Number.isFinite(
+                            year
+                        )
+                        &&
+                        year > 0
+                );
 
-        return null;
+
+        if (
+            years.length
+            ===
+            0
+        ) {
+
+            return null;
+        }
+
+
+        firstDate =
+            new Date(
+                Math.min(
+                    ...years
+                ),
+                0,
+                1
+            );
     }
 
 
-    const firstYear =
-        Math.min(
-            ...years
+    const today =
+        new Date();
+
+
+    let years =
+        today.getFullYear()
+        -
+        firstDate.getFullYear();
+
+
+    const anniversaryPassed =
+        (
+            today.getMonth()
+            >
+            firstDate.getMonth()
+        )
+        ||
+        (
+            today.getMonth()
+            ===
+            firstDate.getMonth()
+            &&
+            today.getDate()
+            >=
+            firstDate.getDate()
         );
 
 
-    const currentYear =
-        new Date()
-            .getFullYear();
+    if (
+        !anniversaryPassed
+    ) {
+
+        years -= 1;
+    }
 
 
     return Math.max(
         0,
-        currentYear - firstYear
+        years
     );
 }
 
 
 // ============================================================
-// 22. Date Helpers
+// 32. Date Helpers
 // ============================================================
 
 function formatCompanyPeriodFromNode(
@@ -3399,19 +4564,15 @@ function formatCompanyPeriodFromNode(
 ) {
 
     const start =
-        node.startYear
-            ? String(
-                node.startYear
-            )
-            : '';
+        normalizeYearValue(
+            node.startYear
+        );
 
 
     const end =
-        node.endYear
-            ? String(
-                node.endYear
-            )
-            : '';
+        normalizeYearValue(
+            node.endYear
+        );
 
 
     if (
@@ -3420,7 +4581,9 @@ function formatCompanyPeriodFromNode(
         end
     ) {
 
-        return `${start} – ${end}`;
+        return (
+            `${start} – ${end}`
+        );
     }
 
 
@@ -3446,6 +4609,7 @@ function formatCareerPeriod(
 
 
     if (!startText) {
+
         return '';
     }
 
@@ -3475,19 +4639,25 @@ function formatDecisionDate(
 
 
     if (!date) {
+
         return '';
     }
 
 
-    return new Intl.DateTimeFormat(
-        'ja-JP',
-        {
-            year: 'numeric',
-            month: 'long'
-        }
-    )
-    .format(
-        date
+    return (
+        new Intl.DateTimeFormat(
+            'ja-JP',
+            {
+                year:
+                    'numeric',
+
+                month:
+                    'long'
+            }
+        )
+        .format(
+            date
+        )
     );
 }
 
@@ -3503,6 +4673,7 @@ function formatYearMonth(
 
 
     if (!date) {
+
         return '';
     }
 
@@ -3537,14 +4708,22 @@ function getSortableYear(
     value
 ) {
 
-    const number =
-        Number(
+    const normalized =
+        normalizeYearValue(
             value
         );
 
 
+    const number =
+        Number(
+            normalized
+        );
+
+
     return (
-        Number.isFinite(number)
+        Number.isFinite(
+            number
+        )
             ? number
             : 9999
     );
@@ -3573,22 +4752,70 @@ function parseDateOnly(
     value
 ) {
 
-    if (!value) {
+    if (
+        !isAvailableValue(
+            value
+        )
+    ) {
+
         return null;
     }
 
 
-    const text =
-        String(value)
-            .slice(
-                0,
-                10
+    const raw =
+        String(
+            value
+        )
+        .trim();
+
+
+    const match =
+        raw.match(
+            /^(\d{4})-(\d{1,2})-(\d{1,2})/
+        );
+
+
+    if (match) {
+
+        const year =
+            Number(
+                match[1]
             );
+
+
+        const month =
+            Number(
+                match[2]
+            );
+
+
+        const day =
+            Number(
+                match[3]
+            );
+
+
+        const date =
+            new Date(
+                year,
+                month - 1,
+                day
+            );
+
+
+        return (
+            Number.isNaN(
+                date.getTime()
+            )
+                ? null
+                : date
+        );
+    }
 
 
     const date =
         new Date(
-            `${text}T00:00:00`
+            raw
         );
 
 
@@ -3602,8 +4829,70 @@ function parseDateOnly(
 }
 
 
+function normalizeDateValue(
+    value
+) {
+
+    return (
+        isAvailableValue(
+            value
+        )
+            ? String(value)
+            : null
+    );
+}
+
+
+function normalizeYearValue(
+    value
+) {
+
+    if (
+        !isAvailableValue(
+            value
+        )
+    ) {
+
+        return '';
+    }
+
+
+    const text =
+        normalizeDisplayText(
+            value
+        );
+
+
+    if (
+        text === '現在'
+        ||
+        text === '現時点'
+        ||
+        text.toLowerCase()
+        ===
+        'present'
+    ) {
+
+        return text;
+    }
+
+
+    const match =
+        text.match(
+            /\d{4}/
+        );
+
+
+    return (
+        match
+            ? match[0]
+            : ''
+    );
+}
+
+
 // ============================================================
-// 23. Satisfaction Helpers
+// 33. Satisfaction Helpers
 // ============================================================
 
 function parseSatisfaction(
@@ -3621,13 +4910,16 @@ function parseSatisfaction(
 
 
     const match =
-        String(value)
-            .match(
-                /\d+(?:\.\d+)?/
-            );
+        String(
+            value
+        )
+        .match(
+            /\d+(?:\.\d+)?/
+        );
 
 
     if (!match) {
+
         return null;
     }
 
@@ -3638,11 +4930,21 @@ function parseSatisfaction(
         );
 
 
-    return (
-        Number.isFinite(number)
-            ? number
-            : null
-    );
+    if (
+        !Number.isFinite(
+            number
+        )
+        ||
+        number < 0
+        ||
+        number > 5
+    ) {
+
+        return null;
+    }
+
+
+    return number;
 }
 
 
@@ -3656,27 +4958,39 @@ function formatSatisfaction(
         );
 
 
-    if (number === null) {
+    if (
+        number
+        ===
+        null
+    ) {
 
-        return normalizeText(
-            value
+        return (
+            normalizeDisplayText(
+                value
+            )
         );
     }
 
 
-    return `${number} / 5`;
+    return (
+        `${number} / 5`
+    );
 }
 
 
 // ============================================================
-// 24. Text / UI Helpers
+// 34. Generic DOM Helpers
 // ============================================================
 
 function getElement(
     ...ids
 ) {
 
-    for (const id of ids) {
+    for (
+        const id
+        of
+        ids
+    ) {
 
         const element =
             document.getElementById(
@@ -3695,6 +5009,53 @@ function getElement(
 }
 
 
+function setTextBlock(
+    wrapper,
+    textElement,
+    value
+) {
+
+    if (
+        !wrapper
+        ||
+        !textElement
+    ) {
+
+        return;
+    }
+
+
+    const text =
+        normalizeDisplayText(
+            value
+        );
+
+
+    if (text) {
+
+        textElement.textContent =
+            text;
+
+
+        wrapper.hidden =
+            false;
+
+    } else {
+
+        textElement.textContent =
+            '';
+
+
+        wrapper.hidden =
+            true;
+    }
+}
+
+
+// ============================================================
+// 35. Generic Data Helpers
+// ============================================================
+
 function getAgeDecade(
     age
 ) {
@@ -3706,7 +5067,9 @@ function getAgeDecade(
 
 
     if (
-        !Number.isFinite(number)
+        !Number.isFinite(
+            number
+        )
         ||
         number <= 0
     ) {
@@ -3716,7 +5079,9 @@ function getAgeDecade(
 
 
     return (
-        `${Math.floor(number / 10) * 10}代`
+        `${Math.floor(
+            number / 10
+        ) * 10}代`
     );
 }
 
@@ -3729,7 +5094,7 @@ function looksLikeEmail(
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     )
     .test(
-        normalizeText(
+        normalizeDisplayText(
             value
         )
     );
@@ -3740,13 +5105,15 @@ function normalizeComparable(
     value
 ) {
 
-    return normalizeText(
-        value
-    )
-    .toLowerCase()
-    .replace(
-        /\s+/g,
-        ''
+    return (
+        normalizeDisplayText(
+            value
+        )
+        .toLowerCase()
+        .replace(
+            /\s+/g,
+            ''
+        )
     );
 }
 
@@ -3765,12 +5132,24 @@ function normalizeText(
     }
 
 
-    return String(value)
-        .trim();
+    return (
+        String(
+            value
+        )
+        .trim()
+    );
 }
 
 
-function isAvailableValue(
+// ============================================================
+// 36. Display Text
+//
+// DB/APIから
+// null / "null" / "undefined" / "N/A"
+// が来ても画面には表示しない。
+// ============================================================
+
+function normalizeDisplayText(
     value
 ) {
 
@@ -3780,19 +5159,36 @@ function isAvailableValue(
         );
 
 
-    if (!text) {
-        return false;
+    if (
+        !text
+        ||
+        [
+            'n/a',
+            'null',
+            'undefined',
+            'none'
+        ]
+        .includes(
+            text.toLowerCase()
+        )
+    ) {
+
+        return '';
     }
 
 
-    return ![
-        'n/a',
-        'null',
-        'undefined',
-        'none'
-    ]
-    .includes(
-        text.toLowerCase()
+    return text;
+}
+
+
+function isAvailableValue(
+    value
+) {
+
+    return Boolean(
+        normalizeDisplayText(
+            value
+        )
     );
 }
 
@@ -3803,9 +5199,15 @@ function truncateText(
 ) {
 
     const text =
-        normalizeText(
+        normalizeDisplayText(
             value
         );
+
+
+    if (!text) {
+
+        return '';
+    }
 
 
     if (
@@ -3819,45 +5221,19 @@ function truncateText(
 
 
     return (
-        `${text.slice(
-            0,
-            maxLength
-        )}…`
+        `${text
+            .slice(
+                0,
+                maxLength
+            )
+            .trim()}…`
     );
 }
 
 
-function createMessagePreview(
-    value
-) {
-
-    const text =
-        normalizeText(
-            value
-        );
-
-
-    if (!text) {
-        return '';
-    }
-
-
-    if (
-        text.length <= 28
-    ) {
-
-        return `${text}…`;
-    }
-
-
-    return (
-        `${text.slice(
-            0,
-            28
-        )}…`
-    );
-}
-
+// ============================================================
+// 37. Escape HTML
+// ============================================================
 
 function escapeHTML(
     value
@@ -3873,28 +5249,49 @@ function escapeHTML(
     }
 
 
-    return String(value)
+    return (
+        String(
+            value
+        )
         .replace(
             /[&'`"<>]/g,
+
             match => ({
-                '&': '&amp;',
-                "'": '&#x27;',
-                '`': '&#x60;',
-                '"': '&quot;',
-                '<': '&lt;',
-                '>': '&gt;'
+
+                '&':
+                    '&amp;',
+
+                "'":
+                    '&#x27;',
+
+                '`':
+                    '&#x60;',
+
+                '"':
+                    '&quot;',
+
+                '<':
+                    '&lt;',
+
+                '>':
+                    '&gt;'
+
             })[match]
-        );
+        )
+    );
 }
 
 
 // ============================================================
-// 25. GA4 Tracking
+// 38. GA4 CTA Tracking
 // ============================================================
 
 document.addEventListener(
     'click',
-    function (event) {
+
+    function (
+        event
+    ) {
 
         const registerLink =
             event.target.closest(
@@ -3902,12 +5299,14 @@ document.addEventListener(
             );
 
 
-        if (!registerLink) {
-            return;
-        }
+        if (
+            !registerLink
+            ||
+            typeof gtag
+            !==
+            'function'
+        ) {
 
-
-        if (typeof gtag !== 'function') {
             return;
         }
 
@@ -3924,9 +5323,8 @@ document.addEventListener(
 
             ctaLocation =
                 'career_detail_header';
-        }
 
-        else if (
+        } else if (
             registerLink.classList.contains(
                 'career-value-wall__cta'
             )
@@ -3934,9 +5332,8 @@ document.addEventListener(
 
             ctaLocation =
                 'career_detail_value_wall';
-        }
 
-        else if (
+        } else if (
             registerLink.classList.contains(
                 'career-outcome-guest__cta'
             )
@@ -3944,19 +5341,8 @@ document.addEventListener(
 
             ctaLocation =
                 'career_detail_outcome';
-        }
 
-        else if (
-            registerLink.closest(
-                '.career-outcome-lock'
-            )
-        ) {
-
-            ctaLocation =
-                'career_detail_outcome_lock';
-        }
-
-        else if (
+        } else if (
             registerLink.closest(
                 '.career-message-lock'
             )
@@ -3965,12 +5351,6 @@ document.addEventListener(
             ctaLocation =
                 'career_detail_message';
         }
-
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
 
 
         gtag(
@@ -3984,7 +5364,12 @@ document.addEventListener(
                     ctaLocation,
 
                 career_id:
-                    params.get('id') || ''
+                    careerDetailCareerId,
+
+                decision_id:
+                    careerDetailPrimaryDecision?.id
+                    ||
+                    ''
             }
         );
     }
@@ -3992,7 +5377,7 @@ document.addEventListener(
 
 
 // ============================================================
-// 26. Career Story View Count
+// 39. Career Story View Count
 // ============================================================
 
 function incrementCareerStoryView(
@@ -4000,14 +5385,13 @@ function incrementCareerStoryView(
 ) {
 
     if (!careerId) {
+
         return;
     }
 
 
     fetch(
-        `/increment-profile-view/${encodeURIComponent(
-            careerId
-        )}`,
+        `/increment-profile-view/${encodeURIComponent(careerId)}`,
         {
             method:
                 'POST',
@@ -4024,7 +5408,9 @@ function incrementCareerStoryView(
     .then(
         response => {
 
-            if (!response.ok) {
+            if (
+                !response.ok
+            ) {
 
                 throw new Error(
                     'Career Story view count update failed.'
@@ -4045,7 +5431,7 @@ function incrementCareerStoryView(
 
 
 // ============================================================
-// 27. Error
+// 40. Error
 // ============================================================
 
 function showPageError(
@@ -4059,11 +5445,13 @@ function showPageError(
 
 
     if (!main) {
+
         return;
     }
 
 
     main.innerHTML = `
+
         <section class="career-gps-section">
 
             <p class="career-empty-message">
@@ -4071,5 +5459,6 @@ function showPageError(
             </p>
 
         </section>
+
     `;
 }

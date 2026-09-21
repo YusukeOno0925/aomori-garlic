@@ -21,11 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const isThemeMode =
         Boolean(pageTheme);
 
+    const isChangeTheme =
+        pageTheme === 'change';
+
     let allCareers = [];
     let filteredCareers = [];
 
     let currentPage = 1;
     let selectedTheme = '';
+    let selectedDecisionPath = '';
 
 
     /* ========================================
@@ -62,6 +66,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeButtons =
         document.querySelectorAll('.career-theme-chip');
 
+    const overviewPage =
+        document.getElementById(
+            'career-overview-page'
+        );
+
+    const searchPanel =
+        document.getElementById(
+            'career-search-panel'
+        );
+
+    const decisionPathPanel =
+        document.getElementById(
+            'career-decision-path-panel'
+        );
+
+    const decisionPathButtons =
+        document.querySelectorAll(
+            '.career-decision-path-button'
+        );
+
+    const decisionPathCountElements =
+        document.querySelectorAll(
+            '[data-decision-path-count]'
+        );
+
     const overviewEyebrow =
         document.getElementById(
             'career-overview-eyebrow'
@@ -91,6 +120,44 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(
             'career-story-section-lead'
         );
+
+
+    /* ========================================
+       PAGE MODE
+    ======================================== */
+
+    if (isThemeMode) {
+
+        overviewPage?.classList.add(
+            'is-theme-mode'
+        );
+
+    }
+
+
+    if (isChangeTheme) {
+
+        overviewPage?.classList.add(
+            'is-change-theme'
+        );
+
+
+        if (searchPanel) {
+
+            searchPanel.hidden =
+                true;
+
+        }
+
+
+        if (decisionPathPanel) {
+
+            decisionPathPanel.hidden =
+                false;
+
+        }
+
+    }
 
 
     /* ========================================
@@ -125,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }`
                 );
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -150,44 +218,101 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-            if (overviewTitle) {
+            if (isChangeTheme) {
 
-                overviewTitle.textContent =
-                    data.theme_title ||
-                    '今の悩みからCareer Storyを探す';
+                /*
+                 * 「転職するか迷っている」
+                 * 専用表示
+                 */
 
-            }
+                if (overviewTitle) {
 
+                    overviewTitle.innerHTML =
+                        '転職するか、残るか。<br>' +
+                        '同じ分岐にいた人は、何を選んだ？';
 
-            if (overviewLead) {
-
-                overviewLead.textContent =
-                    data.theme_description ||
-                    '同じような分岐に立った人の選択を見てみましょう。';
-
-            }
+                }
 
 
-            if (storySectionEyebrow) {
+                if (overviewLead) {
 
-                storySectionEyebrow.textContent =
-                    'STORIES FROM THE SAME DILEMMA';
+                    overviewLead.innerHTML =
+                        '転職を考えた人が、実際にどんな道を選び、<br>' +
+                        'その後どうなったのかを比べてみましょう。';
 
-            }
-
-
-            if (storySectionTitle) {
-
-                storySectionTitle.textContent =
-                    '同じ悩みを経験したCareer Story';
-
-            }
+                }
 
 
-            if (storySectionLead) {
+                if (storySectionEyebrow) {
 
-                storySectionLead.textContent =
-                    '同じような分岐に立った人が、何を考え、何を選んだのか。';
+                    storySectionEyebrow.textContent =
+                        'STORIES FROM THE SAME DILEMMA';
+
+                }
+
+
+                if (storySectionTitle) {
+
+                    storySectionTitle.textContent =
+                        '同じ分岐にいた人のCareer Story';
+
+                }
+
+
+                if (storySectionLead) {
+
+                    storySectionLead.textContent =
+                        'それぞれが何に迷い、何を重視し、どんな道を選んだのか。';
+
+                }
+
+            } else {
+
+                /*
+                 * income / management 等は
+                 * 既存Theme Modeを維持
+                 */
+
+                if (overviewTitle) {
+
+                    overviewTitle.textContent =
+                        data.theme_title ||
+                        '今の悩みからCareer Storyを探す';
+
+                }
+
+
+                if (overviewLead) {
+
+                    overviewLead.textContent =
+                        data.theme_description ||
+                        '同じような分岐に立った人の選択を見てみましょう。';
+
+                }
+
+
+                if (storySectionEyebrow) {
+
+                    storySectionEyebrow.textContent =
+                        'STORIES FROM THE SAME DILEMMA';
+
+                }
+
+
+                if (storySectionTitle) {
+
+                    storySectionTitle.textContent =
+                        '同じ悩みを経験したCareer Story';
+
+                }
+
+
+                if (storySectionLead) {
+
+                    storySectionLead.textContent =
+                        '同じような分岐に立った人が、何を考え、何を選んだのか。';
+
+                }
 
             }
 
@@ -208,6 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
 
 
+            if (isChangeTheme) {
+
+                renderDecisionPathCounts();
+
+            }
+
+
             populateIndustryOptions();
 
             applyFilters();
@@ -221,9 +353,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-            careerList.innerHTML = '';
+            careerList.innerHTML =
+                '';
 
-            emptyState.hidden = false;
+
+            emptyState.hidden =
+                false;
+
 
             emptyState.querySelector(
                 '.career-empty-state__title'
@@ -244,7 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
 
             const response =
-                await fetch(API_URL);
+                await fetch(
+                    API_URL
+                );
+
 
             if (!response.ok) {
 
@@ -260,7 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             allCareers =
-                Array.isArray(data.careers)
+                Array.isArray(
+                    data.careers
+                )
                     ? data.careers
                     : [];
 
@@ -284,9 +425,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-            careerList.innerHTML = '';
+            careerList.innerHTML =
+                '';
 
-            emptyState.hidden = false;
+
+            emptyState.hidden =
+                false;
+
 
             emptyState.querySelector(
                 '.career-empty-state__title'
@@ -302,46 +447,75 @@ document.addEventListener('DOMContentLoaded', () => {
        NORMALIZE THEME CAREER
     ======================================== */
 
-    function normalizeThemeCareer(story) {
+    function normalizeThemeCareer(
+        story
+    ) {
 
         const stages =
-            Array.isArray(story.careerStages)
+            Array.isArray(
+                story.careerStages
+            )
                 ? story.careerStages
                 : [];
 
 
-        const uniqueStages = [];
+        const uniqueStages =
+            [];
+
 
         const stageKeys =
             new Set();
 
 
-        stages.forEach(stage => {
+        stages.forEach(
+            stage => {
 
-            const key =
-                `${stage.year}-${stage.stage}`;
+                const key =
+                    `${stage.year}-${stage.stage}`;
 
-            if (!stageKeys.has(key)) {
 
-                stageKeys.add(key);
+                if (
+                    !stageKeys.has(
+                        key
+                    )
+                ) {
 
-                uniqueStages.push(stage);
+                    stageKeys.add(
+                        key
+                    );
+
+
+                    uniqueStages.push(
+                        stage
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 
         uniqueStages.sort(
             (a, b) => {
 
                 const yearA =
-                    Number(a.year) || 9999;
+                    Number(
+                        a.year
+                    ) ||
+                    9999;
+
 
                 const yearB =
-                    Number(b.year) || 9999;
+                    Number(
+                        b.year
+                    ) ||
+                    9999;
 
-                return yearA - yearB;
+
+                return (
+                    yearA -
+                    yearB
+                );
 
             }
         );
@@ -352,42 +526,59 @@ document.addEventListener('DOMContentLoaded', () => {
             id:
                 story.id,
 
+
             name:
                 story.username ||
                 'Anonymous',
+
 
             profession:
                 story.profession ||
                 '職種未設定',
 
+
             age:
-                story.age || null,
+                story.age ||
+                null,
+
 
             birthYear:
                 story.age
-                    ? new Date().getFullYear()
-                        - story.age
+                    ? (
+                        new Date()
+                            .getFullYear() -
+                        story.age
+                    )
                     : null,
+
 
             income:
                 '未設定',
 
+
             careerStages:
                 uniqueStages,
+
 
             companies:
                 buildCompaniesFromStages(
                     uniqueStages
                 ),
 
+
             career_type:
                 '',
 
+
             decision:
-                story.decision || null,
+                story.decision ||
+                null,
+
 
             theme_match_score:
-                story.theme_match_score || 0,
+                story.theme_match_score ||
+                0,
+
 
             theme_match_reasons:
                 Array.isArray(
@@ -395,6 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 )
                     ? story.theme_match_reasons
                     : [],
+
 
             isThemeStory:
                 true
@@ -404,31 +596,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function buildCompaniesFromStages(stages) {
+    function buildCompaniesFromStages(
+        stages
+    ) {
 
         return stages
+
             .filter(
                 stage =>
-                    stage.type === 'company'
+                    stage.type ===
+                    'company'
             )
-            .map(stage => ({
 
-                name:
-                    String(
-                        stage.stage || ''
-                    )
-                        .replace(
-                            /\s*入社$/,
+            .map(
+                stage => ({
+
+                    name:
+                        String(
+                            stage.stage ||
                             ''
-                        ),
+                        )
+                            .replace(
+                                /\s*入社$/,
+                                ''
+                            ),
 
-                industry:
-                    '不明',
 
-                startYear:
-                    stage.year
+                    industry:
+                        '不明',
 
-            }));
+
+                    startYear:
+                        stage.year
+
+                })
+            );
 
     }
 
@@ -437,46 +639,75 @@ document.addEventListener('DOMContentLoaded', () => {
        NORMALIZE NORMAL CAREER
     ======================================== */
 
-    function normalizeCareer(career) {
+    function normalizeCareer(
+        career
+    ) {
 
         const stages =
-            Array.isArray(career.careerStages)
+            Array.isArray(
+                career.careerStages
+            )
                 ? career.careerStages
                 : [];
 
 
-        const uniqueStages = [];
+        const uniqueStages =
+            [];
+
 
         const stageKeys =
             new Set();
 
 
-        stages.forEach(stage => {
+        stages.forEach(
+            stage => {
 
-            const key =
-                `${stage.year}-${stage.stage}`;
+                const key =
+                    `${stage.year}-${stage.stage}`;
 
-            if (!stageKeys.has(key)) {
 
-                stageKeys.add(key);
+                if (
+                    !stageKeys.has(
+                        key
+                    )
+                ) {
 
-                uniqueStages.push(stage);
+                    stageKeys.add(
+                        key
+                    );
+
+
+                    uniqueStages.push(
+                        stage
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 
         uniqueStages.sort(
             (a, b) => {
 
                 const yearA =
-                    Number(a.year) || 9999;
+                    Number(
+                        a.year
+                    ) ||
+                    9999;
+
 
                 const yearB =
-                    Number(b.year) || 9999;
+                    Number(
+                        b.year
+                    ) ||
+                    9999;
 
-                return yearA - yearB;
+
+                return (
+                    yearA -
+                    yearB
+                );
 
             }
         );
@@ -486,21 +717,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             ...career,
 
+
             name:
                 career.name ||
                 'Anonymous',
 
+
             profession:
                 career.profession ||
                 '職種未設定',
+
 
             income:
                 normalizeIncome(
                     career.income
                 ),
 
+
             careerStages:
                 uniqueStages,
+
 
             companies:
                 Array.isArray(
@@ -509,16 +745,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? career.companies
                     : [],
 
+
             career_type:
-                career.career_type || '',
+                career.career_type ||
+                '',
+
 
             age:
                 calculateAge(
                     career.birthYear
                 ),
 
+
             decision:
-                career.decision || null,
+                career.decision ||
+                null,
+
 
             isThemeStory:
                 false
@@ -528,40 +770,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function normalizeIncome(income) {
+    function normalizeIncome(
+        income
+    ) {
 
-        if (!Array.isArray(income)) {
+        if (
+            !Array.isArray(
+                income
+            )
+        ) {
+
             return '未設定';
+
         }
+
 
         if (
             !income.length ||
             !income[0] ||
             !income[0].income
         ) {
+
             return '未設定';
+
         }
 
-        return income[0].income;
+
+        return (
+            income[0].income
+        );
 
     }
 
 
-    function calculateAge(birthYear) {
+    function calculateAge(
+        birthYear
+    ) {
 
         const year =
-            Number(birthYear);
+            Number(
+                birthYear
+            );
+
 
         if (!year) {
+
             return null;
+
         }
 
 
         const currentYear =
-            new Date().getFullYear();
+            new Date()
+                .getFullYear();
 
 
-        return currentYear - year;
+        return (
+            currentYear -
+            year
+        );
 
     }
 
@@ -576,27 +843,33 @@ document.addEventListener('DOMContentLoaded', () => {
             new Set();
 
 
-        allCareers.forEach(career => {
+        allCareers.forEach(
+            career => {
 
-            career.companies.forEach(company => {
+                career.companies.forEach(
+                    company => {
 
-                if (
-                    company.industry &&
-                    company.industry !== '不明'
-                ) {
+                        if (
+                            company.industry &&
+                            company.industry !==
+                                '不明'
+                        ) {
 
-                    industries.add(
-                        company.industry
-                    );
+                            industries.add(
+                                company.industry
+                            );
 
-                }
+                        }
 
-            });
+                    }
+                );
 
-        });
+            }
+        );
 
 
         [...industries]
+
             .sort(
                 (a, b) =>
                     a.localeCompare(
@@ -604,24 +877,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         'ja'
                     )
             )
-            .forEach(industry => {
 
-                const option =
-                    document.createElement(
-                        'option'
+            .forEach(
+                industry => {
+
+                    const option =
+                        document.createElement(
+                            'option'
+                        );
+
+
+                    option.value =
+                        industry;
+
+
+                    option.textContent =
+                        industry;
+
+
+                    industryFilter.appendChild(
+                        option
                     );
 
-                option.value =
-                    industry;
-
-                option.textContent =
-                    industry;
-
-                industryFilter.appendChild(
-                    option
-                );
-
-            });
+                }
+            );
 
     }
 
@@ -641,43 +920,60 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedIndustry =
             industryFilter.value;
 
+
         const selectedAge =
             ageFilter.value;
+
 
         const selectedIncome =
             incomeFilter.value;
 
 
         filteredCareers =
-            allCareers.filter(career => {
+            allCareers.filter(
+                career => {
 
-                return (
-                    matchesKeyword(
-                        career,
-                        keyword
-                    ) &&
-                    matchesIndustry(
-                        career,
-                        selectedIndustry
-                    ) &&
-                    matchesAge(
-                        career,
-                        selectedAge
-                    ) &&
-                    matchesIncome(
-                        career,
-                        selectedIncome
-                    ) &&
-                    matchesTheme(
-                        career,
-                        selectedTheme
-                    )
-                );
+                    return (
 
-            });
+                        matchesKeyword(
+                            career,
+                            keyword
+                        ) &&
+
+                        matchesIndustry(
+                            career,
+                            selectedIndustry
+                        ) &&
+
+                        matchesAge(
+                            career,
+                            selectedAge
+                        ) &&
+
+                        matchesIncome(
+                            career,
+                            selectedIncome
+                        ) &&
+
+                        matchesTheme(
+                            career,
+                            selectedTheme
+                        ) &&
+
+                        matchesDecisionPath(
+                            career,
+                            selectedDecisionPath
+                        )
+
+                    );
+
+                }
+            );
 
 
-        currentPage = 1;
+        currentPage =
+            1;
+
 
         render();
 
@@ -690,36 +986,57 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
         if (!keyword) {
+
             return true;
+
         }
 
 
         const companyNames =
             career.companies
-                .map(company =>
-                    company.name || ''
+
+                .map(
+                    company =>
+                        company.name ||
+                        ''
                 )
-                .join(' ');
+
+                .join(
+                    ' '
+                );
 
 
         const industries =
             career.companies
-                .map(company =>
-                    company.industry || ''
+
+                .map(
+                    company =>
+                        company.industry ||
+                        ''
                 )
-                .join(' ');
+
+                .join(
+                    ' '
+                );
 
 
         const stages =
             career.careerStages
-                .map(stage =>
-                    stage.stage || ''
+
+                .map(
+                    stage =>
+                        stage.stage ||
+                        ''
                 )
-                .join(' ');
+
+                .join(
+                    ' '
+                );
 
 
         const decision =
-            career.decision || {};
+            career.decision ||
+            {};
 
 
         const decisionText = `
@@ -739,11 +1056,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ${industries}
             ${stages}
             ${decisionText}
-        `.toLowerCase();
+        `
+            .toLowerCase();
 
 
-        return searchableText.includes(
-            keyword
+        return (
+            searchableText.includes(
+                keyword
+            )
         );
 
     }
@@ -755,7 +1075,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
         if (!selectedIndustry) {
+
             return true;
+
         }
 
 
@@ -774,12 +1096,16 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
         if (!selectedAge) {
+
             return true;
+
         }
 
 
         if (!career.age) {
+
             return false;
+
         }
 
 
@@ -787,7 +1113,9 @@ document.addEventListener('DOMContentLoaded', () => {
             career.age;
 
 
-        switch (selectedAge) {
+        switch (
+            selectedAge
+        ) {
 
             case '20':
 
@@ -796,12 +1124,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     age < 30
                 );
 
+
             case '30':
 
                 return (
                     age >= 30 &&
                     age < 40
                 );
+
 
             case '40':
 
@@ -810,9 +1140,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     age < 50
                 );
 
+
             case '50':
 
-                return age >= 50;
+                return (
+                    age >= 50
+                );
+
 
             default:
 
@@ -829,7 +1163,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
         if (!selectedIncome) {
+
             return true;
+
         }
 
 
@@ -847,7 +1183,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
         if (!theme) {
+
             return true;
+
         }
 
 
@@ -855,17 +1193,22 @@ document.addEventListener('DOMContentLoaded', () => {
             (
                 career.career_type ||
                 ''
-            ).toLowerCase();
+            )
+                .toLowerCase();
 
 
         const profession =
             (
                 career.profession ||
                 ''
-            ).toLowerCase();
+            )
+                .toLowerCase();
 
 
-        if (theme === '転職') {
+        if (
+            theme ===
+            '転職'
+        ) {
 
             return (
                 career.careerStages.length >= 3 ||
@@ -876,12 +1219,240 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         return (
+
             careerType.includes(
                 theme.toLowerCase()
             ) ||
+
             profession.includes(
                 theme.toLowerCase()
             )
+
+        );
+
+    }
+
+
+    /* ========================================
+       DECISION PATH
+    ======================================== */
+
+    function getDecisionPath(
+        decisionType
+    ) {
+
+        const type =
+            String(
+                decisionType ||
+                ''
+            )
+                .trim();
+
+
+        /* ------------------------------------
+           転職
+        ------------------------------------ */
+
+        if (
+            type ===
+            '転職'
+        ) {
+
+            return {
+
+                key:
+                    'change',
+
+                label:
+                    '転職した'
+
+            };
+
+        }
+
+
+        /* ------------------------------------
+           現職継続
+           ※Phase 2でDB入力側へ追加予定
+        ------------------------------------ */
+
+        if (
+            type === '現職継続' ||
+            type === '継続' ||
+            type === '残留' ||
+            type === '現職に残る'
+        ) {
+
+            return {
+
+                key:
+                    'stay',
+
+                label:
+                    '残った'
+
+            };
+
+        }
+
+
+        /* ------------------------------------
+           社内異動
+        ------------------------------------ */
+
+        if (
+            type === '異動' ||
+            type === '役割変更'
+        ) {
+
+            return {
+
+                key:
+                    'internal',
+
+                label:
+                    '社内異動した'
+
+            };
+
+        }
+
+
+        /* ------------------------------------
+           その他
+        ------------------------------------ */
+
+        return {
+
+            key:
+                'other',
+
+            label:
+                type ||
+                'その他の道を選んだ'
+
+        };
+
+    }
+
+
+    function matchesDecisionPath(
+        career,
+        selectedPath
+    ) {
+
+        /*
+         * changeテーマ以外では
+         * 従来通り全件対象。
+         */
+
+        if (
+            !isChangeTheme ||
+            !selectedPath
+        ) {
+
+            return true;
+
+        }
+
+
+        const decisionType =
+            career.decision
+                ?.decision_type ||
+            '';
+
+
+        const path =
+            getDecisionPath(
+                decisionType
+            );
+
+
+        return (
+            path.key ===
+            selectedPath
+        );
+
+    }
+
+
+    function renderDecisionPathCounts() {
+
+        if (
+            !isChangeTheme
+        ) {
+
+            return;
+
+        }
+
+
+        const counts = {
+
+            all:
+                allCareers.length,
+
+            change:
+                0,
+
+            stay:
+                0,
+
+            internal:
+                0
+
+        };
+
+
+        allCareers.forEach(
+            career => {
+
+                const decisionType =
+                    career.decision
+                        ?.decision_type ||
+                    '';
+
+
+                const path =
+                    getDecisionPath(
+                        decisionType
+                    );
+
+
+                if (
+                    Object
+                        .prototype
+                        .hasOwnProperty
+                        .call(
+                            counts,
+                            path.key
+                        )
+                ) {
+
+                    counts[
+                        path.key
+                    ]++;
+
+                }
+
+            }
+        );
+
+
+        decisionPathCountElements.forEach(
+            element => {
+
+                const key =
+                    element
+                        .dataset
+                        .decisionPathCount;
+
+
+                element.textContent =
+                    counts[key] ??
+                    0;
+
+            }
         );
 
     }
@@ -904,24 +1475,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCareerCards() {
 
-        careerList.innerHTML = '';
+        careerList.innerHTML =
+            '';
 
 
-        if (!filteredCareers.length) {
+        if (
+            !filteredCareers.length
+        ) {
 
-            emptyState.hidden = false;
+            emptyState.hidden =
+                false;
+
 
             return;
 
         }
 
 
-        emptyState.hidden = true;
+        emptyState.hidden =
+            true;
 
 
         const start =
             (
-                currentPage - 1
+                currentPage -
+                1
             ) *
             ITEMS_PER_PAGE;
 
@@ -938,18 +1516,21 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        careers.forEach(career => {
+        careers.forEach(
+            career => {
 
-            const card =
-                createCareerCard(
-                    career
+                const card =
+                    createCareerCard(
+                        career
+                    );
+
+
+                careerList.appendChild(
+                    card
                 );
 
-            careerList.appendChild(
-                card
-            );
-
-        });
+            }
+        );
 
     }
 
@@ -958,26 +1539,35 @@ document.addEventListener('DOMContentLoaded', () => {
        CAREER GPS STORY CARD
     ======================================== */
 
-    function createCareerCard(career) {
+    function createCareerCard(
+        career
+    ) {
 
-        return createCareerGpsStoryCard(
-            career
+        return (
+            createCareerGpsStoryCard(
+                career
+            )
         );
 
     }
 
 
-    function createCareerGpsStoryCard(career) {
+    function createCareerGpsStoryCard(
+        career
+    ) {
 
         const li =
-            document.createElement('li');
+            document.createElement(
+                'li'
+            );
 
 
         li.className =
             'career-story-card career-story-card--gps';
 
 
-        li.tabIndex = 0;
+        li.tabIndex =
+            0;
 
 
         li.setAttribute(
@@ -999,7 +1589,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const ageText =
             career.age
                 ? `${Math.floor(
-                    career.age / 10
+                    career.age /
+                    10
                 ) * 10}代`
                 : '年齢非公開';
 
@@ -1009,11 +1600,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ============================== */
 
         const decision =
-            career.decision || {};
+            career.decision ||
+            {};
 
 
         const decisionType =
-            decision.decision_type || '';
+            decision.decision_type ||
+            '';
 
 
         const decisionHook =
@@ -1024,7 +1617,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         const priorityText =
-            decision.priority_text || '';
+            decision.priority_text ||
+            '';
+
+
+        const decisionPath =
+            getDecisionPath(
+                decisionType
+            );
 
 
         const hasDecision =
@@ -1045,61 +1645,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 <!-- PERSON -->
+
                 <div class="career-gps-story-profile">
+
 
                     <div
                         class="career-gps-story-avatar"
                         aria-hidden="true"
                     >
+
                         ${escapeHTML(
                             initial
                         )}
+
                     </div>
 
 
                     <div class="career-gps-story-person">
 
+
                         <p class="career-gps-story-meta">
 
+
                             <span>
+
                                 ${escapeHTML(
                                     ageText
                                 )}
+
                             </span>
 
+
                             <span>
+
                                 ${escapeHTML(
                                     career.profession ||
                                     '職種未設定'
                                 )}
+
                             </span>
+
 
                         </p>
 
 
                         <h3>
+
                             ${escapeHTML(
                                 career.name
                             )}
+
                         </h3>
 
+
                     </div>
+
 
                 </div>
 
 
+
                 <!-- CAREER JOURNEY -->
+
                 <section class="career-gps-story-section">
 
+
                     <p class="career-gps-story-label">
+
                         CAREER JOURNEY
+
                     </p>
+
 
                     ${buildCareerGpsJourneyHTML(
                         career.careerStages
                     )}
 
+
                 </section>
+
 
 
                 ${
@@ -1107,6 +1731,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? `
 
                             <!-- CAREER DECISION -->
+
                             <section
                                 class="
                                     career-gps-story-section
@@ -1114,70 +1739,164 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "
                             >
 
+
                                 <div class="career-gps-story-decision__heading">
 
+
                                     <p class="career-gps-story-label">
+
                                         CAREER DECISION
+
                                     </p>
 
 
                                     ${
+                                        !isChangeTheme &&
                                         decisionType
                                             ? `
+
                                                 <span class="career-gps-decision-badge">
+
                                                     ${escapeHTML(
                                                         decisionType
                                                     )}
+
                                                 </span>
+
                                             `
                                             : ''
                                     }
 
+
                                 </div>
+
+
+
+                                ${
+                                    isChangeTheme
+                                        ? `
+
+                                            <div class="career-gps-selected-route">
+
+
+                                                <span>
+
+                                                    選んだ道
+
+                                                </span>
+
+
+                                                <strong>
+
+                                                    ${escapeHTML(
+                                                        decisionPath.label
+                                                    )}
+
+                                                </strong>
+
+
+                                            </div>
+
+                                        `
+                                        : ''
+                                }
+
 
 
                                 ${
                                     decisionHook
-                                        ? `
-                                            <p class="career-gps-decision-hook">
-                                                ${escapeHTML(
-                                                    decisionHook
-                                                )}
-                                            </p>
-                                        `
+
+                                        ? (
+                                            isChangeTheme
+
+                                                ? `
+
+                                                    <div class="career-gps-dilemma">
+
+
+                                                        <span>
+
+                                                            迷っていたこと
+
+                                                        </span>
+
+
+                                                        <p>
+
+                                                            ${escapeHTML(
+                                                                decisionHook
+                                                            )}
+
+                                                        </p>
+
+
+                                                    </div>
+
+                                                `
+
+                                                : `
+
+                                                    <p class="career-gps-decision-hook">
+
+                                                        ${escapeHTML(
+                                                            decisionHook
+                                                        )}
+
+                                                    </p>
+
+                                                `
+                                        )
+
                                         : ''
                                 }
+
 
 
                                 ${
                                     priorityText
+
                                         ? `
+
                                             <div class="career-gps-priority">
 
+
                                                 <span>
+
                                                     重視したこと
+
                                                 </span>
 
+
                                                 <p>
+
                                                     ${escapeHTML(
                                                         priorityText
                                                     )}
+
                                                 </p>
 
+
                                             </div>
+
                                         `
+
                                         : ''
                                 }
+
 
                             </section>
 
                         `
+
                         : ''
                 }
 
 
+
                 <!-- CTA -->
+
                 <div class="career-gps-story-footer">
+
 
                     <span>
 
@@ -1189,11 +1908,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     </span>
 
+
                     <span aria-hidden="true">
+
                         →
+
                     </span>
 
+
                 </div>
+
 
             </article>
 
@@ -1224,11 +1948,14 @@ document.addEventListener('DOMContentLoaded', () => {
             event => {
 
                 if (
-                    event.key === 'Enter' ||
-                    event.key === ' '
+                    event.key ===
+                        'Enter' ||
+                    event.key ===
+                        ' '
                 ) {
 
                     event.preventDefault();
+
 
                     navigate();
 
@@ -1247,17 +1974,25 @@ document.addEventListener('DOMContentLoaded', () => {
        CAREER JOURNEY
     ======================================== */
 
-    function buildCareerGpsJourneyHTML(stages) {
+    function buildCareerGpsJourneyHTML(
+        stages
+    ) {
 
         if (
-            !Array.isArray(stages) ||
+            !Array.isArray(
+                stages
+            ) ||
             !stages.length
         ) {
 
             return `
+
                 <p class="career-gps-journey-empty">
+
                     キャリア履歴は未登録です
+
                 </p>
+
             `;
 
         }
@@ -1273,20 +2008,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="career-gps-journey">
 
+
                 <div class="career-gps-journey__track">
 
+
                     ${displayStages.map(
-                        (stage, index) => `
+
+                        (
+                            stage,
+                            index
+                        ) => `
+
 
                             <div class="career-gps-journey__item">
 
+
                                 <span class="career-gps-journey__year">
+
                                     ${escapeHTML(
                                         String(
                                             stage.year
                                         )
                                     )}
+
                                 </span>
+
 
 
                                 <span
@@ -1302,20 +2048,28 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ></span>
 
 
+
                                 <span class="career-gps-journey__stage">
+
                                     ${escapeHTML(
                                         simplifyCareerGpsJourneyStage(
                                             stage.stage
                                         )
                                     )}
+
                                 </span>
+
 
                             </div>
 
+
                         `
+
                     ).join('')}
 
+
                 </div>
+
 
             </div>
 
@@ -1324,15 +2078,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function simplifyCareerGpsJourneyStage(stage) {
+    function simplifyCareerGpsJourneyStage(
+        stage
+    ) {
 
         if (!stage) {
+
             return '';
+
         }
 
 
         const normalized =
-            String(stage)
+            String(
+                stage
+            )
                 .replace(
                     /\s+/g,
                     ' '
@@ -1341,7 +2101,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         if (
-            normalized.length <= 17
+            normalized.length <=
+            17
         ) {
 
             return normalized;
@@ -1349,17 +2110,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        return `${normalized.slice(
-            0,
-            17
-        )}…`;
+        return `${
+            normalized.slice(
+                0,
+                17
+            )
+        }…`;
 
     }
 
 
-    function reduceTimelineStages(stages) {
+    function reduceTimelineStages(
+        stages
+    ) {
 
-        if (stages.length <= 4) {
+        if (
+            stages.length <=
+            4
+        ) {
 
             return stages;
 
@@ -1367,23 +2135,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         return [
+
             stages[0],
 
-            stages[
-                Math.floor(
-                    stages.length / 3
-                )
-            ],
 
             stages[
                 Math.floor(
-                    stages.length * 2 / 3
+                    stages.length /
+                    3
                 )
             ],
 
+
             stages[
-                stages.length - 1
+                Math.floor(
+                    stages.length *
+                    2 /
+                    3
+                )
+            ],
+
+
+            stages[
+                stages.length -
+                1
             ]
+
         ];
 
     }
@@ -1393,21 +2170,29 @@ document.addEventListener('DOMContentLoaded', () => {
        CARD CONTENT
     ======================================== */
 
-    function getInitial(name) {
+    function getInitial(
+        name
+    ) {
 
         if (!name) {
+
             return '?';
+
         }
 
 
         const firstCharacter =
             name
                 .trim()
-                .charAt(0);
+                .charAt(
+                    0
+                );
 
 
-        return firstCharacter
-            .toUpperCase();
+        return (
+            firstCharacter
+                .toUpperCase()
+        );
 
     }
 
@@ -1418,7 +2203,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPagination() {
 
-        paginationContainer.innerHTML = '';
+        paginationContainer.innerHTML =
+            '';
 
 
         const totalPages =
@@ -1428,8 +2214,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        if (totalPages <= 1) {
+        if (
+            totalPages <=
+            1
+        ) {
+
             return;
+
         }
 
 
@@ -1442,11 +2233,14 @@ document.addEventListener('DOMContentLoaded', () => {
         prev.type =
             'button';
 
+
         prev.textContent =
             '前へ';
 
+
         prev.disabled =
-            currentPage === 1;
+            currentPage ===
+            1;
 
 
         const page =
@@ -1472,22 +2266,30 @@ document.addEventListener('DOMContentLoaded', () => {
         next.type =
             'button';
 
+
         next.textContent =
             '次へ';
 
+
         next.disabled =
-            currentPage === totalPages;
+            currentPage ===
+            totalPages;
 
 
         prev.addEventListener(
             'click',
             () => {
 
-                if (currentPage > 1) {
+                if (
+                    currentPage >
+                    1
+                ) {
 
                     currentPage--;
 
+
                     render();
+
 
                     scrollToStorySection();
 
@@ -1508,7 +2310,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     currentPage++;
 
+
                     render();
+
 
                     scrollToStorySection();
 
@@ -1530,15 +2334,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function scrollToStorySection() {
 
         document
+
             .querySelector(
                 '.career-story-section'
             )
+
             ?.scrollIntoView({
+
                 behavior:
                     'smooth',
 
                 block:
                     'start'
+
             });
 
     }
@@ -1547,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderResultCount() {
 
         resultCount.textContent =
-            `${filteredCareers.length}件のキャリア`;
+            `${filteredCareers.length}件のCareer Story`;
 
     }
 
@@ -1555,6 +2363,45 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ========================================
        EVENTS
     ======================================== */
+
+    decisionPathButtons.forEach(
+        button => {
+
+            button.addEventListener(
+                'click',
+                () => {
+
+                    decisionPathButtons.forEach(
+                        item => {
+
+                            item.classList.remove(
+                                'active'
+                            );
+
+                        }
+                    );
+
+
+                    button.classList.add(
+                        'active'
+                    );
+
+
+                    selectedDecisionPath =
+                        button
+                            .dataset
+                            .decisionPath ||
+                        '';
+
+
+                    applyFilters();
+
+                }
+            );
+
+        }
+    );
+
 
     searchInput.addEventListener(
         'input',
@@ -1580,36 +2427,41 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-    themeButtons.forEach(button => {
+    themeButtons.forEach(
+        button => {
 
-        button.addEventListener(
-            'click',
-            () => {
+            button.addEventListener(
+                'click',
+                () => {
 
-                themeButtons.forEach(
-                    chip =>
-                        chip.classList.remove(
-                            'active'
-                        )
-                );
+                    themeButtons.forEach(
+                        chip => {
 
+                            chip.classList.remove(
+                                'active'
+                            );
 
-                button.classList.add(
-                    'active'
-                );
-
-
-                selectedTheme =
-                    button.dataset.theme ||
-                    '';
+                        }
+                    );
 
 
-                applyFilters();
+                    button.classList.add(
+                        'active'
+                    );
 
-            }
-        );
 
-    });
+                    selectedTheme =
+                        button.dataset.theme ||
+                        '';
+
+
+                    applyFilters();
+
+                }
+            );
+
+        }
+    );
 
 
     resetButton.addEventListener(
@@ -1619,14 +2471,18 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.value =
                 '';
 
+
             industryFilter.value =
                 '';
+
 
             ageFilter.value =
                 '';
 
+
             incomeFilter.value =
                 '';
+
 
             selectedTheme =
                 '';
@@ -1654,27 +2510,35 @@ document.addEventListener('DOMContentLoaded', () => {
        ESCAPE
     ======================================== */
 
-    function escapeHTML(value) {
+    function escapeHTML(
+        value
+    ) {
 
         return String(
-            value ?? ''
+            value ??
+            ''
         )
+
             .replaceAll(
                 '&',
                 '&amp;'
             )
+
             .replaceAll(
                 '<',
                 '&lt;'
             )
+
             .replaceAll(
                 '>',
                 '&gt;'
             )
+
             .replaceAll(
                 '"',
                 '&quot;'
             )
+
             .replaceAll(
                 "'",
                 '&#039;'

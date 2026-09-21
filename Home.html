@@ -3,21 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Career GPS | 実際の意思決定からキャリアを考える - Imnormal
-    </title>
+    <title>Career GPS | 実際の意思決定からキャリアを考える - Imnormal</title>
 
     <meta
         name="description"
         content="Career GPSは、転職・異動・昇進・独立など、実際のキャリアの意思決定とその後の結果から、自分の次の選択を考えるためのキャリアプラットフォームです。"
     >
 
+    <!-- OGP -->
     <meta
         property="og:title"
         content="Career GPS | 実際の意思決定からキャリアを考える"
@@ -25,7 +20,7 @@
 
     <meta
         property="og:description"
-        content="自分と近い人が、何に迷い、何を大切にし、どんな道を選んだのか。リアルなCareer Storyから次の選択を考えよう。"
+        content="自分と近い人が、何に迷い、何を選び、その後どうなったのか。実際の経験から次の選択を考えよう。"
     >
 
     <meta
@@ -43,23 +38,17 @@
         content="website"
     >
 
-    <meta
-        name="keywords"
-        content="Career GPS, キャリアストーリー, キャリア選択, 転職, 意思決定, キャリアパス, インノーマル"
-    >
-
     <link
         rel="canonical"
         href="https://www.imnormal.jp/Home.html"
     >
 
-    <!-- 共通CSS -->
+    <!-- CSS -->
     <link
         rel="stylesheet"
         href="css/styles.css"
     >
 
-    <!-- Home専用CSS -->
     <link
         rel="stylesheet"
         href="css/home.css"
@@ -71,11 +60,11 @@
         rel="stylesheet"
     >
 
-    <!-- Google Ads / GA4 -->
+    <!-- Google tag -->
     <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"
-    ></script>
+        src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955">
+    </script>
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -86,15 +75,18 @@
 
         gtag('js', new Date());
 
-        gtag('config', 'AW-16918246955');
-        gtag('config', 'G-P2QH62VTEX');
+        gtag(
+            'config',
+            'AW-16918246955'
+        );
 
-        gtag('event', 'career_home_view', {
-            page_type: 'career_home'
-        });
+        gtag(
+            'config',
+            'G-P2QH62VTEX'
+        );
     </script>
 
-    <!-- 構造化データ -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -105,14 +97,10 @@
         "publisher": {
             "@type": "Organization",
             "name": "株式会社インノーマル"
-        },
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.imnormal.jp/Career_overview.html?search={search_term_string}",
-            "query-input": "required name=search_term_string"
         }
     }
     </script>
+
 </head>
 
 
@@ -120,10 +108,10 @@
 
 
     <!-- =====================================================
-         Header
+         HEADER
     ====================================================== -->
 
-    <header>
+    <header class="gps-header">
 
         <div class="header-content">
 
@@ -131,6 +119,7 @@
                 href="Home.html"
                 class="logo-link"
             >
+
                 <img
                     src="images/company-logo.jpg"
                     alt="インノーマルのロゴ"
@@ -143,6 +132,7 @@
                 >
                     インノーマル
                 </span>
+
             </a>
 
 
@@ -164,7 +154,7 @@
                     href="Login.html"
                     id="login-button"
                     class="login-button"
-                    style="display: none;"
+                    style="display:none;"
                 >
                     ログイン
                 </a>
@@ -173,7 +163,7 @@
                     href="#"
                     id="logout-button"
                     class="login-button"
-                    style="display: none;"
+                    style="display:none;"
                 >
                     ログアウト
                 </a>
@@ -190,12 +180,13 @@
     </header>
 
 
+
     <!-- =====================================================
-         Side Menu
+         SIDE MENU
     ====================================================== -->
 
     <aside
-        class="main-menu"
+        class="main-menu gps-side-menu"
         id="main-menu"
     >
 
@@ -204,63 +195,101 @@
             <ul>
 
                 <li>
-                    <a href="Home.html" class="active">
+
+                    <a
+                        href="Home.html"
+                        class="active"
+                    >
+
                         <img
                             src="images/home-icon.png"
-                            alt="ホームアイコン"
+                            alt=""
                         >
+
                         ホーム
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="Career_overview.html">
+
                         <img
                             src="images/career-icon.png"
-                            alt="キャリアストーリーアイコン"
+                            alt=""
                         >
+
                         キャリアストーリー
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="Board.html">
+
                         <img
                             src="images/board-icon.png"
-                            alt="掲示板アイコン"
+                            alt=""
                         >
-                        掲示板（Q&A）
+
+                        掲示板（Q&amp;A）
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="Mypage.html">
+
                         <img
                             src="images/mypage-icon.png"
-                            alt="マイページアイコン"
+                            alt=""
                         >
+
                         My Career GPS
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="Announcements.html">
+
                         <img
                             src="images/notification-icon.png"
-                            alt="お知らせアイコン"
+                            alt=""
                         >
+
                         お知らせ
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="Contact.html">
+
                         <img
                             src="images/contact-icon.png"
-                            alt="問い合わせアイコン"
+                            alt=""
                         >
+
                         お問い合わせ
+
                     </a>
+
                 </li>
 
             </ul>
@@ -270,456 +299,876 @@
     </aside>
 
 
+
     <!-- =====================================================
-         Main
+         MAIN
     ====================================================== -->
 
     <main class="career-gps-home">
 
 
         <!-- =================================================
-             01. Featured Story Hero
+             01 HERO
         ================================================== -->
 
         <section
-            class="home-featured-story"
-            aria-labelledby="featured-story-title"
+            class="home-hero"
+            aria-labelledby="home-hero-title"
         >
 
-            <div class="featured-story-content">
 
-                <div class="featured-story-badges">
+            <!-- LEFT -->
 
-                    <span class="featured-story-badge">
-                        FEATURED STORY
+            <div class="home-hero__main">
+
+
+                <p class="home-eyebrow">
+                    CAREER GPS
+                </p>
+
+
+                <h1 id="home-hero-title">
+
+                    転職するか、残るか。<br>
+
+                    迷ったら、同じことで迷った人の<br>
+
+                    <span>
+                        「選択とその後」
                     </span>
 
-                    <span class="featured-story-recommend">
-                        今週のおすすめ
-                    </span>
+                    を見てみよう。
 
-                </div>
-
-
-                <h1
-                    id="featured-story-title"
-                    class="featured-story-title"
-                >
-                    迷ったとき、<br>
-                    他の誰かの選択が<br>
-                    ヒントになる。
                 </h1>
 
 
-                <p class="featured-story-answer">
-                    実際の意思決定から、次の一歩を考える。
+                <p class="home-hero__lead">
+
+                    自分と近い人が何に迷い、何を選び、その後どうなったのか。<br>
+
+                    実際の経験から、あなたの次の選択を考えられます。
+
                 </p>
 
 
-                <p class="featured-story-description">
-                    転職、異動、昇進、独立、結婚、出産。<br>
-                    何に迷い、何を大切にし、なぜその道を選んだのか。<br>
-                    Career GPSには、リアルな選択の背景があります。
-                </p>
+
+                <!-- DILEMMA ENTRY -->
+
+                <div class="home-hero__dilemma">
 
 
-                <div class="featured-story-actions">
+                    <p class="home-hero__question">
 
-                    <a
-                        href="Career_overview.html"
-                        class="home-primary-button"
-                    >
-                        Career Storyを読む
-                        <span aria-hidden="true">→</span>
-                    </a>
+                        今、何に迷っていますか？
+
+                    </p>
+
+
+                    <!-- Main -->
 
                     <a
-                        href="#about-career-gps"
-                        class="home-text-link"
+                        href="Career_overview.html?theme=change"
+                        class="home-hero__primary-choice"
+                        data-dilemma-theme="change"
                     >
-                        Career GPSとは？
+
+                        <span>
+                            転職するか迷っている
+                        </span>
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+
                     </a>
+
+
+
+                    <!-- Quick choices -->
+
+                    <div class="home-hero__quick-choices">
+
+
+                        <a
+                            href="Career_overview.html?theme=income"
+                            data-dilemma-theme="income"
+                        >
+                            年収を上げたい
+                        </a>
+
+
+                        <a
+                            href="Career_overview.html?theme=management"
+                            data-dilemma-theme="management"
+                        >
+                            管理職になる？
+                        </a>
+
+
+                        <a
+                            href="Career_overview.html?theme=workstyle"
+                            data-dilemma-theme="workstyle"
+                        >
+                            働き方を変えたい
+                        </a>
+
+
+                        <a
+                            href="Career_overview.html?theme=independent"
+                            data-dilemma-theme="independent"
+                        >
+                            独立・起業したい
+                        </a>
+
+
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- 後でJSから実データを入れる領域 -->
-            <aside class="featured-story-summary">
 
-                <p class="summary-eyebrow">
-                    CAREER SNAPSHOT
+            <!-- RIGHT -->
+
+            <aside class="home-how-card">
+
+
+                <p class="home-how-card__eyebrow">
+                    HOW TO USE
                 </p>
 
+
                 <h2>
-                    実際の選択と、その後を見る
+
+                    他の人の答えではなく、<br>
+
+                    他の人の「選択」を見る。
+
                 </h2>
 
 
-                <div class="featured-story-summary-list">
 
-                    <div class="summary-row">
-                        <span>意思決定</span>
-                        <strong>転職・異動・昇進・独立</strong>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>わかること</span>
-                        <strong>背景・判断・結果・学び</strong>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>探し方</span>
-                        <strong>自分に近い人・悩み・条件</strong>
-                    </div>
-
-                </div>
+                <ol class="home-how-card__steps">
 
 
-                <div class="featured-story-recommend-box">
+                    <li>
 
-                    <span class="recommend-box-label">
-                        こんな人におすすめ
-                    </span>
+                        <span>
+                            01
+                        </span>
 
-                    <ul>
-                        <li>今のままでいいのか迷っている</li>
-                        <li>転職するか決めきれない</li>
-                        <li>年収とやりがい、両方大切にしたい</li>
-                        <li>自分と似た人の選択を知りたい</li>
-                    </ul>
+                        <div>
 
-                </div>
+                            <strong>
+                                自分と同じ迷いを探す
+                            </strong>
+
+                            <p>
+                                今の自分に近い分岐から探します。
+                            </p>
+
+                        </div>
+
+                    </li>
+
+
+
+                    <li>
+
+                        <span>
+                            02
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                実際の選択を見る
+                            </strong>
+
+                            <p>
+                                何を選び、何を重視したのかを知ります。
+                            </p>
+
+                        </div>
+
+                    </li>
+
+
+
+                    <li>
+
+                        <span>
+                            03
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                その後を見る
+                            </strong>
+
+                            <p>
+                                結果・学び・後悔まで参考にします。
+                            </p>
+
+                        </div>
+
+                    </li>
+
+
+                </ol>
 
             </aside>
+
 
         </section>
 
 
+
         <!-- =================================================
-             02. Similar Stories
+             TRUST / PROOF
+        ================================================== -->
+
+        <section
+            class="home-trust"
+            aria-label="Career GPSの掲載情報"
+        >
+
+
+            <!-- STORIES -->
+
+            <div class="home-trust__item">
+
+                <strong id="story-count">
+                    0
+                </strong>
+
+                <span class="home-trust__label">
+                    CAREER STORIES
+                </span>
+
+                <small>
+                    公開されている経験
+                </small>
+
+            </div>
+
+
+
+            <!-- PEOPLE -->
+
+            <div class="home-trust__item">
+
+                <strong id="user-count">
+                    0
+                </strong>
+
+                <span class="home-trust__label">
+                    PEOPLE
+                </span>
+
+                <small>
+                    経験を共有する人
+                </small>
+
+            </div>
+
+
+
+            <!-- REAL EXPERIENCES -->
+
+            <div class="home-trust__item home-trust__item--text">
+
+                <strong>
+                    実体験
+                </strong>
+
+                <span class="home-trust__label">
+                    REAL EXPERIENCES
+                </span>
+
+                <small>
+                    選択の背景・結果・学びまで
+                </small>
+
+            </div>
+
+
+            <!--
+                metrics.jsとの互換用。
+                Q&A件数はHomeでは見せない。
+            -->
+
+            <span
+                id="qa-count"
+                hidden
+            >
+                0
+            </span>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             02 START FROM YOUR DILEMMA
+        ================================================== -->
+
+        <section class="home-section home-dilemma-section">
+
+
+            <div class="home-section-heading">
+
+
+                <p class="home-eyebrow">
+                    START FROM YOUR DILEMMA
+                </p>
+
+
+                <h2>
+
+                    今の悩みから、<br class="mobile-break">
+
+                    先に迷った人を探す。
+
+                </h2>
+
+
+                <p>
+
+                    同じような分岐に立った人が、
+
+                    何を考え、どんな道を選んだのか。
+
+                    今の自分に近い悩みから見てみましょう。
+
+                </p>
+
+
+            </div>
+
+
+
+            <div class="decision-theme-grid">
+
+
+                <!-- 01 -->
+
+                <a
+                    href="Career_overview.html?theme=change"
+                    class="decision-theme-card decision-theme-card--featured"
+                    data-dilemma-theme="change"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            01
+                        </span>
+
+                        <span class="decision-theme-en">
+                            JOB CHANGE
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        転職するか、残るか迷っている
+                    </h3>
+
+
+                    <p>
+
+                        転職した人、残った人。
+
+                        同じ迷いから違う道を選んだ経験を見る。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- 02 -->
+
+                <a
+                    href="Career_overview.html?theme=income"
+                    class="decision-theme-card"
+                    data-dilemma-theme="income"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            02
+                        </span>
+
+                        <span class="decision-theme-en">
+                            INCOME
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        年収を上げたい
+                    </h3>
+
+
+                    <p>
+
+                        収入を変えるために、
+
+                        他の人は何を選んだのか。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- 03 -->
+
+                <a
+                    href="Career_overview.html?theme=management"
+                    class="decision-theme-card"
+                    data-dilemma-theme="management"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            03
+                        </span>
+
+                        <span class="decision-theme-en">
+                            MANAGEMENT
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        管理職になるか迷っている
+                    </h3>
+
+
+                    <p>
+
+                        専門職を続けるか、
+
+                        マネジメントへ進むか。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- 04 -->
+
+                <a
+                    href="Career_overview.html?theme=workstyle"
+                    class="decision-theme-card"
+                    data-dilemma-theme="workstyle"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            04
+                        </span>
+
+                        <span class="decision-theme-en">
+                            WORK STYLE
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        働き方を変えたい
+                    </h3>
+
+
+                    <p>
+
+                        仕事と生活のバランスを、
+
+                        どう変えたのか。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- 05 -->
+
+                <a
+                    href="Career_overview.html?theme=career_change"
+                    class="decision-theme-card"
+                    data-dilemma-theme="career_change"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            05
+                        </span>
+
+                        <span class="decision-theme-en">
+                            CAREER CHANGE
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        職種・業界を変えたい
+                    </h3>
+
+
+                    <p>
+
+                        未経験の道へ進んだ人は、
+
+                        何を考えて決めたのか。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+
+                <!-- 06 -->
+
+                <a
+                    href="Career_overview.html?theme=independent"
+                    class="decision-theme-card"
+                    data-dilemma-theme="independent"
+                >
+
+                    <div class="decision-theme-card__meta">
+
+                        <span class="decision-theme-number">
+                            06
+                        </span>
+
+                        <span class="decision-theme-en">
+                            INDEPENDENCE
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        独立・起業するか迷っている
+                    </h3>
+
+
+                    <p>
+
+                        会社を離れる決断をした人は、
+
+                        何を重視したのか。
+
+                    </p>
+
+
+                    <span
+                        class="decision-theme-arrow"
+                        aria-hidden="true"
+                    >
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             03 SIMILAR STORIES
         ================================================== -->
 
         <section
             id="similar-stories"
-            class="home-personalized-section"
+            class="home-section home-similar-section"
         >
 
-            <div class="personalized-heading">
+
+            <div class="home-section-heading-row">
+
 
                 <div>
 
-                    <p class="home-eyebrow">
+
+                    <p
+                        id="similar-stories-eyebrow"
+                        class="home-eyebrow"
+                    >
                         FOR YOU
                     </p>
 
-                    <h2>
-                        あなたと近い人は、こんな選択をしています。
+
+                    <h2 id="similar-stories-title">
+
+                        あなたと近い人は、<br>
+
+                        こんな選択をしています。
+
                     </h2>
+
 
                     <p
                         id="similar-stories-description"
                         class="personalized-description"
                     >
-                        あなたの現在地や大切にしていることから、
-                        次の選択を考えるヒントになりそうなCareer Storyを見つけます。
+
+                        あなたのこれまでのキャリアや
+
+                        大切にしていることから、
+
+                        次の選択を考えるヒントになりそうな経験を選びます。
+
                     </p>
 
-                </div>
-
-
-                <a
-                    href="/Register.html"
-                    class="home-secondary-button home-login-cta"
-                >
-                    自分に近いCareer Storyを見つける
-                </a>
-
-            </div>
-
-
-            <div
-                id="similar-stories-list"
-                class="home-story-grid home-story-grid--personalized"
-            >
-                <!-- similar-stories.jsで生成 -->
-            </div>
-
-
-            <div
-                id="similar-stories-indicators"
-                class="carousel-indicators"
-                style="display: none;"
-            >
-            </div>
-
-
-            <!-- 未ログイン時：Career Story Preview -->
-            <div
-                id="career-story-preview-area"
-                class="career-story-preview-area"
-                style="display: none;"
-                >
-
-                <div class="career-story-preview-heading">
-
-                    <p class="career-story-preview-label">
-                        CAREER STORY PREVIEW
-                    </p>
-
-                    <h3>
-                        たとえば、こんなキャリアと選択があります
-                    </h3>
 
                 </div>
 
-
-                <div
-                    id="career-story-preview-list"
-                    class="home-story-grid home-story-grid--personalized"
-                >
-                    <!-- similar-stories.jsで生成 -->
-                </div>
-
-
-                <div class="career-story-preview-cta">
-
-                    <div>
-
-                        <p class="career-story-preview-cta__label">
-                            あなたの場合は？
-                        </p>
-
-                        <p>
-                            Career GPSに現在地を登録すると、
-                            自分と近いキャリアを歩んだ人が、
-                            その先でどんな選択をしたのか見つけられます。
-                        </p>
-
-                    </div>
-
-
-                    <a
-                        href="/Register.html"
-                        class="home-secondary-button"
-                    >
-                        自分に近いCareer Storyを見つける
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             03. Decision Themes / Search
-        ================================================== -->
-
-        <section class="home-discovery-section">
-
-            <!-- 左 -->
-            <div class="decision-theme-area">
-
-                <div class="home-section-heading">
-            
-                    <p class="home-eyebrow">
-                        DECISION THEMES
-                    </p>
-            
-                    <h2>
-                        今の悩みから探す
-                    </h2>
-            
-                    <p>
-                        今、あなたは何に迷っていますか？<br>
-                        同じことで悩んだ人が、何を選び、その後どうなったのかを見る。
-                    </p>
-            
-                </div>
-            
-            
-                <div class="decision-theme-grid">
-            
-                    <!-- 01 -->
-                    <a
-                        href="Career_overview.html?theme=income"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            01
-                        </span>
-            
-                        <div>
-                            <h3>
-                                収入を上げたい
-                            </h3>
-            
-                            <p>
-                                収入を軸に選択した人を見る
-                            </p>
-                        </div>
-                    </a>
-            
-            
-                    <!-- 02 -->
-                    <a
-                        href="Career_overview.html?theme=change"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            02
-                        </span>
-            
-                        <div>
-                            <h3>
-                                転職するか迷っている
-                            </h3>
-            
-                            <p>
-                                転職する・残る、その分岐を見る
-                            </p>
-                        </div>
-                    </a>
-            
-            
-                    <!-- 03 -->
-                    <a
-                        href="Career_overview.html?theme=stay"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            03
-                        </span>
-            
-                        <div>
-                            <h3>
-                                今の仕事を続けるか迷っている
-                            </h3>
-            
-                            <p>
-                                残る・異動する・環境を変える選択を見る
-                            </p>
-                        </div>
-                    </a>
-            
-            
-                    <!-- 04 -->
-                    <a
-                        href="Career_overview.html?theme=management"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            04
-                        </span>
-            
-                        <div>
-                            <h3>
-                                管理職になるか迷っている
-                            </h3>
-            
-                            <p>
-                                管理職・専門職、それぞれの選択を見る
-                            </p>
-                        </div>
-                    </a>
-            
-            
-                    <!-- 05 -->
-                    <a
-                        href="Career_overview.html?theme=independent"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            05
-                        </span>
-            
-                        <div>
-                            <h3>
-                                独立・起業を考えている
-                            </h3>
-            
-                            <p>
-                                会社員を続ける・独立する選択を見る
-                            </p>
-                        </div>
-                    </a>
-            
-            
-                    <!-- 06 -->
-                    <a
-                        href="Career_overview.html?theme=workstyle"
-                        class="decision-theme-card"
-                    >
-                        <span class="decision-theme-number">
-                            06
-                        </span>
-            
-                        <div>
-                            <h3>
-                                働き方を変えたい
-                            </h3>
-            
-                            <p>
-                                働く場所・時間・バランスの選択を見る
-                            </p>
-                        </div>
-                    </a>
-            
-                </div>
-            
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             04. Popular Stories
-        ================================================== -->
-
-        <section
-            id="popular-stories"
-            class="home-story-section"
-        >
-
-            <div class="home-section-heading-row">
-
-                <div>
-
-                    <p class="home-eyebrow">
-                        POPULAR STORIES
-                    </p>
-
-                    <h2>
-                        みんなが読んでいるCareer Story
-                    </h2>
-
-                    <p>
-                        今、多くの人が読んでいる意思決定のストーリー。
-                    </p>
-
-                </div>
 
 
                 <a
                     href="Career_overview.html"
                     class="home-section-link"
                 >
-                    すべて見る
-                    <span aria-hidden="true">→</span>
+
+                    もっと探す
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
                 </a>
 
+
             </div>
+
+
+
+            <!-- Login user -->
+
+            <div
+                id="similar-stories-list"
+                class="home-story-grid home-story-grid--personalized"
+            >
+
+                <!-- similar-stories.js -->
+
+            </div>
+
+
+
+            <div
+                id="similar-stories-indicators"
+                class="carousel-indicators"
+                style="display:none;"
+            >
+            </div>
+
+
+
+            <!-- Guest preview -->
+
+            <div
+                id="career-story-preview-area"
+                class="career-story-preview-area"
+                style="display:none;"
+            >
+
+
+                <p class="career-story-preview-label">
+
+                    CAREER STORY PREVIEW
+
+                </p>
+
+
+                <h3>
+
+                    たとえば、
+
+                    こんなキャリアと選択があります。
+
+                </h3>
+
+
+
+                <div
+                    id="career-story-preview-list"
+                    class="home-story-grid home-story-grid--preview"
+                >
+
+                    <!-- similar-stories.js -->
+
+                </div>
+
+
+
+                <div class="career-story-preview-cta">
+
+
+                    <p>
+
+                        ログインすると、
+
+                        あなたの現在地に近いCareer Storyを見つけられます。
+
+                    </p>
+
+
+                    <a
+                        href="/Register.html"
+                        class="home-login-cta cta-button"
+                    >
+
+                        無料登録して探す
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             04 POPULAR
+        ================================================== -->
+
+        <section
+            id="popular-stories"
+            class="home-section home-popular-section"
+        >
+
+
+            <div class="home-section-heading-row">
+
+
+                <div>
+
+
+                    <p class="home-eyebrow">
+
+                        POPULAR DECISIONS
+
+                    </p>
+
+
+                    <h2>
+
+                        今、よく読まれている選択。
+
+                    </h2>
+
+
+                    <p>
+
+                        多くの人が、
+
+                        次のキャリアを考えるために読んでいるCareer Storyです。
+
+                    </p>
+
+
+                </div>
+
+
+
+                <a
+                    href="Career_overview.html"
+                    class="home-section-link"
+                >
+
+                    すべて見る
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+
+            </div>
+
 
 
             <div
                 id="popular-stories-list"
                 class="home-story-grid"
             >
-                <!-- popular-stories.jsで生成 -->
+
+                <!-- popular-stories.js -->
+
             </div>
+
 
 
             <div
@@ -728,276 +1177,357 @@
             >
             </div>
 
+
         </section>
 
 
 
         <!-- =================================================
-             05. What is Career GPS
+             05 HOW CAREER GPS WORKS
         ================================================== -->
 
         <section
             id="about-career-gps"
-            class="home-about-section"
+            class="home-section home-process-section"
         >
 
-            <div class="home-section-heading home-section-heading--center">
+
+            <div
+                class="home-section-heading home-section-heading--center"
+            >
+
 
                 <p class="home-eyebrow">
-                    WHAT IS CAREER GPS?
+
+                    HOW CAREER GPS WORKS
+
                 </p>
+
 
                 <h2>
-                    Career GPSとは？
+
+                    他人のキャリアを読むだけではなく、<br>
+
+                    自分の次の選択を考えるために。
+
                 </h2>
 
+
                 <p>
-                    実際の人生の意思決定から、
-                    理由・結果・学びを知るキャリアのプラットフォームです。
+
+                    Career GPSは、
+
+                    少し先を歩いた人の経験を、
+
+                    あなたの次の選択を考えるための地図にします。
+
                 </p>
 
+
             </div>
 
 
-            <div class="career-gps-value-grid">
 
-                <article class="career-gps-value-card">
+            <div class="home-process-grid">
 
-                    <div class="value-icon">
+
+                <!-- 01 -->
+
+                <div class="home-process-card">
+
+                    <span>
                         01
-                    </div>
+                    </span>
 
-                    <h3>
-                        リアルな意思決定
-                    </h3>
+                    <strong>
+                        今の迷い
+                    </strong>
 
                     <p>
-                        なぜその選択をしたのか。
-                        成功談だけでなく、迷いや葛藤まで知ることができます。
+                        自分が立っている分岐を見つける
                     </p>
 
-                </article>
+                </div>
 
 
-                <article class="career-gps-value-card">
+                <div class="home-process-arrow">
+                    →
+                </div>
 
-                    <div class="value-icon">
+
+
+                <!-- 02 -->
+
+                <div class="home-process-card">
+
+                    <span>
                         02
-                    </div>
+                    </span>
 
-                    <h3>
-                        結果と、その後がわかる
-                    </h3>
+                    <strong>
+                        他の人の選択
+                    </strong>
 
                     <p>
-                        年収・役割・満足度など、
-                        選択したあとにどう変わったのかを確認できます。
+                        同じ分岐にいた人が何を選んだかを見る
                     </p>
 
-                </article>
+                </div>
 
 
-                <article class="career-gps-value-card">
+                <div class="home-process-arrow">
+                    →
+                </div>
 
-                    <div class="value-icon">
+
+
+                <!-- 03 -->
+
+                <div class="home-process-card">
+
+                    <span>
                         03
-                    </div>
+                    </span>
 
-                    <h3>
-                        自分に近い人を発見
-                    </h3>
-
-                    <p>
-                        年齢、職種、業界、価値観などから、
-                        自分に近い人のキャリアを探せます。
-                    </p>
-
-                </article>
-
-
-                <article class="career-gps-value-card">
-
-                    <div class="value-icon">
-                        AI
-                    </div>
-
-                    <h3>
-                        AIが要点を整理
-                    </h3>
+                    <strong>
+                        判断軸
+                    </strong>
 
                     <p>
-                        長いストーリーも、
-                        判断軸や転機をわかりやすく整理して確認できます。
+                        何を重視して決めたのかを知る
                     </p>
 
-                </article>
+                </div>
+
+
+                <div class="home-process-arrow">
+                    →
+                </div>
+
+
+
+                <!-- 04 -->
+
+                <div class="home-process-card">
+
+                    <span>
+                        04
+                    </span>
+
+                    <strong>
+                        その後
+                    </strong>
+
+                    <p>
+                        結果・学び・後悔までを見る
+                    </p>
+
+                </div>
+
+
+                <div class="home-process-arrow">
+                    →
+                </div>
+
+
+
+                <!-- 05 -->
+
+                <div class="home-process-card home-process-card--final">
+
+                    <span>
+                        05
+                    </span>
+
+                    <strong>
+                        自分なら？
+                    </strong>
+
+                    <p>
+                        自分の次の選択を考える
+                    </p>
+
+                </div>
+
 
             </div>
+
 
         </section>
 
 
 
         <!-- =================================================
-            FINAL CTA / COMMUNITY
+             06 MY CAREER GPS
         ================================================== -->
 
-        <section class="home-final-section">
-
-            <!-- 左側 -->
-            <div class="home-final-message">
-
-                <p class="home-eyebrow">
-                    SHARE YOUR STORY
-                </p>
-
-                <h2>
-                    あなたの意思決定も、<br>
-                    誰かの道しるべになる。
-                </h2>
-
-                <p>
-                    あなたが迷い、考え、選んだ経験は、
-                    今まさに同じことで悩んでいる誰かのヒントになります。
-                </p>
-
-                <div class="home-final-benefits">
-
-                    <span>
-                        匿名でも投稿できます
-                    </span>
-
-                    <span>
-                        後から編集・非公開にできます
-                    </span>
-
-                    <span>
-                        自分自身のキャリア整理にも使えます
-                    </span>
-
-                </div>
-
-                <a
-                    href="/Register.html"
-                    class="home-primary-button cta-button"
-                >
-                    無料でCareer Storyを始める
-                    <span aria-hidden="true">→</span>
-                </a>
-
-            </div>
+        <section class="home-my-gps-section">
 
 
-            <!-- 右側 -->
-            <div class="home-final-community">
+            <p class="home-eyebrow">
 
-                <p class="home-final-community-label">
-                    CAREER GPS COMMUNITY
-                </p>
+                MY CAREER GPS
 
-                <div class="home-final-metrics">
-
-                    <div class="home-final-metric">
-
-                        <strong id="story-count">
-                            0
-                        </strong>
-
-                        <span>
-                            公開Career Story
-                        </span>
-
-                    </div>
+            </p>
 
 
-                    <div class="home-final-metric">
+            <h2>
 
-                        <strong id="user-count">
-                            0
-                        </strong>
+                今度は、あなた自身の<br>
 
-                        <span>
-                            登録ユーザー
-                        </span>
+                現在地と次の分岐を整理する。
 
-                    </div>
+            </h2>
 
 
-                    <div class="home-final-metric">
+            <p>
 
-                        <strong id="qa-count">
-                            0
-                        </strong>
+                これまで歩いてきた道、
 
-                        <span>
-                            Q&amp;A
-                        </span>
+                選んできたこと、
 
-                    </div>
+                大切にしていること。<br>
 
-                </div>
+                自分のCareer GPSをつくることで、
+
+                次の選択を考えるための現在地が見えてきます。
+
+            </p>
 
 
-                <div class="home-final-voice">
+            <a
+                href="Mypage.html"
+                class="home-outline-button"
+            >
 
-                    <p>
-                        「同じ状況だった人の選択を見て、
-                        自分の考えを整理するきっかけになりました。」
-                    </p>
+                My Career GPSを開く
 
-                    <span>
-                        Career GPS User
-                    </span>
+                <span aria-hidden="true">
+                    →
+                </span>
 
-                </div>
+            </a>
 
-            </div>
 
         </section>
 
 
 
         <!-- =================================================
-             News
+             07 SHARE YOUR STORY
+        ================================================== -->
+
+        <section class="home-share-section">
+
+
+            <p class="home-eyebrow">
+
+                SHARE YOUR STORY
+
+            </p>
+
+
+            <h2>
+
+                あなたの選択も、<br>
+
+                次に迷う誰かの道しるべになる。
+
+            </h2>
+
+
+            <p>
+
+                成功だけでなく、
+
+                迷ったこと、後悔したこと、
+
+                そこから学んだことも、
+
+                次の誰かにとって大切な判断材料になります。
+
+            </p>
+
+
+            <a
+                href="/Register.html"
+                class="home-primary-button cta-button"
+            >
+
+                無料でCareer GPSをつくる
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             08 NEWS
         ================================================== -->
 
         <section
             id="announcements"
-            class="home-news-section"
+            class="home-section home-news-section"
         >
+
 
             <div class="home-section-heading-row">
 
+
                 <div>
 
+
                     <p class="home-eyebrow">
+
                         NEWS
+
                     </p>
 
+
                     <h2>
+
                         Career GPSからのお知らせ
+
                     </h2>
 
+
                 </div>
+
 
 
                 <a
                     href="Announcements.html"
                     class="home-section-link"
                 >
+
                     一覧を見る
-                    <span aria-hidden="true">→</span>
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
                 </a>
 
+
             </div>
+
 
 
             <div
                 id="announcements-list"
                 class="home-news-list"
             >
-                <!-- home.jsで生成 -->
+
+                <!-- home.js -->
+
             </div>
+
 
         </section>
 
@@ -1007,53 +1537,67 @@
 
 
     <!-- =====================================================
-         Footer
+         FOOTER
     ====================================================== -->
 
-    <footer>
+    <footer class="gps-footer">
+
 
         <div class="footer-content">
 
+
             <div class="footer-items">
+
 
                 <p>
                     &copy; 2026 Imnormal
                 </p>
 
+
                 <a
                     href="https://www.instagram.com/imnormal_official/"
                     target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Instagram"
                 >
+
                     <img
                         src="images/instagram-icon.png"
                         alt="Instagram"
                         class="instagram-icon"
                     >
+
                 </a>
+
 
                 <a
                     href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
                     target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="LinkedIn"
                 >
+
                     <img
                         src="images/linkedin_icon.png"
                         alt="LinkedIn"
                         class="linkedin-icon"
                     >
+
                 </a>
+
 
             </div>
 
+
         </div>
+
 
     </footer>
 
 
 
     <!-- =====================================================
-         Scripts
+         JS
     ====================================================== -->
 
     <script src="js/hamburgermenu.js"></script>
@@ -1067,6 +1611,7 @@
     <script src="js/similar-stories.js"></script>
 
     <script src="js/session.js"></script>
+
 
 </body>
 
