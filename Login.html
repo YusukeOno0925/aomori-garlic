@@ -1,106 +1,454 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン | インノーマル</title>
-    <meta name="description" content="インノーマルの会員ログインページ。メールアドレスとパスワードでログインして、キャリア共有コミュニティにアクセスしましょう。">
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/login.css">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"></script>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ログイン | Career GPS | インノーマル
+    </title>
+
+    <meta
+        name="description"
+        content="インノーマルのCareer GPSにログインして、自分の現在地、これまでの選択、これからの方向を確認できます。"
+    >
+
+    <meta
+        name="robots"
+        content="noindex, nofollow"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/login.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         Google Ads
+         ========================================================= -->
+
+    <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=AW-16918246955"
+    ></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
-    
-        gtag('config', 'AW-16918246955');
+
+        gtag(
+            'config',
+            'AW-16918246955'
+        );
     </script>
+
 </head>
+
+
 <body>
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
     <header>
+
         <div class="header-content">
-            <a href="Home.html" class="logo-link">
-                <img src="images/company-logo.jpg" alt="インノーマルのロゴ" class="logo-image">
-                <h1 class="logo">インノーマル</h1>
+
+            <a
+                href="Home.html"
+                class="logo-link"
+            >
+                <img
+                    src="images/company-logo.jpg"
+                    alt="インノーマルのロゴ"
+                    class="logo-image"
+                >
+
+                <span
+                    class="logo"
+                    aria-label="インノーマル"
+                >
+                    インノーマル
+                </span>
             </a>
+
         </div>
+
     </header>
+
+
+    <!-- =========================================================
+         LOGIN
+         ========================================================= -->
+
     <main class="login-page">
+
+
+        <!-- =====================================================
+             LEFT / CAREER GPS
+             ===================================================== -->
+
         <section class="login-hero">
-            <p class="login-kicker">WELCOME BACK</p>
-            <h2>キャリアの続きを、見にいく。</h2>
+
+            <p class="login-kicker">
+                WELCOME BACK
+            </p>
+
+
+            <h1>
+                あなたのCareer GPSの、<br>
+                続きをひらく。
+            </h1>
+
+
             <p class="login-lead">
-                あなたに近いキャリア事例や、リアルな失敗・後悔から、
-                これからの働き方を考えられます。
+
+                これまでの選択を振り返りながら、
+                今の自分と、次に向かう方向を整理できます。
+
             </p>
-    
+
+
             <div class="login-benefits">
-                <div>
-                    <span>01</span>
-                    <p>自分に近いキャリア事例を探せる</p>
-                </div>
-                <div>
-                    <span>02</span>
-                    <p>失敗・後悔から学べる</p>
-                </div>
-                <div>
-                    <span>03</span>
-                    <p>年収・職種・志向を参考にできる</p>
-                </div>
+
+
+                <article class="login-benefit-card">
+
+                    <span class="login-benefit-card__number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <p class="login-benefit-card__label">
+                            CURRENT CROSSROAD
+                        </p>
+
+                        <h2>
+                            今の分岐を確認する
+                        </h2>
+
+                        <p>
+                            今何に迷っているのか、
+                            次の選択で大切にしたいことを確認できます。
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="login-benefit-card">
+
+                    <span class="login-benefit-card__number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <p class="login-benefit-card__label">
+                            PAST DECISIONS
+                        </p>
+
+                        <h2>
+                            これまでの選択を振り返る
+                        </h2>
+
+                        <p>
+                            過去の意思決定とその結果から、
+                            自分の判断軸を振り返れます。
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="login-benefit-card">
+
+                    <span class="login-benefit-card__number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <p class="login-benefit-card__label">
+                            NEXT DIRECTION
+                        </p>
+
+                        <h2>
+                            次に向かう方向を整理する
+                        </h2>
+
+                        <p>
+                            目指したい役割や今後の目標を、
+                            自分のCareer GPSに残せます。
+                        </p>
+
+                    </div>
+
+                </article>
+
             </div>
+
         </section>
-    
+
+
+        <!-- =====================================================
+             RIGHT / LOGIN FORM
+             ===================================================== -->
+
         <section class="login-card">
+
             <div class="login-card-header">
-                <p class="login-card-kicker">LOGIN</p>
-                <h2>ログイン</h2>
-                <p>登録済みのメールアドレスとパスワードを入力してください。</p>
+
+                <p class="login-card-kicker">
+                    LOGIN
+                </p>
+
+
+                <h2>
+                    Career GPSにログイン
+                </h2>
+
+
+                <p>
+                    登録済みのEmailアドレスと<br>
+                    パスワードを入力してください。
+                </p>
+
             </div>
-    
-            <form id="login-form">
-                <label>
-                    メールアドレス
-                    <input type="email" name="email" placeholder="example@imnormal.jp" required>
+
+
+            <!-- =================================================
+                 FORM
+                 ================================================= -->
+
+            <form
+                id="login-form"
+                novalidate
+            >
+
+
+                <!-- ---------------------------------------------
+                     EMAIL
+                     --------------------------------------------- -->
+
+                <label class="login-field">
+
+                    <span class="login-field__header">
+
+                        <strong>
+                            Emailアドレス
+                        </strong>
+
+                    </span>
+
+
+                    <input
+                        type="email"
+                        name="email"
+                        autocomplete="email"
+                        inputmode="email"
+                        placeholder="mail@example.com"
+                        required
+                    >
+
                 </label>
-    
-                <label>
-                    パスワード
-                    <input type="password" name="password" placeholder="パスワードを入力" required>
+
+
+                <!-- ---------------------------------------------
+                     PASSWORD
+                     --------------------------------------------- -->
+
+                <label class="login-field">
+
+                    <span class="login-field__header">
+
+                        <strong>
+                            パスワード
+                        </strong>
+
+                    </span>
+
+
+                    <input
+                        type="password"
+                        name="password"
+                        autocomplete="current-password"
+                        placeholder="パスワードを入力"
+                        required
+                    >
+
                 </label>
-    
-                <button type="submit">ログインする</button>
+
+
+                <!-- ---------------------------------------------
+                     SUBMIT
+                     --------------------------------------------- -->
+
+                <button
+                    type="submit"
+                    id="login-button-submit"
+                >
+                    ログインする
+                </button>
+
             </form>
-    
-            <p id="error-message" class="error-message">
-                ログインに失敗しました。メールアドレスまたはパスワードをご確認ください。
-            </p>
-    
+
+
+            <!-- =================================================
+                 ERROR
+                 ================================================= -->
+
+            <div
+                id="error-message"
+                class="error-message"
+                role="alert"
+                aria-live="polite"
+                style="display: none;"
+            >
+                ログインに失敗しました。
+                Emailアドレスまたはパスワードをご確認ください。
+            </div>
+
+
+            <!-- =================================================
+                 LINKS
+                 ================================================= -->
+
             <div class="login-links">
-                <p>アカウントをお持ちでない方は <a href="Register.html">新規登録</a></p>
-                <p>パスワードをお忘れの方は <a href="Forgot_password.html">こちら</a></p>
+
+                <p class="login-register-link">
+
+                    アカウントをお持ちでない方
+
+                    <a href="Register.html">
+                        Career GPSをはじめる →
+                    </a>
+
+                </p>
+
+
+                <p class="login-forgot-link">
+
+                    <a href="Forgot_password.html">
+                        パスワードをお忘れですか？
+                    </a>
+
+                </p>
+
             </div>
+
         </section>
-    
-        <div id="loading-indicator" class="loading-indicator" style="display: none;">
-            <div class="spinner"></div>
-            <p>ログイン中です...</p>
-        </div>
-    </main>
-    <footer>
-        <div class="footer-content">
-            <div class="footer-items">
-                <p>&copy; 2026 Imnormal</p>
-                <a href="https://www.instagram.com/imnormal_official/" target="_blank" aria-label="Instagram">
-                    <img src="images/instagram-icon.png" alt="Instagram" class="instagram-icon">
-                </a>
-                <a href="https://www.linkedin.com/company/105660424/admin/page-posts/published/" target="_blank" aria-label="LinkedIn">
-                    <img src="images/linkedin_icon.png" alt="LinkedIn" class="linkedin-icon">
-                </a>
+
+
+        <!-- =====================================================
+             LOADING
+             ===================================================== -->
+
+        <div
+            id="loading-indicator"
+            class="loading-indicator"
+            style="display: none;"
+            aria-live="polite"
+        >
+
+            <div class="loading-indicator__card">
+
+                <span
+                    class="spinner"
+                    aria-hidden="true"
+                ></span>
+
+                <p>
+                    Career GPSを開いています…
+                </p>
+
             </div>
+
         </div>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div class="footer-items">
+
+                <p>
+                    &copy; 2026 Imnormal
+                </p>
+
+
+                <a
+                    href="https://www.instagram.com/imnormal_official/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                >
+                    <img
+                        src="images/instagram-icon.png"
+                        alt="Instagram"
+                        class="instagram-icon"
+                    >
+                </a>
+
+
+                <a
+                    href="https://www.linkedin.com/company/105660424/admin/page-posts/published/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                >
+                    <img
+                        src="images/linkedin_icon.png"
+                        alt="LinkedIn"
+                        class="linkedin-icon"
+                    >
+                </a>
+
+            </div>
+
+        </div>
+
     </footer>
+
+
+    <!-- =========================================================
+         SCRIPT
+         ========================================================= -->
+
     <script src="js/login.js"></script>
+
 </body>
+
 </html>
