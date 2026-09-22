@@ -521,7 +521,7 @@ body {
    07. TRUST / METRICS
    ========================================================= */
 
-.home-trust {
+   .home-trust {
     display: grid;
 
     grid-template-columns:
@@ -533,23 +533,27 @@ body {
         1px solid
         var(--gps-line);
 
-    background: var(--gps-white);
+    background:
+        var(--gps-white);
 }
+
 
 .home-trust__item {
     display: flex;
+
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    min-height: 142px;
+    min-height: 104px;
 
     padding:
-        24px
-        28px;
+        17px
+        24px;
 
     text-align: center;
 }
+
 
 .home-trust__item + .home-trust__item {
     border-left:
@@ -557,34 +561,49 @@ body {
         var(--gps-line);
 }
 
-.home-trust__item strong {
-    color: var(--gps-text-strong);
 
-    font-size: 2.1rem;
+.home-trust__item strong {
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1.9rem;
+
     font-weight: 800;
     line-height: 1;
 }
 
+
 .home-trust__item--text strong {
-    font-size: 1.45rem;
+    font-size:
+        1.25rem;
 }
+
 
 .home-trust__label {
-    margin-top: 9px;
+    margin-top:
+        7px;
 
-    color: var(--gps-blue-600);
+    color:
+        var(--gps-blue-600);
 
-    font-size: 0.68rem;
+    font-size:
+        0.6rem;
+
     font-weight: 800;
-    letter-spacing: 0.13em;
+    letter-spacing: 0.12em;
 }
 
+
 .home-trust__item small {
-    margin-top: 6px;
+    margin-top:
+        4px;
 
-    color: var(--gps-muted);
+    color:
+        var(--gps-muted);
 
-    font-size: 0.72rem;
+    font-size:
+        0.66rem;
 }
 
 
@@ -2368,31 +2387,47 @@ body {
     }
 
     .home-trust__item {
-        min-height: 105px;
+        min-height: 88px;
 
         padding:
-            17px
-            7px;
+            14px
+            6px;
     }
+
 
     .home-trust__item strong {
-        font-size: 1.45rem;
+        font-size:
+            1.4rem;
     }
+
 
     .home-trust__item--text strong {
-        font-size: 1rem;
+        font-size:
+            0.95rem;
     }
+
 
     .home-trust__label {
-        margin-top: 7px;
+        margin-top:
+            6px;
 
-        font-size: 0.5rem;
-        letter-spacing: 0.08em;
+        font-size:
+            0.46rem;
+
+        letter-spacing:
+            0.06em;
     }
 
+
     .home-trust__item small {
-        font-size: 0.55rem;
-        line-height: 1.4;
+        margin-top:
+            3px;
+
+        font-size:
+            0.52rem;
+
+        line-height:
+            1.35;
     }
 
 
@@ -2908,32 +2943,23 @@ body {
    ========================================================= */
 
    .home-same-crossroad-section[hidden] {
-    display:
-        none !important;
+    display: none !important;
 }
 
-
 .home-same-crossroad-section {
-    position:
-        relative;
+    position: relative;
+    overflow: hidden;
 
-    overflow:
-        hidden;
+    border-top: 1px solid var(--gps-line);
+    border-bottom: 1px solid var(--gps-line);
 
     background:
         linear-gradient(
             180deg,
             var(--gps-bg-blue) 0%,
+            #f8fbfe 55%,
             var(--gps-white) 100%
         );
-
-    border-top:
-        1px solid
-        var(--gps-line);
-
-    border-bottom:
-        1px solid
-        var(--gps-line);
 }
 
 
@@ -2942,23 +2968,14 @@ body {
    --------------------------------------------------------- */
 
 .home-same-crossroad-section::before {
-    position:
-        absolute;
+    position: absolute;
+    top: -190px;
+    right: -140px;
 
-    top:
-        -190px;
+    width: 430px;
+    height: 430px;
 
-    right:
-        -140px;
-
-    width:
-        430px;
-
-    height:
-        430px;
-
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         radial-gradient(
@@ -2968,42 +2985,30 @@ body {
             rgba(29, 95, 158, 0) 72%
         );
 
-    pointer-events:
-        none;
+    pointer-events: none;
 
-    content:
-        '';
+    content: "";
 }
 
 
-/* ---------------------------------------------------------
-   Heading
-   --------------------------------------------------------- */
+/* =========================================================
+   HEADING
+   ========================================================= */
 
 .home-same-crossroad-heading {
-    position:
-        relative;
+    position: relative;
+    z-index: 1;
 
-    z-index:
-        1;
-
-    max-width:
-        760px;
+    max-width: 760px;
 }
-
 
 .home-same-crossroad-description {
-    max-width:
-        680px !important;
+    max-width: 680px !important;
 }
 
-
 .home-same-crossroad-all-link {
-    position:
-        relative;
-
-    z-index:
-        1;
+    position: relative;
+    z-index: 1;
 }
 
 
@@ -3012,14 +3017,10 @@ body {
    ========================================================= */
 
 .home-same-crossroad-grid {
-    position:
-        relative;
+    position: relative;
+    z-index: 1;
 
-    z-index:
-        1;
-
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -3027,23 +3028,30 @@ body {
             minmax(0, 1fr)
         );
 
-    gap:
-        18px;
+    align-items: stretch;
 
-    width:
-        100%;
+    gap: 18px;
+
+    width: 100%;
 }
 
 
-/* 2件しかない場合は広げすぎない */
-.home-same-crossroad-grid
-.home-same-crossroad-card:first-child:nth-last-child(2),
+/*
+ * 2ルートのみの場合。
+ *
+ * 3列幅いっぱいに引き伸ばさず、
+ * 比較しやすい横幅に留める。
+ */
+.home-same-crossroad-grid:has(
+    > .home-same-crossroad-card:nth-child(2):last-child
+) {
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-.home-same-crossroad-grid
-.home-same-crossroad-card:first-child:nth-last-child(2)
-~ .home-same-crossroad-card {
-    max-width:
-        none;
+    max-width: 920px;
 }
 
 
@@ -3052,28 +3060,20 @@ body {
    ========================================================= */
 
 .home-same-crossroad-card {
-    position:
-        relative;
+    position: relative;
 
-    display:
-        flex;
+    display: flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
-
-    min-width:
-        0;
-
-    min-height:
-        310px;
+    min-width: 0;
+    min-height: 472px;
 
     padding:
-        26px
         25px
-        23px;
+        24px
+        22px;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
     border:
         1px solid
@@ -3087,17 +3087,15 @@ body {
             255,
             255,
             255,
-            0.96
+            0.97
         );
 
-    color:
-        inherit;
-
-    text-decoration:
-        none;
+    color: inherit;
+    text-decoration: none;
 
     box-shadow:
-        var(--gps-shadow-card);
+        0 8px 26px
+        rgba(7, 27, 48, 0.045);
 
     transition:
         transform 0.18s ease,
@@ -3106,159 +3104,167 @@ body {
 }
 
 
+/*
+ * 「違う道」を比較していることを
+ * 上部の細いラインで示す。
+ *
+ * 色はCareer GPSの
+ * Navy / Blueだけに限定。
+ */
 .home-same-crossroad-card::before {
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        0;
+    top: 0;
+    right: 0;
+    left: 0;
 
-    right:
-        0;
-
-    left:
-        0;
-
-    height:
-        4px;
+    height: 4px;
 
     background:
         var(--gps-blue-600);
 
-    content:
-        '';
+    content: "";
 }
-
 
 .home-same-crossroad-card:hover {
     transform:
         translateY(-4px);
 
     border-color:
-        var(--gps-blue-100);
+        #b9cfe2;
 
     box-shadow:
         var(--gps-shadow-hover);
 }
 
+.home-same-crossroad-card:focus-visible {
+    outline:
+        3px solid
+        rgba(29, 95, 158, 0.22);
+
+    outline-offset: 3px;
+}
+
 
 /* =========================================================
-   SELECTED ROUTE
+   ROUTE
    ========================================================= */
 
 .home-same-crossroad-card__route {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
+    justify-content: space-between;
 
-    justify-content:
-        space-between;
+    gap: 16px;
 
-    gap:
-        16px;
+    min-width: 0;
+    min-height: 40px;
 
-    width:
-        100%;
-
-    min-width:
-        0;
-
-    padding-bottom:
-        18px;
+    padding-bottom: 17px;
 
     border-bottom:
         1px solid
         var(--gps-line);
 }
 
-
 .home-same-crossroad-card__route-label {
-    flex:
-        0 0 auto;
+    flex: 0 0 auto;
 
     color:
         var(--gps-muted-light);
 
-    font-size:
-        0.62rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.08em;
+    font-size: 0.59rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
 }
 
-
 .home-same-crossroad-card__route strong {
-    min-width:
-        0;
+    display: inline-flex;
 
-    color:
-        var(--gps-blue-600);
+    flex: 0 1 auto;
 
-    font-size:
-        1rem;
+    align-items: center;
+    justify-content: center;
 
-    font-weight:
-        800;
+    max-width: 62%;
 
-    line-height:
-        1.4;
+    min-height: 29px;
 
-    text-align:
-        right;
+    padding:
+        5px
+        11px;
 
-    overflow-wrap:
-        anywhere;
+    border-radius:
+        999px;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.25;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
 }
 
 
 /* ---------------------------------------------------------
    Route variation
-
-   色を増やしすぎず、
-   Blue / Navyの範囲内に留める。
    --------------------------------------------------------- */
+
+/* 転職 */
 
 .home-same-crossroad-card--change::before {
     background:
         var(--gps-blue-600);
 }
 
-
 .home-same-crossroad-card--change
 .home-same-crossroad-card__route strong {
+    background:
+        var(--gps-navy-800);
+
     color:
-        var(--gps-blue-600);
+        var(--gps-white);
 }
 
+
+/* 残った */
 
 .home-same-crossroad-card--stay::before {
     background:
         var(--gps-navy-800);
 }
 
-
 .home-same-crossroad-card--stay
 .home-same-crossroad-card__route strong {
+    background:
+        var(--gps-blue-050);
+
     color:
-        var(--gps-navy-800);
+        var(--gps-blue-700);
 }
 
+
+/* 社内異動 */
 
 .home-same-crossroad-card--internal::before {
     background:
         var(--gps-navy-700);
 }
 
-
 .home-same-crossroad-card--internal
 .home-same-crossroad-card__route strong {
+    border:
+        1px solid
+        var(--gps-blue-100);
+
+    background:
+        var(--gps-blue-025);
+
     color:
-        var(--gps-navy-700);
+        var(--gps-navy-800);
 }
 
 
@@ -3266,131 +3272,294 @@ body {
    PERSON
    ========================================================= */
 
-.home-same-crossroad-card__person {
-    display:
-        flex;
+.home-same-crossroad-card__person-header {
+    display: flex;
 
-    flex-wrap:
-        wrap;
+    align-items: center;
 
-    gap:
-        7px;
+    gap: 12px;
 
-    margin-top:
-        18px;
-}
-
-
-.home-same-crossroad-card__person span {
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    min-height:
-        25px;
+    min-width: 0;
 
     padding:
-        4px
-        9px;
+        18px
+        0;
+}
+
+.home-same-crossroad-card__avatar {
+    display: flex;
+
+    flex: 0 0 auto;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
 
     border:
         1px solid
-        var(--gps-line);
+        var(--gps-blue-100);
 
-    border-radius:
-        999px;
+    border-radius: 50%;
 
     background:
-        var(--gps-bg-soft);
+        var(--gps-blue-050);
 
     color:
-        var(--gps-muted);
+        var(--gps-blue-700);
 
-    font-size:
-        0.61rem;
-
-    font-weight:
-        700;
-
-    line-height:
-        1.4;
-
-    overflow-wrap:
-        anywhere;
+    font-size: 0.88rem;
+    font-weight: 800;
 }
 
-
-/* =========================================================
-   DECISION
-   ========================================================= */
-
-.home-same-crossroad-card__decision {
-    min-width:
-        0;
-
-    margin-top:
-        21px;
+.home-same-crossroad-card__person-info {
+    min-width: 0;
 }
 
+.home-same-crossroad-card__person-info > strong {
+    display: block;
 
-.home-same-crossroad-card__label {
-    margin:
-        0
-        0
-        7px;
+    max-width: 100%;
 
-    color:
-        var(--gps-blue-600);
-
-    font-size:
-        0.58rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.12em;
-}
-
-
-.home-same-crossroad-card__decision h3 {
-    display:
-        -webkit-box;
-
-    margin:
-        0;
-
-    overflow:
-        hidden;
+    overflow: hidden;
 
     color:
         var(--gps-text-strong);
 
-    font-size:
-        1.05rem;
+    font-size: 0.86rem;
+    font-weight: 800;
+    line-height: 1.4;
 
-    font-weight:
-        800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-    line-height:
-        1.62;
+.home-same-crossroad-card__person-info p {
+    display: flex;
 
-    letter-spacing:
-        -0.015em;
+    flex-wrap: wrap;
 
-    overflow-wrap:
-        anywhere;
+    gap: 0 3px;
 
-    word-break:
-        break-word;
+    margin:
+        4px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.home-same-crossroad-card__person-info p span {
+    color:
+        var(--gps-muted-light);
+}
+
+
+/* =========================================================
+   CAREER GPS PATH
+   ========================================================= */
+
+.home-same-crossroad-card__path {
+    display: grid;
+
+    gap: 0;
+
+    min-width: 0;
+
+    padding-top: 1px;
+}
+
+
+/*
+ * 各カードの高さがバラつかないよう、
+ * PCでは情報ゾーンごとに最低高を持たせる。
+ *
+ * スマホでは解除する。
+ */
+.home-same-crossroad-card__path-item {
+    position: relative;
+
+    min-width: 0;
+
+    padding:
+        0
+        0
+        19px
+        29px;
+}
+
+.home-same-crossroad-card__path-item:last-child {
+    padding-bottom: 5px;
+}
+
+
+/* ---------------------------------------------------------
+   GPS route line
+   --------------------------------------------------------- */
+
+.home-same-crossroad-card__path-item::before {
+    position: absolute;
+
+    top: 9px;
+    bottom: -8px;
+    left: 7px;
+
+    width: 1px;
+
+    background:
+        var(--gps-blue-100);
+
+    content: "";
+}
+
+.home-same-crossroad-card__path-item:last-child::before {
+    display: none;
+}
+
+
+/* ---------------------------------------------------------
+   GPS point
+   --------------------------------------------------------- */
+
+.home-same-crossroad-card__path-item::after {
+    position: absolute;
+
+    top: 5px;
+    left: 3px;
+
+    width: 9px;
+    height: 9px;
+
+    border:
+        2px solid
+        var(--gps-white);
+
+    border-radius: 50%;
+
+    background:
+        var(--gps-blue-600);
+
+    box-shadow:
+        0 0 0 1px
+        var(--gps-blue-100);
+
+    content: "";
+}
+
+
+/* ---------------------------------------------------------
+   Label
+   --------------------------------------------------------- */
+
+.home-same-crossroad-card__path-heading {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 7px;
+
+    margin-bottom: 7px;
+}
+
+.home-same-crossroad-card__path-number {
+    color:
+        var(--gps-blue-600);
+
+    font-size: 0.55rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+}
+
+.home-same-crossroad-card__path-label {
+    color:
+        var(--gps-muted);
+
+    font-size: 0.62rem;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+
+/* ---------------------------------------------------------
+   Text
+   --------------------------------------------------------- */
+
+.home-same-crossroad-card__path-item p {
+    display: -webkit-box;
+
+    min-width: 0;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color:
+        var(--gps-text);
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.65;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
 
     -webkit-box-orient:
         vertical;
+}
 
-    -webkit-line-clamp:
-        3;
+
+/*
+ * 01 当時の迷い
+ *
+ * 一番重要なので3行。
+ */
+.home-same-crossroad-card__path-item:nth-child(1) {
+    min-height: 102px;
+}
+
+.home-same-crossroad-card__path-item:nth-child(1) p {
+    -webkit-line-clamp: 3;
+}
+
+
+/*
+ * 02 大切にしたこと
+ */
+.home-same-crossroad-card__path-item:nth-child(2) {
+    min-height: 83px;
+}
+
+.home-same-crossroad-card__path-item:nth-child(2) p {
+    -webkit-line-clamp: 2;
+}
+
+
+/*
+ * 03 その後
+ */
+.home-same-crossroad-card__path-item:nth-child(3) {
+    min-height: 83px;
+}
+
+.home-same-crossroad-card__path-item:nth-child(3) p {
+    -webkit-line-clamp: 2;
+}
+
+
+/* 未入力 */
+
+.home-same-crossroad-card__path-item--empty p {
+    color:
+        var(--gps-muted-light);
+
+    font-weight: 500;
 }
 
 
@@ -3399,71 +3568,48 @@ body {
    ========================================================= */
 
 .home-same-crossroad-card__cta {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
+    justify-content: space-between;
 
-    justify-content:
-        space-between;
+    gap: 16px;
 
-    gap:
-        16px;
+    min-height: 48px;
 
-    margin-top:
-        auto;
+    margin-top: auto;
 
-    padding-top:
-        22px;
+    padding-top: 17px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
 
     color:
-        var(--gps-blue-600);
+        var(--gps-blue-700);
 
-    font-size:
-        0.72rem;
-
-    font-weight:
-        800;
+    font-size: 0.71rem;
+    font-weight: 800;
+    line-height: 1.4;
 }
 
+.home-same-crossroad-card__cta span:first-child {
+    min-width: 0;
+}
 
-.home-same-crossroad-card__cta
-span:last-child {
-    flex:
-        0 0 auto;
+.home-same-crossroad-card__cta span:last-child {
+    flex: 0 0 auto;
 
-    font-size:
-        1rem;
+    font-size: 1rem;
 
     transition:
         transform 0.18s ease;
 }
 
-
 .home-same-crossroad-card:hover
-.home-same-crossroad-card__cta
-span:last-child {
+.home-same-crossroad-card__cta span:last-child {
     transform:
-        translateX(3px);
-}
-
-
-/* =========================================================
-   2 CARDS
-   ========================================================= */
-
-.home-same-crossroad-grid:has(
-    > .home-same-crossroad-card:nth-child(2):last-child
-) {
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-
-    max-width:
-        880px;
+        translateX(4px);
 }
 
 
@@ -3481,23 +3627,19 @@ span:last-child {
             );
     }
 
-
     .home-same-crossroad-grid:has(
         > .home-same-crossroad-card:nth-child(2):last-child
     ) {
-        max-width:
-            none;
+        max-width: none;
     }
 
-
     .home-same-crossroad-card {
-        min-height:
-            290px;
+        min-height: 455px;
 
         padding:
-            24px
-            22px
-            21px;
+            23px
+            21px
+            20px;
     }
 
 }
@@ -3510,42 +3652,29 @@ span:last-child {
 @media (max-width: 700px) {
 
     .home-same-crossroad-section {
-        padding-top:
-            54px;
-
-        padding-bottom:
-            54px;
+        padding-top: 54px;
+        padding-bottom: 54px;
     }
 
 
     .home-same-crossroad-section
     .home-section-heading-row {
-        align-items:
-            flex-start;
-
-        flex-direction:
-            column;
-
-        gap:
-            20px;
+        display: block;
     }
 
 
     .home-same-crossroad-heading {
-        max-width:
-            none;
+        max-width: none;
     }
 
 
     .home-same-crossroad-description br {
-        display:
-            none;
+        display: none;
     }
 
 
     .home-same-crossroad-all-link {
-        align-self:
-            flex-start;
+        margin-top: 17px;
     }
 
 
@@ -3556,64 +3685,114 @@ span:last-child {
         grid-template-columns:
             1fr;
 
-        gap:
-            13px;
+        gap: 13px;
 
-        max-width:
-            none;
+        max-width: none;
     }
 
 
+    /*
+     * スマホでは高さ固定を解除。
+     *
+     * PCの高さ統一をそのまま持ち込むと
+     * 縦に間延びするため。
+     */
     .home-same-crossroad-card {
-        min-height:
-            0;
+        min-height: 0;
 
         padding:
-            22px
-            19px
-            20px;
-
-        border-radius:
+            21px
+            18px
             18px;
+
+        border-radius: 18px;
     }
 
 
     .home-same-crossroad-card__route {
-        padding-bottom:
-            15px;
+        min-height: 36px;
+
+        padding-bottom: 14px;
     }
 
 
-    .home-same-crossroad-card__person {
-        margin-top:
-            15px;
+    .home-same-crossroad-card__route strong {
+        max-width: 58%;
     }
 
 
-    .home-same-crossroad-card__decision {
-        margin-top:
-            17px;
+    .home-same-crossroad-card__person-header {
+        padding:
+            15px
+            0;
     }
 
 
-    .home-same-crossroad-card__decision h3 {
-        font-size:
-            0.96rem;
+    .home-same-crossroad-card__avatar {
+        width: 38px;
+        height: 38px;
 
-        line-height:
-            1.58;
+        font-size: 0.8rem;
+    }
 
-        -webkit-line-clamp:
-            3;
+
+    .home-same-crossroad-card__person-info > strong {
+        font-size: 0.8rem;
+    }
+
+
+    .home-same-crossroad-card__person-info p {
+        font-size: 0.64rem;
+    }
+
+
+    /*
+     * スマホでは各ゾーン最低高を解除。
+     */
+    .home-same-crossroad-card__path-item {
+        min-height: 0 !important;
+
+        padding:
+            0
+            0
+            16px
+            25px;
+    }
+
+
+    .home-same-crossroad-card__path-item::before {
+        left: 6px;
+    }
+
+
+    .home-same-crossroad-card__path-item::after {
+        left: 2px;
+    }
+
+
+    .home-same-crossroad-card__path-item p {
+        font-size: 0.75rem;
+        line-height: 1.65;
+    }
+
+
+    .home-same-crossroad-card__path-item:nth-child(1) p {
+        -webkit-line-clamp: 3;
+    }
+
+
+    .home-same-crossroad-card__path-item:nth-child(2) p,
+    .home-same-crossroad-card__path-item:nth-child(3) p {
+        -webkit-line-clamp: 2;
     }
 
 
     .home-same-crossroad-card__cta {
-        margin-top:
-            19px;
+        min-height: 43px;
 
-        padding-top:
-            17px;
+        padding-top: 14px;
+
+        font-size: 0.67rem;
     }
 
 }
@@ -3627,39 +3806,34 @@ span:last-child {
 
     .home-same-crossroad-card {
         padding:
-            20px
-            17px
-            18px;
+            19px
+            16px
+            17px;
     }
 
 
     .home-same-crossroad-card__route {
-        gap:
-            10px;
+        gap: 10px;
+    }
+
+
+    .home-same-crossroad-card__route-label {
+        font-size: 0.55rem;
     }
 
 
     .home-same-crossroad-card__route strong {
-        font-size:
-            0.92rem;
+        font-size: 0.67rem;
     }
 
 
-    .home-same-crossroad-card__person span {
-        font-size:
-            0.58rem;
-    }
-
-
-    .home-same-crossroad-card__decision h3 {
-        font-size:
-            0.91rem;
+    .home-same-crossroad-card__path-item p {
+        font-size: 0.72rem;
     }
 
 
     .home-same-crossroad-card__cta {
-        font-size:
-            0.67rem;
+        font-size: 0.65rem;
     }
 
 }
@@ -3672,23 +3846,19 @@ span:last-child {
 @media (prefers-reduced-motion: reduce) {
 
     .home-same-crossroad-card,
-    .home-same-crossroad-card__cta span {
-        transition:
-            none;
+    .home-same-crossroad-card__cta span:last-child {
+        transition: none;
     }
 
 
     .home-same-crossroad-card:hover {
-        transform:
-            none;
+        transform: none;
     }
 
 
     .home-same-crossroad-card:hover
-    .home-same-crossroad-card__cta
-    span:last-child {
-        transform:
-            none;
+    .home-same-crossroad-card__cta span:last-child {
+        transform: none;
     }
 
 }

@@ -1,5 +1,4 @@
 (() => {
-
     'use strict';
 
 
@@ -10,40 +9,23 @@
     const API_URL =
         '/career-stories-by-theme/?theme=change';
 
-
     const SECTION_ID =
         'home-same-crossroad';
-
 
     const LIST_ID =
         'home-same-crossroad-list';
 
-
     const THEME =
         'change';
 
-
-    /*
-     * SAME CROSSROADとして成立させるため、
-     * 異なる選択肢が最低2つ必要。
-     */
     const MIN_ROUTE_COUNT =
         2;
 
-
-    /*
-     * Homeでは最大3ルート。
-     *
-     * 転職した
-     * 残った
-     * 社内異動した
-     */
     const ROUTE_ORDER = [
         'change',
         'stay',
         'internal'
     ];
-
 
 
     /* =====================================================
@@ -57,12 +39,10 @@
 
 
     async function initializeSameCrossroad() {
-
         const section =
             document.getElementById(
                 SECTION_ID
             );
-
 
         const list =
             document.getElementById(
@@ -70,49 +50,35 @@
             );
 
 
-        if (
-            !section
-            ||
-            !list
-        ) {
-
+        if (!section || !list) {
             return;
         }
 
 
         /*
-         * 読み込み前は必ず非表示。
-         *
-         * API失敗時にも空のセクションを
-         * Homeに残さない。
+         * API取得前・エラー時に
+         * 空のセクションを表示しない。
          */
-        section.hidden =
-            true;
-
-
-        list.innerHTML =
-            '';
+        section.hidden = true;
+        list.innerHTML = '';
 
 
         try {
-
             const response =
                 await fetch(
                     API_URL,
                     {
-                        method:
-                            'GET',
-
+                        method: 'GET',
                         headers: {
                             Accept:
                                 'application/json'
-                        }
+                        },
+                        credentials: 'include'
                     }
                 );
 
 
             if (!response.ok) {
-
                 throw new Error(
                     `HTTP ${response.status}`
                 );
@@ -131,23 +97,11 @@
                     : [];
 
 
-            if (
-                stories.length
-                ===
-                0
-            ) {
-
+            if (stories.length === 0) {
                 return;
             }
 
 
-            /*
-             * API側はテーマとの関連度が高い順で
-             * Storyを返している。
-             *
-             * その順序を維持したまま、
-             * 各ルート最初の1件を代表Storyにする。
-             */
             const representatives =
                 selectRouteRepresentatives(
                     stories
@@ -155,15 +109,16 @@
 
 
             /*
-             * 1種類しかなければ
-             * SAME CROSSROADとして比較にならない。
+             * SAME CROSSROADは
+             * 異なる選択を比較するための場所。
+             *
+             * 1ルートしかない場合は表示しない。
              */
             if (
                 representatives.length
                 <
                 MIN_ROUTE_COUNT
             ) {
-
                 return;
             }
 
@@ -176,35 +131,30 @@
                     .join('');
 
 
-            section.hidden =
-                false;
+            section.hidden = false;
 
 
+            /*
+             * 既存GA4計測を維持。
+             */
             bindAnalytics(
                 section
             );
 
-
         } catch (error) {
-
             console.error(
                 'Same Crossroad error:',
                 error
             );
 
-
             /*
-             * Home本体の表示を壊さない。
+             * SAME CROSSROADの取得失敗で
+             * Home全体を壊さない。
              */
-            section.hidden =
-                true;
-
-
-            list.innerHTML =
-                '';
+            section.hidden = true;
+            list.innerHTML = '';
         }
     }
-
 
 
     /* =====================================================
@@ -214,7 +164,6 @@
     function selectRouteRepresentatives(
         stories
     ) {
-
         const routeMap =
             new Map();
 
@@ -227,42 +176,44 @@
                     ||
                     !story.decision
                 ) {
-
                     return;
                 }
 
 
-                const route =
-                    getDecisionPath(
-                        story.decision
-                            .decision_type
-                    );
+                const decision =
+                    story.decision;
 
 
                 /*
-                 * Home SAME CROSSROADでは
-                 * 想定している3ルートのみ表示。
+                 * Backendが返すdecision_pathを優先。
+                 *
+                 * 古いAPIレスポンスとの互換のため、
+                 * 無い場合のみdecision_typeからFallbackする。
                  */
+                const route =
+                    getDecisionPathFromStory(
+                        decision
+                    );
+
+
                 if (
                     !ROUTE_ORDER.includes(
                         route.key
                     )
                 ) {
-
                     return;
                 }
 
 
                 /*
-                 * 同じルートでは
-                 * API順で最初のStoryを代表にする。
+                 * APIの並び順を維持し、
+                 * 各ルート最初のStoryを代表とする。
                  */
                 if (
                     routeMap.has(
                         route.key
                     )
                 ) {
-
                     return;
                 }
 
@@ -279,14 +230,12 @@
 
 
         return ROUTE_ORDER
-
             .filter(
                 routeKey =>
                     routeMap.has(
                         routeKey
                     )
             )
-
             .map(
                 routeKey =>
                     routeMap.get(
@@ -296,44 +245,69 @@
     }
 
 
-
     /* =====================================================
        DECISION PATH
        ===================================================== */
 
-    function getDecisionPath(
+    function getDecisionPathFromStory(
+        decision
+    ) {
+        const backendPath =
+            decision.decision_path;
+
+
+        if (
+            backendPath
+            &&
+            ROUTE_ORDER.includes(
+                normalizeDisplayText(
+                    backendPath.key
+                )
+            )
+        ) {
+            return {
+                key:
+                    normalizeDisplayText(
+                        backendPath.key
+                    ),
+
+                label:
+                    normalizeDisplayText(
+                        backendPath.label
+                    )
+                    ||
+                    getFallbackRouteLabel(
+                        backendPath.key
+                    )
+            };
+        }
+
+
+        /*
+         * 旧API互換用Fallback。
+         */
+        return getDecisionPathFallback(
+            decision.decision_type
+        );
+    }
+
+
+    function getDecisionPathFallback(
         decisionType
     ) {
-
         const type =
             normalizeDisplayText(
                 decisionType
             );
 
 
-        /* -----------------------------------------
-           転職した
-        ----------------------------------------- */
-
-        if (
-            type
-            ===
-            '転職'
-        ) {
-
+        if (type === '転職') {
             return {
-                key:
-                    'change',
-
-                label:
-                    '転職した'
+                key: 'change',
+                label: '転職した'
             };
         }
 
-
-        /* -----------------------------------------
-           残った
-        ----------------------------------------- */
 
         if (
             type === '現職継続'
@@ -344,41 +318,23 @@
             ||
             type === '現職に残る'
         ) {
-
             return {
-                key:
-                    'stay',
-
-                label:
-                    '残った'
+                key: 'stay',
+                label: '残った'
             };
         }
 
 
-        /* -----------------------------------------
-           社内異動した
-        ----------------------------------------- */
-
-        if (
-            type
-            ===
-            '異動'
-        ) {
-
+        if (type === '異動') {
             return {
-                key:
-                    'internal',
-
-                label:
-                    '社内異動した'
+                key: 'internal',
+                label: '社内異動した'
             };
         }
 
 
         return {
-            key:
-                'other',
-
+            key: 'other',
             label:
                 type
                 ||
@@ -386,6 +342,32 @@
         };
     }
 
+
+    function getFallbackRouteLabel(
+        routeKey
+    ) {
+        const labels = {
+            change:
+                '転職した',
+
+            stay:
+                '残った',
+
+            internal:
+                '社内異動した'
+        };
+
+
+        return (
+            labels[
+                normalizeDisplayText(
+                    routeKey
+                )
+            ]
+            ||
+            '選択'
+        );
+    }
 
 
     /* =====================================================
@@ -395,14 +377,11 @@
     function createStoryCardHTML(
         representative
     ) {
-
         const story =
             representative.story;
 
-
         const route =
             representative.route;
-
 
         const decision =
             story.decision
@@ -410,21 +389,68 @@
             {};
 
 
+        const username =
+            normalizeDisplayText(
+                story.username
+            )
+            ||
+            'Career GPS User';
+
+
         const ageText =
             getAgeGroup(
                 story.age
-            );
+            )
+            ||
+            '年代非公開';
 
 
         const profession =
             normalizeDisplayText(
                 story.profession
+            )
+            ||
+            '職種非公開';
+
+
+        /*
+         * 当時の迷い
+         *
+         * dilemma_textを最優先。
+         */
+        const dilemma =
+            normalizeDisplayText(
+                decision.dilemma_text
+            )
+            ||
+            normalizeDisplayText(
+                decision.trigger_text
+            )
+            ||
+            normalizeDisplayText(
+                decision.title
             );
 
 
-        const dilemma =
-            getDecisionHook(
-                decision
+        /*
+         * 判断するときに
+         * 大切にしたこと。
+         */
+        const priority =
+            normalizeDisplayText(
+                decision.priority_text
+            );
+
+
+        /*
+         * 選択した後の結果。
+         *
+         * career_stories_by_theme.pyで
+         * result_textを追加済み。
+         */
+        const result =
+            normalizeDisplayText(
+                decision.result_text
             );
 
 
@@ -436,7 +462,6 @@
 
 
         return `
-
             <a
                 href="${escapeHTML(detailUrl)}"
                 class="
@@ -446,8 +471,10 @@
                 data-same-crossroad-route="${escapeHTML(route.key)}"
                 data-career-id="${escapeHTML(story.id)}"
                 data-decision-id="${escapeHTML(decision.id || '')}"
+                aria-label="${escapeHTML(
+                    `${username}さんの「${route.label}」という選択を見る`
+                )}"
             >
-
 
                 <!-- =====================================
                      Selected Route
@@ -459,7 +486,6 @@
                         選んだ道
                     </span>
 
-
                     <strong>
                         ${escapeHTML(route.label)}
                     </strong>
@@ -467,60 +493,70 @@
                 </div>
 
 
-
                 <!-- =====================================
                      Person
                 ====================================== -->
 
-                <div class="home-same-crossroad-card__person">
+                <div class="home-same-crossroad-card__person-header">
 
-                    ${
-                        ageText
-                            ? `
-                                <span>
-                                    ${escapeHTML(ageText)}
-                                </span>
-                            `
-                            : ''
-                    }
+                    <div
+                        class="home-same-crossroad-card__avatar"
+                        aria-hidden="true"
+                    >
+                        ${escapeHTML(
+                            getInitial(
+                                username
+                            )
+                        )}
+                    </div>
 
+                    <div class="home-same-crossroad-card__person-info">
 
-                    ${
-                        profession
-                        &&
-                        profession !==
-                        '職種未設定'
+                        <strong>
+                            ${escapeHTML(username)}
+                        </strong>
 
-                            ? `
-                                <span>
-                                    ${escapeHTML(profession)}
-                                </span>
-                            `
+                        <p>
+                            ${escapeHTML(ageText)}
+                            <span aria-hidden="true">
+                                ・
+                            </span>
+                            ${escapeHTML(profession)}
+                        </p>
 
-                            : ''
-                    }
+                    </div>
 
                 </div>
-
 
 
                 <!-- =====================================
-                     Dilemma
+                     Career GPS Path
                 ====================================== -->
 
-                <div class="home-same-crossroad-card__decision">
+                <div class="home-same-crossroad-card__path">
 
-                    <p class="home-same-crossroad-card__label">
-                        SAME DILEMMA
-                    </p>
+                    ${createPathItem(
+                        '01',
+                        '当時の迷い',
+                        dilemma,
+                        'この選択で何に迷っていたかは、まだ記録されていません。'
+                    )}
 
+                    ${createPathItem(
+                        '02',
+                        '大切にしたこと',
+                        priority,
+                        '何を大切にして決めたかは、まだ記録されていません。'
+                    )}
 
-                    <h3>
-                        ${escapeHTML(dilemma)}
-                    </h3>
+                    ${createPathItem(
+                        '03',
+                        'その後',
+                        result,
+                        '選択後の結果は、まだ記録されていません。'
+                    )}
 
                 </div>
-
 
 
                 <!-- =====================================
@@ -530,9 +566,8 @@
                 <div class="home-same-crossroad-card__cta">
 
                     <span>
-                        選んだ理由とその後を見る
+                        選択の背景と、その後を見る
                     </span>
-
 
                     <span aria-hidden="true">
                         →
@@ -540,86 +575,74 @@
 
                 </div>
 
-
             </a>
-
         `;
     }
 
 
-
     /* =====================================================
-       DECISION HOOK
+       CAREER GPS PATH ITEM
        ===================================================== */
 
-    function getDecisionHook(
-        decision
+    function createPathItem(
+        number,
+        label,
+        value,
+        emptyMessage
     ) {
-
-        const dilemma =
+        const text =
             normalizeDisplayText(
-                decision.dilemma_text
+                value
             );
 
 
-        if (dilemma) {
-
-            return truncateText(
-                dilemma,
-                78
-            );
-        }
+        const emptyClass =
+            text
+                ? ''
+                : ' home-same-crossroad-card__path-item--empty';
 
 
-        const title =
-            normalizeDisplayText(
-                decision.title
-            );
+        return `
+            <div
+                class="
+                    home-same-crossroad-card__path-item
+                    ${emptyClass}
+                "
+            >
 
+                <div class="home-same-crossroad-card__path-heading">
 
-        if (title) {
+                    <span class="home-same-crossroad-card__path-number">
+                        ${escapeHTML(number)}
+                    </span>
 
-            return truncateText(
-                title,
-                78
-            );
-        }
+                    <span class="home-same-crossroad-card__path-label">
+                        ${escapeHTML(label)}
+                    </span>
 
+                </div>
 
-        const trigger =
-            normalizeDisplayText(
-                decision.trigger_text
-            );
+                <p>
+                    ${escapeHTML(
+                        text
+                        ||
+                        emptyMessage
+                    )}
+                </p>
 
-
-        if (trigger) {
-
-            return truncateText(
-                trigger,
-                78
-            );
-        }
-
-
-        return (
-            '転職するか、今の会社に残るか迷った'
-        );
+            </div>
+        `;
     }
-
 
 
     /* =====================================================
        DETAIL URL
-
-       Career Detailへ
-       decision_id / theme を確実に引き継ぐ。
        ===================================================== */
 
     function createCareerDetailUrl(
         careerId,
         decisionId
     ) {
-
         const params =
             new URLSearchParams();
 
@@ -639,10 +662,8 @@
             &&
             String(
                 decisionId
-            )
-            .trim()
+            ).trim()
         ) {
-
             params.set(
                 'decision_id',
                 String(
@@ -659,12 +680,11 @@
 
 
         return (
-            `Career_detail.html?`
+            'Career_detail.html?'
             +
             params.toString()
         );
     }
-
 
 
     /* =====================================================
@@ -674,7 +694,6 @@
     function getAgeGroup(
         age
     ) {
-
         const number =
             Number(
                 age
@@ -688,7 +707,6 @@
             ||
             number <= 0
         ) {
-
             return '';
         }
 
@@ -701,11 +719,34 @@
             10;
 
 
-        return (
-            `${decade}代`
-        );
+        return `${decade}代`;
     }
 
+
+    /* =====================================================
+       AVATAR
+       ===================================================== */
+
+    function getInitial(
+        value
+    ) {
+        const text =
+            normalizeDisplayText(
+                value
+            );
+
+
+        if (!text) {
+            return 'C';
+        }
+
+
+        return Array
+            .from(
+                text
+            )[0]
+            .toUpperCase();
+    }
 
 
     /* =====================================================
@@ -715,9 +756,8 @@
     function bindAnalytics(
         section
     ) {
-
         /*
-         * 二重登録防止
+         * 二重登録防止。
          */
         if (
             section.dataset
@@ -725,7 +765,6 @@
             ===
             'true'
         ) {
-
             return;
         }
 
@@ -739,6 +778,9 @@
             'click',
             event => {
 
+                /*
+                 * Storyクリック
+                 */
                 const storyCard =
                     event.target.closest(
                         '.home-same-crossroad-card'
@@ -752,7 +794,6 @@
                     ===
                     'function'
                 ) {
-
                     gtag(
                         'event',
                         'same_crossroad_story_click',
@@ -785,6 +826,9 @@
                 }
 
 
+                /*
+                 * 「すべての選択を比較する」
+                 */
                 const allLink =
                     event.target.closest(
                         '.home-same-crossroad-all-link'
@@ -798,7 +842,6 @@
                     ===
                     'function'
                 ) {
-
                     gtag(
                         'event',
                         'same_crossroad_compare_click',
@@ -811,10 +854,10 @@
                         }
                     );
                 }
+
             }
         );
     }
-
 
 
     /* =====================================================
@@ -824,30 +867,24 @@
     function normalizeText(
         value
     ) {
-
         if (
             value === null
             ||
             value === undefined
         ) {
-
             return '';
         }
 
 
-        return (
-            String(
-                value
-            )
-            .trim()
-        );
+        return String(
+            value
+        ).trim();
     }
 
 
     function normalizeDisplayText(
         value
     ) {
-
         const text =
             normalizeText(
                 value
@@ -855,7 +892,6 @@
 
 
         if (!text) {
-
             return '';
         }
 
@@ -866,55 +902,16 @@
                 'undefined',
                 'none',
                 'n/a'
-            ]
-            .includes(
+            ].includes(
                 text.toLowerCase()
             )
         ) {
-
             return '';
         }
 
 
         return text;
     }
-
-
-    function truncateText(
-        value,
-        maxLength
-    ) {
-
-        const text =
-            normalizeDisplayText(
-                value
-            );
-
-
-        if (
-            !text
-            ||
-            text.length
-            <=
-            maxLength
-        ) {
-
-            return text;
-        }
-
-
-        return (
-            text
-                .slice(
-                    0,
-                    maxLength
-                )
-                .trim()
-            +
-            '…'
-        );
-    }
-
 
 
     /* =====================================================
@@ -924,13 +921,11 @@
     function escapeHTML(
         value
     ) {
-
         if (
             value === null
             ||
             value === undefined
         ) {
-
             return '';
         }
 
@@ -938,32 +933,30 @@
         return String(
             value
         )
-        .replace(
-            /[&'`"<>]/g,
-            character => ({
+            .replace(
+                /[&'`"<>]/g,
+                character => ({
+                    '&':
+                        '&amp;',
 
-                '&':
-                    '&amp;',
+                    "'":
+                        '&#x27;',
 
-                "'":
-                    '&#x27;',
+                    '`':
+                        '&#x60;',
 
-                '`':
-                    '&#x60;',
+                    '"':
+                        '&quot;',
 
-                '"':
-                    '&quot;',
+                    '<':
+                        '&lt;',
 
-                '<':
-                    '&lt;',
-
-                '>':
-                    '&gt;'
-
-            })[
-                character
-            ]
-        );
+                    '>':
+                        '&gt;'
+                })[
+                    character
+                ]
+            );
     }
 
 })();

@@ -968,7 +968,8 @@ async def get_career_stories_by_theme(
 
                 cd.trigger_text,
                 cd.dilemma_text,
-                cd.priority_text
+                cd.priority_text,
+                cd.result_text
 
             FROM career_decisions AS cd
 
@@ -1648,6 +1649,14 @@ async def get_career_stories_by_theme(
                         (
                             decision.get(
                                 "priority_text"
+                            )
+                            or
+                            ""
+                        ),
+                    "result_text":
+                        (
+                            decision.get(
+                                "result_text"
                             )
                             or
                             ""
