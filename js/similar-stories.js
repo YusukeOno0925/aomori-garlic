@@ -1,4 +1,56 @@
 (() => {
+    'use strict';
+
+
+    /* =========================================================
+       CONFIG
+       ========================================================= */
+
+    const SIMILAR_API =
+        '/similar-career-stories/';
+
+    const GUEST_PREVIEW_API =
+        '/career-story-previews/';
+
+    const LOGIN_STATUS_API =
+        '/check-login-status/';
+
+
+    /*
+     * Homeでは大量に並べない。
+     *
+     * People Like Youは第2主役だが、
+     * Career Overviewの代わりにはしない。
+     */
+    const SIMILAR_LIMIT =
+        3;
+
+    const GUEST_LIMIT =
+        3;
+
+
+    /*
+     * Home表示専用の文字数。
+     *
+     * DB / 詳細画面の元データは変更しない。
+     */
+    const EXCERPT_LIMITS = {
+
+        dilemma:
+            66,
+
+        priority:
+            52,
+
+        result:
+            60
+
+    };
+
+
+    /* =========================================================
+       INITIALIZE
+       ========================================================= */
 
     document.addEventListener(
         'DOMContentLoaded',
@@ -7,6 +59,11 @@
 
 
     async function initializeSimilarStories() {
+
+        const section =
+            document.getElementById(
+                'similar-stories'
+            );
 
         const list =
             document.getElementById(
@@ -38,14 +95,35 @@
                 'career-story-preview-list'
             );
 
-        const loginCTA =
-            document.querySelector(
-                '.home-login-cta'
+        const indicators =
+            document.getElementById(
+                'similar-stories-indicators'
             );
 
 
-        if (!list || !description) {
+        if (
+            !section
+            ||
+            !list
+            ||
+            !description
+        ) {
             return;
+        }
+
+
+        /*
+         * 今回のHomeでは3件表示なので、
+         * SimilarのCarousel indicatorは基本不要。
+         */
+        if (indicators) {
+
+            indicators.innerHTML =
+                '';
+
+            indicators.style.display =
+                'none';
+
         }
 
 
@@ -53,70 +131,57 @@
             await checkLoginStatus();
 
 
-        /* =================================================
-           Not logged in
-        ================================================= */
-
         if (!isLoggedIn) {
 
-            list.style.display =
-                'none';
-
-
-            if (loginCTA) {
-
-                loginCTA.style.display =
-                    'inline-flex';
-
-            }
-
-
-            if (eyebrow) {
-
-                eyebrow.textContent =
-                    'CAREER STORIES';
-
-            }
-
-
-            if (title) {
-
-                title.textContent =
-                    'こんな迷いを経験した人がいます。';
-
-            }
-
-
-            description.textContent =
-                '自分と近い道を歩んだ人が、その先の分岐で何を選んだのか。まずは実際のCareer Storyを見てみましょう。';
-
-
-            if (
-                previewArea
-                &&
+            await initializeGuestView({
+                list,
+                eyebrow,
+                title,
+                description,
+                previewArea,
                 previewList
-            ) {
-
-                await loadGuestPreviews(
-                    previewArea,
-                    previewList
-                );
-
-            }
-
+            });
 
             return;
+
         }
 
 
-        /* =================================================
-           Logged in
-        ================================================= */
+        await initializeLoggedInView({
+            list,
+            eyebrow,
+            title,
+            description,
+            previewArea
+        });
+
+    }
+
+
+    /* =========================================================
+       GUEST
+       ========================================================= */
+
+    async function initializeGuestView({
+        list,
+        eyebrow,
+        title,
+        description,
+        previewArea,
+        previewList
+    }) {
+
+        list.innerHTML =
+            '';
+
+        list.style.display =
+            'none';
+
 
         if (eyebrow) {
 
             eyebrow.textContent =
-                'FOR YOU';
+                'CAREER STORIES';
 
         }
 
@@ -124,10 +189,44 @@
         if (title) {
 
             title.textContent =
-                'あなたと近い人は、こんな選択をしています。';
+                'こんな迷いを経験した人がいます。';
 
         }
 
+
+        description.textContent =
+            'まずは公開されている経験から。登録すると、あなたの経歴や大切にしていることに近い人から探せます。';
+
+
+        if (
+            !previewArea
+            ||
+            !previewList
+        ) {
+            return;
+        }
+
+
+        await loadGuestPreviews(
+            previewArea,
+            previewList,
+            description
+        );
+
+    }
+
+
+    /* =========================================================
+       LOGGED IN
+       ========================================================= */
+
+    async function initializeLoggedInView({
+        list,
+        eyebrow,
+        title,
+        description,
+        previewArea
+    }) {
 
         if (previewArea) {
 
@@ -137,26 +236,42 @@
         }
 
 
-        if (loginCTA) {
+        if (eyebrow) {
 
-            loginCTA.style.display =
-                'none';
+            eyebrow.textContent =
+                'PEOPLE LIKE YOU';
+
+        }
+
+
+        if (title) {
+
+            title.textContent =
+                'あなたと近い人の経験を見る。';
 
         }
 
 
         description.textContent =
-            'あなたのこれまでのキャリアや大切にしていることから、次の選択を考えるヒントになりそうな経験を選びました.';
+            'あなたのこれまでのキャリアや大切にしていることから、次の選択を考える参考になりそうな経験を選びました。';
 
 
         try {
 
             const response =
                 await fetch(
-                    '/similar-career-stories/',
+                    SIMILAR_API,
                     {
+                        method:
+                            'GET',
+
                         credentials:
-                            'include'
+                            'include',
+
+                        headers: {
+                            Accept:
+                                'application/json'
+                        }
                     }
                 );
 
@@ -174,7 +289,7 @@
                 await response.json();
 
 
-            const careers =
+            const rawCareers =
                 Array.isArray(
                     data.careers
                 )
@@ -182,11 +297,25 @@
                     : [];
 
 
-            /* =============================================
-               Empty
-            ============================================= */
+            const careers =
+                rawCareers
+
+                    .map(
+                        normalizeStory
+                    )
+
+                    .filter(
+                        story =>
+                            story.id !== null
+                            &&
+                            story.id !== undefined
+                    );
+
 
             if (!careers.length) {
+
+                list.innerHTML =
+                    '';
 
                 list.style.display =
                     'none';
@@ -207,7 +336,7 @@
                 ) {
 
                     description.textContent =
-                        'まだ十分な共通点を見つけられませんでした。Career GPSを充実させると、歩んできた道や価値観が近いStoryを見つけやすくなります。';
+                        'まだ十分な共通点を見つけられませんでした。My Career GPSを充実させると、歩んできた道や大切にしていることが近い人を見つけやすくなります。';
 
                 } else {
 
@@ -218,49 +347,17 @@
 
 
                 return;
+
             }
 
 
-            /* =============================================
-               Render
-            ============================================= */
-
-            list.innerHTML =
-                '';
-
-            /*
-             * 重要：
-             * display:grid をJSから指定しない。
-             *
-             * PC / Tablet / Mobile のレイアウトは
-             * home.css に任せる。
-             *
-             * 以前のMobile横スクロール崩れ対策。
-             */
-            list.style.removeProperty(
-                'display'
+            renderSimilarStories(
+                list,
+                careers.slice(
+                    0,
+                    SIMILAR_LIMIT
+                )
             );
-
-
-            careers
-                .slice(0, 6)
-                .forEach(
-                    rawStory => {
-
-                        const story =
-                            normalizeStory(
-                                rawStory
-                            );
-
-
-                        list.appendChild(
-                            createSimilarStoryCard(
-                                story
-                            )
-                        );
-
-                    }
-                );
 
 
         } catch (error) {
@@ -270,6 +367,9 @@
                 error
             );
 
+
+            list.innerHTML =
+                '';
 
             list.style.display =
                 'none';
@@ -283,20 +383,71 @@
     }
 
 
-    /* =====================================================
-       Guest Career Story Preview
-    ====================================================== */
+    /* =========================================================
+       RENDER SIMILAR
+       ========================================================= */
+
+    function renderSimilarStories(
+        list,
+        stories
+    ) {
+
+        list.innerHTML =
+            '';
+
+
+        /*
+         * CSS側に
+         * PC grid / Mobile horizontal scroll
+         * を任せる。
+         */
+        list.style.removeProperty(
+            'display'
+        );
+
+
+        stories.forEach(
+            story => {
+
+                list.appendChild(
+                    createSimilarStoryCard(
+                        story
+                    )
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       GUEST PREVIEW LOAD
+       ========================================================= */
 
     async function loadGuestPreviews(
         previewArea,
-        previewList
+        previewList,
+        description
     ) {
 
         try {
 
             const response =
                 await fetch(
-                    '/career-story-previews/'
+                    GUEST_PREVIEW_API,
+                    {
+                        method:
+                            'GET',
+
+                        credentials:
+                            'include',
+
+                        headers: {
+                            Accept:
+                                'application/json'
+                        }
+                    }
                 );
 
 
@@ -313,7 +464,7 @@
                 await response.json();
 
 
-            const careers =
+            const rawCareers =
                 Array.isArray(
                     data.careers
                 )
@@ -321,12 +472,45 @@
                     : [];
 
 
+            const careers =
+                rawCareers
+
+                    .map(
+                        normalizeGuestPreview
+                    )
+
+                    .filter(
+                        story =>
+                            story.id !== null
+                            &&
+                            story.id !== undefined
+                    )
+
+                    .slice(
+                        0,
+                        GUEST_LIMIT
+                    );
+
+
             if (!careers.length) {
+
+                previewList.innerHTML =
+                    '';
 
                 previewArea.style.display =
                     'none';
 
+
+                if (description) {
+
+                    description.textContent =
+                        '公開されているCareer Storyは、現在準備中です。';
+
+                }
+
+
                 return;
+
             }
 
 
@@ -334,21 +518,17 @@
                 '';
 
 
-            careers
-                .slice(0, 3)
-                .forEach(
-                    rawStory => {
+            careers.forEach(
+                story => {
 
-                        previewList.appendChild(
-                            createGuestPreviewCard(
-                                normalizeGuestPreview(
-                                    rawStory
-                                )
-                            )
-                        );
+                    previewList.appendChild(
+                        createGuestPreviewCard(
+                            story
+                        )
+                    );
 
-                    }
-                );
+                }
+            );
 
 
             previewArea.style.display =
@@ -363,13 +543,28 @@
             );
 
 
+            previewList.innerHTML =
+                '';
+
             previewArea.style.display =
                 'none';
+
+
+            if (description) {
+
+                description.textContent =
+                    'Career Storyを読み込めませんでした。';
+
+            }
 
         }
 
     }
 
+
+    /* =========================================================
+       GUEST NORMALIZE
+       ========================================================= */
 
     function normalizeGuestPreview(
         story
@@ -384,71 +579,102 @@
         return {
 
             id:
-                story.id,
+                story?.id
+                ??
+                null,
 
 
             name:
-                story.name
+                normalizeDisplayText(
+                    story?.name
+                    ??
+                    story?.username
+                )
                 ||
                 '匿名',
 
 
-            age:
-                Number.isFinite(
-                    Number(
-                        story.age
-                    )
-                )
-                    ? Number(
-                        story.age
-                    )
-                    : null,
+            ageText:
+                normalizeAgeText(
+                    story?.age_group
+                    ??
+                    story?.age
+                ),
 
 
             profession:
-                story.profession
-                ||
-                '職種未設定',
+                normalizeDisplayText(
+                    story?.profession
+                ),
 
 
             industry:
-                story.industry
-                ||
-                '',
+                normalizeDisplayText(
+                    story?.industry
+                ),
 
 
             careerStages:
                 normalizePreviewStages(
-                    story.careerStages
+                    story?.careerStages
+                    ??
+                    story?.career_stages
+                    ??
+                    []
                 ),
 
 
             decision: {
 
+                /*
+                 * 現行Guest normalizeでは
+                 * 落ちていたIDを保持する。
+                 */
+                id:
+                    decision?.id
+                    ??
+                    null,
+
+
                 type:
-                    decision.decision_type
-                    ||
-                    '',
+                    normalizeDisplayText(
+                        decision?.decision_type
+                        ??
+                        decision?.type
+                    ),
+
 
                 title:
-                    decision.title
-                    ||
-                    '',
+                    normalizeDisplayText(
+                        decision?.title
+                    ),
+
 
                 trigger:
-                    decision.trigger_text
-                    ||
-                    '',
+                    normalizeDisplayText(
+                        decision?.trigger_text
+                    ),
+
 
                 dilemma:
-                    decision.dilemma_text
-                    ||
-                    '',
+                    normalizeDisplayText(
+                        decision?.dilemma_text
+                    ),
+
 
                 priority:
-                    decision.priority_text
-                    ||
-                    ''
+                    normalizeDisplayText(
+                        decision?.priority_text
+                    ),
+
+
+                /*
+                 * 「その後」も保持する。
+                 */
+                result:
+                    normalizeDisplayText(
+                        decision?.result_text
+                    )
 
             }
 
@@ -457,68 +683,181 @@
     }
 
 
-    function normalizePreviewStages(
-        stages
+    /* =========================================================
+       LOGGED-IN NORMALIZE
+       ========================================================= */
+
+    function normalizeStory(
+        story
     ) {
 
-        if (!Array.isArray(stages)) {
+        const decision =
+            story?.decision
+            ||
+            {};
 
-            return [];
 
-        }
-
-
-        return stages
-            .filter(
-                stage =>
-                    stage
-                    &&
-                    stage.label
-            )
-            .map(
-                stage => ({
-
-                    type:
-                        stage.type
-                        ||
-                        '',
-
-                    year:
-                        stage.year
-                        ||
-                        '',
-
-                    label:
-                        stage.label
-
-                })
+        const similarityReasons =
+            normalizeSimilarityReasons(
+                story?.similarity_reasons
             );
+
+
+        const similarityHeadline =
+            normalizeDisplayText(
+                story?.similarity_headline
+            );
+
+
+        /*
+         * reasonsが無くHeadlineだけある場合、
+         * HomeではHeadlineを1つの共通理由として使用する。
+         */
+        const reasons =
+            similarityReasons.length
+
+                ? similarityReasons
+
+                : (
+                    similarityHeadline
+                        ? [
+                            similarityHeadline
+                        ]
+                        : []
+                );
+
+
+        return {
+
+            id:
+                story?.id
+                ??
+                null,
+
+
+            name:
+                normalizeDisplayText(
+                    story?.name
+                    ??
+                    story?.username
+                )
+                ||
+                '匿名',
+
+
+            ageText:
+                normalizeAgeText(
+                    story?.age_group
+                    ??
+                    story?.age
+                    ??
+                    calculateAge(
+                        story?.birthYear
+                        ??
+                        story?.birth_year
+                    )
+                ),
+
+
+            profession:
+                normalizeDisplayText(
+                    story?.profession
+                ),
+
+
+            similarityReasons:
+                reasons,
+
+
+            careerStages:
+                normalizeStages(
+                    story?.careerStages
+                    ??
+                    story?.career_stages
+                    ??
+                    []
+                ),
+
+
+            decision: {
+
+                id:
+                    decision?.id
+                    ??
+                    null,
+
+
+                type:
+                    normalizeDisplayText(
+                        decision?.decision_type
+                        ??
+                        decision?.type
+                    ),
+
+
+                title:
+                    normalizeDisplayText(
+                        decision?.title
+                    ),
+
+
+                trigger:
+                    normalizeDisplayText(
+                        decision?.trigger_text
+                    ),
+
+
+                dilemma:
+                    normalizeDisplayText(
+                        decision?.dilemma_text
+                    ),
+
+
+                priority:
+                    normalizeDisplayText(
+                        decision?.priority_text
+                    ),
+
+
+                result:
+                    normalizeDisplayText(
+                        decision?.result_text
+                    )
+
+            }
+
+        };
 
     }
 
 
-    function createGuestPreviewCard(
+    /* =========================================================
+       CREATE LOGGED-IN CARD
+       ========================================================= */
+
+    function createSimilarStoryCard(
         story
     ) {
 
+        const detailUrl =
+            createCareerDetailUrl(
+                story.id,
+                story.decision.id
+            );
+
+
         const card =
             document.createElement(
-                'article'
+                'a'
             );
 
 
         card.className =
-            'home-career-card home-career-card--preview';
+            'home-career-card';
 
 
-        card.tabIndex =
-            0;
-
-
-        card.setAttribute(
-            'role',
-            'link'
-        );
+        card.href =
+            detailUrl;
 
 
         card.setAttribute(
@@ -527,21 +866,26 @@
         );
 
 
-        const decisionHook =
-            story.decision.dilemma
-            ||
-            story.decision.title
-            ||
-            story.decision.trigger
-            ||
-            'この人がどんな選択をしたのかを見る';
+        const reasons =
+            story.similarityReasons
+                .slice(
+                    0,
+                    3
+                );
 
 
         card.innerHTML = `
 
+            <!-- =====================================
+                 Person
+            ====================================== -->
+
             <div class="home-career-card__top">
 
-                <div class="home-career-avatar">
+                <div
+                    class="home-career-avatar"
+                    aria-hidden="true"
+                >
 
                     ${escapeHTML(
                         getInitial(
@@ -554,49 +898,19 @@
 
                 <div class="home-career-person">
 
-                    <p class="home-career-person__meta">
-
-                        ${
-                            story.age !== null
-
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        getAgeGroup(
-                                            story.age
-                                        )
-                                    )}
-                                </span>
-                            `
-
-                            : ''
-                        }
-
-
-                        ${
-                            story.profession
-                            &&
-                            story.profession !==
-                            '職種未設定'
-
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        story.profession
-                                    )}
-                                </span>
-                            `
-
-                            : ''
-                        }
-
-                    </p>
+                    ${
+                        createPersonMetaHTML(
+                            story
+                        )
+                    }
 
 
                     <h3>
+
                         ${escapeHTML(
                             story.name
                         )}
+
                     </h3>
 
                 </div>
@@ -604,138 +918,106 @@
             </div>
 
 
-            ${buildGuestTimelineHTML(
-                story.careerStages
-            )}
+            <!-- =====================================
+                 Why this person
+            ====================================== -->
 
-
-            <div class="career-preview-decision">
-
-                <div class="career-preview-decision__heading">
-
-                    <span>
-                        CAREER DECISION
-                    </span>
-
-                    ${
-                        story.decision.type
-
-                        ? `
-                            <strong>
-                                ${escapeHTML(
-                                    story.decision.type
-                                )}
-                            </strong>
-                        `
-
-                        : ''
-                    }
-
-                </div>
-
-
-                <p class="career-preview-decision__hook">
-
-                    ${escapeHTML(
-                        decisionHook
-                    )}
-
-                </p>
-
-
-                ${
-                    story.decision.priority
+            ${
+                reasons.length
 
                     ? `
-                        <div class="career-preview-priority">
+                        <div class="home-career-card__story">
 
-                            <span>
-                                重視したこと
-                            </span>
+                            <p class="home-career-card__label">
 
-                            <p>
-                                ${escapeHTML(
-                                    story.decision.priority
-                                )}
+                                あなたとの共通点
+
                             </p>
+
+
+                            <div class="home-career-tags">
+
+                                ${
+                                    reasons
+
+                                        .map(
+                                            reason => `
+
+                                                <span>
+
+                                                    ${escapeHTML(
+                                                        createExcerpt(
+                                                            reason,
+                                                            28
+                                                        )
+                                                    )}
+
+                                                </span>
+
+                                            `
+                                        )
+
+                                        .join('')
+                                }
+
+                            </div>
 
                         </div>
                     `
 
                     : ''
-                }
+            }
 
-            </div>
 
+            <!-- =====================================
+                 Career Journey
+            ====================================== -->
+
+            ${buildJourneyHTML(
+                story.careerStages
+            )}
+
+
+            <!-- =====================================
+                 Decision
+            ====================================== -->
+
+            ${buildDecisionHTML(
+                story.decision
+            )}
+
+
+            <!-- =====================================
+                 Footer
+            ====================================== -->
 
             <div class="home-career-card__footer">
 
                 <span class="home-career-card__link">
 
-                    選択の背景と、その後を見る
+                    この人の選択と、その後を見る
 
                     <span aria-hidden="true">
+
                         →
+
                     </span>
 
                 </span>
 
             </div>
+
         `;
-
-
-        const navigate =
-            () => {
-
-                trackCareerStoryClick(
-                    story.id,
-                    'guest_preview'
-                );
-
-
-                const decisionQuery =
-                    story.decision.id
-
-                        ? `&decision_id=${
-                            encodeURIComponent(
-                                story.decision.id
-                            )
-                        }`
-
-                        : '';
-
-
-                window.location.href =
-                    `Career_detail.html?id=${
-                        encodeURIComponent(
-                            story.id
-                        )
-                    }${decisionQuery}`;
-
-            };
 
 
         card.addEventListener(
             'click',
-            navigate
-        );
+            () => {
 
-
-        card.addEventListener(
-            'keydown',
-            event => {
-
-                if (
-                    event.key === 'Enter'
-                    ||
-                    event.key === ' '
-                ) {
-
-                    event.preventDefault();
-
-                    navigate();
-
-                }
+                trackCareerStoryClick(
+                    story.id,
+                    'similar'
+                );
 
             }
         );
@@ -746,19 +1028,452 @@
     }
 
 
-    function buildGuestTimelineHTML(
-        stages
+    /* =========================================================
+       CREATE GUEST CARD
+       ========================================================= */
+
+    function createGuestPreviewCard(
+        story
     ) {
 
-        if (!stages.length) {
+        const detailUrl =
+            createCareerDetailUrl(
+                story.id,
+                story.decision.id
+            );
+
+
+        const card =
+            document.createElement(
+                'a'
+            );
+
+
+        card.className =
+            'home-career-card home-career-card--preview';
+
+
+        card.href =
+            detailUrl;
+
+
+        card.setAttribute(
+            'aria-label',
+            `${story.name}さんのCareer Storyを見る`
+        );
+
+
+        card.innerHTML = `
+
+            <!-- =====================================
+                 Person
+            ====================================== -->
+
+            <div class="home-career-card__top">
+
+                <div
+                    class="home-career-avatar"
+                    aria-hidden="true"
+                >
+
+                    ${escapeHTML(
+                        getInitial(
+                            story.name
+                        )
+                    )}
+
+                </div>
+
+
+                <div class="home-career-person">
+
+                    ${
+                        createPersonMetaHTML(
+                            story
+                        )
+                    }
+
+
+                    <h3>
+
+                        ${escapeHTML(
+                            story.name
+                        )}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 Journey
+            ====================================== -->
+
+            ${buildJourneyHTML(
+                story.careerStages
+            )}
+
+
+            <!-- =====================================
+                 Decision
+            ====================================== -->
+
+            ${buildDecisionHTML(
+                story.decision
+            )}
+
+
+            <!-- =====================================
+                 Footer
+            ====================================== -->
+
+            <div class="home-career-card__footer">
+
+                <span class="home-career-card__link">
+
+                    この人の選択と、その後を見る
+
+                    <span aria-hidden="true">
+
+                        →
+
+                    </span>
+
+                </span>
+
+            </div>
+
+        `;
+
+
+        card.addEventListener(
+            'click',
+            () => {
+
+                trackCareerStoryClick(
+                    story.id,
+                    'guest_preview'
+                );
+
+            }
+        );
+
+
+        return card;
+
+    }
+
+
+    /* =========================================================
+       PERSON META
+       ========================================================= */
+
+    function createPersonMetaHTML(
+        story
+    ) {
+
+        const values =
+            [];
+
+
+        if (
+            normalizeDisplayText(
+                story.ageText
+            )
+        ) {
+
+            values.push(
+                story.ageText
+            );
+
+        }
+
+
+        if (
+            normalizeDisplayText(
+                story.profession
+            )
+            &&
+            ![
+                '職種未設定',
+                '職種非公開'
+            ].includes(
+                story.profession
+            )
+        ) {
+
+            values.push(
+                story.profession
+            );
+
+        }
+
+
+        if (!values.length) {
 
             return '';
 
         }
 
 
-        const displayStages =
-            reduceGuestStages(
+        return `
+
+            <p class="home-career-person__meta">
+
+                ${
+                    values
+
+                        .map(
+                            value => `
+
+                                <span>
+
+                                    ${escapeHTML(
+                                        value
+                                    )}
+
+                                </span>
+
+                            `
+                        )
+
+                        .join('')
+                }
+
+            </p>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       DECISION HTML
+       ========================================================= */
+
+    function buildDecisionHTML(
+        decision
+    ) {
+
+        if (!decision) {
+            return '';
+        }
+
+
+        const dilemma =
+            createExcerpt(
+                (
+                    decision.dilemma
+                    ||
+                    decision.title
+                    ||
+                    decision.trigger
+                ),
+                EXCERPT_LIMITS.dilemma
+            );
+
+
+        const priority =
+            createExcerpt(
+                decision.priority,
+                EXCERPT_LIMITS.priority
+            );
+
+
+        const result =
+            createExcerpt(
+                decision.result,
+                EXCERPT_LIMITS.result
+            );
+
+
+        /*
+         * Decision情報が全く無いなら、
+         * 空の枠は作らない。
+         */
+        if (
+            !decision.type
+            &&
+            !dilemma
+            &&
+            !priority
+            &&
+            !result
+        ) {
+
+            return '';
+
+        }
+
+
+        return `
+
+            <div class="career-preview-decision">
+
+                <!-- =================================
+                     Heading
+                ================================== -->
+
+                <div class="career-preview-decision__heading">
+
+                    <span>
+
+                        CAREER DECISION
+
+                    </span>
+
+
+                    ${
+                        decision.type
+
+                            ? `
+                                <strong>
+
+                                    ${escapeHTML(
+                                        decision.type
+                                    )}
+
+                                </strong>
+                            `
+
+                            : ''
+                    }
+
+                </div>
+
+
+                <!-- =================================
+                     Dilemma
+                ================================== -->
+
+                ${
+                    dilemma
+
+                        ? `
+                            <div class="career-preview-decision__dilemma">
+
+                                <span class="career-preview-decision__sub-label">
+
+                                    当時の迷い
+
+                                </span>
+
+
+                                <p class="career-preview-decision__hook">
+
+                                    ${escapeHTML(
+                                        dilemma
+                                    )}
+
+                                </p>
+
+                            </div>
+                        `
+
+                        : ''
+                }
+
+
+                <!-- =================================
+                     Priority
+                ================================== -->
+
+                ${
+                    priority
+
+                        ? `
+                            <div class="career-preview-priority">
+
+                                <span>
+
+                                    大切にしたこと
+
+                                </span>
+
+
+                                <p>
+
+                                    ${escapeHTML(
+                                        priority
+                                    )}
+
+                                </p>
+
+                            </div>
+                        `
+
+                        : ''
+                }
+
+
+                <!-- =================================
+                     Result
+                ================================== -->
+
+                ${
+                    result
+
+                        ? `
+                            <div
+                                class="
+                                    career-preview-priority
+                                    career-preview-result
+                                "
+                            >
+
+                                <span>
+
+                                    その後
+
+                                </span>
+
+
+                                <p>
+
+                                    ${escapeHTML(
+                                        result
+                                    )}
+
+                                </p>
+
+                            </div>
+                        `
+
+                        : ''
+                }
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       JOURNEY
+       ========================================================= */
+
+    function buildJourneyHTML(
+        stages
+    ) {
+
+        if (
+            !Array.isArray(
+                stages
+            )
+            ||
+            !stages.length
+        ) {
+
+            return '';
+
+        }
+
+
+        const items =
+            selectTimelineItems(
                 stages
             );
 
@@ -768,7 +1483,9 @@
             <div class="career-preview-journey">
 
                 <p class="career-preview-journey__label">
+
                     CAREER JOURNEY
+
                 </p>
 
 
@@ -777,10 +1494,11 @@
                     <div class="home-career-timeline__track">
 
                         ${
-                            displayStages
+                            items
+
                                 .map(
                                     (
-                                        stage,
+                                        item,
                                         index
                                     ) => `
 
@@ -790,7 +1508,7 @@
 
                                                 ${escapeHTML(
                                                     String(
-                                                        stage.year
+                                                        item.year
                                                         ||
                                                         ''
                                                     )
@@ -802,17 +1520,17 @@
                                             <span
                                                 class="
                                                     home-career-timeline__dot
-
                                                     ${
                                                         index
                                                         ===
-                                                        displayStages.length - 1
+                                                        items.length - 1
 
-                                                        ? 'is-current'
+                                                            ? 'is-current'
 
-                                                        : ''
+                                                            : ''
                                                     }
                                                 "
+                                                aria-hidden="true"
                                             >
                                             </span>
 
@@ -821,9 +1539,7 @@
 
                                                 ${escapeHTML(
                                                     simplifyStage(
-                                                        buildGuestStageLabel(
-                                                            stage
-                                                        )
+                                                        item.stage
                                                     )
                                                 )}
 
@@ -833,6 +1549,7 @@
 
                                     `
                                 )
+
                                 .join('')
                         }
 
@@ -841,80 +1558,43 @@
                 </div>
 
             </div>
+
         `;
 
     }
 
 
-    function buildGuestStageLabel(
-        stage
-    ) {
+    /* =========================================================
+       TIMELINE ITEMS
+       ========================================================= */
 
-        const label =
-            String(
-                stage?.label
-                ||
-                ''
-            )
-                .trim();
-
-
-        if (!label) {
-
-            return '';
-
-        }
-
-
-        if (
-            stage.type ===
-            'education'
-        ) {
-
-            return `${label} 入学`;
-
-        }
-
-
-        if (
-            stage.type ===
-            'company'
-        ) {
-
-            return `${label} 入社`;
-
-        }
-
-
-        return label;
-
-    }
-
-
-    function reduceGuestStages(
+    function selectTimelineItems(
         stages
     ) {
 
-        if (stages.length <= 4) {
+        if (
+            stages.length <= 3
+        ) {
 
             return stages;
 
         }
 
 
+        /*
+         * Homeでは最大3点。
+         *
+         * 最初
+         * 中間
+         * 最新
+         */
         return [
 
             stages[0],
 
             stages[
                 Math.floor(
-                    stages.length / 3
-                )
-            ],
-
-            stages[
-                Math.floor(
-                    stages.length * 2 / 3
+                    stages.length / 2
                 )
             ],
 
@@ -927,584 +1607,9 @@
     }
 
 
-    /* =====================================================
-       Login
-    ====================================================== */
-
-    async function checkLoginStatus() {
-
-        try {
-
-            const response =
-                await fetch(
-                    '/check-login-status/',
-                    {
-                        credentials:
-                            'include'
-                    }
-                );
-
-
-            return response.ok;
-
-
-        } catch (error) {
-
-            return false;
-
-        }
-
-    }
-
-
-    /* =====================================================
-       Logged-in Similar Card
-    ====================================================== */
-
-    function createSimilarStoryCard(
-        story
-    ) {
-
-        const card =
-            document.createElement(
-                'article'
-            );
-
-
-        card.className =
-            'home-career-card';
-
-
-        card.tabIndex =
-            0;
-
-
-        card.setAttribute(
-            'role',
-            'link'
-        );
-
-
-        card.setAttribute(
-            'aria-label',
-            `${story.name}さんのCareer Storyを見る`
-        );
-
-
-        const reasons =
-            story
-                .similarityReasons
-                .slice(
-                    0,
-                    3
-                );
-
-
-        const decisionHook =
-            story.decision.dilemma
-            ||
-            story.decision.title
-            ||
-            story.decision.trigger
-            ||
-            '';
-
-
-        card.innerHTML = `
-
-            <div class="home-career-card__top">
-
-                <div class="home-career-avatar">
-
-                    ${escapeHTML(
-                        getInitial(
-                            story.name
-                        )
-                    )}
-
-                </div>
-
-
-                <div class="home-career-person">
-
-                    <p class="home-career-person__meta">
-
-                        ${
-                            story.age !== null
-
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        getAgeGroup(
-                                            story.age
-                                        )
-                                    )}
-                                </span>
-                            `
-
-                            : ''
-                        }
-
-
-                        ${
-                            story.profession
-                            &&
-                            story.profession !==
-                            '職種未設定'
-
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        story.profession
-                                    )}
-                                </span>
-                            `
-
-                            : ''
-                        }
-
-                    </p>
-
-
-                    <h3>
-                        ${escapeHTML(
-                            story.name
-                        )}
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            ${
-                reasons.length
-
-                ? `
-                    <div class="home-career-card__story">
-
-                        <p class="home-career-card__label">
-                            あなたとの共通点
-                        </p>
-
-
-                        <div class="home-career-tags">
-
-                            ${reasons
-                                .map(
-                                    reason => `
-
-                                        <span>
-                                            ${escapeHTML(
-                                                reason
-                                            )}
-                                        </span>
-
-                                    `
-                                )
-                                .join('')}
-
-                        </div>
-
-                    </div>
-                `
-
-                : ''
-            }
-
-
-            ${buildSimilarJourneyHTML(
-                story.careerStages
-            )}
-
-
-            ${
-                decisionHook
-                ||
-                story.decision.type
-                ||
-                story.decision.priority
-                ||
-                story.decision.result
-
-                ? `
-                    <div class="career-preview-decision">
-
-                        <div class="career-preview-decision__heading">
-
-                            <span>
-                                CAREER DECISION
-                            </span>
-
-                            ${
-                                story.decision.type
-
-                                ? `
-                                    <strong>
-                                        ${escapeHTML(
-                                            story.decision.type
-                                        )}
-                                    </strong>
-                                `
-
-                                : ''
-                            }
-
-                        </div>
-
-
-                        ${
-                            decisionHook
-
-                            ? `
-                                <div class="career-preview-decision__dilemma">
-
-                                    <span class="career-preview-decision__sub-label">
-                                        当時の迷い
-                                    </span>
-
-                                    <p class="career-preview-decision__hook">
-
-                                        ${escapeHTML(
-                                            decisionHook
-                                        )}
-
-                                    </p>
-
-                                </div>
-                            `
-
-                            : ''
-                        }
-
-
-                        ${
-                            story.decision.priority
-
-                            ? `
-                                <div class="career-preview-priority">
-
-                                    <span>
-                                        大切にしたこと
-                                    </span>
-
-                                    <p>
-                                        ${escapeHTML(
-                                            story.decision.priority
-                                        )}
-                                    </p>
-
-                                </div>
-                            `
-
-                            : ''
-                        }
-
-
-                        ${
-                            story.decision.result
-
-                            ? `
-                                <div class="career-preview-priority career-preview-result">
-
-                                    <span>
-                                        その後
-                                    </span>
-
-                                    <p>
-                                        ${escapeHTML(
-                                            story.decision.result
-                                        )}
-                                    </p>
-
-                                </div>
-                            `
-
-                            : ''
-                        }
-
-                    </div>
-                `
-
-                : ''
-            }
-
-
-            <div class="home-career-card__footer">
-
-                <span class="home-career-card__link">
-
-                    選択の背景と、その後を見る
-
-                    <span aria-hidden="true">
-                        →
-                    </span>
-
-                </span>
-
-            </div>
-        `;
-
-
-        const navigate =
-            () => {
-
-                trackCareerStoryClick(
-                    story.id,
-                    'similar'
-                );
-
-
-                const decisionQuery =
-                    story.decision.id
-
-                        ? `&decision_id=${
-                            encodeURIComponent(
-                                story.decision.id
-                            )
-                        }`
-
-                        : '';
-
-
-                window.location.href =
-                    `Career_detail.html?id=${
-                        encodeURIComponent(
-                            story.id
-                        )
-                    }${decisionQuery}`;
-
-            };
-
-
-        card.addEventListener(
-            'click',
-            navigate
-        );
-
-
-        card.addEventListener(
-            'keydown',
-            event => {
-
-                if (
-                    event.key === 'Enter'
-                    ||
-                    event.key === ' '
-                ) {
-
-                    event.preventDefault();
-
-                    navigate();
-
-                }
-
-            }
-        );
-
-
-        return card;
-
-    }
-
-
-    /* =====================================================
-       Normalize
-    ====================================================== */
-
-    function normalizeStory(
-        story
-    ) {
-
-        const decision =
-            story?.decision
-            ||
-            {};
-
-
-        const companies =
-            Array.isArray(
-                story.companies
-            )
-                ? story.companies
-                : [];
-
-
-        const similarityReasons =
-            Array.isArray(
-                story.similarity_reasons
-            )
-                ? story
-                    .similarity_reasons
-                    .filter(Boolean)
-                : [];
-
-
-        return {
-
-            id:
-                story.id,
-
-
-            name:
-                story.name
-                ||
-                '匿名',
-
-
-            age:
-                calculateAge(
-                    story.birthYear
-                ),
-
-
-            profession:
-                story.profession
-                ||
-                '職種未設定',
-
-
-            income:
-                getLatestIncome(
-                    story.income
-                ),
-
-
-            careerType:
-                story.career_type
-                ||
-                '',
-
-
-            similarityScore:
-                Number(
-                    story.similarity_score
-                )
-                || 0,
-
-
-            similarityHeadline:
-                story.similarity_headline
-                ||
-                '',
-
-
-            similarityReasons,
-
-
-            companies,
-
-
-            careerStages:
-                normalizeStages(
-                    story.careerStages
-                ),
-
-
-            decision: {
-
-                id:
-                    decision.id
-                    ||
-                    null,
-            
-                type:
-                    decision.decision_type
-                    ||
-                    '',
-            
-                title:
-                    decision.title
-                    ||
-                    '',
-            
-                trigger:
-                    decision.trigger_text
-                    ||
-                    '',
-            
-                dilemma:
-                    decision.dilemma_text
-                    ||
-                    '',
-            
-                priority:
-                    decision.priority_text
-                    ||
-                    '',
-            
-                result:
-                    decision.result_text
-                    ||
-                    ''
-            
-            }
-
-        };
-
-    }
-
-
-    /* =====================================================
-       WHY THIS STORY
-    ====================================================== */
-
-    function buildStoryHeadline(
-        story
-    ) {
-
-        if (
-            story.similarityHeadline
-        ) {
-
-            return (
-                story.similarityHeadline
-            );
-
-        }
-
-
-        if (
-            story.similarityReasons
-                .length >= 2
-        ) {
-
-            return (
-                `${
-                    story
-                        .similarityReasons[0]
-                }、${
-                    story
-                        .similarityReasons[1]
-                }`
-            );
-
-        }
-
-
-        if (
-            story.similarityReasons
-                .length === 1
-        ) {
-
-            return (
-                story
-                    .similarityReasons[0]
-            );
-
-        }
-
-
-        return (
-            'あなたと共通点のあるCareer Story'
-        );
-
-    }
-
-
-    /* =====================================================
-       Normalize stages
-    ====================================================== */
+    /* =========================================================
+       NORMALIZE LOGGED-IN STAGES
+       ========================================================= */
 
     function normalizeStages(
         stages
@@ -1531,49 +1636,64 @@
         stages.forEach(
             stage => {
 
+                if (!stage) {
+                    return;
+                }
+
+
+                /*
+                 * 非公開は内容を出さない。
+                 */
                 const value =
                     stage?.is_private
+
                         ? '非公開'
-                        : (
+
+                        : normalizeDisplayText(
                             stage?.stage
-                            ||
-                            ''
+                            ??
+                            stage?.label
+                            ??
+                            stage?.name
                         );
 
 
                 if (!value) {
-
                     return;
-
                 }
+
+
+                const year =
+                    normalizeDisplayText(
+                        stage?.year
+                        ??
+                        stage?.startYear
+                        ??
+                        stage?.start_year
+                    );
 
 
                 const key =
-                    `${
-                        stage?.year
-                        ||
-                        ''
-                    }-${value}`;
+                    `${year}__${value}`;
 
 
                 if (
-                    used.has(key)
+                    used.has(
+                        key
+                    )
                 ) {
-
                     return;
-
                 }
 
 
-                used.add(key);
+                used.add(
+                    key
+                );
 
 
                 result.push({
 
-                    year:
-                        stage?.year
-                        ||
-                        '',
+                    year,
 
                     stage:
                         value
@@ -1589,339 +1709,542 @@
     }
 
 
-    /* =====================================================
-       Career summary
-    ====================================================== */
+    /* =========================================================
+       NORMALIZE GUEST STAGES
+       ========================================================= */
 
-    function buildCareerSummary(
-        story
+    function normalizePreviewStages(
+        stages
     ) {
 
-        const values =
-            [];
+        if (
+            !Array.isArray(
+                stages
+            )
+        ) {
 
-
-        const companyCount =
-            getUniqueCompanyCount(
-                story.companies
-            );
-
-
-        if (companyCount) {
-
-            values.push(
-                `${companyCount}社経験`
-            );
+            return [];
 
         }
 
 
-        const careerYears =
-            calculateCareerYears(
-                story.companies
+        const result =
+            [];
+
+        const used =
+            new Set();
+
+
+        stages.forEach(
+            stage => {
+
+                if (!stage) {
+                    return;
+                }
+
+
+                const value =
+                    stage?.is_private
+
+                        ? '非公開'
+
+                        : normalizeDisplayText(
+                            stage?.label
+                            ??
+                            stage?.stage
+                            ??
+                            stage?.name
+                        );
+
+
+                if (!value) {
+                    return;
+                }
+
+
+                const year =
+                    normalizeDisplayText(
+                        stage?.year
+                        ??
+                        stage?.startYear
+                        ??
+                        stage?.start_year
+                    );
+
+
+                const key =
+                    `${year}__${value}`;
+
+
+                if (
+                    used.has(
+                        key
+                    )
+                ) {
+                    return;
+                }
+
+
+                used.add(
+                    key
+                );
+
+
+                result.push({
+
+                    year,
+
+                    stage:
+                        buildGuestStageLabel({
+                            type:
+                                stage?.type
+                                ??
+                                '',
+
+                            value
+                        })
+
+                });
+
+            }
+        );
+
+
+        return result;
+
+    }
+
+
+    /* =========================================================
+       GUEST STAGE LABEL
+       ========================================================= */
+
+    function buildGuestStageLabel({
+        type,
+        value
+    }) {
+
+        if (!value) {
+            return '';
+        }
+
+
+        /*
+         * 非公開には
+         * 入学 / 入社を付けない。
+         */
+        if (
+            value ===
+            '非公開'
+        ) {
+
+            return value;
+
+        }
+
+
+        if (
+            type ===
+            'education'
+        ) {
+
+            return `${value} 入学`;
+
+        }
+
+
+        if (
+            type ===
+            'company'
+        ) {
+
+            return `${value} 入社`;
+
+        }
+
+
+        return value;
+
+    }
+
+
+    /* =========================================================
+       SIMILARITY REASONS
+       ========================================================= */
+
+    function normalizeSimilarityReasons(
+        values
+    ) {
+
+        if (
+            !Array.isArray(
+                values
+            )
+        ) {
+
+            return [];
+
+        }
+
+
+        const result =
+            [];
+
+        const used =
+            new Set();
+
+
+        values.forEach(
+            value => {
+
+                const text =
+                    normalizeDisplayText(
+                        value
+                    );
+
+
+                if (
+                    !text
+                    ||
+                    used.has(
+                        text
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                used.add(
+                    text
+                );
+
+
+                result.push(
+                    text
+                );
+
+            }
+        );
+
+
+        return result;
+
+    }
+
+
+    /* =========================================================
+       HOME EXCERPT
+
+       詳細画面の本文は変更しない。
+       ========================================================= */
+
+    function createExcerpt(
+        value,
+        maxLength
+    ) {
+
+        const text =
+            normalizeDisplayText(
+                value
+            )
+
+                .replace(
+                    /\s+/g,
+                    ' '
+                )
+
+                .trim();
+
+
+        if (!text) {
+            return '';
+        }
+
+
+        const characters =
+            Array.from(
+                text
             );
 
 
         if (
-            careerYears !== null
+            characters.length
+            <=
+            maxLength
         ) {
 
-            values.push(
-                `キャリア約${careerYears}年`
+            return text;
+
+        }
+
+
+        const sliced =
+            characters
+
+                .slice(
+                    0,
+                    maxLength
+                )
+
+                .join('');
+
+
+        /*
+         * 可能なら句点などで自然に切る。
+         */
+        let bestIndex =
+            -1;
+
+
+        [
+            '。',
+            '！',
+            '？',
+            '!',
+            '?'
+        ]
+            .forEach(
+                mark => {
+
+                    bestIndex =
+                        Math.max(
+                            bestIndex,
+                            sliced.lastIndexOf(
+                                mark
+                            )
+                        );
+
+                }
+            );
+
+
+        if (
+            bestIndex
+            >=
+            Math.floor(
+                maxLength
+                *
+                0.58
+            )
+        ) {
+
+            return sliced
+
+                .slice(
+                    0,
+                    bestIndex + 1
+                )
+
+                .trim();
+
+        }
+
+
+        return (
+            sliced.trim()
+            +
+            '…'
+        );
+
+    }
+
+
+    /* =========================================================
+       DETAIL URL
+       ========================================================= */
+
+    function createCareerDetailUrl(
+        careerId,
+        decisionId
+    ) {
+
+        const params =
+            new URLSearchParams();
+
+
+        params.set(
+            'id',
+            String(
+                careerId
+            )
+        );
+
+
+        if (
+            decisionId !== null
+            &&
+            decisionId !== undefined
+            &&
+            String(
+                decisionId
+            ).trim()
+        ) {
+
+            params.set(
+                'decision_id',
+                String(
+                    decisionId
+                )
             );
 
         }
 
 
         return (
-            values.length
-
-            ? values.join('・')
-
-            : 'Career Story'
+            'Career_detail.html?'
+            +
+            params.toString()
         );
 
     }
 
 
-    /* =====================================================
-       Similar Journey
-    ====================================================== */
+    /* =========================================================
+       LOGIN
+       ========================================================= */
 
-    function buildSimilarJourneyHTML(
-        stages
+    async function checkLoginStatus() {
+
+        try {
+
+            const response =
+                await fetch(
+                    LOGIN_STATUS_API,
+                    {
+                        method:
+                            'GET',
+
+                        credentials:
+                            'include',
+
+                        headers: {
+                            Accept:
+                                'application/json'
+                        }
+                    }
+                );
+
+
+            /*
+             * 現行仕様：
+             * 未ログインは401、
+             * ログイン済みは2xx。
+             */
+            return response.ok;
+
+
+        } catch (error) {
+
+            return false;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       AGE
+       ========================================================= */
+
+    function normalizeAgeText(
+        value
     ) {
 
-        if (!stages.length) {
+        if (
+            value === null
+            ||
+            value === undefined
+            ||
+            value === ''
+        ) {
 
             return '';
 
         }
 
 
-        const items =
-            selectTimelineItems(
-                stages
-            );
-
-
-        return `
-
-            <div class="career-preview-journey">
-
-                <p class="career-preview-journey__label">
-                    CAREER JOURNEY
-                </p>
-
-
-                <div class="home-career-timeline">
-
-                    <div class="home-career-timeline__track">
-
-                        ${
-                            items
-                                .map(
-                                    (
-                                        item,
-                                        index
-                                    ) => `
-
-                                        <div class="home-career-timeline__item">
-
-                                            <span class="home-career-timeline__year">
-
-                                                ${escapeHTML(
-                                                    String(
-                                                        item.year
-                                                        ||
-                                                        ''
-                                                    )
-                                                )}
-
-                                            </span>
-
-
-                                            <span
-                                                class="
-                                                    home-career-timeline__dot
-
-                                                    ${
-                                                        index
-                                                        ===
-                                                        items.length - 1
-
-                                                        ? 'is-current'
-
-                                                        : ''
-                                                    }
-                                                "
-                                            >
-                                            </span>
-
-
-                                            <span class="home-career-timeline__stage">
-
-                                                ${escapeHTML(
-                                                    simplifyStage(
-                                                        item.stage
-                                                    )
-                                                )}
-
-                                            </span>
-
-                                        </div>
-
-                                    `
-                                )
-                                .join('')
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-
-    }
-
-
-    /* =====================================================
-       Timeline
-    ====================================================== */
-
-    function buildTimelineHTML(
-        stages
-    ) {
-
-        if (
-            !stages.length
-        ) {
-
-            return `
-
-                <div
-                    class="
-                        home-career-timeline
-                        home-career-timeline--empty
-                    "
-                >
-
-                    キャリア履歴はまだ登録されていません
-
-                </div>
-
-            `;
-
-        }
-
-
-        const items =
-            selectTimelineItems(
-                stages
-            );
-
-
-        return `
-
-            <div class="home-career-timeline">
-
-                <div class="home-career-timeline__track">
-
-                    ${
-                        items
-                            .map(
-                                (
-                                    item,
-                                    index
-                                ) => `
-
-                                    <div class="home-career-timeline__item">
-
-                                        <span class="home-career-timeline__year">
-
-                                            ${escapeHTML(
-                                                String(
-                                                    item.year
-                                                    ||
-                                                    ''
-                                                )
-                                            )}
-
-                                        </span>
-
-
-                                        <span
-                                            class="
-                                                home-career-timeline__dot
-
-                                                ${
-                                                    index
-                                                    ===
-                                                    items.length - 1
-
-                                                    ? 'is-current'
-
-                                                    : ''
-                                                }
-                                            "
-                                        >
-                                        </span>
-
-
-                                        <span class="home-career-timeline__stage">
-
-                                            ${escapeHTML(
-                                                simplifyStage(
-                                                    item.stage
-                                                )
-                                            )}
-
-                                        </span>
-
-                                    </div>
-
-                                `
-                            )
-                            .join('')
-                    }
-
-                </div>
-
-            </div>
-        `;
-
-    }
-
-
-    function selectTimelineItems(
-        stages
-    ) {
-
-        if (
-            stages.length <= 4
-        ) {
-
-            return stages;
-
-        }
-
-
-        return [
-
-            stages[0],
-
-            stages[
-                Math.floor(
-                    stages.length / 2
-                )
-            ],
-
-            stages[
-                stages.length - 1
-            ]
-
-        ];
-
-    }
-
-
-    /* =====================================================
-       Helpers
-    ====================================================== */
-
-    function simplifyStage(
-        stage
-    ) {
-
-        const value =
+        const text =
             String(
-                stage
-                ||
-                ''
+                value
+            ).trim();
+
+
+        if (!text) {
+            return '';
+        }
+
+
+        /*
+         * APIが既に
+         * 30代
+         * のように返している。
+         */
+        if (
+            text.includes(
+                '代'
             )
-                .replace(
-                    /\s+/g,
-                    ' '
-                )
-                .trim();
+        ) {
+
+            return text;
+
+        }
 
 
-        return (
-            value.length > 17
+        const numeric =
+            Number(
+                text
+            );
 
-            ? `${
-                value.slice(
-                    0,
-                    17
-                )
-              }…`
 
-            : value
-        );
+        if (
+            !Number.isFinite(
+                numeric
+            )
+            ||
+            numeric <= 0
+        ) {
+
+            return '';
+
+        }
+
+
+        if (
+            numeric < 20
+        ) {
+
+            return '10代';
+
+        }
+
+
+        if (
+            numeric >= 60
+        ) {
+
+            return '60代以上';
+
+        }
+
+
+        const decade =
+            Math.floor(
+                numeric / 10
+            )
+            *
+            10;
+
+
+        return `${decade}代`;
 
     }
 
+
+    /* =========================================================
+       CALCULATE AGE
+       ========================================================= */
 
     function calculateAge(
         birthYear
@@ -1938,7 +2261,7 @@
                 year
             )
             ||
-            year <= 0
+            year <= 1900
         ) {
 
             return null;
@@ -1946,177 +2269,89 @@
         }
 
 
-        return (
+        const currentYear =
             new Date()
-                .getFullYear()
+                .getFullYear();
+
+
+        const age =
+            currentYear
             -
-            year
-        );
-
-    }
-
-
-    function getLatestIncome(
-        incomes
-    ) {
-
-        if (
-            !Array.isArray(
-                incomes
-            )
-            ||
-            !incomes.length
-        ) {
-
-            return (
-                '未設定'
-            );
-
-        }
-
-
-        const latest =
-            incomes[
-                incomes.length - 1
-            ];
+            year;
 
 
         return (
-            latest?.income
-            ??
-            '未設定'
+            age > 0
+                ? age
+                : null
         );
 
     }
 
 
-    function getUniqueCompanyCount(
-        companies
+    /* =========================================================
+       STAGE DISPLAY
+       ========================================================= */
+
+    function simplifyStage(
+        stage
     ) {
 
-        const names =
-            (
-                Array.isArray(
-                    companies
-                )
-                    ? companies
-                    : []
-            )
-                .map(
-                    company =>
-                        company?.name
-                )
-                .filter(
-                    name =>
-                        name
-                        &&
-                        name !==
-                        '非公開'
-                );
-
-
-        return (
-            new Set(
-                names
-            ).size
-        );
-
-    }
-
-
-    function calculateCareerYears(
-        companies
-    ) {
-
-        const years =
-            (
-                Array.isArray(
-                    companies
-                )
-                    ? companies
-                    : []
-            )
-                .map(
-                    company =>
-                        Number(
-                            company
-                                ?.startYear
-                        )
-                )
-                .filter(
-                    year =>
-                        Number.isFinite(
-                            year
-                        )
-                        &&
-                        year > 1900
-                );
-
-
-        if (
-            !years.length
-        ) {
-
-            return null;
-
-        }
-
-
-        return Math.max(
-
-            1,
-
-            new Date()
-                .getFullYear()
-            -
-            Math.min(
-                ...years
+        const text =
+            normalizeDisplayText(
+                stage
             )
 
-        );
+                .replace(
+                    /\s+/g,
+                    ' '
+                )
 
-    }
-
-
-    function getAgeGroup(
-        age
-    ) {
-
-        const value =
-            Number(
-                age
-            );
+                .trim();
 
 
-        if (!Number.isFinite(value)) {
-
+        if (!text) {
             return '';
+        }
+
+
+        const characters =
+            Array.from(
+                text
+            );
+
+
+        if (
+            characters.length
+            <=
+            17
+        ) {
+
+            return text;
 
         }
 
 
-        if (value < 20) {
+        return (
+            characters
 
-            return '10代';
+                .slice(
+                    0,
+                    17
+                )
 
-        }
+                .join('')
 
-
-        if (value >= 60) {
-
-            return '60代以上';
-
-        }
-
-
-        return `${
-            Math.floor(
-                value / 10
-            ) * 10
-        }代`;
+            +
+            '…'
+        );
 
     }
 
+
+    /* =========================================================
+       ANALYTICS
+       ========================================================= */
 
     function trackCareerStoryClick(
         storyId,
@@ -2125,7 +2360,8 @@
 
         if (
             typeof gtag
-            !== 'function'
+            !==
+            'function'
         ) {
 
             return;
@@ -2139,10 +2375,15 @@
             {
 
                 career_id:
-                    storyId,
+                    String(
+                        storyId
+                    ),
 
                 section_name:
-                    sectionName
+                    sectionName,
+
+                page_type:
+                    'career_home'
 
             }
         );
@@ -2150,21 +2391,101 @@
     }
 
 
+    /* =========================================================
+       INITIAL
+       ========================================================= */
+
     function getInitial(
         name
     ) {
 
-        return String(
-            name
-            ||
-            '?'
-        )
-            .trim()
-            .charAt(0)
-            .toUpperCase();
+        const value =
+            normalizeDisplayText(
+                name
+            );
+
+
+        if (!value) {
+            return '人';
+        }
+
+
+        const first =
+            Array.from(
+                value
+            )[0];
+
+
+        if (
+            /^[a-zA-Z]$/.test(
+                first
+            )
+        ) {
+
+            return first.toUpperCase();
+
+        }
+
+
+        return first;
 
     }
 
+
+    /* =========================================================
+       TEXT
+       ========================================================= */
+
+    function normalizeDisplayText(
+        value
+    ) {
+
+        if (
+            value === null
+            ||
+            value === undefined
+        ) {
+
+            return '';
+
+        }
+
+
+        const text =
+            String(
+                value
+            ).trim();
+
+
+        if (!text) {
+            return '';
+        }
+
+
+        if (
+            [
+                'null',
+                'undefined',
+                'none',
+                'n/a'
+            ].includes(
+                text.toLowerCase()
+            )
+        ) {
+
+            return '';
+
+        }
+
+
+        return text;
+
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
 
     function escapeHTML(
         value
@@ -2175,27 +2496,33 @@
             ??
             ''
         )
-            .replaceAll(
-                '&',
+
+            .replace(
+                /&/g,
                 '&amp;'
             )
-            .replaceAll(
-                '<',
+
+            .replace(
+                /</g,
                 '&lt;'
             )
-            .replaceAll(
-                '>',
+
+            .replace(
+                />/g,
                 '&gt;'
             )
-            .replaceAll(
-                '"',
+
+            .replace(
+                /"/g,
                 '&quot;'
             )
-            .replaceAll(
-                "'",
+
+            .replace(
+                /'/g,
                 '&#039;'
             );
 
     }
+
 
 })();

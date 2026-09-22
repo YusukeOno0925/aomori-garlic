@@ -1,16 +1,18 @@
 /* =========================================================
-   Career GPS Home
-   Home V2
+   IMNORMAL
+   CAREER GPS HOME
+   Home Decision Experience
+   =========================================================
 
-   Brand:
-   White 70%
-   Deep Navy 20%
-   Blue 10%
+   Brand
+   - White
+   - Deep Navy
+   - Blue
 
-   NOTE:
-   - Header / Sidebar / Footer の共通ブランド色は
-     styles.css 側を優先する。
-   - Homeだけ共通シェルの色を変更しない。
+   Important
+   - Header / Sidebar / Footer は styles.css を優先
+   - このCSSは Home.html 専用
+   - DB / API には影響しない
    ========================================================= */
 
 
@@ -18,26 +20,33 @@
    01. VARIABLES
    ========================================================= */
 
-   :root {
+   .career-gps-home {
+
     --gps-navy-950: #06182b;
     --gps-navy-900: #071b30;
+    --gps-navy-850: #0a223b;
     --gps-navy-800: #0d2744;
     --gps-navy-700: #123b63;
 
     --gps-blue-700: #174f85;
     --gps-blue-600: #1d5f9e;
     --gps-blue-500: #2a72b5;
+
+    --gps-blue-150: #c9dff0;
     --gps-blue-100: #dcecf8;
+    --gps-blue-075: #e8f2fa;
     --gps-blue-050: #eef5fb;
     --gps-blue-025: #f6faff;
 
-    --gps-text: #17283a;
+    --gps-text: #1b2d3f;
     --gps-text-strong: #071b30;
-    --gps-muted: #637386;
-    --gps-muted-light: #8796a6;
+
+    --gps-muted: #627386;
+    --gps-muted-light: #8b99a8;
 
     --gps-line: #dce5ee;
-    --gps-line-strong: #cbd9e6;
+    --gps-line-soft: #e9eff4;
+    --gps-line-strong: #c8d7e4;
 
     --gps-bg: #ffffff;
     --gps-bg-soft: #f7fafc;
@@ -45,15 +54,18 @@
 
     --gps-white: #ffffff;
 
+    --gps-shadow-soft:
+        0 10px 28px rgba(7, 27, 48, 0.055);
+
     --gps-shadow-card:
-        0 10px 30px rgba(7, 27, 48, 0.055);
+        0 7px 22px rgba(7, 27, 48, 0.045);
 
     --gps-shadow-hover:
         0 18px 42px rgba(7, 27, 48, 0.10);
 
-    --gps-radius-sm: 10px;
-    --gps-radius-md: 16px;
-    --gps-radius-lg: 22px;
+    --gps-radius-sm: 9px;
+    --gps-radius-md: 14px;
+    --gps-radius-lg: 20px;
 }
 
 
@@ -61,24 +73,17 @@
    02. BASE
    ========================================================= */
 
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
+body.home-page {
     overflow-x: hidden;
 }
+
 
 .career-gps-home {
     width: calc(100% - 212px);
     margin-left: 212px;
 
+    background: var(--gps-bg);
     color: var(--gps-text);
-    background: var(--gps-white);
 
     font-family:
         "Roboto",
@@ -88,17 +93,49 @@ body {
         "Segoe UI",
         sans-serif;
 
+    line-height: 1.7;
+
     overflow: hidden;
 }
+
+
+.career-gps-home,
+.career-gps-home *,
+.career-gps-home *::before,
+.career-gps-home *::after {
+    box-sizing: border-box;
+}
+
 
 .career-gps-home a {
     color: inherit;
     text-decoration: none;
 }
 
+
 .career-gps-home button,
 .career-gps-home a {
     -webkit-tap-highlight-color: transparent;
+}
+
+
+.career-gps-home button {
+    font-family: inherit;
+}
+
+
+.career-gps-home [hidden] {
+    display: none !important;
+}
+
+
+.career-gps-home a:focus-visible,
+.career-gps-home button:focus-visible {
+    outline:
+        3px solid
+        rgba(29, 95, 158, 0.22);
+
+    outline-offset: 3px;
 }
 
 
@@ -107,2433 +144,147 @@ body {
    ========================================================= */
 
 .home-eyebrow {
-    margin: 0 0 16px;
+    margin: 0 0 13px;
 
     color: var(--gps-blue-600);
 
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     line-height: 1.3;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
 }
+
+
+.home-section {
+    padding:
+        80px
+        clamp(34px, 5vw, 80px);
+}
+
 
 .home-section-heading {
     max-width: 820px;
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
 
-.home-section-heading h2,
-.home-section-heading-row h2 {
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: clamp(2rem, 3.1vw, 3.35rem);
-    font-weight: 800;
-    line-height: 1.22;
-    letter-spacing: -0.035em;
-}
-
-.home-section-heading > p:not(.home-eyebrow),
-.home-section-heading-row > div > p:not(.home-eyebrow) {
-    max-width: 760px;
-
-    margin:
-        20px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 1rem;
-    line-height: 1.9;
-}
-
-.home-section-heading--center {
-    max-width: 900px;
-
-    margin-right: auto;
-    margin-left: auto;
-
-    text-align: center;
-}
-
-.home-section-heading--center > p:not(.home-eyebrow) {
-    margin-right: auto;
-    margin-left: auto;
-}
 
 .home-section-heading-row {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 
-    gap: 40px;
+    gap: 34px;
 
-    margin-bottom: 38px;
+    margin-bottom: 34px;
 }
+
 
 .home-section-heading-row > div {
     min-width: 0;
 }
+
+
+.home-section-heading h2,
+.home-section-heading-row h2 {
+    max-width: 880px;
+
+    margin: 0;
+
+    color: var(--gps-text-strong);
+
+    font-size:
+        clamp(
+            1.9rem,
+            3vw,
+            3rem
+        );
+
+    font-weight: 800;
+    line-height: 1.24;
+    letter-spacing: -0.035em;
+}
+
+
+.home-section-description,
+.home-section-heading > p:not(.home-eyebrow),
+.home-section-heading-row > div > p:not(.home-eyebrow) {
+    max-width: 760px;
+
+    margin:
+        17px
+        0
+        0;
+
+    color: var(--gps-muted);
+
+    font-size: 0.96rem;
+    line-height: 1.85;
+}
+
 
 .home-section-link {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
 
-    gap: 10px;
+    gap: 9px;
 
-    padding-bottom: 6px;
+    min-height: 42px;
+
+    padding-bottom: 4px;
 
     border-bottom:
         1px solid
         var(--gps-line-strong);
 
-    color: var(--gps-blue-700);
+    color: var(--gps-blue-700) !important;
 
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 800;
 
     transition:
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+        color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
 }
 
+
 .home-section-link:hover {
-    color: var(--gps-blue-500);
+    color: var(--gps-blue-500) !important;
     border-color: var(--gps-blue-500);
+
     transform: translateX(2px);
 }
 
 
 /* =========================================================
-   04. COMMON SECTION
+   04. HERO
    ========================================================= */
 
-.home-section {
-    padding:
-        88px
-        clamp(42px, 5.5vw, 88px);
-}
+.home-hero {
+    position: relative;
 
-
-/* =========================================================
-   05. HERO
-   ========================================================= */
-
-   .home-hero {
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1.55fr)
-        minmax(300px, 0.75fr);
+        minmax(0, 1.45fr)
+        minmax(315px, 0.7fr);
 
     align-items: center;
 
-    gap: clamp(42px, 5vw, 72px);
-
-    /* 570px → 520px */
-    min-height: 520px;
-
-    /* 上72 / 下68 → 上46 / 下48 */
-    padding:
-        46px
-        clamp(42px, 5.5vw, 88px)
-        48px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffffff 0%,
-            #ffffff 63%,
-            #f5f9fd 100%
-        );
-
-    border-bottom:
-        1px solid
-        var(--gps-line);
-}
-
-.home-hero__main {
-    min-width: 0;
-}
-
-.home-hero h1 {
-  max-width: 850px;
-
-  margin: 0;
-
-  color: var(--gps-text-strong);
-
-  font-size: clamp(2.55rem, 2.8vw, 3.15rem);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.045em;
-}
-
-.home-hero h1 span {
-    color: var(--gps-blue-600);
-}
-
-.home-hero__lead {
-    max-width: 760px;
-
-    margin:
-        20px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 1rem;
-    line-height: 1.95;
-}
-
-.home-hero__dilemma {
-  max-width: 720px;
-  margin-top: 24px;
-}
-
-.home-hero__question {
-    margin:
-        0
-        0
-        12px;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.84rem;
-    font-weight: 800;
-}
-
-.home-hero__primary-choice,
-.home-hero__primary-choice:link,
-.home-hero__primary-choice:visited {
-    color: #ffffff;
-}
-
-.home-hero__primary-choice span {
-    color: inherit;
-}
-
-.home-hero__primary-choice {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: min(100%, 530px);
-
-    gap: 20px;
-
-    padding:
-        18px
-        22px;
-
-    border:
-        1px solid
-        var(--gps-navy-800);
-
-    border-radius: 10px;
-
-    background: var(--gps-navy-800);
-    color: var(--gps-white);
-
-    font-size: 0.98rem;
-    font-weight: 800;
-
-    box-shadow:
-        0 10px 25px rgba(7, 27, 48, 0.10);
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.home-hero__primary-choice:hover {
-    background: var(--gps-navy-700);
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 14px 30px rgba(7, 27, 48, 0.14);
-}
-
-.home-hero__quick-choices {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin-top: 11px;
-}
-
-.home-hero__quick-choices a {
-    display: inline-flex;
-    align-items: center;
-
-    min-height: 37px;
-
-    padding:
-        8px
-        13px;
-
-    border:
-        1px solid
-        var(--gps-line);
-
-    border-radius: 999px;
-
-    background: var(--gps-white);
-
-    color: var(--gps-text);
-
-    font-size: 0.76rem;
-    font-weight: 700;
-
-    transition:
-        border-color 0.2s ease,
-        color 0.2s ease,
-        background 0.2s ease;
-}
-
-.home-hero__quick-choices a:hover {
-    border-color: var(--gps-blue-600);
-    background: var(--gps-blue-025);
-    color: var(--gps-blue-700);
-}
-
-
-/* =========================================================
-   06. HERO HOW TO USE
-   ========================================================= */
-
-.home-how-card {
-    width: 100%;
-
-    padding:
-        27px
-        28px;
-
-    border:
-        1px solid
-        var(--gps-line);
-
-    border-radius: var(--gps-radius-lg);
-
-    background:
-        rgba(255, 255, 255, 0.94);
-
-    box-shadow:
-        0 18px 48px rgba(7, 27, 48, 0.07);
-}
-
-.home-how-card__eyebrow {
-    margin:
-        0
-        0
-        12px;
-
-    color: var(--gps-blue-600);
-
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-}
-
-.home-how-card h2 {
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: clamp(1.25rem, 1.65vw, 1.6rem);
-    font-weight: 800;
-    line-height: 1.45;
-    letter-spacing: -0.025em;
-}
-
-.home-how-card__steps {
-    display: grid;
-
-    gap: 0;
-
-    margin:
-        23px
-        0
-        0;
-
-    padding: 0;
-
-    list-style: none;
-}
-
-.home-how-card__steps li {
-    display: grid;
-
-    grid-template-columns:
-        34px
-        minmax(0, 1fr);
-
-    gap: 14px;
-
-    padding:
-        15px
-        0;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.home-how-card__steps li > span {
-    color: var(--gps-blue-600);
-
-    font-size: 0.7rem;
-    font-weight: 800;
-}
-
-.home-how-card__steps strong {
-    display: block;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.84rem;
-    font-weight: 800;
-    line-height: 1.5;
-}
-
-.home-how-card__steps p {
-    margin:
-        5px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.73rem;
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   07. TRUST / METRICS
-   ========================================================= */
-
-   .home-trust {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    max-width: none;
-
-    border-bottom:
-        1px solid
-        var(--gps-line);
-
-    background:
-        var(--gps-white);
-}
-
-
-.home-trust__item {
-    display: flex;
-
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 104px;
-
-    padding:
-        17px
-        24px;
-
-    text-align: center;
-}
-
-
-.home-trust__item + .home-trust__item {
-    border-left:
-        1px solid
-        var(--gps-line);
-}
-
-
-.home-trust__item strong {
-    color:
-        var(--gps-text-strong);
-
-    font-size:
-        1.9rem;
-
-    font-weight: 800;
-    line-height: 1;
-}
-
-
-.home-trust__item--text strong {
-    font-size:
-        1.25rem;
-}
-
-
-.home-trust__label {
-    margin-top:
-        7px;
-
-    color:
-        var(--gps-blue-600);
-
-    font-size:
-        0.6rem;
-
-    font-weight: 800;
-    letter-spacing: 0.12em;
-}
-
-
-.home-trust__item small {
-    margin-top:
-        4px;
-
-    color:
-        var(--gps-muted);
-
-    font-size:
-        0.66rem;
-}
-
-
-/* =========================================================
-   08. DILEMMA SECTION
-   ========================================================= */
-
-/*
- * SAME CROSSROADより一段弱い
- * 「次の入口」として扱う。
- *
- * 大型カードではなく、
- * 軽いナビゲーションリストにする。
- */
- .home-dilemma-section {
-  padding-top:
-      66px;
-
-  padding-bottom:
-      68px;
-
-  border-bottom:
-      1px solid
-      var(--gps-line);
-
-  background:
-      var(--gps-white);
-}
-
-
-/* ---------------------------------------------------------
- Heading hierarchy
- --------------------------------------------------------- */
-
-/*
-* 通常のHome見出しより少し小さくし、
-* SAME CROSSROADとの強弱を作る。
-*/
-.home-dilemma-section
-.home-section-heading h2 {
-  max-width:
-      720px;
-
-  font-size:
-      clamp(
-          1.85rem,
-          2.7vw,
-          2.65rem
-      );
-
-  line-height:
-      1.25;
-}
-
-
-/*
-* このセクションは
-* 「読む」のではなく「選ぶ」場所なので、
-* 説明文も主張を抑える。
-*/
-.home-dilemma-section
-.home-section-heading
-> p:not(.home-eyebrow) {
-  max-width:
-      660px;
-
-  margin-top:
-      14px;
-
-  font-size:
-      0.84rem;
-
-  line-height:
-      1.75;
-}
-
-
-/* =========================================================
- NAVIGATION GRID
- ========================================================= */
-
-.decision-theme-grid {
-  display: grid;
-
-  grid-template-columns:
-      repeat(
-          2,
-          minmax(0, 1fr)
-      );
-
-  column-gap:
-      42px;
-
-  row-gap:
-      0;
-
-  margin-top:
-      33px;
-}
-
-
-/* =========================================================
- NAVIGATION ROW
- ========================================================= */
-
-.decision-theme-card {
-  position: relative;
-
-  display: grid;
-
-  grid-template-columns:
-      126px
-      minmax(0, 1fr)
-      32px;
-
-  align-items:
-      center;
-
-  gap:
-      16px;
-
-  min-width:
-      0;
-
-  min-height:
-      84px;
-
-  padding:
-      15px
-      0;
-
-  border:
-      0;
-
-  border-bottom:
-      1px solid
-      var(--gps-line);
-
-  border-radius:
-      0;
-
-  background:
-      transparent;
-
-  color:
-      inherit;
-
-  text-decoration:
-      none;
-
-  overflow:
-      visible;
-
-  box-shadow:
-      none;
-
-  transition:
-      background-color 0.18s ease;
-}
-
-
-/*
-* 2列それぞれの先頭に上罫線。
-*/
-@media (min-width: 701px) {
-
-  .decision-theme-card:nth-child(-n + 2) {
-      border-top:
-          1px solid
-          var(--gps-line);
-  }
-
-}
-
-
-/* ---------------------------------------------------------
- Hover / Focus
- --------------------------------------------------------- */
-
-.decision-theme-card:hover {
-  border-color:
-      var(--gps-line);
-
-  background:
-      var(--gps-blue-025);
-
-  transform:
-      none;
-
-  box-shadow:
-      none;
-}
-
-
-.decision-theme-card:focus-visible {
-  outline:
-      3px solid
-      rgba(29, 95, 158, 0.20);
-
-  outline-offset:
-      3px;
-}
-
-
-/* =========================================================
- META
- ========================================================= */
-
-.decision-theme-card__meta {
-  display: flex;
-
-  align-items:
-      center;
-
-  gap:
-      10px;
-
-  min-width:
-      0;
-}
-
-
-.decision-theme-number {
-  flex:
-      0 0 auto;
-
-  color:
-      var(--gps-muted-light);
-
-  font-size:
-      0.61rem;
-
-  font-weight:
-      800;
-
-  line-height:
-      1;
-
-  letter-spacing:
-      0.08em;
-}
-
-
-.decision-theme-en {
-  min-width:
-      0;
-
-  margin:
-      0;
-
-  color:
-      var(--gps-blue-600);
-
-  font-size:
-      0.58rem;
-
-  font-weight:
-      800;
-
-  line-height:
-      1.35;
-
-  letter-spacing:
-      0.1em;
-}
-
-
-/* =========================================================
- TITLE
- ========================================================= */
-
-.decision-theme-card h3 {
-  min-width:
-      0;
-
-  margin:
-      0;
-
-  color:
-      var(--gps-text-strong);
-
-  font-size:
-      0.91rem;
-
-  font-weight:
-      750;
-
-  line-height:
-      1.5;
-
-  overflow-wrap:
-      anywhere;
-
-  transition:
-      color 0.18s ease;
-}
-
-
-/*
-* 旧カードに入っている補足説明は、
-* Home上では表示しない。
-*
-* HTML自体は残すため、
-* データ・構造を破壊しない。
-*/
-.decision-theme-card p {
-  display:
-      none;
-}
-
-
-/* =========================================================
- ARROW
- ========================================================= */
-
-.decision-theme-arrow {
-  display: flex;
-
-  align-items:
-      center;
-
-  justify-content:
-      center;
-
-  width:
-      32px;
-
-  height:
-      32px;
-
-  margin:
-      0;
-
-  padding:
-      0;
-
-  border-radius:
-      50%;
-
-  background:
-      transparent;
-
-  color:
-      var(--gps-muted-light);
-
-  font-size:
-      0.9rem;
-
-  font-weight:
-      800;
-
-  transition:
-      color 0.18s ease,
-      background-color 0.18s ease,
-      transform 0.18s ease;
-}
-
-
-/* ---------------------------------------------------------
- Interaction
- --------------------------------------------------------- */
-
-.decision-theme-card:hover
-.decision-theme-number,
-.decision-theme-card:hover
-.decision-theme-en {
-  color:
-      var(--gps-blue-600);
-}
-
-
-.decision-theme-card:hover
-h3 {
-  color:
-      var(--gps-blue-700);
-}
-
-
-.decision-theme-card:hover
-.decision-theme-arrow {
-  background:
-      var(--gps-blue-050);
-
-  color:
-      var(--gps-blue-700);
-
-  transform:
-      translateX(3px);
-}
-
-
-/* ---------------------------------------------------------
- Featured
- --------------------------------------------------------- */
-
-/*
-* 1番目だけ大型カードに戻したりはしない。
-*
-* Hero / SAME CROSSROADですでに
-* 転職テーマを強く扱っているため、
-* ここでは全テーマを同じ入口として扱う。
-*/
-.decision-theme-card--featured {
-  background:
-      transparent;
-}
-
-
-/* =========================================================
-   09. SIMILAR / POPULAR SECTION
-   ========================================================= */
-
-   .home-similar-section {
-    background:
-        var(--gps-bg-soft);
-
-    border-top:
-        1px solid
-        #e7edf3;
-
-    border-bottom:
-        1px solid
-        #e7edf3;
-}
-
-
-/*
- * SAME CROSSROADほど大きくしない。
- * ただしPeople Like YouはHomeの第2主役なので、
- * Dilemmaよりは明確に強くする。
- */
-.home-similar-section
-.home-section-heading-row h2 {
-    max-width:
-        760px;
-
-    font-size:
+    gap:
         clamp(
-            2rem,
-            2.8vw,
-            2.9rem
+            44px,
+            5vw,
+            76px
         );
-}
 
-
-.home-similar-section
-.personalized-description {
-    max-width:
-        690px;
-
-    font-size:
-        0.92rem;
-
-    line-height:
-        1.82;
-}
-
-.home-popular-section {
-    background: var(--gps-bg-blue);
-
-    border-top:
-        1px solid
-        #e4edf5;
-
-    border-bottom:
-        1px solid
-        #e4edf5;
-}
-
-
-/* =========================================================
-   10. STORY GRID
-   ========================================================= */
-
-.home-story-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    align-items: stretch;
-
-    gap: 18px;
-}
-
-.home-story-grid--personalized,
-.home-story-grid--preview {
-    align-items: stretch;
-}
-
-
-/* =========================================================
-   11. CAREER STORY CARD
-   ========================================================= */
-
-.home-career-card,
-.home-story-grid .card {
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    min-width: 0;
-    min-height: 500px;
-
-    border:
-        1px solid
-        #d4e1ec;
-
-    border-radius: var(--gps-radius-md);
-
-    background: var(--gps-white);
-
-    overflow: hidden;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 5px 18px rgba(7, 27, 48, 0.025);
-
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.home-career-card:hover,
-.home-story-grid .card:hover {
-    border-color: #a9c6df;
-
-    transform: translateY(-3px);
-
-    box-shadow: var(--gps-shadow-hover);
-}
-
-.home-career-card:focus-visible,
-.home-story-grid .card:focus-visible {
-    outline:
-        3px solid
-        rgba(29, 95, 158, 0.24);
-
-    outline-offset: 2px;
-}
-
-
-/* =========================================================
-   12. CARD PERSON
-   ========================================================= */
-
-.home-career-card__top {
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    min-width: 0;
+    min-height: 540px;
 
     padding:
-        24px
-        24px
-        20px;
-}
-
-.home-career-avatar {
-    display: flex;
-    flex: 0 0 54px;
-    align-items: center;
-    justify-content: center;
-
-    width: 54px;
-    height: 54px;
-
-    border:
-        1px solid
-        #cfe0ee;
-
-    border-radius: 50%;
-
-    background: var(--gps-blue-025);
-
-    color: var(--gps-navy-800);
-
-    font-size: 1rem;
-    font-weight: 800;
-}
-
-.home-career-person {
-    min-width: 0;
-}
-
-.home-career-person__meta {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap:
-        4px
-        9px;
-
-    margin:
-        0
-        0
-        5px;
-
-    color: var(--gps-muted);
-
-    font-size: 0.7rem;
-    line-height: 1.45;
-}
-
-.home-career-person__meta span {
-    min-width: 0;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.home-career-person h3 {
-    max-width: 100%;
-
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.95rem;
-    font-weight: 800;
-    line-height: 1.45;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-
-/* =========================================================
-   13. SIMILARITY / COMMON POINTS
-   ========================================================= */
-
-.home-career-card__story {
-    min-width: 0;
-
-    margin:
-        0
-        24px;
-
-    padding:
-        15px
-        0
-        0;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.home-career-card__label {
-    margin: 0;
-
-    color: var(--gps-blue-600);
-
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-}
-
-.home-career-tags {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 6px;
-
-    margin-top: 10px;
-}
-
-.home-career-tags span {
-    display: inline-flex;
-    align-items: center;
-
-    max-width: 100%;
-
-    padding:
-        6px
-        9px;
-
-    border:
-        1px solid
-        #d6e4ef;
-
-    border-radius: 999px;
-
-    background: var(--gps-blue-025);
-
-    color: var(--gps-blue-700);
-
-    font-size: 0.66rem;
-    font-weight: 700;
-    line-height: 1.35;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-
-/* =========================================================
-   14. CAREER JOURNEY
-   ========================================================= */
-
-.career-preview-journey {
-    min-width: 0;
-
-    margin:
-        0
-        24px;
-
-    padding:
-        20px
-        0
-        23px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.home-career-card__story + .career-preview-journey {
-    margin-top: 18px;
-}
-
-.career-preview-journey__label,
-.home-career-card__journey-label {
-    margin:
-        0
-        0
-        21px;
-
-    color: var(--gps-blue-600);
-
-    font-size: 0.66rem;
-    font-weight: 800;
-    line-height: 1.3;
-    letter-spacing: 0.1em;
-}
-
-
-/* ---------------------------------------------------------
-   Horizontal timeline
-
-   YEAR
-    ●────────●────────●
-   STAGE     STAGE     STAGE
-   --------------------------------------------------------- */
-
-.home-career-timeline {
-    width: 100%;
-    min-width: 0;
-
-    padding: 0;
-}
-
-.home-career-timeline__track {
-    display: flex;
-    align-items: flex-start;
-
-    width: 100%;
-    min-width: 0;
-}
-
-.home-career-timeline__item {
-    position: relative;
-
-    flex:
-        1
-        1
-        0;
-
-    min-width: 0;
-
-    text-align: center;
-}
-
-.home-career-timeline__item::after {
-    content: "";
-
-    position: absolute;
-    z-index: 0;
-
-    top: 27px;
-    left: 50%;
-
-    width: 100%;
-    height: 1px;
-
-    background: var(--gps-line-strong);
-}
-
-.home-career-timeline__item:last-child::after {
-    display: none;
-}
-
-.home-career-timeline__year {
-    display: block;
-
-    min-height: 16px;
-
-    margin-bottom: 7px;
-
-    color: var(--gps-muted);
-
-    font-size: 0.61rem;
-    font-weight: 700;
-    line-height: 1.2;
-
-    white-space: nowrap;
-}
-
-.home-career-timeline__dot {
-    position: relative;
-    z-index: 1;
-
-    display: block;
-
-    width: 9px;
-    height: 9px;
-
-    margin:
-        0
-        auto
-        9px;
-
-    border:
-        2px solid
-        var(--gps-white);
-
-    border-radius: 50%;
-
-    background: var(--gps-blue-600);
-
-    box-shadow:
-        0
-        0
-        0
-        1px
-        #9ebbd3;
-}
-
-.home-career-timeline__dot.is-current {
-    background: var(--gps-navy-800);
-
-    box-shadow:
-        0
-        0
-        0
-        1px
-        var(--gps-navy-700);
-}
-
-.home-career-timeline__stage {
-    display: -webkit-box;
-
-    max-width: 100%;
-
-    padding:
-        0
-        5px;
-
-    color: var(--gps-text);
-
-    font-size: 0.65rem;
-    font-weight: 500;
-    line-height: 1.45;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-
-    overflow: hidden;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.home-career-timeline--empty {
-    padding:
-        5px
-        0
-        3px;
-
-    color: var(--gps-muted);
-
-    font-size: 0.72rem;
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   15. CAREER DECISION
-   ========================================================= */
-
-.career-preview-decision {
-    min-width: 0;
-
-    margin:
-        0
-        24px;
-
-    padding:
-        20px
-        0
-        24px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.career-preview-decision__heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    min-width: 0;
-
-    margin-bottom: 14px;
-}
-
-.career-preview-decision__heading > span {
-    flex: 0 0 auto;
-
-    color: var(--gps-blue-600);
-
-    font-size: 0.66rem;
-    font-weight: 800;
-    line-height: 1.3;
-    letter-spacing: 0.1em;
-}
-
-.career-preview-decision__heading > strong {
-    display: inline-flex;
-    flex: 0 1 auto;
-    align-items: center;
-
-    max-width: 52%;
-
-    padding:
-        4px
-        8px;
-
-    border-radius: 999px;
-
-    background: var(--gps-blue-050);
-
-    color: var(--gps-blue-700);
-
-    font-size: 0.64rem;
-    font-weight: 800;
-    line-height: 1.35;
-
-    text-align: right;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.career-preview-decision__hook {
-    display: -webkit-box;
-
-    min-width: 0;
-
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.93rem;
-    font-weight: 600;
-    line-height: 1.68;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-
-    overflow: hidden;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-
-/* =========================================================
-   16. DECISION PRIORITY
-   ========================================================= */
-
-.career-preview-priority {
-    min-width: 0;
-
-    margin-top: 17px;
-
-    padding: 0;
-
-    border: 0;
-    border-radius: 0;
-
-    background: transparent;
-}
-
-.career-preview-priority > span {
-    display: block;
-
-    margin:
-        0
-        0
-        6px;
-
-    color: var(--gps-muted);
-
-    font-size: 0.67rem;
-    font-weight: 700;
-    line-height: 1.4;
-}
-
-.career-preview-priority > p {
-    display: -webkit-box;
-
-    min-width: 0;
-
-    margin: 0;
-
-    color: var(--gps-text);
-
-    font-size: 0.79rem;
-    font-weight: 500;
-    line-height: 1.65;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-
-    overflow: hidden;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-
-/* =========================================================
-   16A. PEOPLE LIKE YOU
-   Career GPS person card
-   ========================================================= */
-
-
-/* ---------------------------------------------------------
-   Card
-   --------------------------------------------------------- */
-
-.home-similar-section
-.home-story-grid {
-    gap:
-        20px;
-}
-
-
-.home-similar-section
-.home-career-card {
-    min-height:
-        0;
-
-    border-color:
-        #cfdae4;
-
-    border-radius:
-        18px;
-
-    box-shadow:
-        0
-        7px
-        24px
-        rgba(7, 27, 48, 0.045);
-}
-
-
-.home-similar-section
-.home-career-card:hover {
-    border-color:
-        #9fbed8;
-
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0
-        16px
-        38px
-        rgba(7, 27, 48, 0.09);
-}
-
-
-/* ---------------------------------------------------------
-  Person
-  --------------------------------------------------------- */
-
-.home-similar-section
-.home-career-card__top {
-    padding:
-        23px
-        22px
-        18px;
-}
-
-
-.home-similar-section
-.home-career-avatar {
-    flex-basis:
-        50px;
-
-    width:
-        50px;
-
-    height:
-        50px;
-
-    background:
-        var(--gps-white);
-
-    border-color:
-        #bcd2e4;
-
-    color:
-        var(--gps-navy-900);
-
-    box-shadow:
-        inset
-        0
-        0
-        0
-        3px
-        var(--gps-blue-025);
-}
-
-
-/* ---------------------------------------------------------
-  Why this person / common points
-  --------------------------------------------------------- */
-
-.home-similar-section
-.home-career-card__story {
-    margin:
-        0
-        22px;
-
-    padding:
-        12px
-        14px;
-
-    border-top:
-        0;
-
-    border-radius:
-        10px;
-
-    background:
-        var(--gps-blue-025);
-}
-
-
-.home-similar-section
-.home-career-card__label {
-    font-size:
-        0.62rem;
-}
-
-
-.home-similar-section
-.home-career-tags {
-    margin-top:
-        8px;
-}
-
-
-.home-similar-section
-.home-career-tags span {
-    padding:
-        4px
-        8px;
-
-    border:
-        0;
-
-    background:
-        var(--gps-white);
-
-    font-size:
-        0.62rem;
-}
-
-
-/* ---------------------------------------------------------
-  Career Journey
-  --------------------------------------------------------- */
-
-.home-similar-section
-.career-preview-journey {
-    margin:
-        17px
-        22px
-        0;
-
-    padding:
-        17px
-        0
-        20px;
-}
-
-
-.home-similar-section
-.home-career-card__story
-+
-.career-preview-journey {
-    margin-top:
-        17px;
-}
-
-
-.home-similar-section
-.career-preview-journey__label {
-    margin-bottom:
-        18px;
-}
-
-
-/* ---------------------------------------------------------
-  Career Decision
-  --------------------------------------------------------- */
-
-.home-similar-section
-.career-preview-decision {
-    margin:
-        0
-        22px;
-
-    padding:
-        18px
-        0
-        20px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-
-.home-similar-section
-.career-preview-decision__heading {
-    margin-bottom:
-        7px;
-}
-
-
-/*
-* Decisionの中を
-*
-* ラベル | 内容
-*
-* に統一する。
-*
-* 縦長の文章カードにしない。
-*/
-.home-similar-section
-.career-preview-decision__dilemma,
-.home-similar-section
-.career-preview-priority {
-    display:
-        grid;
-
-    grid-template-columns:
-        82px
-        minmax(0, 1fr);
-
-    align-items:
-        start;
-
-    gap:
-        12px;
-
-    margin-top:
-        0;
-
-    padding:
-        11px
-        0;
-
-    border-top:
-        1px solid
-        #edf2f6;
-}
-
-
-.home-similar-section
-.career-preview-decision__dilemma {
-    border-top:
-        0;
-}
-
-
-/* ---------------------------------------------------------
-  Decision labels
-  --------------------------------------------------------- */
-
-.home-similar-section
-.career-preview-decision__sub-label,
-.home-similar-section
-.career-preview-priority > span {
-    display:
-        block;
-
-    margin:
-        2px
-        0
-        0;
-
-    color:
-        var(--gps-muted);
-
-    font-size:
-        0.62rem;
-
-    font-weight:
-        700;
-
-    line-height:
-        1.45;
-}
-
-
-/* ---------------------------------------------------------
-  Decision text
-  --------------------------------------------------------- */
-
-.home-similar-section
-.career-preview-decision__hook {
-    font-size:
-        0.8rem;
-
-    font-weight:
-        600;
-
-    line-height:
-        1.62;
-
-    -webkit-line-clamp:
-        2;
-}
-
-
-.home-similar-section
-.career-preview-priority > p {
-    font-size:
-        0.75rem;
-
-    line-height:
-        1.62;
-
-    -webkit-line-clamp:
-        2;
-}
-
-
-/*
-* 「その後」は結果なので、
-* 最後だけ少し強くする。
-*/
-.home-similar-section
-.career-preview-result > span {
-    color:
-        var(--gps-blue-600);
-}
-
-
-.home-similar-section
-.career-preview-result > p {
-    color:
-        var(--gps-text-strong);
-
-    font-weight:
-        600;
-}
-
-
-/* ---------------------------------------------------------
-  Footer = 選択する場所
-  --------------------------------------------------------- */
-
-.home-similar-section
-.home-career-card__footer {
-    min-height:
-        55px;
-
-    padding:
-        15px
-        22px;
-
-    border-top:
-        0;
-
-    background:
-        var(--gps-navy-900);
-}
-
-
-.home-similar-section
-.home-career-card__link {
-    color:
-        var(--gps-white);
-}
-
-
-.home-similar-section
-.home-career-card:hover
-.home-career-card__link {
-    color:
-        var(--gps-white);
-}
-
-
-/* =========================================================
-   17. LEGACY CARD COMPATIBILITY
-   Existing JS class names
-   ========================================================= */
-
-.home-career-card__decision,
-.home-career-decision {
-    min-width: 0;
-
-    margin:
-        0
-        24px;
-
-    padding:
-        20px
-        0
-        24px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.home-career-card__decision-head,
-.home-career-decision__heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin-bottom: 14px;
-}
-
-.home-career-card__decision-label,
-.home-career-decision__label {
-    color: var(--gps-blue-600);
-
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-}
-
-.home-career-card__decision-type,
-.home-career-decision__type {
-    display: inline-flex;
-
-    max-width: 52%;
-
-    padding:
-        4px
-        8px;
-
-    border-radius: 999px;
-
-    background: var(--gps-blue-050);
-
-    color: var(--gps-blue-700);
-
-    font-size: 0.64rem;
-    font-weight: 800;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.home-career-card__decision-text,
-.home-career-decision__hook {
-    display: -webkit-box;
-
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.93rem;
-    font-weight: 600;
-    line-height: 1.68;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-
-    overflow: hidden;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-.home-career-card__priority,
-.home-career-decision__priority {
-    min-width: 0;
-
-    margin-top: 17px;
-
-    padding: 0 !important;
-
-    background: transparent !important;
-}
-
-.home-career-card__priority-label,
-.home-career-decision__priority-label {
-    display: block;
-
-    margin-bottom: 6px;
-
-    color: var(--gps-muted);
-
-    font-size: 0.67rem;
-    font-weight: 700;
-}
-
-.home-career-card__priority-text,
-.home-career-decision__priority-text {
-    display: -webkit-box;
-
-    margin: 0;
-
-    color: var(--gps-text);
-
-    font-size: 0.79rem;
-    line-height: 1.65;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-
-    overflow: hidden;
-
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-
-
-/* =========================================================
-   18. CARD FOOTER
-   ========================================================= */
-
-.home-career-card__footer {
-    display: flex;
-    align-items: center;
-
-    min-height: 54px;
-
-    margin-top: auto;
-
-    padding:
-        15px
-        24px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-
-    background: var(--gps-white);
-}
-
-.home-career-card__link {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 7px;
-
-    color: var(--gps-blue-700);
-
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.4;
-
-    transition:
-        color 0.2s ease,
-        gap 0.2s ease;
-}
-
-.home-career-card:hover
-.home-career-card__link {
-    gap: 10px;
-
-    color: var(--gps-blue-500);
-}
-
-
-/* =========================================================
-   19. GUEST PREVIEW
-   ========================================================= */
-
-.career-story-preview-area {
-    margin-top: 27px;
-}
-
-.career-story-preview-label {
-    margin:
-        0
-        0
-        8px;
-
-    color: var(--gps-blue-600);
-
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-}
-
-/*
-   Home.html / JS の整理後は
-   Guest時の重複見出しを削除予定。
-   現時点のHTMLにも対応するため残す。
-*/
-.career-story-preview-area > h3 {
-    margin:
-        0
-        0
-        22px;
-
-    color: var(--gps-text-strong);
-
-    font-size: 1rem;
-    font-weight: 800;
-    line-height: 1.6;
-}
-
-.career-story-preview-cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 30px;
-
-    margin-top: 28px;
-
-    padding-top: 24px;
-
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.career-story-preview-cta p {
-    margin: 0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.82rem;
-    line-height: 1.7;
-}
-
-.home-login-cta {
-    display: inline-flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 48px;
-
-    padding:
-        13px
-        20px;
-
-    border-radius: 8px;
-
-    background: var(--gps-blue-600);
-
-    color: var(--gps-white) !important;
-
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
-}
-
-.home-login-cta:hover {
-    background: var(--gps-blue-700);
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   20. CAROUSEL INDICATORS
-   ========================================================= */
-
-.carousel-indicators {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 6px;
-
-    margin-top: 17px;
-}
-
-.carousel-indicators button,
-.carousel-indicators span {
-    width: 6px;
-    height: 6px;
-
-    padding: 0;
-
-    border: 0;
-    border-radius: 50%;
-
-    background: #cbd8e3;
-}
-
-.carousel-indicators .active,
-.carousel-indicators .is-active {
-    width: 18px;
-
-    border-radius: 999px;
-
-    background: var(--gps-blue-600);
-}
-
-
-/* =========================================================
-   21. HOW CAREER GPS WORKS
-   ========================================================= */
-
-.home-process-section {
-    background: var(--gps-white);
-}
-
-.home-process-grid {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        28px
-        minmax(0, 1fr)
-        28px
-        minmax(0, 1fr)
-        28px
-        minmax(0, 1fr)
-        28px
-        minmax(0, 1fr);
-
-    align-items: stretch;
-
-    max-width: 1180px;
-
-    margin:
-        50px
-        auto
-        0;
-}
-
-.home-process-card {
-    display: flex;
-    flex-direction: column;
-
-    min-height: 178px;
-
-    padding:
-        23px
-        20px;
-
-    border:
-        1px solid
-        var(--gps-line);
-
-    border-radius: 14px;
-
-    background: var(--gps-white);
-}
-
-.home-process-card > span {
-    color: var(--gps-blue-600);
-
-    font-size: 0.68rem;
-    font-weight: 800;
-}
-
-.home-process-card strong {
-    margin-top: 24px;
-
-    color: var(--gps-text-strong);
-
-    font-size: 0.93rem;
-    font-weight: 800;
-    line-height: 1.5;
-}
-
-.home-process-card p {
-    margin:
-        8px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.73rem;
-    line-height: 1.65;
-}
-
-.home-process-card--final {
-    border-color: var(--gps-navy-800);
-
-    background: var(--gps-navy-800);
-}
-
-.home-process-card--final > span,
-.home-process-card--final strong {
-    color: var(--gps-white);
-}
-
-.home-process-card--final p {
-    color: rgba(255, 255, 255, 0.72);
-}
-
-.home-process-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #a4b5c5;
-
-    font-size: 0.9rem;
-}
-
-
-/* =========================================================
-   22. MY CAREER GPS
-   ========================================================= */
-
-.home-my-gps-section {
-    padding:
-        88px
-        clamp(42px, 5.5vw, 88px);
-
-    background: var(--gps-navy-900);
-
-    color: var(--gps-white);
-}
-
-.home-my-gps-section .home-eyebrow {
-    color: #78b3e5;
-}
-
-.home-my-gps-section h2 {
-    max-width: 820px;
-
-    margin: 0;
-
-    color: var(--gps-white);
-
-    font-size: clamp(2.2rem, 3.6vw, 3.75rem);
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.04em;
-}
-
-.home-my-gps-section > p:not(.home-eyebrow) {
-    max-width: 760px;
-
-    margin:
-        24px
-        0
-        0;
-
-    color: rgba(255, 255, 255, 0.72);
-
-    font-size: 0.96rem;
-    line-height: 1.9;
-}
-
-.home-outline-button {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 11px;
-
-    margin-top: 30px;
-
-    padding:
-        14px
-        20px;
-
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.55);
-
-    border-radius: 8px;
-
-    color: var(--gps-white) !important;
-
-    font-size: 0.82rem;
-    font-weight: 800;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.home-outline-button:hover {
-    border-color: var(--gps-white);
-
-    background:
-        rgba(255, 255, 255, 0.08);
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   23. SHARE YOUR STORY
-   ========================================================= */
-
-.home-share-section {
-    padding:
-        88px
-        clamp(42px, 5.5vw, 88px);
+        58px
+        clamp(34px, 5vw, 80px)
+        60px;
 
     border-bottom:
         1px solid
@@ -2543,1331 +294,20 @@ h3 {
         linear-gradient(
             135deg,
             #ffffff 0%,
-            #f5f9fd 100%
-        );
-}
-
-.home-share-section h2 {
-    max-width: 800px;
-
-    margin: 0;
-
-    color: var(--gps-text-strong);
-
-    font-size: clamp(2.2rem, 3.6vw, 3.75rem);
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.04em;
-}
-
-.home-share-section > p:not(.home-eyebrow) {
-    max-width: 720px;
-
-    margin:
-        24px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.96rem;
-    line-height: 1.9;
-}
-
-.home-primary-button {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 12px;
-
-    margin-top: 30px;
-
-    padding:
-        15px
-        21px;
-
-    border-radius: 8px;
-
-    background: var(--gps-navy-800);
-
-    color: var(--gps-white) !important;
-
-    font-size: 0.82rem;
-    font-weight: 800;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.home-primary-button:hover {
-    background: var(--gps-navy-700);
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 24px rgba(7, 27, 48, 0.13);
-}
-
-
-/* =========================================================
-   24. NEWS
-   ========================================================= */
-
-.home-news-section {
-    background: var(--gps-white);
-}
-
-.home-news-list {
-    border-top:
-        1px solid
-        var(--gps-line);
-}
-
-.announcement-item {
-    display: grid;
-
-    grid-template-columns:
-        100px
-        70px
-        minmax(0, 1fr)
-        24px;
-
-    align-items: center;
-
-    gap: 18px;
-
-    min-height: 76px;
-
-    padding:
-        18px
-        0;
-
-    border-bottom:
-        1px solid
-        var(--gps-line);
-
-    transition:
-        background 0.2s ease;
-}
-
-.announcement-item:hover {
-    background: var(--gps-blue-025);
-}
-
-.announcement-date {
-    color: var(--gps-muted);
-
-    font-size: 0.73rem;
-}
-
-.announcement-category {
-    color: var(--gps-blue-600);
-
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-}
-
-.announcement-title {
-    min-width: 0;
-
-    color: var(--gps-text);
-
-    font-size: 0.82rem;
-    font-weight: 600;
-    line-height: 1.6;
-
-    overflow-wrap: anywhere;
-}
-
-.announcement-arrow {
-    color: var(--gps-blue-600);
-
-    font-size: 0.85rem;
-}
-
-.announcement-empty {
-    margin: 0;
-
-    padding:
-        28px
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.82rem;
-}
-
-
-/* =========================================================
-   25. GENERAL LONG-TEXT PROTECTION
-   ========================================================= */
-
-.home-career-card,
-.home-career-card *,
-.decision-theme-card,
-.decision-theme-card * {
-    min-width: 0;
-}
-
-.home-career-card p,
-.home-career-card h3,
-.home-career-card strong,
-.home-career-card span {
-    overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   26. TABLET / SMALL DESKTOP
-   ========================================================= */
-
-@media (max-width: 1180px) {
-
-    .home-hero {
-        grid-template-columns:
-            minmax(0, 1.35fr)
-            minmax(280px, 0.75fr);
-
-        gap: 38px;
-
-        min-height: 540px;
-
-        padding-top: 58px;
-        padding-bottom: 58px;
-    }
-
-    .home-hero h1 {
-        font-size:
-            clamp(
-                2.55rem,
-                4.4vw,
-                3.8rem
-            );
-    }
-
-    .home-how-card {
-        padding:
-            24px
-            23px;
-    }
-
-    .decision-theme-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .home-story-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .home-process-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 12px;
-    }
-
-    .home-process-arrow {
-        display: none;
-    }
-
-    .home-process-card--final {
-        grid-column:
-            1 / -1;
-
-        min-height: 145px;
-    }
-
-}
-
-
-/* =========================================================
-   27. TABLET
-   ========================================================= */
-
-@media (max-width: 950px) {
-
-    .career-gps-home {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .home-section {
-        padding:
-            70px
-            32px;
-    }
-
-
-    /* HERO */
-
-    .home-hero {
-        grid-template-columns:
-            1fr;
-
-        gap: 34px;
-
-        min-height: 0;
-
-        padding:
-            56px
-            32px
-            58px;
-    }
-
-    .home-hero__main {
-        max-width: 780px;
-    }
-
-    .home-hero h1 {
-        max-width: 760px;
-
-        font-size:
-            clamp(
-                2.5rem,
-                7vw,
-                4.1rem
-            );
-    }
-
-    .home-hero__lead {
-        max-width: 700px;
-    }
-
-    .home-how-card {
-        max-width: 680px;
-
-        padding:
-            25px
-            27px;
-    }
-
-    .home-how-card__steps {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-        gap: 0;
-    }
-
-    .home-how-card__steps li {
-        grid-template-columns:
-            1fr;
-
-        align-content: start;
-
-        padding:
-            16px
-            15px;
-
-        border-top:
-            1px solid
-            var(--gps-line);
-    }
-
-    .home-how-card__steps li + li {
-        border-left:
-            1px solid
-            var(--gps-line);
-    }
-
-
-    /* TRUST */
-
-    .home-trust__item {
-        min-height: 125px;
-
-        padding:
-            20px
-            15px;
-    }
-
-    .home-trust__item strong {
-        font-size: 1.8rem;
-    }
-
-
-    /* HEADING */
-
-    .home-section-heading-row {
-        align-items: flex-start;
-
-        gap: 25px;
-    }
-
-
-    /* STORY */
-
-    .home-career-card {
-        min-height: 490px;
-    }
-
-
-    /* MY GPS / SHARE */
-
-    .home-my-gps-section,
-    .home-share-section {
-        padding:
-            72px
-            32px;
-    }
-
-}
-
-
-/* =========================================================
-   28. MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-    .career-gps-home {
-        overflow: hidden;
-    }
-
-
-    /* -----------------------------------------
-       Common
-       ----------------------------------------- */
-
-    .home-section {
-        padding:
-            54px
-            18px;
-    }
-
-    .home-eyebrow {
-        margin-bottom: 11px;
-
-        font-size: 0.65rem;
-    }
-
-    .home-section-heading {
-        margin-bottom: 28px;
-    }
-
-    .home-section-heading h2,
-    .home-section-heading-row h2 {
-        font-size: 2rem;
-        line-height: 1.25;
-    }
-
-    .home-section-heading > p:not(.home-eyebrow),
-    .home-section-heading-row > div > p:not(.home-eyebrow) {
-        margin-top: 14px;
-
-        font-size: 0.79rem;
-        line-height: 1.8;
-    }
-
-    .home-section-heading-row {
-        display: block;
-
-        margin-bottom: 27px;
-    }
-
-    .home-section-link {
-        margin-top: 17px;
-
-        font-size: 0.72rem;
-    }
-
-
-    /* -----------------------------------------
-       Hero
-       ----------------------------------------- */
-
-    .home-hero {
-        gap: 28px;
-
-        padding:
-            43px
-            18px
-            46px;
-    }
-
-    .home-hero h1 {
-        font-size: clamp(2.05rem, 10vw, 3rem);
-        line-height: 1.18;
-        letter-spacing: -0.045em;
-    }
-
-    .home-hero__lead {
-        margin-top: 20px;
-
-        font-size: 0.8rem;
-        line-height: 1.85;
-    }
-
-    .home-hero__lead br {
-        display: none;
-    }
-
-    .home-hero__dilemma {
-        margin-top: 27px;
-    }
-
-    .home-hero__question {
-        font-size: 0.75rem;
-    }
-
-    .home-hero__primary-choice {
-        width: 100%;
-
-        padding:
-            16px
-            17px;
-
-        font-size: 0.85rem;
-    }
-
-    .home-hero__quick-choices {
-        gap: 6px;
-    }
-
-    .home-hero__quick-choices a {
-        min-height: 34px;
-
-        padding:
-            7px
-            10px;
-
-        font-size: 0.67rem;
-    }
-
-
-    /* -----------------------------------------
-       How to use
-       ----------------------------------------- */
-
-    .home-how-card {
-        padding:
-            22px
-            19px;
-
-        border-radius: 16px;
-    }
-
-    .home-how-card h2 {
-        font-size: 1.25rem;
-    }
-
-    .home-how-card__steps {
-        grid-template-columns:
-            1fr;
-
-        margin-top: 19px;
-    }
-
-    .home-how-card__steps li {
-        grid-template-columns:
-            31px
-            minmax(0, 1fr);
-
-        padding:
-            13px
-            0;
-    }
-
-    .home-how-card__steps li + li {
-        border-left: 0;
-    }
-
-    .home-how-card__steps strong {
-        font-size: 0.78rem;
-    }
-
-    .home-how-card__steps p {
-        font-size: 0.68rem;
-    }
-
-
-    /* -----------------------------------------
-       Trust
-       ----------------------------------------- */
-
-    .home-trust {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-    }
-
-    .home-trust__item {
-        min-height: 88px;
-
-        padding:
-            14px
-            6px;
-    }
-
-
-    .home-trust__item strong {
-        font-size:
-            1.4rem;
-    }
-
-
-    .home-trust__item--text strong {
-        font-size:
-            0.95rem;
-    }
-
-
-    .home-trust__label {
-        margin-top:
-            6px;
-
-        font-size:
-            0.46rem;
-
-        letter-spacing:
-            0.06em;
-    }
-
-
-    .home-trust__item small {
-        margin-top:
-            3px;
-
-        font-size:
-            0.52rem;
-
-        line-height:
-            1.35;
-    }
-
-
-    /* -----------------------------------------
-      Dilemma
-      ----------------------------------------- */
-
-    .home-dilemma-section {
-      padding-top:
-          52px;
-
-      padding-bottom:
-          54px;
-    }
-
-
-    .home-dilemma-section
-    .home-section-heading h2 {
-      font-size:
-          1.65rem;
-
-      line-height:
-          1.3;
-    }
-
-
-    .home-dilemma-section
-    .home-section-heading
-    > p:not(.home-eyebrow) {
-      margin-top:
-          12px;
-
-      font-size:
-          0.75rem;
-
-      line-height:
-          1.7;
-    }
-
-
-    .decision-theme-grid {
-      grid-template-columns:
-          1fr;
-
-      gap:
-          0;
-
-      margin-top:
-          25px;
-    }
-
-
-    .decision-theme-card {
-      grid-template-columns:
-          96px
-          minmax(0, 1fr)
-          29px;
-
-      gap:
-          11px;
-
-      min-height:
-          74px;
-
-      padding:
-          12px
-          0;
-    }
-
-
-    .decision-theme-card:first-child {
-      border-top:
-          1px solid
-          var(--gps-line);
-    }
-
-
-    .decision-theme-card__meta {
-      gap:
-          7px;
-    }
-
-
-    .decision-theme-number {
-      font-size:
-          0.55rem;
-    }
-
-
-    .decision-theme-en {
-      font-size:
-          0.49rem;
-
-      letter-spacing:
-          0.07em;
-    }
-
-
-    .decision-theme-card h3 {
-      font-size:
-          0.8rem;
-
-      line-height:
-          1.45;
-    }
-
-
-    .decision-theme-arrow {
-      width:
-          29px;
-
-      height:
-          29px;
-
-      font-size:
-          0.8rem;
-    }
-
-
-    /* =====================================================
-       STORY CAROUSEL
-       ===================================================== */
-
-    .home-story-grid {
-        display: flex;
-
-        gap: 12px;
-
-        overflow-x: auto;
-        overflow-y: hidden;
-
-        margin-right: -18px;
-        margin-left: -2px;
-
-        padding:
-            2px
-            18px
-            13px
-            2px;
-
-        scroll-snap-type: x mandatory;
-        scroll-padding-left: 2px;
-
-        -webkit-overflow-scrolling: touch;
-
-        scrollbar-width: none;
-    }
-
-    .home-story-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-    .home-story-grid .home-career-card,
-    .home-story-grid .card {
-        flex:
-            0
-            0
-            min(86vw, 360px);
-
-        width:
-            min(86vw, 360px);
-
-        min-height: 470px;
-
-        scroll-snap-align: start;
-    }
-
-
-    /* -----------------------------------------
-       Person
-       ----------------------------------------- */
-
-    .home-career-card__top {
-        gap: 12px;
-
-        padding:
-            20px
-            18px
-            17px;
-    }
-
-    .home-career-avatar {
-        flex-basis: 48px;
-
-        width: 48px;
-        height: 48px;
-
-        font-size: 0.9rem;
-    }
-
-    .home-career-person__meta {
-        font-size: 0.64rem;
-    }
-
-    .home-career-person h3 {
-        font-size: 0.87rem;
-    }
-
-
-    /* -----------------------------------------
-       Common points
-       ----------------------------------------- */
-
-    .home-career-card__story {
-        margin:
-            0
-            18px;
-
-        padding-top: 14px;
-    }
-
-    .home-career-card__label {
-        font-size: 0.61rem;
-    }
-
-    .home-career-tags {
-        gap: 5px;
-
-        margin-top: 8px;
-    }
-
-    .home-career-tags span {
-        padding:
-            5px
-            8px;
-
-        font-size: 0.6rem;
-    }
-
-
-    /* -----------------------------------------
-       Journey
-       IMPORTANT:
-       Card itself scrolls horizontally,
-       Journey remains horizontal inside card.
-       ----------------------------------------- */
-
-    .career-preview-journey {
-        margin:
-            0
-            18px;
-
-        padding:
-            18px
-            0
-            21px;
-    }
-
-    .home-career-card__story + .career-preview-journey {
-        margin-top: 15px;
-    }
-
-    .career-preview-journey__label,
-    .home-career-card__journey-label {
-        margin-bottom: 18px;
-
-        font-size: 0.61rem;
-    }
-
-    .home-career-timeline__year {
-        font-size: 0.55rem;
-    }
-
-    .home-career-timeline__item::after {
-        top: 25px;
-    }
-
-    .home-career-timeline__dot {
-        width: 8px;
-        height: 8px;
-
-        margin-bottom: 8px;
-    }
-
-    .home-career-timeline__stage {
-        padding:
-            0
-            3px;
-
-        font-size: 0.58rem;
-        line-height: 1.4;
-    }
-
-
-    /* -----------------------------------------
-       Decision
-       ----------------------------------------- */
-
-    .career-preview-decision,
-    .home-career-card__decision,
-    .home-career-decision {
-        margin:
-            0
-            18px;
-
-        padding:
-            18px
-            0
-            21px;
-    }
-
-    .career-preview-decision__heading,
-    .home-career-card__decision-head,
-    .home-career-decision__heading {
-        gap: 8px;
-
-        margin-bottom: 12px;
-    }
-
-    .career-preview-decision__heading > span,
-    .home-career-card__decision-label,
-    .home-career-decision__label {
-        font-size: 0.61rem;
-    }
-
-    .career-preview-decision__heading > strong,
-    .home-career-card__decision-type,
-    .home-career-decision__type {
-        max-width: 50%;
-
-        font-size: 0.59rem;
-    }
-
-    .career-preview-decision__hook,
-    .home-career-card__decision-text,
-    .home-career-decision__hook {
-        font-size: 0.84rem;
-        line-height: 1.65;
-    }
-
-    .career-preview-priority,
-    .home-career-card__priority,
-    .home-career-decision__priority {
-        margin-top: 14px;
-    }
-
-    .career-preview-priority > span,
-    .home-career-card__priority-label,
-    .home-career-decision__priority-label {
-        font-size: 0.61rem;
-    }
-
-    .career-preview-priority > p,
-    .home-career-card__priority-text,
-    .home-career-decision__priority-text {
-        font-size: 0.73rem;
-    }
-
-    /* -----------------------------------------
-      People Like You - Mobile
-      ----------------------------------------- */
-
-    .home-similar-section
-    .home-career-card {
-        min-height:
-            0;
-    }
-
-
-    .home-similar-section
-    .home-career-card__top {
-        padding:
-            19px
-            18px
-            16px;
-    }
-
-
-    .home-similar-section
-    .home-career-card__story {
-        margin:
-            0
-            18px;
-
-        padding:
-            11px
-            12px;
-    }
-
-
-    .home-similar-section
-    .career-preview-journey {
-        margin:
-            15px
-            18px
-            0;
-
-        padding:
-            16px
-            0
-            18px;
-    }
-
-
-    .home-similar-section
-    .career-preview-decision {
-        margin:
-            0
-            18px;
-
-        padding:
-            16px
-            0
-            18px;
-    }
-
-
-    .home-similar-section
-    .career-preview-decision__dilemma,
-    .home-similar-section
-    .career-preview-priority {
-        grid-template-columns:
-            70px
-            minmax(0, 1fr);
-
-        gap:
-            9px;
-
-        padding:
-            10px
-            0;
-    }
-
-
-    .home-similar-section
-    .career-preview-decision__sub-label,
-    .home-similar-section
-    .career-preview-priority > span {
-        font-size:
-            0.58rem;
-    }
-
-
-    .home-similar-section
-    .career-preview-decision__hook {
-        font-size:
-            0.76rem;
-    }
-
-
-    .home-similar-section
-    .career-preview-priority > p {
-        font-size:
-            0.7rem;
-    }
-
-
-    .home-similar-section
-    .home-career-card__footer {
-        padding:
-            14px
-            18px;
-    }
-
-
-    /* -----------------------------------------
-       Card footer
-       ----------------------------------------- */
-
-    .home-career-card__footer {
-        min-height: 51px;
-
-        padding:
-            13px
-            18px;
-    }
-
-    .home-career-card__link {
-        font-size: 0.67rem;
-    }
-
-
-    /* -----------------------------------------
-       Guest
-       ----------------------------------------- */
-
-    .career-story-preview-area {
-        margin-top: 20px;
-    }
-
-    .career-story-preview-cta {
-        align-items: stretch;
-        flex-direction: column;
-
-        gap: 14px;
-
-        margin-top: 20px;
-
-        padding-top: 20px;
-    }
-
-    .career-story-preview-cta p {
-        font-size: 0.72rem;
-    }
-
-    .home-login-cta {
-        width: 100%;
-    }
-
-
-    /* -----------------------------------------
-       Process
-       ----------------------------------------- */
-
-    .home-process-grid {
-        grid-template-columns:
-            1fr;
-
-        gap: 8px;
-
-        margin-top: 32px;
-    }
-
-    .home-process-card,
-    .home-process-card--final {
-        grid-column: auto;
-
-        min-height: 0;
-
-        padding:
-            19px
-            18px;
-    }
-
-    .home-process-card strong {
-        margin-top: 15px;
-
-        font-size: 0.85rem;
-    }
-
-    .home-process-card p {
-        font-size: 0.68rem;
-    }
-
-
-    /* -----------------------------------------
-       My GPS / Share
-       ----------------------------------------- */
-
-    .home-my-gps-section,
-    .home-share-section {
-        padding:
-            58px
-            18px;
-    }
-
-    .home-my-gps-section h2,
-    .home-share-section h2 {
-        font-size: 2rem;
-        line-height: 1.25;
-    }
-
-    .home-my-gps-section > p:not(.home-eyebrow),
-    .home-share-section > p:not(.home-eyebrow) {
-        margin-top: 18px;
-
-        font-size: 0.78rem;
-        line-height: 1.85;
-    }
-
-    .home-my-gps-section br,
-    .home-share-section br {
-        display: none;
-    }
-
-    .home-outline-button,
-    .home-primary-button {
-        width: 100%;
-
-        justify-content: center;
-
-        margin-top: 24px;
-    }
-
-
-    /* -----------------------------------------
-       News
-       ----------------------------------------- */
-
-    .announcement-item {
-        grid-template-columns:
-            75px
-            minmax(0, 1fr)
-            18px;
-
-        gap:
-            7px
-            11px;
-
-        padding:
-            16px
-            0;
-    }
-
-    .announcement-date {
-        font-size: 0.65rem;
-    }
-
-    .announcement-category {
-        grid-column: 1;
-
-        font-size: 0.57rem;
-    }
-
-    .announcement-title {
-        grid-column: 2;
-        grid-row: 1 / span 2;
-
-        font-size: 0.75rem;
-    }
-
-    .announcement-arrow {
-        grid-column: 3;
-        grid-row: 1 / span 2;
-    }
-
-}
-
-
-/* =========================================================
-   29. SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-    .home-hero {
-        padding-top: 37px;
-    }
-
-    .home-hero h1 {
-        font-size: 1.95rem;
-    }
-
-    .home-hero__quick-choices a {
-        font-size: 0.63rem;
-    }
-
-    .home-trust__item {
-        padding:
-            15px
-            4px;
-    }
-
-    .home-trust__item strong {
-        font-size: 1.28rem;
-    }
-
-    .home-trust__item--text strong {
-        font-size: 0.88rem;
-    }
-
-    .home-trust__label {
-        font-size: 0.45rem;
-    }
-
-    .home-trust__item small {
-        font-size: 0.5rem;
-    }
-
-    .home-story-grid .home-career-card,
-    .home-story-grid .card {
-        flex-basis: 88vw;
-
-        width: 88vw;
-    }
-
-    .home-career-timeline__stage {
-        font-size: 0.55rem;
-    }
-
-}
-
-
-/* =========================================================
-   30. REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    html {
-        scroll-behavior: auto;
-    }
-
-    .career-gps-home *,
-    .career-gps-home *::before,
-    .career-gps-home *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-    }
-
-}
-
-
-
-
-/* =========================================================
-   SAME CROSSROAD
-   ========================================================= */
-
-   .home-same-crossroad-section[hidden] {
-    display: none !important;
-}
-
-.home-same-crossroad-section {
-    position: relative;
-    overflow: hidden;
-
-    border-top: 1px solid var(--gps-line);
-    border-bottom: 1px solid var(--gps-line);
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--gps-bg-blue) 0%,
-            #f8fbfe 55%,
-            var(--gps-white) 100%
+            #ffffff 60%,
+            #f3f8fc 100%
         );
 }
 
 
-/* ---------------------------------------------------------
-   Decorative background
-   --------------------------------------------------------- */
-
-.home-same-crossroad-section::before {
+.home-hero::after {
     position: absolute;
-    top: -190px;
-    right: -140px;
 
-    width: 430px;
-    height: 430px;
+    top: -180px;
+    right: -180px;
+
+    width: 520px;
+    height: 520px;
 
     border-radius: 50%;
 
@@ -3875,8 +315,7 @@ h3 {
         radial-gradient(
             circle,
             rgba(29, 95, 158, 0.07) 0%,
-            rgba(29, 95, 158, 0.025) 46%,
-            rgba(29, 95, 158, 0) 72%
+            rgba(29, 95, 158, 0) 70%
         );
 
     pointer-events: none;
@@ -3885,89 +324,272 @@ h3 {
 }
 
 
-/* =========================================================
-   HEADING
-   ========================================================= */
-
-.home-same-crossroad-heading {
+.home-hero__main {
     position: relative;
-    z-index: 1;
+    z-index: 2;
 
-    max-width: 760px;
-}
-
-.home-same-crossroad-description {
-    max-width: 680px !important;
-}
-
-.home-same-crossroad-all-link {
-    position: relative;
-    z-index: 1;
+    min-width: 0;
 }
 
 
-/* =========================================================
-   GRID
-   ========================================================= */
+.home-hero h1 {
+  max-width: 900px;
 
-.home-same-crossroad-grid {
-    position: relative;
-    z-index: 1;
+  margin: 0;
 
-    display: grid;
+  color: var(--gps-text-strong);
 
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
+  font-size:
+      clamp(
+          2.55rem,
+          3.6vw,
+          4.15rem
+      );
 
-    align-items: stretch;
-
-    gap: 18px;
-
-    width: 100%;
+  font-weight: 800;
+  line-height: 1.10;
+  letter-spacing: -0.035em;
 }
 
 
 /*
- * 2ルートのみの場合。
- *
- * 3列幅いっぱいに引き伸ばさず、
- * 比較しやすい横幅に留める。
- */
-.home-same-crossroad-grid:has(
-    > .home-same-crossroad-card:nth-child(2):last-child
-) {
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
+* Heroの意図した改行位置。
+*
+* 各spanを1行のまとまりとして扱う。
+*/
+.home-hero-title__line {
+  display: block;
+}
 
-    max-width: 920px;
+
+/*
+* 「選択とその後」は
+* 途中で改行させない。
+*/
+.home-hero-title__accent {
+  display: inline-block;
+
+  color: var(--gps-blue-600);
+
+  white-space: nowrap;
+}
+
+
+.home-hero__lead {
+  max-width: 720px;
+
+  margin:
+      22px
+      0
+      0;
+
+  color: var(--gps-muted);
+
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
 
 /* =========================================================
-   CARD
+   05. HERO DILEMMA START
    ========================================================= */
 
-.home-same-crossroad-card {
-    position: relative;
+.home-decision-start {
+    max-width: 670px;
 
+    margin-top: 31px;
+}
+
+
+.home-decision-start__question {
+    margin:
+        0
+        0
+        10px;
+
+    color: var(--gps-text-strong);
+
+    font-size: 0.83rem;
+    font-weight: 800;
+}
+
+
+.home-decision-start__primary {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 
-    min-width: 0;
-    min-height: 472px;
+    gap: 22px;
+
+    width: min(100%, 590px);
+
+    min-height: 72px;
 
     padding:
-        25px
-        24px
-        22px;
+        15px
+        20px;
 
-    overflow: hidden;
+    border:
+        1px solid
+        var(--gps-navy-800);
+
+    border-radius: 11px;
+
+    background:
+        var(--gps-navy-800);
+
+    color:
+        var(--gps-white) !important;
+
+    box-shadow:
+        0 10px 26px
+        rgba(7, 27, 48, 0.11);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+.home-decision-start__primary:hover {
+    background:
+        var(--gps-navy-700);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 14px 32px
+        rgba(7, 27, 48, 0.15);
+}
+
+
+.home-decision-start__primary-copy {
+    display: block;
+
+    min-width: 0;
+}
+
+
+.home-decision-start__primary-copy small {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    font-size: 0.6rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+}
+
+
+.home-decision-start__primary-copy strong {
+    display: block;
+
+    color: var(--gps-white);
+
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+
+.home-decision-start__primary-arrow {
+    flex: 0 0 auto;
+
+    color: var(--gps-white);
+
+    font-size: 1rem;
+}
+
+
+.home-decision-start__quick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 12px;
+}
+
+
+.home-decision-start__quick-label {
+    margin-right: 3px;
+
+    color: var(--gps-muted);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+.home-decision-start__quick a {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 34px;
+
+    padding:
+        6px
+        11px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius: 999px;
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-text);
+
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    transition:
+        border-color 0.18s ease,
+        color 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+.home-decision-start__quick a:hover {
+    border-color:
+        var(--gps-blue-600);
+
+    background:
+        var(--gps-blue-025);
+
+    color:
+        var(--gps-blue-700);
+}
+
+
+/* =========================================================
+   06. HERO DECISION MAP
+   ========================================================= */
+
+.home-hero-map {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+
+    padding:
+        26px
+        25px;
 
     border:
         1px solid
@@ -3981,141 +603,800 @@ h3 {
             255,
             255,
             255,
-            0.97
+            0.94
         );
 
-    color: inherit;
-    text-decoration: none;
-
     box-shadow:
-        0 8px 26px
-        rgba(7, 27, 48, 0.045);
-
-    transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
+        var(--gps-shadow-soft);
 }
 
 
-/*
- * 「違う道」を比較していることを
- * 上部の細いラインで示す。
- *
- * 色はCareer GPSの
- * Navy / Blueだけに限定。
- */
-.home-same-crossroad-card::before {
-    position: absolute;
+.home-hero-map__eyebrow {
+    margin:
+        0
+        0
+        10px;
 
-    top: 0;
-    right: 0;
-    left: 0;
-
-    height: 4px;
-
-    background:
+    color:
         var(--gps-blue-600);
 
-    content: "";
+    font-size:
+        0.65rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.15em;
 }
 
-.home-same-crossroad-card:hover {
-    transform:
-        translateY(-4px);
 
-    border-color:
-        #b9cfe2;
+.home-hero-map h2 {
+    margin: 0;
 
-    box-shadow:
-        var(--gps-shadow-hover);
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        clamp(
+            1.2rem,
+            1.6vw,
+            1.55rem
+        );
+
+    font-weight: 800;
+    line-height: 1.45;
+    letter-spacing: -0.025em;
 }
 
-.home-same-crossroad-card:focus-visible {
-    outline:
-        3px solid
-        rgba(29, 95, 158, 0.22);
 
-    outline-offset: 3px;
+.home-hero-map__content {
+    margin-top: 24px;
+}
+
+
+.home-hero-map__point {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-height: 52px;
+}
+
+
+.home-hero-map__number {
+    display: flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border:
+        1px solid
+        var(--gps-blue-150);
+
+    border-radius: 50%;
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-hero-map__point small {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.56rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.1em;
+}
+
+
+.home-hero-map__point strong {
+    display: block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-hero-map__line {
+    width: 1px;
+    height: 21px;
+
+    margin:
+        3px
+        0
+        3px
+        17px;
+
+    background:
+        var(--gps-line-strong);
+}
+
+
+.home-hero-map__choices {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 7px;
+}
+
+
+.home-hero-map__choices > div {
+    min-width: 0;
+
+    padding:
+        10px
+        7px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--gps-bg-soft);
+
+    text-align: center;
+}
+
+
+.home-hero-map__choices span {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.55rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-hero-map__choices strong {
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        800;
 }
 
 
 /* =========================================================
-   ROUTE
+   07. HOW TO USE
    ========================================================= */
 
-.home-same-crossroad-card__route {
-    display: flex;
+.home-how-section {
+    display: grid;
 
+    grid-template-columns:
+        minmax(0, 1fr)
+        42px
+        minmax(0, 1fr)
+        42px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    padding:
+        24px
+        clamp(34px, 5vw, 80px);
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        var(--gps-white);
+}
+
+
+.home-how-section__item {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+}
+
+
+.home-how-section__item > span {
+    flex:
+        0
+        0
+        auto;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-how-section__item strong {
+    display: block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+.home-how-section__item p {
+    margin:
+        3px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.68rem;
+
+    line-height:
+        1.55;
+}
+
+
+.home-how-section__arrow {
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.8rem;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   08. SOCIAL PROOF
+   ========================================================= */
+
+.home-proof {
+    display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 16px;
+    gap:
+        30px;
 
+    min-height:
+        94px;
+
+    padding:
+        18px
+        clamp(34px, 5vw, 80px);
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.home-proof__lead {
     min-width: 0;
-    min-height: 40px;
+}
 
-    padding-bottom: 17px;
+
+.home-proof__mark {
+    display: block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.11em;
+}
+
+
+.home-proof__lead strong {
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.8rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-proof__metrics {
+    display: flex;
+    align-items: center;
+
+    gap:
+        32px;
+}
+
+
+.home-proof__metric {
+    display: flex;
+    align-items: center;
+
+    gap:
+        11px;
+}
+
+
+.home-proof__metric + .home-proof__metric {
+    padding-left:
+        32px;
+
+    border-left:
+        1px solid
+        var(--gps-line-strong);
+}
+
+
+.home-proof__metric > strong {
+    min-width: 44px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1.5rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+}
+
+
+.home-proof__metric span {
+    display: block;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.52rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.3;
+
+    letter-spacing:
+        0.09em;
+}
+
+
+.home-proof__metric small {
+    display: block;
+
+    margin-top:
+        2px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.62rem;
+}
+
+
+/* =========================================================
+   09. DECISION EXPERIENCE
+   ========================================================= */
+
+.home-decision-experience {
+    position: relative;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        linear-gradient(
+            180deg,
+            #f3f8fc 0%,
+            #ffffff 35%,
+            #ffffff 100%
+        );
+}
+
+
+.home-decision-experience::before {
+    position: absolute;
+
+    top: -130px;
+    right: -100px;
+
+    width: 360px;
+    height: 360px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29, 95, 158, 0.055) 0%,
+            rgba(29, 95, 158, 0) 70%
+        );
+
+    pointer-events: none;
+
+    content: "";
+}
+
+
+/* =========================================================
+   10. DECISION SUBHEADING
+   ========================================================= */
+
+.home-decision-subheading {
+    display: flex;
+    align-items: center;
+
+    gap:
+        11px;
+
+    margin-bottom:
+        24px;
+}
+
+
+.home-decision-subheading > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width:
+        31px;
+
+    height:
+        31px;
+
+    flex:
+        0
+        0
+        31px;
+
+    border:
+        1px solid
+        var(--gps-blue-150);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-decision-subheading small {
+    display: block;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.55rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.1em;
+}
+
+
+.home-decision-subheading strong {
+    display: block;
+
+    margin-top:
+        1px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.83rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   11. DECISION COMPARE AREA
+   ========================================================= */
+
+.home-decision-compare-area {
+    position: relative;
+    z-index: 1;
+
+    margin-top:
+        12px;
+
+    padding:
+        30px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        var(--gps-white);
+
+    box-shadow:
+        var(--gps-shadow-card);
+}
+
+
+.home-decision-compare-note {
+    margin:
+        18px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.7rem;
+
+    line-height:
+        1.65;
+}
+
+
+/* =========================================================
+   12. NEW DECISION MATRIX
+   Future home-same-crossroad.js
+   ========================================================= */
+
+.decision-compare-desktop {
+    display: block;
+}
+
+
+.decision-compare-mobile {
+    display: none;
+}
+
+
+.decision-matrix {
+    width: 100%;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--gps-white);
+}
+
+
+.decision-matrix__header,
+.decision-matrix__row {
+    display: grid;
+
+    grid-template-columns:
+        150px
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+}
+
+
+.decision-matrix__header {
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.decision-matrix__label,
+.decision-matrix__cell {
+    min-width: 0;
+
+    padding:
+        17px
+        18px;
+
+    border-right:
+        1px solid
+        var(--gps-line);
 
     border-bottom:
         1px solid
         var(--gps-line);
 }
 
-.home-same-crossroad-card__route-label {
-    flex: 0 0 auto;
 
+.decision-matrix__header
+.decision-matrix__cell {
+    padding:
+        20px
+        18px;
+}
+
+
+.decision-matrix__header
+.decision-matrix__label {
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.decision-matrix__row:last-child
+.decision-matrix__label,
+.decision-matrix__row:last-child
+.decision-matrix__cell {
+    border-bottom: 0;
+}
+
+
+.decision-matrix__cell:last-child,
+.decision-matrix__label:last-child {
+    border-right: 0;
+}
+
+
+.decision-matrix__label {
+    display: flex;
+    align-items: flex-start;
+
+    background:
+        #fbfcfd;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+}
+
+
+.decision-matrix__cell {
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.7;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.decision-matrix__cell--empty {
     color:
         var(--gps-muted-light);
 
-    font-size: 0.59rem;
-    font-weight: 800;
-    line-height: 1.3;
-    letter-spacing: 0.1em;
+    font-weight:
+        400;
 }
 
-.home-same-crossroad-card__route strong {
+
+.decision-route {
     display: inline-flex;
-
-    flex: 0 1 auto;
-
     align-items: center;
-    justify-content: center;
 
-    max-width: 62%;
-
-    min-height: 29px;
+    min-height:
+        28px;
 
     padding:
-        5px
-        11px;
+        4px
+        9px;
 
     border-radius:
         999px;
 
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.25;
-
-    text-align: right;
-
-    overflow-wrap: anywhere;
-}
-
-
-/* ---------------------------------------------------------
-   Route variation
-   --------------------------------------------------------- */
-
-/* 転職 */
-
-.home-same-crossroad-card--change::before {
     background:
-        var(--gps-blue-600);
+        var(--gps-blue-050);
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.64rem;
+
+    font-weight:
+        800;
 }
 
-.home-same-crossroad-card--change
-.home-same-crossroad-card__route strong {
+
+.decision-route--change {
     background:
         var(--gps-navy-800);
 
@@ -4124,15 +1405,7 @@ h3 {
 }
 
 
-/* 残った */
-
-.home-same-crossroad-card--stay::before {
-    background:
-        var(--gps-navy-800);
-}
-
-.home-same-crossroad-card--stay
-.home-same-crossroad-card__route strong {
+.decision-route--stay {
     background:
         var(--gps-blue-050);
 
@@ -4141,61 +1414,336 @@ h3 {
 }
 
 
-/* 社内異動 */
-
-.home-same-crossroad-card--internal::before {
-    background:
-        var(--gps-navy-700);
-}
-
-.home-same-crossroad-card--internal
-.home-same-crossroad-card__route strong {
+.decision-route--internal {
     border:
         1px solid
-        var(--gps-blue-100);
+        var(--gps-blue-150);
 
     background:
-        var(--gps-blue-025);
+        var(--gps-white);
 
     color:
         var(--gps-navy-800);
+}
+
+
+.decision-person {
+    margin-top:
+        11px;
+}
+
+
+.decision-person strong {
+    display: block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        800;
+}
+
+
+.decision-person p {
+    margin:
+        3px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.66rem;
+
+    line-height:
+        1.5;
+}
+
+
+.decision-detail-link {
+    display: inline-flex;
+    align-items: center;
+
+    gap:
+        6px;
+
+    color:
+        var(--gps-blue-700) !important;
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+}
+
+
+.decision-detail-link:hover {
+    text-decoration:
+        underline;
+
+    text-underline-offset:
+        3px;
 }
 
 
 /* =========================================================
-   PERSON
+   13. MOBILE DECISION CARDS
+   Future home-same-crossroad.js
    ========================================================= */
 
-.home-same-crossroad-card__person-header {
+.decision-mobile-card {
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        14px;
+
+    background:
+        var(--gps-white);
+}
+
+
+.decision-mobile-card + .decision-mobile-card {
+    margin-top:
+        13px;
+}
+
+
+.decision-mobile-card__header {
+    padding:
+        17px
+        18px;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.decision-mobile-card__person {
+    margin-top:
+        8px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.75rem;
+}
+
+
+.decision-mobile-card__person strong {
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.86rem;
+}
+
+
+.decision-mobile-card__row {
+    display: grid;
+
+    grid-template-columns:
+        92px
+        minmax(0, 1fr);
+
+    gap:
+        12px;
+
+    padding:
+        14px
+        18px;
+
+    border-bottom:
+        1px solid
+        var(--gps-line-soft);
+}
+
+
+.decision-mobile-card__row:last-of-type {
+    border-bottom: 0;
+}
+
+
+.decision-mobile-card__label {
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.67rem;
+
+    font-weight:
+        800;
+}
+
+
+.decision-mobile-card__value {
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.86rem;
+
+    line-height:
+        1.7;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.decision-mobile-card__footer {
     display: flex;
+    justify-content: flex-end;
 
-    align-items: center;
+    padding:
+        13px
+        18px;
 
-    gap: 12px;
+    border-top:
+        1px solid
+        var(--gps-line);
+
+    background:
+        #fbfcfd;
+}
+
+
+/* =========================================================
+   14. LEGACY SAME CROSSROAD COMPATIBILITY
+
+   JS差し替え前でも崩れないように残す。
+   ========================================================= */
+
+.home-decision-compare
+.home-same-crossroad-grid,
+#home-same-crossroad-list.home-same-crossroad-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        15px;
+}
+
+
+.home-same-crossroad-card {
+    display: flex;
+    flex-direction: column;
 
     min-width: 0;
 
     padding:
-        18px
-        0;
-}
-
-.home-same-crossroad-card__avatar {
-    display: flex;
-
-    flex: 0 0 auto;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 42px;
-    height: 42px;
+        20px;
 
     border:
         1px solid
-        var(--gps-blue-100);
+        var(--gps-line);
 
-    border-radius: 50%;
+    border-radius:
+        14px;
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-text);
+
+    box-shadow:
+        0 5px 18px
+        rgba(7, 27, 48, 0.035);
+}
+
+
+.home-same-crossroad-card__route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        12px;
+
+    padding-bottom:
+        13px;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+}
+
+
+.home-same-crossroad-card__route-label {
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.63rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-same-crossroad-card__route strong {
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-same-crossroad-card__person-header {
+    display: flex;
+    align-items: center;
+
+    gap:
+        10px;
+
+    padding:
+        15px
+        0;
+}
+
+
+.home-same-crossroad-card__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex:
+        0
+        0
+        38px;
+
+    border-radius:
+        50%;
 
     background:
         var(--gps-blue-050);
@@ -4203,277 +1751,133 @@ h3 {
     color:
         var(--gps-blue-700);
 
-    font-size: 0.88rem;
-    font-weight: 800;
+    font-size:
+        0.78rem;
+
+    font-weight:
+        800;
 }
+
 
 .home-same-crossroad-card__person-info {
     min-width: 0;
 }
 
+
 .home-same-crossroad-card__person-info > strong {
     display: block;
 
-    max-width: 100%;
-
-    overflow: hidden;
+    overflow:
+        hidden;
 
     color:
         var(--gps-text-strong);
 
-    font-size: 0.86rem;
-    font-weight: 800;
-    line-height: 1.4;
+    font-size:
+        0.83rem;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight:
+        800;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
 }
 
+
 .home-same-crossroad-card__person-info p {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 0 3px;
-
     margin:
-        4px
+        3px
         0
         0;
 
     color:
         var(--gps-muted);
 
-    font-size: 0.68rem;
-    font-weight: 600;
-    line-height: 1.5;
-}
-
-.home-same-crossroad-card__person-info p span {
-    color:
-        var(--gps-muted-light);
+    font-size:
+        0.67rem;
 }
 
 
-/* =========================================================
-   CAREER GPS PATH
-   ========================================================= */
-
-.home-same-crossroad-card__path {
-    display: grid;
-
-    gap: 0;
-
-    min-width: 0;
-
-    padding-top: 1px;
-}
-
-
-/*
- * 各カードの高さがバラつかないよう、
- * PCでは情報ゾーンごとに最低高を持たせる。
- *
- * スマホでは解除する。
- */
 .home-same-crossroad-card__path-item {
-    position: relative;
-
-    min-width: 0;
-
     padding:
-        0
-        0
-        19px
-        29px;
+        12px
+        0;
+
+    border-top:
+        1px solid
+        var(--gps-line-soft);
 }
 
-.home-same-crossroad-card__path-item:last-child {
-    padding-bottom: 5px;
-}
-
-
-/* ---------------------------------------------------------
-   GPS route line
-   --------------------------------------------------------- */
-
-.home-same-crossroad-card__path-item::before {
-    position: absolute;
-
-    top: 9px;
-    bottom: -8px;
-    left: 7px;
-
-    width: 1px;
-
-    background:
-        var(--gps-blue-100);
-
-    content: "";
-}
-
-.home-same-crossroad-card__path-item:last-child::before {
-    display: none;
-}
-
-
-/* ---------------------------------------------------------
-   GPS point
-   --------------------------------------------------------- */
-
-.home-same-crossroad-card__path-item::after {
-    position: absolute;
-
-    top: 5px;
-    left: 3px;
-
-    width: 9px;
-    height: 9px;
-
-    border:
-        2px solid
-        var(--gps-white);
-
-    border-radius: 50%;
-
-    background:
-        var(--gps-blue-600);
-
-    box-shadow:
-        0 0 0 1px
-        var(--gps-blue-100);
-
-    content: "";
-}
-
-
-/* ---------------------------------------------------------
-   Label
-   --------------------------------------------------------- */
 
 .home-same-crossroad-card__path-heading {
     display: flex;
+    align-items: center;
 
-    align-items: baseline;
+    gap:
+        7px;
 
-    gap: 7px;
-
-    margin-bottom: 7px;
+    margin-bottom:
+        5px;
 }
+
 
 .home-same-crossroad-card__path-number {
     color:
         var(--gps-blue-600);
 
-    font-size: 0.55rem;
-    font-weight: 800;
-    line-height: 1.3;
-    letter-spacing: 0.08em;
+    font-size:
+        0.56rem;
+
+    font-weight:
+        800;
 }
+
 
 .home-same-crossroad-card__path-label {
     color:
         var(--gps-muted);
 
-    font-size: 0.62rem;
-    font-weight: 800;
-    line-height: 1.4;
+    font-size:
+        0.64rem;
+
+    font-weight:
+        800;
 }
 
 
-/* ---------------------------------------------------------
-   Text
-   --------------------------------------------------------- */
-
 .home-same-crossroad-card__path-item p {
-    display: -webkit-box;
-
-    min-width: 0;
-
     margin: 0;
-
-    overflow: hidden;
 
     color:
         var(--gps-text);
 
-    font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.65;
+    font-size:
+        0.82rem;
 
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    line-height:
+        1.68;
 
-    -webkit-box-orient:
-        vertical;
+    overflow-wrap:
+        anywhere;
 }
 
-
-/*
- * 01 当時の迷い
- *
- * 一番重要なので3行。
- */
-.home-same-crossroad-card__path-item:nth-child(1) {
-    min-height: 102px;
-}
-
-.home-same-crossroad-card__path-item:nth-child(1) p {
-    -webkit-line-clamp: 3;
-}
-
-
-/*
- * 02 大切にしたこと
- */
-.home-same-crossroad-card__path-item:nth-child(2) {
-    min-height: 83px;
-}
-
-.home-same-crossroad-card__path-item:nth-child(2) p {
-    -webkit-line-clamp: 2;
-}
-
-
-/*
- * 03 その後
- */
-.home-same-crossroad-card__path-item:nth-child(3) {
-    min-height: 83px;
-}
-
-.home-same-crossroad-card__path-item:nth-child(3) p {
-    -webkit-line-clamp: 2;
-}
-
-
-/* 未入力 */
-
-.home-same-crossroad-card__path-item--empty p {
-    color:
-        var(--gps-muted-light);
-
-    font-weight: 500;
-}
-
-
-/* =========================================================
-   CTA
-   ========================================================= */
 
 .home-same-crossroad-card__cta {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
-    gap: 16px;
+    gap:
+        12px;
 
-    min-height: 48px;
+    margin-top:
+        auto;
 
-    margin-top: auto;
-
-    padding-top: 17px;
+    padding-top:
+        13px;
 
     border-top:
         1px solid
@@ -4482,38 +1886,2229 @@ h3 {
     color:
         var(--gps-blue-700);
 
-    font-size: 0.71rem;
-    font-weight: 800;
-    line-height: 1.4;
-}
+    font-size:
+        0.72rem;
 
-.home-same-crossroad-card__cta span:first-child {
-    min-width: 0;
-}
-
-.home-same-crossroad-card__cta span:last-child {
-    flex: 0 0 auto;
-
-    font-size: 1rem;
-
-    transition:
-        transform 0.18s ease;
-}
-
-.home-same-crossroad-card:hover
-.home-same-crossroad-card__cta span:last-child {
-    transform:
-        translateX(4px);
+    font-weight:
+        800;
 }
 
 
 /* =========================================================
-   TABLET
+   15. DECISION CRITERIA
    ========================================================= */
 
-@media (max-width: 950px) {
+.home-decision-criteria {
+    position: relative;
+    z-index: 1;
 
-    .home-same-crossroad-grid {
+    margin-top:
+        26px;
+
+    padding:
+        30px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.home-decision-criteria__intro {
+    max-width:
+        720px;
+
+    margin-bottom:
+        22px;
+}
+
+
+.home-decision-criteria__intro h3 {
+    margin: 0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1.1rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.55;
+}
+
+
+.home-decision-criteria__intro p {
+    margin:
+        8px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.75;
+}
+
+
+.home-decision-criteria-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        12px;
+}
+
+
+.decision-criteria-card {
+    min-width: 0;
+
+    padding:
+        16px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        11px;
+
+    background:
+        var(--gps-white);
+}
+
+
+.decision-criteria-card__route {
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+}
+
+
+.decision-criteria-card strong {
+    display: block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.83rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.6;
+}
+
+
+.decision-criteria-card p {
+    margin:
+        6px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.75rem;
+
+    line-height:
+        1.65;
+}
+
+
+/* =========================================================
+   16. YOUR DECISION
+   ========================================================= */
+
+.home-your-decision {
+    position: relative;
+    z-index: 1;
+
+    margin-top:
+        26px;
+
+    padding:
+        30px;
+
+    border:
+        1px solid
+        var(--gps-navy-800);
+
+    border-radius:
+        var(--gps-radius-lg);
+
+    background:
+        var(--gps-navy-900);
+
+    color:
+        var(--gps-white);
+}
+
+
+.home-your-decision
+.home-decision-subheading > span {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.28
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    color:
+        #8dc3ef;
+}
+
+
+.home-your-decision
+.home-decision-subheading small {
+    color:
+        #78b3e5;
+}
+
+
+.home-your-decision
+.home-decision-subheading strong {
+    color:
+        var(--gps-white);
+}
+
+
+.home-your-decision__panel {
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 0.72fr)
+        minmax(0, 1.28fr);
+
+    gap:
+        34px;
+
+    align-items: start;
+}
+
+
+.home-your-decision__copy h3 {
+    margin: 0;
+
+    color:
+        var(--gps-white);
+
+    font-size:
+        1.3rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+.home-your-decision__copy p {
+    margin:
+        11px
+        0
+        0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.8;
+}
+
+
+.home-self-check {
+    min-width: 0;
+}
+
+
+.home-self-check__choices {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap:
+        8px;
+}
+
+
+.home-self-check__choices button {
+    min-height:
+        41px;
+
+    padding:
+        9px
+        14px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.25
+        );
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.84
+        );
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        border-color 0.16s ease,
+        color 0.16s ease,
+        background-color 0.16s ease,
+        transform 0.16s ease;
+}
+
+
+.home-self-check__choices button:hover {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+
+    color:
+        var(--gps-white);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.home-self-check__choices button.is-selected,
+.home-self-check__choices button[aria-pressed="true"] {
+    border-color:
+        var(--gps-white);
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-navy-900);
+}
+
+
+.home-self-check__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        20px;
+
+    margin-top:
+        20px;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+}
+
+
+.home-self-check__footer > span {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.64
+        );
+
+    font-size:
+        0.7rem;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   17. BUTTONS
+   ========================================================= */
+
+.home-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap:
+        10px;
+
+    min-height:
+        45px;
+
+    padding:
+        11px
+        17px;
+
+    border:
+        1px solid
+        var(--gps-navy-800);
+
+    border-radius:
+        8px;
+
+    background:
+        var(--gps-navy-800);
+
+    color:
+        var(--gps-white) !important;
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        800;
+
+    transition:
+        background-color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.home-primary-button:hover {
+    background:
+        var(--gps-navy-700);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 24px
+        rgba(7, 27, 48, 0.14);
+}
+
+
+.home-your-decision
+.home-primary-button {
+    border-color:
+        var(--gps-white);
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-navy-900) !important;
+}
+
+
+/* =========================================================
+   18. PEOPLE LIKE YOU
+   ========================================================= */
+
+.home-similar-section {
+    border-top:
+        1px solid
+        var(--gps-line-soft);
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.home-similar-section
+.home-section-heading-row h2 {
+    max-width:
+        760px;
+}
+
+
+.home-story-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    align-items:
+        stretch;
+
+    gap:
+        18px;
+}
+
+
+/* =========================================================
+   19. PEOPLE CARD
+   Existing similar-stories.js support
+   ========================================================= */
+
+.home-career-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #cfdae4;
+
+    border-radius:
+        16px;
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-text);
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        var(--gps-shadow-card);
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.home-career-card:hover {
+    border-color:
+        #9fbed8;
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        var(--gps-shadow-hover);
+}
+
+
+.home-career-card__top {
+    display: flex;
+    align-items: center;
+
+    gap:
+        12px;
+
+    min-width: 0;
+
+    padding:
+        20px
+        20px
+        15px;
+}
+
+
+.home-career-avatar {
+    display: flex;
+    flex:
+        0
+        0
+        45px;
+
+    align-items: center;
+    justify-content: center;
+
+    width:
+        45px;
+
+    height:
+        45px;
+
+    border:
+        1px solid
+        var(--gps-blue-150);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--gps-blue-025);
+
+    color:
+        var(--gps-navy-800);
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        800;
+}
+
+
+.home-career-person {
+    min-width: 0;
+}
+
+
+.home-career-person__meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap:
+        4px
+        8px;
+
+    margin:
+        0
+        0
+        4px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.68rem;
+}
+
+
+.home-career-person h3 {
+    margin: 0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* Common points */
+
+.home-similar-section
+.home-career-card__story {
+    margin:
+        0
+        20px;
+
+    padding:
+        11px
+        12px;
+
+    border-radius:
+        9px;
+
+    background:
+        var(--gps-blue-025);
+}
+
+
+.home-career-card__label {
+    margin: 0;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.6rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.07em;
+}
+
+
+.home-career-tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap:
+        5px;
+
+    margin-top:
+        7px;
+}
+
+
+.home-career-tags span {
+    display: inline-flex;
+
+    max-width:
+        100%;
+
+    padding:
+        4px
+        7px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--gps-white);
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.61rem;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.35;
+}
+
+
+/* =========================================================
+   20. CAREER JOURNEY
+   ========================================================= */
+
+.career-preview-journey {
+    margin:
+        16px
+        20px
+        0;
+
+    padding:
+        15px
+        0
+        17px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.career-preview-journey__label {
+    margin:
+        0
+        0
+        16px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.59rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.09em;
+}
+
+
+.home-career-timeline {
+    width:
+        100%;
+
+    min-width:
+        0;
+}
+
+
+.home-career-timeline__track {
+    display: flex;
+    align-items: flex-start;
+
+    width:
+        100%;
+
+    min-width:
+        0;
+}
+
+
+.home-career-timeline__item {
+    position: relative;
+
+    flex:
+        1
+        1
+        0;
+
+    min-width:
+        0;
+
+    text-align:
+        center;
+}
+
+
+.home-career-timeline__item::after {
+    position:
+        absolute;
+
+    z-index:
+        0;
+
+    top:
+        25px;
+
+    left:
+        50%;
+
+    width:
+        100%;
+
+    height:
+        1px;
+
+    background:
+        var(--gps-line-strong);
+
+    content:
+        "";
+}
+
+
+.home-career-timeline__item:last-child::after {
+    display:
+        none;
+}
+
+
+.home-career-timeline__year {
+    display:
+        block;
+
+    min-height:
+        15px;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.55rem;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+}
+
+
+.home-career-timeline__dot {
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        block;
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    margin:
+        0
+        auto
+        7px;
+
+    border:
+        2px solid
+        var(--gps-white);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--gps-blue-600);
+
+    box-shadow:
+        0
+        0
+        0
+        1px
+        var(--gps-blue-150);
+}
+
+
+.home-career-timeline__stage {
+    display:
+        -webkit-box;
+
+    padding:
+        0
+        3px;
+
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.58rem;
+
+    line-height:
+        1.4;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        2;
+
+    overflow:
+        hidden;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   21. CAREER DECISION
+   ========================================================= */
+
+.career-preview-decision {
+    margin:
+        0
+        20px;
+
+    padding:
+        16px
+        0
+        18px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.career-preview-decision__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        8px;
+}
+
+
+.career-preview-decision__heading > span {
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.59rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.career-preview-decision__heading > strong {
+    display: inline-flex;
+
+    max-width:
+        52%;
+
+    padding:
+        4px
+        7px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--gps-blue-050);
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.59rem;
+
+    font-weight:
+        800;
+
+    text-align:
+        right;
+}
+
+
+.career-preview-decision__dilemma,
+.career-preview-priority {
+    display: grid;
+
+    grid-template-columns:
+        76px
+        minmax(0, 1fr);
+
+    gap:
+        10px;
+
+    padding:
+        9px
+        0;
+
+    border-top:
+        1px solid
+        var(--gps-line-soft);
+}
+
+
+.career-preview-decision__dilemma {
+    border-top:
+        0;
+}
+
+
+.career-preview-decision__sub-label,
+.career-preview-priority > span {
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.61rem;
+
+    font-weight:
+        700;
+}
+
+
+.career-preview-decision__hook,
+.career-preview-priority > p {
+    margin: 0;
+
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.65;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.career-preview-result > span {
+    color:
+        var(--gps-blue-600);
+}
+
+
+.career-preview-result > p {
+    color:
+        var(--gps-text-strong);
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   22. STORY FOOTER
+   ========================================================= */
+
+.home-career-card__footer {
+    display: flex;
+    align-items: center;
+
+    min-height:
+        52px;
+
+    margin-top:
+        auto;
+
+    padding:
+        13px
+        20px;
+
+    background:
+        var(--gps-navy-900);
+}
+
+
+.home-career-card__link {
+    display: inline-flex;
+    align-items: center;
+
+    gap:
+        6px;
+
+    color:
+        var(--gps-white);
+
+    font-size:
+        0.68rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   23. GUEST PREVIEW
+   ========================================================= */
+
+.career-story-preview-area {
+    margin-top:
+        23px;
+}
+
+
+.career-story-preview-label {
+    margin:
+        0
+        0
+        6px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.63rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.1em;
+}
+
+
+.career-story-preview-area > h3 {
+    margin:
+        0
+        0
+        20px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+}
+
+
+.career-story-preview-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        24px;
+
+    margin-top:
+        25px;
+
+    padding-top:
+        21px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.career-story-preview-cta strong {
+    display:
+        block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.79rem;
+
+    font-weight:
+        800;
+}
+
+
+.career-story-preview-cta p {
+    max-width:
+        660px;
+
+    margin:
+        5px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.74rem;
+
+    line-height:
+        1.7;
+}
+
+
+.home-login-cta {
+    display:
+        inline-flex;
+
+    flex:
+        0
+        0
+        auto;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    min-height:
+        45px;
+
+    padding:
+        11px
+        16px;
+
+    border-radius:
+        8px;
+
+    background:
+        var(--gps-blue-600);
+
+    color:
+        var(--gps-white) !important;
+
+    font-size:
+        0.73rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   24. EXPLORE
+   ========================================================= */
+
+.home-explore-section {
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        var(--gps-white);
+}
+
+
+.home-explore-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.12fr)
+        minmax(330px, 0.88fr);
+
+    gap:
+        34px;
+}
+
+
+.home-explore-block {
+    min-width: 0;
+}
+
+
+.home-explore-block__heading {
+    display: flex;
+    align-items: baseline;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        16px;
+}
+
+
+.home-explore-block__heading > span {
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.09em;
+}
+
+
+.home-explore-block__heading > strong {
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   25. OTHER CROSSROADS
+   ========================================================= */
+
+.decision-theme-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr;
+
+    gap:
+        0;
+}
+
+
+.decision-theme-card {
+    display: grid;
+
+    grid-template-columns:
+        48px
+        minmax(0, 1fr)
+        28px;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    min-height:
+        58px;
+
+    padding:
+        10px
+        0;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    color:
+        var(--gps-text);
+
+    transition:
+        color 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+.decision-theme-card:first-child {
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.decision-theme-card:hover {
+    background:
+        var(--gps-blue-025);
+
+    color:
+        var(--gps-blue-700);
+}
+
+
+.decision-theme-number {
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.59rem;
+
+    font-weight:
+        800;
+
+    text-align:
+        center;
+}
+
+
+.decision-theme-card > strong {
+    font-size:
+        0.8rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+}
+
+
+.decision-theme-arrow {
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.8rem;
+
+    text-align:
+        center;
+}
+
+
+/* =========================================================
+   26. POPULAR
+   Supports current JS + future compact JS
+   ========================================================= */
+
+.home-popular-section {
+    padding:
+        20px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-md);
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.home-popular-list {
+    display:
+        grid;
+
+    gap:
+        9px;
+}
+
+
+/*
+ * Current popular-stories.js compatibility
+ */
+.home-popular-section
+.home-career-card {
+    min-height:
+        0;
+
+    border-radius:
+        10px;
+
+    box-shadow:
+        none;
+}
+
+
+.home-popular-section
+.home-career-card__top {
+    padding:
+        13px
+        14px
+        8px;
+}
+
+
+.home-popular-section
+.home-career-avatar {
+    width:
+        34px;
+
+    height:
+        34px;
+
+    flex-basis:
+        34px;
+
+    font-size:
+        0.68rem;
+}
+
+
+.home-popular-section
+.home-career-person__meta {
+    font-size:
+        0.58rem;
+}
+
+
+.home-popular-section
+.home-career-person h3 {
+    font-size:
+        0.75rem;
+}
+
+
+.home-popular-section
+.career-preview-journey {
+    display:
+        none;
+}
+
+
+.home-popular-section
+.career-preview-decision {
+    margin:
+        0
+        14px;
+
+    padding:
+        7px
+        0
+        11px;
+
+    border-top:
+        0;
+}
+
+
+.home-popular-section
+.career-preview-decision__heading {
+    margin-bottom:
+        5px;
+}
+
+
+.home-popular-section
+.career-preview-decision__heading > span {
+    font-size:
+        0.52rem;
+}
+
+
+.home-popular-section
+.career-preview-decision__heading > strong {
+    font-size:
+        0.53rem;
+}
+
+
+.home-popular-section
+.career-preview-decision__hook {
+    font-size:
+        0.72rem;
+}
+
+
+.home-popular-section
+.career-preview-priority {
+    display:
+        none;
+}
+
+
+.home-popular-section
+.home-career-card__footer {
+    min-height:
+        38px;
+
+    padding:
+        9px
+        14px;
+}
+
+
+.home-popular-section
+.home-career-card__link {
+    font-size:
+        0.61rem;
+}
+
+
+/*
+ * Future compact popular item
+ */
+.home-popular-item {
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        24px;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    min-height:
+        62px;
+
+    padding:
+        11px
+        12px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--gps-white);
+
+    transition:
+        border-color 0.18s ease,
+        background-color 0.18s ease;
+}
+
+
+.home-popular-item:hover {
+    border-color:
+        var(--gps-blue-150);
+
+    background:
+        var(--gps-blue-025);
+}
+
+
+.home-popular-item small {
+    display:
+        block;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.59rem;
+}
+
+
+.home-popular-item strong {
+    display:
+        block;
+
+    margin-top:
+        2px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.76rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+}
+
+
+.home-explore-more-link {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    margin-top:
+        15px;
+
+    color:
+        var(--gps-blue-700) !important;
+
+    font-size:
+        0.7rem;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   27. MY CAREER GPS
+   ========================================================= */
+
+.home-my-gps-section {
+    padding:
+        72px
+        clamp(34px, 5vw, 80px);
+
+    background:
+        var(--gps-navy-900);
+
+    color:
+        var(--gps-white);
+}
+
+
+.home-my-gps-section__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        38px;
+}
+
+
+.home-my-gps-section
+.home-eyebrow {
+    color:
+        #78b3e5;
+}
+
+
+.home-my-gps-section h2 {
+    max-width:
+        810px;
+
+    margin: 0;
+
+    color:
+        var(--gps-white);
+
+    font-size:
+        clamp(
+            2rem,
+            3.2vw,
+            3.3rem
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        -0.04em;
+}
+
+
+.home-my-gps-section p:not(.home-eyebrow) {
+    max-width:
+        720px;
+
+    margin:
+        20px
+        0
+        0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
+
+    font-size:
+        0.9rem;
+
+    line-height:
+        1.9;
+}
+
+
+.home-outline-button {
+    display:
+        inline-flex;
+
+    flex:
+        0
+        0
+        auto;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        9px;
+
+    min-height:
+        47px;
+
+    padding:
+        12px
+        17px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    border-radius:
+        8px;
+
+    color:
+        var(--gps-white) !important;
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        800;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.home-outline-button:hover {
+    border-color:
+        var(--gps-white);
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   28. SHARE YOUR STORY
+   ========================================================= */
+
+.home-share-section {
+    padding:
+        72px
+        clamp(34px, 5vw, 80px);
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f5f9fd 100%
+        );
+}
+
+
+.home-share-section__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        38px;
+}
+
+
+.home-share-section h2 {
+    max-width:
+        780px;
+
+    margin: 0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        clamp(
+            1.9rem,
+            3vw,
+            3rem
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.22;
+
+    letter-spacing:
+        -0.035em;
+}
+
+
+.home-share-section p:not(.home-eyebrow) {
+    max-width:
+        700px;
+
+    margin:
+        18px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.87rem;
+
+    line-height:
+        1.85;
+}
+
+
+/* =========================================================
+   29. NEWS
+   ========================================================= */
+
+.home-news-section {
+    padding-top:
+        52px;
+
+    padding-bottom:
+        56px;
+
+    background:
+        var(--gps-white);
+}
+
+
+.home-news-section
+.home-section-heading-row {
+    margin-bottom:
+        12px;
+}
+
+
+.home-news-section h2 {
+    font-size:
+        1.5rem;
+}
+
+
+.home-news-list {
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.announcement-item {
+    display:
+        grid;
+
+    grid-template-columns:
+        94px
+        64px
+        minmax(0, 1fr)
+        22px;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+
+    min-height:
+        66px;
+
+    padding:
+        14px
+        0;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+
+    transition:
+        background-color 0.18s ease;
+}
+
+
+.announcement-item:hover {
+    background:
+        var(--gps-blue-025);
+}
+
+
+.announcement-date {
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.68rem;
+}
+
+
+.announcement-category {
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.announcement-title {
+    min-width: 0;
+
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.77rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.55;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.announcement-arrow {
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.78rem;
+}
+
+
+.announcement-empty {
+    margin: 0;
+
+    padding:
+        21px
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.76rem;
+}
+
+
+/* =========================================================
+   30. CAROUSEL INDICATORS
+   ========================================================= */
+
+.carousel-indicators {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap:
+        6px;
+
+    margin-top:
+        15px;
+}
+
+
+.carousel-indicators button,
+.carousel-indicators span {
+    width:
+        6px;
+
+    height:
+        6px;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        #cbd8e3;
+}
+
+
+.carousel-indicators .active,
+.carousel-indicators .is-active {
+    width:
+        18px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--gps-blue-600);
+}
+
+
+/* =========================================================
+   31. TABLET / SMALL DESKTOP
+   ========================================================= */
+
+@media (max-width: 1180px) {
+
+
+    .home-hero {
+        grid-template-columns:
+            minmax(0, 1.25fr)
+            minmax(290px, 0.75fr);
+
+        gap:
+            35px;
+    }
+
+
+    .home-hero h1 {
+        font-size:
+            clamp(
+                2.4rem,
+                4.5vw,
+                3.7rem
+            );
+    }
+
+
+    .home-explore-layout {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            42px;
+    }
+
+
+    .home-popular-section {
+        max-width:
+            760px;
+    }
+
+
+    .home-story-grid {
         grid-template-columns:
             repeat(
                 2,
@@ -4521,319 +4116,914 @@ h3 {
             );
     }
 
-    .home-same-crossroad-grid:has(
-        > .home-same-crossroad-card:nth-child(2):last-child
-    ) {
-        max-width: none;
+
+    .home-your-decision__panel {
+        grid-template-columns:
+            1fr;
     }
 
-    .home-same-crossroad-card {
-        min-height: 455px;
-
-        padding:
-            23px
-            21px
-            20px;
-    }
 
 }
 
 
 /* =========================================================
-   MOBILE
+   32. SIDEBAR BREAKPOINT
    ========================================================= */
 
-@media (max-width: 700px) {
-
-    .home-same-crossroad-section {
-        padding-top: 54px;
-        padding-bottom: 54px;
-    }
+@media (max-width: 950px) {
 
 
-    .home-same-crossroad-section
-    .home-section-heading-row {
-        display: block;
-    }
+    .career-gps-home {
+        width:
+            100%;
 
-
-    .home-same-crossroad-heading {
-        max-width: none;
-    }
-
-
-    .home-same-crossroad-description br {
-        display: none;
-    }
-
-
-    .home-same-crossroad-all-link {
-        margin-top: 17px;
-    }
-
-
-    .home-same-crossroad-grid,
-    .home-same-crossroad-grid:has(
-        > .home-same-crossroad-card:nth-child(2):last-child
-    ) {
-        grid-template-columns:
-            1fr;
-
-        gap: 13px;
-
-        max-width: none;
-    }
-
-
-    /*
-     * スマホでは高さ固定を解除。
-     *
-     * PCの高さ統一をそのまま持ち込むと
-     * 縦に間延びするため。
-     */
-    .home-same-crossroad-card {
-        min-height: 0;
-
-        padding:
-            21px
-            18px
-            18px;
-
-        border-radius: 18px;
-    }
-
-
-    .home-same-crossroad-card__route {
-        min-height: 36px;
-
-        padding-bottom: 14px;
-    }
-
-
-    .home-same-crossroad-card__route strong {
-        max-width: 58%;
-    }
-
-
-    .home-same-crossroad-card__person-header {
-        padding:
-            15px
+        margin-left:
             0;
     }
 
 
-    .home-same-crossroad-card__avatar {
-        width: 38px;
-        height: 38px;
+    .home-hero {
+        grid-template-columns:
+            1fr;
 
-        font-size: 0.8rem;
+        min-height:
+            0;
+
+        padding-top:
+            54px;
+
+        padding-bottom:
+            54px;
     }
 
 
-    .home-same-crossroad-card__person-info > strong {
-        font-size: 0.8rem;
+    .home-hero__main {
+        max-width:
+            780px;
     }
 
 
-    .home-same-crossroad-card__person-info p {
-        font-size: 0.64rem;
+    .home-hero-map {
+        max-width:
+            720px;
     }
 
 
-    /*
-     * スマホでは各ゾーン最低高を解除。
-     */
-    .home-same-crossroad-card__path-item {
-        min-height: 0 !important;
+    .home-how-section {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+
+        gap:
+            15px;
+    }
+
+
+    .home-how-section__arrow {
+        display:
+            none;
+    }
+
+
+    .home-proof {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            15px;
+    }
+
+
+    .home-decision-criteria-list {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .home-my-gps-section__inner,
+    .home-share-section__inner {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+}
+
+
+/* =========================================================
+   33. MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+
+    /* -----------------------------------------
+       Common
+       ----------------------------------------- */
+
+    .home-section {
+        padding:
+            53px
+            18px;
+    }
+
+
+    .home-section-heading {
+        margin-bottom:
+            26px;
+    }
+
+
+    .home-section-heading-row {
+        display:
+            block;
+
+        margin-bottom:
+            26px;
+    }
+
+
+    .home-section-heading h2,
+    .home-section-heading-row h2 {
+        font-size:
+            1.8rem;
+
+        line-height:
+            1.27;
+    }
+
+
+    .home-section-description,
+    .home-section-heading > p:not(.home-eyebrow),
+    .home-section-heading-row > div > p:not(.home-eyebrow) {
+        margin-top:
+            13px;
+
+        font-size:
+            0.82rem;
+
+        line-height:
+            1.78;
+    }
+
+
+    .home-section-description br,
+    .home-section-heading br {
+        display:
+            none;
+    }
+
+
+    .home-section-link {
+        margin-top:
+            14px;
+
+        font-size:
+            0.72rem;
+    }
+
+
+    .home-eyebrow {
+        margin-bottom:
+            10px;
+
+        font-size:
+            0.62rem;
+    }
+
+
+
+    /* -----------------------------------------
+       Hero
+       ----------------------------------------- */
+
+    .home-hero {
+        gap:
+            27px;
 
         padding:
-            0
-            0
-            16px
+            41px
+            18px
+            44px;
+    }
+
+
+    .home-hero h1 {
+        font-size:
+            clamp(
+                1.85rem,
+                8.2vw,
+                2.35rem
+            );
+    
+        line-height:
+            1.18;
+    
+        letter-spacing:
+            -0.025em;
+    }
+    
+    
+    .home-hero__lead {
+        margin-top:
+            17px;
+    
+        font-size:
+            0.82rem;
+    
+        line-height:
+            1.75;
+    }
+    
+    
+    .home-hero__lead br {
+        display:
+            none;
+    }
+
+
+    .home-decision-start {
+        margin-top:
             25px;
     }
 
 
-    .home-same-crossroad-card__path-item::before {
-        left: 6px;
-    }
+    .home-decision-start__primary {
+        width:
+            100%;
 
+        min-height:
+            66px;
 
-    .home-same-crossroad-card__path-item::after {
-        left: 2px;
-    }
-
-
-    .home-same-crossroad-card__path-item p {
-        font-size: 0.75rem;
-        line-height: 1.65;
-    }
-
-
-    .home-same-crossroad-card__path-item:nth-child(1) p {
-        -webkit-line-clamp: 3;
-    }
-
-
-    .home-same-crossroad-card__path-item:nth-child(2) p,
-    .home-same-crossroad-card__path-item:nth-child(3) p {
-        -webkit-line-clamp: 2;
-    }
-
-
-    .home-same-crossroad-card__cta {
-        min-height: 43px;
-
-        padding-top: 14px;
-
-        font-size: 0.67rem;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-    .home-same-crossroad-card {
         padding:
-            19px
+            13px
+            16px;
+    }
+
+
+    .home-decision-start__primary-copy strong {
+        font-size:
+            0.88rem;
+    }
+
+
+    .home-decision-start__quick {
+        gap:
+            5px;
+    }
+
+
+    .home-decision-start__quick-label {
+        width:
+            100%;
+
+        margin:
+            2px
+            0
+            1px;
+    }
+
+
+    .home-decision-start__quick a {
+        min-height:
+            32px;
+
+        padding:
+            6px
+            9px;
+
+        font-size:
+            0.65rem;
+    }
+
+
+
+    /* -----------------------------------------
+       Hero map
+       ----------------------------------------- */
+
+    .home-hero-map {
+        padding:
+            21px
+            18px;
+    }
+
+
+    .home-hero-map h2 {
+        font-size:
+            1.18rem;
+    }
+
+
+    .home-hero-map__choices {
+        gap:
+            5px;
+    }
+
+
+
+    /* -----------------------------------------
+       How
+       ----------------------------------------- */
+
+    .home-how-section {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            0;
+
+        padding:
+            9px
+            18px;
+    }
+
+
+    .home-how-section__item {
+        padding:
+            13px
+            0;
+
+        border-bottom:
+            1px solid
+            var(--gps-line-soft);
+    }
+
+
+    .home-how-section__item:last-child {
+        border-bottom:
+            0;
+    }
+
+
+    .home-how-section__item p {
+        font-size:
+            0.67rem;
+    }
+
+
+
+    /* -----------------------------------------
+       Proof
+       ----------------------------------------- */
+
+    .home-proof {
+        padding:
             16px
+            18px;
+    }
+
+
+    .home-proof__lead strong {
+        font-size:
+            0.75rem;
+    }
+
+
+    .home-proof__metrics {
+        width:
+            100%;
+
+        gap:
+            0;
+    }
+
+
+    .home-proof__metric {
+        flex:
+            1
+            1
+            0;
+
+        gap:
+            9px;
+    }
+
+
+    .home-proof__metric + .home-proof__metric {
+        margin-left:
+            14px;
+
+        padding-left:
+            14px;
+    }
+
+
+    .home-proof__metric > strong {
+        min-width:
+            0;
+
+        font-size:
+            1.25rem;
+    }
+
+
+    .home-proof__metric span {
+        font-size:
+            0.46rem;
+    }
+
+
+    .home-proof__metric small {
+        font-size:
+            0.55rem;
+    }
+
+
+
+    /* -----------------------------------------
+       Decision Experience
+       ----------------------------------------- */
+
+    .home-decision-compare-area,
+    .home-decision-criteria,
+    .home-your-decision {
+        padding:
+            20px
+            17px;
+
+        border-radius:
+            15px;
+    }
+
+
+    .home-decision-criteria,
+    .home-your-decision {
+        margin-top:
             17px;
     }
 
 
-    .home-same-crossroad-card__route {
-        gap: 10px;
+    .home-decision-subheading {
+        margin-bottom:
+            18px;
     }
 
 
-    .home-same-crossroad-card__route-label {
-        font-size: 0.55rem;
+
+    /* Desktop matrix -> mobile cards */
+
+    .decision-compare-desktop {
+        display:
+            none;
     }
 
 
-    .home-same-crossroad-card__route strong {
-        font-size: 0.67rem;
+    .decision-compare-mobile {
+        display:
+            block;
+    }
+
+
+    /* Legacy cards */
+
+    .home-decision-compare
+    .home-same-crossroad-grid,
+    #home-same-crossroad-list.home-same-crossroad-grid {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            11px;
+    }
+
+
+    .home-same-crossroad-card {
+        padding:
+            17px;
     }
 
 
     .home-same-crossroad-card__path-item p {
-        font-size: 0.72rem;
+        font-size:
+            0.86rem;
+
+        line-height:
+            1.68;
     }
 
 
-    .home-same-crossroad-card__cta {
-        font-size: 0.65rem;
+
+    /* -----------------------------------------
+       Your decision
+       ----------------------------------------- */
+
+    .home-your-decision__copy h3 {
+        font-size:
+            1.13rem;
     }
+
+
+    .home-your-decision__copy p {
+        font-size:
+            0.78rem;
+    }
+
+
+    .home-self-check__choices {
+        margin-top:
+            19px;
+    }
+
+
+    .home-self-check__choices button {
+        min-height:
+            40px;
+
+        padding:
+            8px
+            12px;
+
+        font-size:
+            0.71rem;
+    }
+
+
+    .home-self-check__footer {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .home-your-decision
+    .home-primary-button {
+        width:
+            100%;
+    }
+
+
+
+    /* -----------------------------------------
+       People like you
+       ----------------------------------------- */
+
+    .home-story-grid {
+        display:
+            flex;
+
+        gap:
+            12px;
+
+        overflow-x:
+            auto;
+
+        overflow-y:
+            hidden;
+
+        margin-right:
+            -18px;
+
+        padding:
+            2px
+            18px
+            12px
+            0;
+
+        scroll-snap-type:
+            x mandatory;
+
+        -webkit-overflow-scrolling:
+            touch;
+
+        scrollbar-width:
+            none;
+    }
+
+
+    .home-story-grid::-webkit-scrollbar {
+        display:
+            none;
+    }
+
+
+    .home-story-grid
+    .home-career-card {
+        flex:
+            0
+            0
+            min(
+                86vw,
+                350px
+            );
+
+        width:
+            min(
+                86vw,
+                350px
+            );
+
+        scroll-snap-align:
+            start;
+    }
+
+
+    .home-career-card__top {
+        padding:
+            18px
+            17px
+            14px;
+    }
+
+
+    .home-similar-section
+    .home-career-card__story {
+        margin:
+            0
+            17px;
+    }
+
+
+    .career-preview-journey,
+    .career-preview-decision {
+        margin-right:
+            17px;
+
+        margin-left:
+            17px;
+    }
+
+
+    .career-preview-decision__hook,
+    .career-preview-priority > p {
+        font-size:
+            0.79rem;
+    }
+
+
+    .career-story-preview-cta {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+
+        gap:
+            14px;
+    }
+
+
+    .home-login-cta {
+        width:
+            100%;
+    }
+
+
+
+    /* -----------------------------------------
+       Explore
+       ----------------------------------------- */
+
+    .home-explore-layout {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            37px;
+    }
+
+
+    .decision-theme-card {
+        grid-template-columns:
+            40px
+            minmax(0, 1fr)
+            27px;
+
+        min-height:
+            55px;
+    }
+
+
+    .home-popular-section {
+        padding:
+            17px;
+    }
+
+
+
+    /* -----------------------------------------
+       My GPS / Share
+       ----------------------------------------- */
+
+    .home-my-gps-section,
+    .home-share-section {
+        padding:
+            56px
+            18px;
+    }
+
+
+    .home-my-gps-section h2,
+    .home-share-section h2 {
+        font-size:
+            1.85rem;
+
+        line-height:
+            1.25;
+    }
+
+
+    .home-my-gps-section p:not(.home-eyebrow),
+    .home-share-section p:not(.home-eyebrow) {
+        margin-top:
+            16px;
+
+        font-size:
+            0.8rem;
+
+        line-height:
+            1.82;
+    }
+
+
+    .home-my-gps-section br,
+    .home-share-section br {
+        display:
+            none;
+    }
+
+
+    .home-outline-button,
+    .home-share-section
+    .home-primary-button {
+        width:
+            100%;
+    }
+
+
+
+    /* -----------------------------------------
+       News
+       ----------------------------------------- */
+
+    .home-news-section {
+        padding-top:
+            42px;
+
+        padding-bottom:
+            45px;
+    }
+
+
+    .announcement-item {
+        grid-template-columns:
+            72px
+            minmax(0, 1fr)
+            18px;
+
+        gap:
+            8px;
+
+        min-height:
+            60px;
+
+        padding:
+            13px
+            0;
+    }
+
+
+    .announcement-date {
+        font-size:
+            0.62rem;
+    }
+
+
+    .announcement-category {
+        display:
+            none;
+    }
+
+
+    .announcement-title {
+        font-size:
+            0.73rem;
+    }
+
 
 }
 
 
 /* =========================================================
-   REDUCED MOTION
+   34. SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  
+
+    .home-decision-start__primary-copy strong {
+        font-size:
+            0.83rem;
+    }
+
+
+    .home-hero-map__choices strong {
+        font-size:
+            0.68rem;
+    }
+
+
+    .home-proof__metric > strong {
+        font-size:
+            1.15rem;
+    }
+
+
+    .home-proof__metric span {
+        font-size:
+            0.43rem;
+    }
+
+
+    .decision-mobile-card__row {
+        grid-template-columns:
+            80px
+            minmax(0, 1fr);
+
+        padding:
+            13px
+            15px;
+    }
+
+
+    .decision-mobile-card__value {
+        font-size:
+            0.82rem;
+    }
+
+
+    .decision-mobile-card__row {
+      grid-template-columns: 1fr;
+      gap: 5px;
+  
+      padding:
+          13px
+          15px;
+  }
+  
+  
+  .decision-mobile-card__label {
+      font-size:
+          0.64rem;
+  }
+  
+  
+  .decision-mobile-card__value {
+      display:
+          -webkit-box;
+  
+      font-size:
+          0.84rem;
+  
+      line-height:
+          1.65;
+  
+      -webkit-box-orient:
+          vertical;
+  
+      -webkit-line-clamp:
+          4;
+  
+      overflow:
+          hidden;
+  }
+
+
+}
+
+
+/* =========================================================
+   35. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
-    .home-same-crossroad-card,
-    .home-same-crossroad-card__cta span:last-child {
-        transition: none;
+
+    .career-gps-home *,
+    .career-gps-home *::before,
+    .career-gps-home *::after {
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
     }
 
-
-    .home-same-crossroad-card:hover {
-        transform: none;
-    }
-
-
-    .home-same-crossroad-card:hover
-    .home-same-crossroad-card__cta span:last-child {
-        transform: none;
-    }
 
 }
-
-
-
-/* =========================================================
-   HERO TITLE RESPONSIVE COPY
-   ========================================================= */
-
-   .home-hero-title-desktop,
-   .home-hero-title-mobile {
-       color:
-           inherit !important;
-   }
-   
-   
-   .home-hero-title-desktop {
-       display:
-           inline;
-   }
-   
-   
-   .home-hero-title-mobile {
-       display:
-           none;
-   }
-   
-   
-   .home-hero-title-desktop strong,
-   .home-hero-title-mobile strong {
-       color:
-           var(--gps-blue-600);
-   
-       font: inherit;
-   }
-   
-   
-   /* Smartphone */
-   @media (max-width: 700px) {
-   
-       .home-hero-title-desktop {
-           display:
-               none;
-       }
-   
-   
-       .home-hero-title-mobile {
-           display:
-               inline;
-       }
-   
-   
-       .home-hero h1 {
-           font-size:
-               clamp(
-                   1.55rem,
-                   7vw,
-                   1.85rem
-               );
-   
-           line-height:
-               1.27;
-   
-           letter-spacing:
-               -0.045em;
-       }
-   
-   }
-   
-   
-   /* Small Smartphone */
-   @media (max-width: 420px) {
-   
-       .home-hero h1 {
-           font-size:
-               clamp(
-                   1.48rem,
-                   6.9vw,
-                   1.72rem
-               );
-       }
-   
-   }
