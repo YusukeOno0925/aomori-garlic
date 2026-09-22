@@ -668,6 +668,12 @@ def get_home_career_decision(
                 "priority_text"
             )
             or "",
+
+        "result_text":
+            selected.get(
+                "result_text"
+            )
+            or "",
     }
 
 
@@ -1653,7 +1659,8 @@ async def get_similar_users(
                 occurred_at,
                 trigger_text,
                 dilemma_text,
-                priority_text
+                priority_text,
+                result_text
             FROM career_decisions
             ORDER BY
                 user_id,

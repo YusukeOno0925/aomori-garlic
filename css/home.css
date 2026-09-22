@@ -1016,8 +1016,49 @@ h3 {
    09. SIMILAR / POPULAR SECTION
    ========================================================= */
 
-.home-similar-section {
-    background: var(--gps-white);
+   .home-similar-section {
+    background:
+        var(--gps-bg-soft);
+
+    border-top:
+        1px solid
+        #e7edf3;
+
+    border-bottom:
+        1px solid
+        #e7edf3;
+}
+
+
+/*
+ * SAME CROSSROADほど大きくしない。
+ * ただしPeople Like YouはHomeの第2主役なので、
+ * Dilemmaよりは明確に強くする。
+ */
+.home-similar-section
+.home-section-heading-row h2 {
+    max-width:
+        760px;
+
+    font-size:
+        clamp(
+            2rem,
+            2.8vw,
+            2.9rem
+        );
+}
+
+
+.home-similar-section
+.personalized-description {
+    max-width:
+        690px;
+
+    font-size:
+        0.92rem;
+
+    line-height:
+        1.82;
 }
 
 .home-popular-section {
@@ -1600,6 +1641,385 @@ h3 {
 
     overflow-wrap: anywhere;
     word-break: break-word;
+}
+
+
+/* =========================================================
+   16A. PEOPLE LIKE YOU
+   Career GPS person card
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   Card
+   --------------------------------------------------------- */
+
+.home-similar-section
+.home-story-grid {
+    gap:
+        20px;
+}
+
+
+.home-similar-section
+.home-career-card {
+    min-height:
+        0;
+
+    border-color:
+        #cfdae4;
+
+    border-radius:
+        18px;
+
+    box-shadow:
+        0
+        7px
+        24px
+        rgba(7, 27, 48, 0.045);
+}
+
+
+.home-similar-section
+.home-career-card:hover {
+    border-color:
+        #9fbed8;
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0
+        16px
+        38px
+        rgba(7, 27, 48, 0.09);
+}
+
+
+/* ---------------------------------------------------------
+  Person
+  --------------------------------------------------------- */
+
+.home-similar-section
+.home-career-card__top {
+    padding:
+        23px
+        22px
+        18px;
+}
+
+
+.home-similar-section
+.home-career-avatar {
+    flex-basis:
+        50px;
+
+    width:
+        50px;
+
+    height:
+        50px;
+
+    background:
+        var(--gps-white);
+
+    border-color:
+        #bcd2e4;
+
+    color:
+        var(--gps-navy-900);
+
+    box-shadow:
+        inset
+        0
+        0
+        0
+        3px
+        var(--gps-blue-025);
+}
+
+
+/* ---------------------------------------------------------
+  Why this person / common points
+  --------------------------------------------------------- */
+
+.home-similar-section
+.home-career-card__story {
+    margin:
+        0
+        22px;
+
+    padding:
+        12px
+        14px;
+
+    border-top:
+        0;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--gps-blue-025);
+}
+
+
+.home-similar-section
+.home-career-card__label {
+    font-size:
+        0.62rem;
+}
+
+
+.home-similar-section
+.home-career-tags {
+    margin-top:
+        8px;
+}
+
+
+.home-similar-section
+.home-career-tags span {
+    padding:
+        4px
+        8px;
+
+    border:
+        0;
+
+    background:
+        var(--gps-white);
+
+    font-size:
+        0.62rem;
+}
+
+
+/* ---------------------------------------------------------
+  Career Journey
+  --------------------------------------------------------- */
+
+.home-similar-section
+.career-preview-journey {
+    margin:
+        17px
+        22px
+        0;
+
+    padding:
+        17px
+        0
+        20px;
+}
+
+
+.home-similar-section
+.home-career-card__story
++
+.career-preview-journey {
+    margin-top:
+        17px;
+}
+
+
+.home-similar-section
+.career-preview-journey__label {
+    margin-bottom:
+        18px;
+}
+
+
+/* ---------------------------------------------------------
+  Career Decision
+  --------------------------------------------------------- */
+
+.home-similar-section
+.career-preview-decision {
+    margin:
+        0
+        22px;
+
+    padding:
+        18px
+        0
+        20px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.home-similar-section
+.career-preview-decision__heading {
+    margin-bottom:
+        7px;
+}
+
+
+/*
+* Decisionの中を
+*
+* ラベル | 内容
+*
+* に統一する。
+*
+* 縦長の文章カードにしない。
+*/
+.home-similar-section
+.career-preview-decision__dilemma,
+.home-similar-section
+.career-preview-priority {
+    display:
+        grid;
+
+    grid-template-columns:
+        82px
+        minmax(0, 1fr);
+
+    align-items:
+        start;
+
+    gap:
+        12px;
+
+    margin-top:
+        0;
+
+    padding:
+        11px
+        0;
+
+    border-top:
+        1px solid
+        #edf2f6;
+}
+
+
+.home-similar-section
+.career-preview-decision__dilemma {
+    border-top:
+        0;
+}
+
+
+/* ---------------------------------------------------------
+  Decision labels
+  --------------------------------------------------------- */
+
+.home-similar-section
+.career-preview-decision__sub-label,
+.home-similar-section
+.career-preview-priority > span {
+    display:
+        block;
+
+    margin:
+        2px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.45;
+}
+
+
+/* ---------------------------------------------------------
+  Decision text
+  --------------------------------------------------------- */
+
+.home-similar-section
+.career-preview-decision__hook {
+    font-size:
+        0.8rem;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.62;
+
+    -webkit-line-clamp:
+        2;
+}
+
+
+.home-similar-section
+.career-preview-priority > p {
+    font-size:
+        0.75rem;
+
+    line-height:
+        1.62;
+
+    -webkit-line-clamp:
+        2;
+}
+
+
+/*
+* 「その後」は結果なので、
+* 最後だけ少し強くする。
+*/
+.home-similar-section
+.career-preview-result > span {
+    color:
+        var(--gps-blue-600);
+}
+
+
+.home-similar-section
+.career-preview-result > p {
+    color:
+        var(--gps-text-strong);
+
+    font-weight:
+        600;
+}
+
+
+/* ---------------------------------------------------------
+  Footer = 選択する場所
+  --------------------------------------------------------- */
+
+.home-similar-section
+.home-career-card__footer {
+    min-height:
+        55px;
+
+    padding:
+        15px
+        22px;
+
+    border-top:
+        0;
+
+    background:
+        var(--gps-navy-900);
+}
+
+
+.home-similar-section
+.home-career-card__link {
+    color:
+        var(--gps-white);
+}
+
+
+.home-similar-section
+.home-career-card:hover
+.home-career-card__link {
+    color:
+        var(--gps-white);
 }
 
 
@@ -3062,6 +3482,112 @@ h3 {
     .home-career-card__priority-text,
     .home-career-decision__priority-text {
         font-size: 0.73rem;
+    }
+
+    /* -----------------------------------------
+      People Like You - Mobile
+      ----------------------------------------- */
+
+    .home-similar-section
+    .home-career-card {
+        min-height:
+            0;
+    }
+
+
+    .home-similar-section
+    .home-career-card__top {
+        padding:
+            19px
+            18px
+            16px;
+    }
+
+
+    .home-similar-section
+    .home-career-card__story {
+        margin:
+            0
+            18px;
+
+        padding:
+            11px
+            12px;
+    }
+
+
+    .home-similar-section
+    .career-preview-journey {
+        margin:
+            15px
+            18px
+            0;
+
+        padding:
+            16px
+            0
+            18px;
+    }
+
+
+    .home-similar-section
+    .career-preview-decision {
+        margin:
+            0
+            18px;
+
+        padding:
+            16px
+            0
+            18px;
+    }
+
+
+    .home-similar-section
+    .career-preview-decision__dilemma,
+    .home-similar-section
+    .career-preview-priority {
+        grid-template-columns:
+            70px
+            minmax(0, 1fr);
+
+        gap:
+            9px;
+
+        padding:
+            10px
+            0;
+    }
+
+
+    .home-similar-section
+    .career-preview-decision__sub-label,
+    .home-similar-section
+    .career-preview-priority > span {
+        font-size:
+            0.58rem;
+    }
+
+
+    .home-similar-section
+    .career-preview-decision__hook {
+        font-size:
+            0.76rem;
+    }
+
+
+    .home-similar-section
+    .career-preview-priority > p {
+        font-size:
+            0.7rem;
+    }
+
+
+    .home-similar-section
+    .home-career-card__footer {
+        padding:
+            14px
+            18px;
     }
 
 

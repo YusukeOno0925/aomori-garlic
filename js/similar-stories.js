@@ -693,12 +693,24 @@
                 );
 
 
+                const decisionQuery =
+                    story.decision.id
+
+                        ? `&decision_id=${
+                            encodeURIComponent(
+                                story.decision.id
+                            )
+                        }`
+
+                        : '';
+
+
                 window.location.href =
                     `Career_detail.html?id=${
                         encodeURIComponent(
                             story.id
                         )
-                    }`;
+                    }${decisionQuery}`;
 
             };
 
@@ -1112,6 +1124,8 @@
                 story.decision.type
                 ||
                 story.decision.priority
+                ||
+                story.decision.result
 
                 ? `
                     <div class="career-preview-decision">
@@ -1121,7 +1135,6 @@
                             <span>
                                 CAREER DECISION
                             </span>
-
 
                             ${
                                 story.decision.type
@@ -1144,13 +1157,21 @@
                             decisionHook
 
                             ? `
-                                <p class="career-preview-decision__hook">
+                                <div class="career-preview-decision__dilemma">
 
-                                    ${escapeHTML(
-                                        decisionHook
-                                    )}
+                                    <span class="career-preview-decision__sub-label">
+                                        当時の迷い
+                                    </span>
 
-                                </p>
+                                    <p class="career-preview-decision__hook">
+
+                                        ${escapeHTML(
+                                            decisionHook
+                                        )}
+
+                                    </p>
+
+                                </div>
                             `
 
                             : ''
@@ -1164,12 +1185,35 @@
                                 <div class="career-preview-priority">
 
                                     <span>
-                                        重視したこと
+                                        大切にしたこと
                                     </span>
 
                                     <p>
                                         ${escapeHTML(
                                             story.decision.priority
+                                        )}
+                                    </p>
+
+                                </div>
+                            `
+
+                            : ''
+                        }
+
+
+                        ${
+                            story.decision.result
+
+                            ? `
+                                <div class="career-preview-priority career-preview-result">
+
+                                    <span>
+                                        その後
+                                    </span>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            story.decision.result
                                         )}
                                     </p>
 
@@ -1211,12 +1255,24 @@
                 );
 
 
+                const decisionQuery =
+                    story.decision.id
+
+                        ? `&decision_id=${
+                            encodeURIComponent(
+                                story.decision.id
+                            )
+                        }`
+
+                        : '';
+
+
                 window.location.href =
                     `Career_detail.html?id=${
                         encodeURIComponent(
                             story.id
                         )
-                    }`;
+                    }${decisionQuery}`;
 
             };
 
@@ -1347,31 +1403,41 @@
 
             decision: {
 
+                id:
+                    decision.id
+                    ||
+                    null,
+            
                 type:
                     decision.decision_type
                     ||
                     '',
-
+            
                 title:
                     decision.title
                     ||
                     '',
-
+            
                 trigger:
                     decision.trigger_text
                     ||
                     '',
-
+            
                 dilemma:
                     decision.dilemma_text
                     ||
                     '',
-
+            
                 priority:
                     decision.priority_text
                     ||
+                    '',
+            
+                result:
+                    decision.result_text
+                    ||
                     ''
-
+            
             }
 
         };
