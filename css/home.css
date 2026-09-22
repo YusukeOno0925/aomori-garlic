@@ -611,116 +611,404 @@ body {
    08. DILEMMA SECTION
    ========================================================= */
 
-.home-dilemma-section {
-    background: var(--gps-white);
+/*
+ * SAME CROSSROADより一段弱い
+ * 「次の入口」として扱う。
+ *
+ * 大型カードではなく、
+ * 軽いナビゲーションリストにする。
+ */
+ .home-dilemma-section {
+  padding-top:
+      66px;
+
+  padding-bottom:
+      68px;
+
+  border-bottom:
+      1px solid
+      var(--gps-line);
+
+  background:
+      var(--gps-white);
 }
+
+
+/* ---------------------------------------------------------
+ Heading hierarchy
+ --------------------------------------------------------- */
+
+/*
+* 通常のHome見出しより少し小さくし、
+* SAME CROSSROADとの強弱を作る。
+*/
+.home-dilemma-section
+.home-section-heading h2 {
+  max-width:
+      720px;
+
+  font-size:
+      clamp(
+          1.85rem,
+          2.7vw,
+          2.65rem
+      );
+
+  line-height:
+      1.25;
+}
+
+
+/*
+* このセクションは
+* 「読む」のではなく「選ぶ」場所なので、
+* 説明文も主張を抑える。
+*/
+.home-dilemma-section
+.home-section-heading
+> p:not(.home-eyebrow) {
+  max-width:
+      660px;
+
+  margin-top:
+      14px;
+
+  font-size:
+      0.84rem;
+
+  line-height:
+      1.75;
+}
+
+
+/* =========================================================
+ NAVIGATION GRID
+ ========================================================= */
 
 .decision-theme-grid {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+      repeat(
+          2,
+          minmax(0, 1fr)
+      );
 
-    gap: 14px;
+  column-gap:
+      42px;
+
+  row-gap:
+      0;
+
+  margin-top:
+      33px;
 }
+
+
+/* =========================================================
+ NAVIGATION ROW
+ ========================================================= */
 
 .decision-theme-card {
-    position: relative;
+  position: relative;
 
-    display: flex;
-    flex-direction: column;
+  display: grid;
 
-    min-height: 245px;
+  grid-template-columns:
+      126px
+      minmax(0, 1fr)
+      32px;
 
-    padding:
-        25px
-        24px
-        23px;
+  align-items:
+      center;
 
-    border:
-        1px solid
-        var(--gps-line);
+  gap:
+      16px;
 
-    border-radius: var(--gps-radius-md);
+  min-width:
+      0;
 
-    background: var(--gps-white);
+  min-height:
+      84px;
 
-    overflow: hidden;
+  padding:
+      15px
+      0;
 
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+  border:
+      0;
+
+  border-bottom:
+      1px solid
+      var(--gps-line);
+
+  border-radius:
+      0;
+
+  background:
+      transparent;
+
+  color:
+      inherit;
+
+  text-decoration:
+      none;
+
+  overflow:
+      visible;
+
+  box-shadow:
+      none;
+
+  transition:
+      background-color 0.18s ease;
 }
+
+
+/*
+* 2列それぞれの先頭に上罫線。
+*/
+@media (min-width: 701px) {
+
+  .decision-theme-card:nth-child(-n + 2) {
+      border-top:
+          1px solid
+          var(--gps-line);
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+ Hover / Focus
+ --------------------------------------------------------- */
 
 .decision-theme-card:hover {
-  border-color: var(--gps-blue-600);
-  background: var(--gps-blue-025);
+  border-color:
+      var(--gps-line);
 
-  transform: translateY(-3px);
+  background:
+      var(--gps-blue-025);
 
-  box-shadow: var(--gps-shadow-card);
+  transform:
+      none;
+
+  box-shadow:
+      none;
 }
 
-.decision-theme-card:hover .decision-theme-number,
-.decision-theme-card:hover .decision-theme-en,
-.decision-theme-card:hover .decision-theme-arrow {
-  color: var(--gps-blue-600);
+
+.decision-theme-card:focus-visible {
+  outline:
+      3px solid
+      rgba(29, 95, 158, 0.20);
+
+  outline-offset:
+      3px;
 }
+
+
+/* =========================================================
+ META
+ ========================================================= */
+
+.decision-theme-card__meta {
+  display: flex;
+
+  align-items:
+      center;
+
+  gap:
+      10px;
+
+  min-width:
+      0;
+}
+
 
 .decision-theme-number {
-    color: var(--gps-muted-light);
+  flex:
+      0 0 auto;
 
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+  color:
+      var(--gps-muted-light);
+
+  font-size:
+      0.61rem;
+
+  font-weight:
+      800;
+
+  line-height:
+      1;
+
+  letter-spacing:
+      0.08em;
 }
+
 
 .decision-theme-en {
-    margin-top: 24px;
+  min-width:
+      0;
 
-    color: var(--gps-blue-600);
+  margin:
+      0;
 
-    font-size: 0.67rem;
-    font-weight: 800;
-    letter-spacing: 0.13em;
+  color:
+      var(--gps-blue-600);
+
+  font-size:
+      0.58rem;
+
+  font-weight:
+      800;
+
+  line-height:
+      1.35;
+
+  letter-spacing:
+      0.1em;
 }
+
+
+/* =========================================================
+ TITLE
+ ========================================================= */
 
 .decision-theme-card h3 {
-    margin:
-        9px
-        0
-        0;
+  min-width:
+      0;
 
-    color: var(--gps-text-strong);
+  margin:
+      0;
 
-    font-size: 1.12rem;
-    font-weight: 800;
-    line-height: 1.55;
+  color:
+      var(--gps-text-strong);
+
+  font-size:
+      0.91rem;
+
+  font-weight:
+      750;
+
+  line-height:
+      1.5;
+
+  overflow-wrap:
+      anywhere;
+
+  transition:
+      color 0.18s ease;
 }
 
+
+/*
+* 旧カードに入っている補足説明は、
+* Home上では表示しない。
+*
+* HTML自体は残すため、
+* データ・構造を破壊しない。
+*/
 .decision-theme-card p {
-    margin:
-        10px
-        0
-        0;
-
-    color: var(--gps-muted);
-
-    font-size: 0.78rem;
-    line-height: 1.7;
+  display:
+      none;
 }
+
+
+/* =========================================================
+ ARROW
+ ========================================================= */
 
 .decision-theme-arrow {
-    display: block;
+  display: flex;
 
-    margin-top: auto;
-    padding-top: 18px;
+  align-items:
+      center;
 
-    color: var(--gps-blue-600);
+  justify-content:
+      center;
 
-    font-size: 1rem;
-    font-weight: 800;
+  width:
+      32px;
+
+  height:
+      32px;
+
+  margin:
+      0;
+
+  padding:
+      0;
+
+  border-radius:
+      50%;
+
+  background:
+      transparent;
+
+  color:
+      var(--gps-muted-light);
+
+  font-size:
+      0.9rem;
+
+  font-weight:
+      800;
+
+  transition:
+      color 0.18s ease,
+      background-color 0.18s ease,
+      transform 0.18s ease;
+}
+
+
+/* ---------------------------------------------------------
+ Interaction
+ --------------------------------------------------------- */
+
+.decision-theme-card:hover
+.decision-theme-number,
+.decision-theme-card:hover
+.decision-theme-en {
+  color:
+      var(--gps-blue-600);
+}
+
+
+.decision-theme-card:hover
+h3 {
+  color:
+      var(--gps-blue-700);
+}
+
+
+.decision-theme-card:hover
+.decision-theme-arrow {
+  background:
+      var(--gps-blue-050);
+
+  color:
+      var(--gps-blue-700);
+
+  transform:
+      translateX(3px);
+}
+
+
+/* ---------------------------------------------------------
+ Featured
+ --------------------------------------------------------- */
+
+/*
+* 1番目だけ大型カードに戻したりはしない。
+*
+* Hero / SAME CROSSROADですでに
+* 転職テーマを強く扱っているため、
+* ここでは全テーマを同じ入口として扱う。
+*/
+.decision-theme-card--featured {
+  background:
+      transparent;
 }
 
 
@@ -2432,38 +2720,118 @@ body {
 
 
     /* -----------------------------------------
-       Dilemma
-       ----------------------------------------- */
+      Dilemma
+      ----------------------------------------- */
+
+    .home-dilemma-section {
+      padding-top:
+          52px;
+
+      padding-bottom:
+          54px;
+    }
+
+
+    .home-dilemma-section
+    .home-section-heading h2 {
+      font-size:
+          1.65rem;
+
+      line-height:
+          1.3;
+    }
+
+
+    .home-dilemma-section
+    .home-section-heading
+    > p:not(.home-eyebrow) {
+      margin-top:
+          12px;
+
+      font-size:
+          0.75rem;
+
+      line-height:
+          1.7;
+    }
+
 
     .decision-theme-grid {
-        grid-template-columns:
-            1fr;
+      grid-template-columns:
+          1fr;
 
-        gap: 9px;
+      gap:
+          0;
+
+      margin-top:
+          25px;
     }
+
 
     .decision-theme-card {
-        min-height: 0;
+      grid-template-columns:
+          96px
+          minmax(0, 1fr)
+          29px;
 
-        padding:
-            20px
-            18px;
+      gap:
+          11px;
+
+      min-height:
+          74px;
+
+      padding:
+          12px
+          0;
     }
+
+
+    .decision-theme-card:first-child {
+      border-top:
+          1px solid
+          var(--gps-line);
+    }
+
+
+    .decision-theme-card__meta {
+      gap:
+          7px;
+    }
+
+
+    .decision-theme-number {
+      font-size:
+          0.55rem;
+    }
+
 
     .decision-theme-en {
-        margin-top: 17px;
+      font-size:
+          0.49rem;
+
+      letter-spacing:
+          0.07em;
     }
+
 
     .decision-theme-card h3 {
-        font-size: 1rem;
+      font-size:
+          0.8rem;
+
+      line-height:
+          1.45;
     }
 
-    .decision-theme-card p {
-        font-size: 0.72rem;
-    }
 
     .decision-theme-arrow {
-        padding-top: 14px;
+      width:
+          29px;
+
+      height:
+          29px;
+
+      font-size:
+          0.8rem;
     }
 
 
