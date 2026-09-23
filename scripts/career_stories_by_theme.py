@@ -1,6 +1,6 @@
 from datetime import date as _date, datetime
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
 
 from .register_user import get_db_connection
@@ -1621,13 +1621,43 @@ def select_decisions_for_response(
     "/career-stories-by-theme/"
 )
 async def get_career_stories_by_theme(
-    theme: str
+    theme: str,
+
+    view: str = Query(
+        "home"
+    ),
+
+    limit: int = Query(
+        12,
+        ge=1,
+        le=300
+    )
 ):
 
     theme_key = (
         theme
         or ""
     ).strip().lower()
+
+    view_mode = (
+        view
+        or
+        "home"
+    ).strip().lower()
+
+
+    if (
+        view_mode
+        not in [
+            "home",
+            "overview",
+        ]
+    ):
+
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid view"
+        )
 
 
     if (
@@ -1956,16 +1986,61 @@ async def get_career_stories_by_theme(
         # 5. Response対象Selection
         # =================================================
 
-        (
-            selected_decisions,
-            comparison_group
-        ) = (
-            select_decisions_for_response(
-                ranked_decisions,
-                theme_key,
-                limit=12
+        if view_mode == "overview":
+
+            selected_decisions = (
+                ranked_decisions[
+                    :limit
+                ]
             )
-        )
+
+
+            comparison_group = None
+
+
+            if theme_key == "change":
+
+                best_group = (
+                    choose_change_comparison_group(
+                        ranked_decisions
+                    )
+                )
+
+
+                if best_group:
+
+                    comparison_group = {
+
+                        "key":
+                            best_group[
+                                "key"
+                            ],
+
+                        "label":
+                            best_group[
+                                "label"
+                            ],
+
+                        "route_count":
+                            best_group[
+                                "route_count"
+                            ],
+
+                    }
+
+
+        else:
+
+            (
+                selected_decisions,
+                comparison_group
+            ) = (
+                select_decisions_for_response(
+                    ranked_decisions,
+                    theme_key,
+                    limit=limit
+                )
+            )
 
 
         # =================================================
@@ -2409,6 +2484,10 @@ async def get_career_stories_by_theme(
 
                 "theme":
                     theme_key,
+
+
+                "view":
+                    view_mode,
 
 
                 "theme_title":

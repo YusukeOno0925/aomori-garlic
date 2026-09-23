@@ -1,101 +1,64 @@
 /* =========================================================
+   IMNORMAL
    CAREER OVERVIEW
-   Career GPS Design System
+   Career GPS / Decision Explorer
+   ========================================================= */
+
+
+/* =========================================================
+   01. VARIABLES
    ========================================================= */
 
    :root {
 
-    /* =====================================================
-       Career GPS Brand
-       ===================================================== */
+    --overview-navy-950: #06182b;
+    --overview-navy-900: #071b30;
+    --overview-navy-850: #0a223b;
+    --overview-navy-800: #0d2744;
+    --overview-navy-700: #123b63;
 
-    --overview-navy-deep:
-        #071b30;
+    --overview-blue-700: #174f85;
+    --overview-blue-600: #1d5f9e;
+    --overview-blue-500: #2a72b5;
 
-    --overview-navy:
-        #0d2744;
+    --overview-blue-150: #c9dff0;
+    --overview-blue-100: #dcecf8;
+    --overview-blue-075: #e8f2fa;
+    --overview-blue-050: #eef5fb;
+    --overview-blue-025: #f6faff;
 
-    --overview-blue:
-        #1d5f9e;
+    --overview-text: #1b2d3f;
+    --overview-text-strong: #071b30;
+    --overview-text-sub: #627386;
+    --overview-text-muted: #8b99a8;
 
-    --overview-blue-hover:
-        #174f83;
+    --overview-line: #dce5ee;
+    --overview-line-soft: #e9eff4;
+    --overview-line-strong: #c8d7e4;
 
-    --overview-blue-soft:
-        #eef5fb;
+    --overview-bg: #f6f8fa;
+    --overview-white: #ffffff;
 
-    --overview-blue-soft-strong:
-        #e4f0fa;
+    --overview-shadow-soft:
+        0 10px 28px rgba(7, 27, 48, 0.055);
 
-    --overview-bg:
-        #f7f9fb;
+    --overview-shadow-panel:
+        0 18px 46px rgba(7, 27, 48, 0.085);
 
-    --overview-surface:
-        #ffffff;
-
-    --overview-surface-soft:
-        #f8fafc;
-
-    --overview-text:
-        #17283a;
-
-    --overview-text-strong:
-        #071b30;
-
-    --overview-text-sub:
-        #637386;
-
-    --overview-text-muted:
-        #8997a6;
-
-    --overview-border:
-        #dce5ee;
-
-    --overview-border-strong:
-        #bdd1e3;
-
-    --overview-shadow:
-        0 16px 42px
-        rgba(
-            7,
-            27,
-            48,
-            .07
-        );
+    --overview-shadow-card:
+        0 8px 24px rgba(7, 27, 48, 0.055);
 
     --overview-shadow-hover:
-        0 22px 52px
-        rgba(
-            7,
-            27,
-            48,
-            .12
-        );
+        0 18px 42px rgba(7, 27, 48, 0.11);
 
-    --overview-radius:
-        22px;
-
-
-    /* =====================================================
-       旧CSS互換
-       ===================================================== */
-
-    --overview-brown:
-        var(--overview-navy);
-
-    --overview-olive:
-        var(--overview-blue);
-
-    --overview-olive-dark:
-        var(--overview-navy);
-
-    --overview-olive-soft:
-        var(--overview-blue-soft);
+    --overview-radius-sm: 10px;
+    --overview-radius-md: 15px;
+    --overview-radius-lg: 22px;
 }
 
 
 /* =========================================================
-   PAGE
+   02. PAGE
    ========================================================= */
 
 body {
@@ -122,11 +85,63 @@ main.career-overview-page {
     color:
         var(--overview-text);
 
+    font-family:
+        "Roboto",
+        "Noto Sans JP",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height:
+        1.7;
+
+}
+
+
+.career-overview-page,
+.career-overview-page *,
+.career-overview-page *::before,
+.career-overview-page *::after {
+
+    box-sizing:
+        border-box;
+
+}
+
+
+.career-overview-page button {
+
+    font-family:
+        inherit;
+
+}
+
+
+.career-overview-page [hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+.career-overview-page button:focus-visible,
+.career-overview-page a:focus-visible,
+.career-story-card:focus-visible {
+
+    outline:
+        3px solid
+        rgba(29, 95, 158, 0.22);
+
+    outline-offset:
+        3px;
+
 }
 
 
 /* =========================================================
-   COMMON
+   03. COMMON
    ========================================================= */
 
 .overview-eyebrow {
@@ -137,25 +152,25 @@ main.career-overview-page {
         10px;
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     font-size:
-        .68rem;
+        0.69rem;
 
     font-weight:
         800;
 
-    letter-spacing:
-        .18em;
-
     line-height:
-        1.4;
+        1.35;
+
+    letter-spacing:
+        0.15em;
 
 }
 
 
 /* =========================================================
-   HERO
+   04. HERO
    ========================================================= */
 
 .career-overview-hero {
@@ -169,11 +184,11 @@ main.career-overview-page {
     align-items:
         center;
 
-    min-height:
-        330px;
-
     max-width:
         1280px;
+
+    min-height:
+        320px;
 
     margin:
         0
@@ -184,35 +199,17 @@ main.career-overview-page {
 
     border-bottom:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     background-image:
 
         linear-gradient(
             90deg,
             #ffffff 0%,
-            #ffffff 43%,
-            rgba(
-                255,
-                255,
-                255,
-                .94
-            )
-            58%,
-            rgba(
-                238,
-                245,
-                251,
-                .78
-            )
-            75%,
-            rgba(
-                238,
-                245,
-                251,
-                .52
-            )
-            100%
+            #ffffff 48%,
+            rgba(255, 255, 255, 0.95) 60%,
+            rgba(238, 245, 251, 0.78) 78%,
+            rgba(238, 245, 251, 0.48) 100%
         ),
 
         url("../images/career_gps_hero.png");
@@ -249,18 +246,8 @@ main.career-overview-page {
     background:
         linear-gradient(
             90deg,
-            rgba(
-                238,
-                245,
-                251,
-                0
-            ),
-            rgba(
-                238,
-                245,
-                251,
-                .18
-            )
+            rgba(238, 245, 251, 0),
+            rgba(238, 245, 251, 0.18)
         );
 
     content:
@@ -280,16 +267,14 @@ main.career-overview-page {
     z-index:
         2;
 
-    width: min(
-        820px,
-        70%
-    );
+    width:
+        min(820px, 70%);
 
     padding:
-        48px
+        46px
         0
-        58px
-        64px;
+        52px
+        62px;
 
 }
 
@@ -307,19 +292,19 @@ main.career-overview-page {
 
     font-size:
         clamp(
-            2.45rem,
-            3.1vw,
-            3.45rem
+            2.35rem,
+            3vw,
+            3.35rem
         );
 
     font-weight:
         800;
 
-    letter-spacing:
-        -.045em;
-
     line-height:
         1.12;
+
+    letter-spacing:
+        -0.043em;
 
 }
 
@@ -330,7 +315,7 @@ main.career-overview-page {
         660px;
 
     margin:
-        24px
+        21px
         0
         0;
 
@@ -338,7 +323,7 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .96rem;
+        0.96rem;
 
     line-height:
         1.9;
@@ -347,31 +332,46 @@ main.career-overview-page {
 
 
 /* =========================================================
-   THEME MODE HERO
+   05. CHANGE THEME HERO
    ========================================================= */
 
-.career-overview-page.is-theme-mode
+.career-overview-page.is-change-theme
 .career-overview-hero {
 
     min-height:
-        340px;
+        292px;
+
+    background-image:
+
+        linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #ffffff 54%,
+            rgba(255, 255, 255, 0.94) 66%,
+            rgba(238, 245, 251, 0.66) 100%
+        ),
+
+        url("../images/career_gps_hero.png");
 
 }
 
 
-.career-overview-page.is-theme-mode
+.career-overview-page.is-change-theme
 .career-overview-hero__content {
 
     width:
-        min(
-            860px,
-            74%
-        );
+        min(860px, 73%);
+
+    padding-top:
+        40px;
+
+    padding-bottom:
+        48px;
 
 }
 
 
-.career-overview-page.is-theme-mode
+.career-overview-page.is-change-theme
 .career-overview-hero h1 {
 
     max-width:
@@ -379,25 +379,19 @@ main.career-overview-page {
 
     font-size:
         clamp(
-            2.2rem,
+            2.15rem,
             2.65vw,
-            2.75rem
+            2.85rem
         );
-
-    letter-spacing:
-        -.04em;
 
     line-height:
         1.16;
-
-    white-space:
-        normal;
 
 }
 
 
 /* =========================================================
-   SEARCH PANEL
+   06. NORMAL SEARCH PANEL
    ========================================================= */
 
 .career-search-panel {
@@ -412,7 +406,7 @@ main.career-overview-page {
         1280px;
 
     margin:
-        -26px
+        -25px
         auto
         58px;
 
@@ -421,21 +415,16 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
-        var(--overview-radius);
+        var(--overview-radius-lg);
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            .97
-        );
+        rgba(255, 255, 255, 0.97);
 
     box-shadow:
-        var(--overview-shadow);
+        var(--overview-shadow-panel);
 
     backdrop-filter:
         blur(16px);
@@ -449,24 +438,18 @@ main.career-overview-page {
         grid;
 
     grid-template-columns:
-        minmax(
-            300px,
-            1.8fr
-        )
+        minmax(300px, 1.8fr)
         repeat(
             3,
-            minmax(
-                120px,
-                .65fr
-            )
+            minmax(120px, 0.65fr)
         )
         auto;
 
-    gap:
-        10px;
-
     align-items:
         end;
+
+    gap:
+        10px;
 
 }
 
@@ -496,7 +479,7 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .7rem;
+        0.71rem;
 
     font-weight:
         700;
@@ -532,27 +515,27 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
-        12px;
+        11px;
 
     outline:
         none;
 
     background:
-        var(--overview-surface-soft);
+        #f8fafc;
 
     color:
         var(--overview-text);
 
     font-size:
-        .88rem;
+        0.88rem;
 
     transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background-color .2s ease;
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background-color 0.18s ease;
 
 }
 
@@ -579,12 +562,7 @@ main.career-overview-page {
 #filter-income:focus {
 
     border-color:
-        rgba(
-            29,
-            95,
-            158,
-            .55
-        );
+        rgba(29, 95, 158, 0.55);
 
     background:
         #ffffff;
@@ -594,12 +572,7 @@ main.career-overview-page {
         0
         0
         4px
-        rgba(
-            29,
-            95,
-            158,
-            .08
-        );
+        rgba(29, 95, 158, 0.08);
 
 }
 
@@ -616,10 +589,10 @@ main.career-overview-page {
         15px;
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     font-size:
-        1.15rem;
+        1.1rem;
 
     transform:
         translateY(-50%);
@@ -641,33 +614,33 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border-strong);
+        var(--overview-line-strong);
 
     border-radius:
-        12px;
+        11px;
 
     background:
         #ffffff;
 
     color:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     font-size:
-        .76rem;
+        0.76rem;
 
     font-weight:
         700;
 
-    cursor:
-        pointer;
-
     white-space:
         nowrap;
 
+    cursor:
+        pointer;
+
     transition:
-        background-color .2s ease,
-        transform .2s ease,
-        border-color .2s ease;
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
 
 }
 
@@ -675,10 +648,10 @@ main.career-overview-page {
 .career-filter-reset:hover {
 
     border-color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     background:
-        var(--overview-blue-soft);
+        var(--overview-blue-025);
 
     transform:
         translateY(-1px);
@@ -687,7 +660,7 @@ main.career-overview-page {
 
 
 /* =========================================================
-   THEME FILTER
+   07. NORMAL THEME FILTER
    ========================================================= */
 
 .career-theme-area {
@@ -709,7 +682,7 @@ main.career-overview-page {
 
     border-top:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
 }
 
@@ -726,7 +699,7 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .72rem;
+        0.72rem;
 
     font-weight:
         700;
@@ -773,7 +746,7 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
         999px;
@@ -785,7 +758,7 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .72rem;
+        0.72rem;
 
     font-weight:
         700;
@@ -794,9 +767,9 @@ main.career-overview-page {
         pointer;
 
     transition:
-        color .2s ease,
-        border-color .2s ease,
-        background-color .2s ease;
+        color 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease;
 
 }
 
@@ -804,10 +777,10 @@ main.career-overview-page {
 .career-theme-chip:hover {
 
     border-color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
 }
 
@@ -815,35 +788,22 @@ main.career-overview-page {
 .career-theme-chip.active {
 
     border-color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     background:
-        var(--overview-blue-soft);
+        var(--overview-blue-050);
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-700);
 
 }
 
 
 /* =========================================================
-   HIDDEN
+   08. DECISION EXPLORER
    ========================================================= */
 
-.career-search-panel[hidden],
-.career-decision-path-panel[hidden] {
-
-    display:
-        none !important;
-
-}
-
-
-/* =========================================================
-   DECISION PATH PANEL
-   ========================================================= */
-
-.career-decision-path-panel {
+.career-decision-explorer {
 
     position:
         relative;
@@ -857,41 +817,38 @@ main.career-overview-page {
     margin:
         -28px
         auto
-        68px;
+        30px;
 
     padding:
-        26px
-        28px
-        28px;
+        34px
+        34px
+        32px;
 
     overflow:
         hidden;
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-blue-150);
 
     border-radius:
-        22px;
+        24px;
 
     background:
-        #ffffff;
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8fbfe 52%,
+            #edf6fd 100%
+        );
 
     box-shadow:
-        0
-        20px
-        46px
-        rgba(
-            7,
-            27,
-            48,
-            .09
-        );
+        var(--overview-shadow-panel);
 
 }
 
 
-.career-decision-path-panel::before {
+.career-decision-explorer::before {
 
     position:
         absolute;
@@ -911,8 +868,8 @@ main.career-overview-page {
     background:
         linear-gradient(
             180deg,
-            var(--overview-blue),
-            var(--overview-navy)
+            var(--overview-blue-500),
+            var(--overview-navy-800)
         );
 
     content:
@@ -921,24 +878,60 @@ main.career-overview-page {
 }
 
 
-.career-decision-path-panel__heading {
+.career-decision-explorer::after {
 
-    display:
-        flex;
+    position:
+        absolute;
 
-    align-items:
-        flex-end;
+    top:
+        -150px;
 
-    justify-content:
-        space-between;
+    right:
+        -120px;
 
-    gap:
-        24px;
+    width:
+        390px;
+
+    height:
+        390px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29, 95, 158, 0.08) 0%,
+            rgba(29, 95, 158, 0) 68%
+        );
+
+    content:
+        "";
+
+    pointer-events:
+        none;
 
 }
 
 
-.career-decision-path-panel h2 {
+.career-decision-explorer__intro {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    max-width:
+        780px;
+
+    margin-bottom:
+        31px;
+
+}
+
+
+.career-decision-explorer__intro h2 {
 
     margin:
         0;
@@ -947,24 +940,31 @@ main.career-overview-page {
         var(--overview-text-strong);
 
     font-size:
-        1.45rem;
+        clamp(
+            1.55rem,
+            2vw,
+            2rem
+        );
 
     font-weight:
         800;
 
-    letter-spacing:
-        -.025em;
-
     line-height:
         1.35;
+
+    letter-spacing:
+        -0.035em;
 
 }
 
 
-.career-decision-path-panel__lead {
+.career-decision-explorer__lead {
+
+    max-width:
+        690px;
 
     margin:
-        8px
+        10px
         0
         0;
 
@@ -972,16 +972,338 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .82rem;
+        0.86rem;
 
     line-height:
-        1.7;
+        1.75;
 
 }
 
 
 /* =========================================================
-   DECISION PATH FILTER
+   09. EXPLORER FILTER BLOCK
+   ========================================================= */
+
+.career-decision-filter-block {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+}
+
+
+.career-decision-filter-block__heading {
+
+    margin-bottom:
+        17px;
+
+}
+
+
+.career-decision-filter-block__title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+}
+
+
+.career-decision-filter-step {
+
+    display:
+        inline-flex;
+
+    flex:
+        0 0
+        34px;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    border:
+        1px solid
+        var(--overview-blue-150);
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--overview-blue-700);
+
+    font-size:
+        0.63rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-decision-filter-eyebrow {
+
+    margin:
+        0;
+
+    color:
+        var(--overview-blue-600);
+
+    font-size:
+        0.61rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.12em;
+
+}
+
+
+.career-decision-filter-block h3 {
+
+    margin:
+        2px
+        0
+        0;
+
+    color:
+        var(--overview-text-strong);
+
+    font-size:
+        0.98rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+
+}
+
+
+.career-decision-explorer__divider {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    height:
+        1px;
+
+    margin:
+        26px
+        0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--overview-line-strong),
+            var(--overview-line),
+            rgba(220, 229, 238, 0)
+        );
+
+}
+
+
+/* =========================================================
+   10. DILEMMA FILTER
+   ========================================================= */
+
+.career-dilemma-filter {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        10px;
+
+}
+
+
+.career-dilemma-button {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    min-height:
+        54px;
+
+    padding:
+        10px
+        14px;
+
+    border:
+        1px solid
+        var(--overview-line);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255, 255, 255, 0.92);
+
+    color:
+        var(--overview-text-sub);
+
+    font-size:
+        0.79rem;
+
+    font-weight:
+        800;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0
+        3px
+        10px
+        rgba(7, 27, 48, 0.025);
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+
+}
+
+
+.career-dilemma-button:hover {
+
+    border-color:
+        var(--overview-blue-150);
+
+    background:
+        var(--overview-blue-025);
+
+    color:
+        var(--overview-blue-700);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.career-dilemma-button.active {
+
+    border-color:
+        var(--overview-navy-800);
+
+    background:
+        var(--overview-navy-800);
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0
+        9px
+        20px
+        rgba(13, 39, 68, 0.16);
+
+}
+
+
+.career-dilemma-count {
+
+    display:
+        inline-flex;
+
+    flex:
+        0 0 auto;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        29px;
+
+    height:
+        27px;
+
+    padding:
+        0
+        8px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--overview-blue-050);
+
+    color:
+        var(--overview-blue-700);
+
+    font-size:
+        0.67rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-dilemma-button.active
+.career-dilemma-count {
+
+    background:
+        rgba(255, 255, 255, 0.15);
+
+    color:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   11. CHOICE FILTER
    ========================================================= */
 
 .career-decision-path-filter {
@@ -992,17 +1314,11 @@ main.career-overview-page {
     grid-template-columns:
         repeat(
             4,
-            minmax(
-                0,
-                1fr
-            )
+            minmax(0, 1fr)
         );
 
     gap:
         10px;
-
-    margin-top:
-        22px;
 
 }
 
@@ -1022,27 +1338,27 @@ main.career-overview-page {
         12px;
 
     min-height:
-        58px;
+        56px;
 
     padding:
-        0
-        17px;
+        10px
+        15px;
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
-        13px;
+        12px;
 
     background:
-        #ffffff;
+        rgba(255, 255, 255, 0.92);
 
     color:
         var(--overview-text-sub);
 
     font-size:
-        .82rem;
+        0.8rem;
 
     font-weight:
         800;
@@ -1051,36 +1367,28 @@ main.career-overview-page {
         pointer;
 
     transition:
-        transform .2s ease,
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background-color .2s ease,
-        color .2s ease;
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
 
 }
 
 
 .career-decision-path-button:hover {
 
-    transform:
-        translateY(-2px);
-
     border-color:
-        var(--overview-blue);
+        var(--overview-blue-150);
+
+    background:
+        var(--overview-blue-025);
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-700);
 
-    box-shadow:
-        0
-        8px
-        20px
-        rgba(
-            29,
-            95,
-            158,
-            .08
-        );
+    transform:
+        translateY(-1px);
 
 }
 
@@ -1088,24 +1396,19 @@ main.career-overview-page {
 .career-decision-path-button.active {
 
     border-color:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     background:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     color:
         #ffffff;
 
     box-shadow:
         0
-        10px
-        22px
-        rgba(
-            13,
-            39,
-            68,
-            .18
-        );
+        9px
+        20px
+        rgba(13, 39, 68, 0.16);
 
 }
 
@@ -1115,6 +1418,9 @@ main.career-overview-page {
     display:
         inline-flex;
 
+    flex:
+        0 0 auto;
+
     align-items:
         center;
 
@@ -1122,26 +1428,26 @@ main.career-overview-page {
         center;
 
     min-width:
-        27px;
+        29px;
 
     height:
         27px;
 
     padding:
         0
-        7px;
+        8px;
 
     border-radius:
         999px;
 
     background:
-        var(--overview-blue-soft);
+        var(--overview-blue-050);
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-700);
 
     font-size:
-        .68rem;
+        0.67rem;
 
     font-weight:
         800;
@@ -1153,12 +1459,7 @@ main.career-overview-page {
 .career-decision-path-count {
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            .16
-        );
+        rgba(255, 255, 255, 0.15);
 
     color:
         #ffffff;
@@ -1167,7 +1468,298 @@ main.career-overview-page {
 
 
 /* =========================================================
-   STORY SECTION
+   12. CURRENT VIEW
+   ========================================================= */
+
+.career-current-view {
+
+    max-width:
+        1280px;
+
+    margin:
+        0
+        auto
+        54px;
+
+    padding:
+        27px
+        30px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius:
+        19px;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--overview-navy-950),
+            var(--overview-navy-800)
+        );
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0
+        16px
+        34px
+        rgba(7, 27, 48, 0.13);
+
+}
+
+
+.career-current-view__main {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        28px;
+
+}
+
+
+.career-current-view
+.overview-eyebrow {
+
+    color:
+        #76b5e7;
+
+}
+
+
+.career-current-view__copy {
+
+    min-width:
+        0;
+
+}
+
+
+.career-current-view h2 {
+
+    margin:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            1.25rem,
+            1.8vw,
+            1.6rem
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    letter-spacing:
+        -0.025em;
+
+}
+
+
+.career-current-view__lead {
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.65;
+
+}
+
+
+.career-current-view__total {
+
+    display:
+        flex;
+
+    flex:
+        0 0 auto;
+
+    align-items:
+        baseline;
+
+    gap:
+        8px;
+
+}
+
+
+.career-current-view__total strong {
+
+    color:
+        #ffffff;
+
+    font-size:
+        2.15rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+}
+
+
+.career-current-view__total span {
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size:
+        0.58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+.career-current-view__routes {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        9px;
+
+    margin-top:
+        22px;
+
+    padding-top:
+        20px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+
+}
+
+
+.career-current-view__route {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    min-height:
+        50px;
+
+    padding:
+        10px
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    transition:
+        border-color 0.18s ease,
+        background-color 0.18s ease;
+
+}
+
+
+.career-current-view__route span {
+
+    color:
+        rgba(255, 255, 255, 0.72);
+
+    font-size:
+        0.74rem;
+
+    font-weight:
+        700;
+
+}
+
+
+.career-current-view__route strong {
+
+    color:
+        #ffffff;
+
+    font-size:
+        1.02rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-current-view__route.is-selected {
+
+    border-color:
+        rgba(255, 255, 255, 0.8);
+
+    background:
+        #ffffff;
+
+}
+
+
+.career-current-view__route.is-selected span,
+.career-current-view__route.is-selected strong {
+
+    color:
+        var(--overview-navy-900);
+
+}
+
+
+/* =========================================================
+   13. STORY SECTION
    ========================================================= */
 
 .career-story-section {
@@ -1197,12 +1789,15 @@ main.career-overview-page {
         30px;
 
     margin-bottom:
-        24px;
+        26px;
 
 }
 
 
 .career-story-section h2 {
+
+    max-width:
+        850px;
 
     margin:
         0;
@@ -1212,19 +1807,19 @@ main.career-overview-page {
 
     font-size:
         clamp(
-            1.7rem,
+            1.65rem,
             2vw,
-            2rem
+            2.05rem
         );
 
     font-weight:
         800;
 
-    letter-spacing:
-        -.035em;
-
     line-height:
         1.3;
+
+    letter-spacing:
+        -0.035em;
 
 }
 
@@ -1232,7 +1827,7 @@ main.career-overview-page {
 .career-story-section__lead {
 
     max-width:
-        700px;
+        720px;
 
     margin:
         9px
@@ -1243,10 +1838,10 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .88rem;
+        0.86rem;
 
     line-height:
-        1.7;
+        1.75;
 
 }
 
@@ -1259,17 +1854,34 @@ main.career-overview-page {
     margin:
         0;
 
+    padding:
+        7px
+        11px;
+
+    border:
+        1px solid
+        var(--overview-line);
+
+    border-radius:
+        999px;
+
+    background:
+        #ffffff;
+
     color:
         var(--overview-text-muted);
 
     font-size:
-        .78rem;
+        0.72rem;
+
+    font-weight:
+        700;
 
 }
 
 
 /* =========================================================
-   CARD GRID
+   14. STORY GRID
    ========================================================= */
 
 .career-story-list {
@@ -1280,10 +1892,7 @@ main.career-overview-page {
     grid-template-columns:
         repeat(
             3,
-            minmax(
-                0,
-                1fr
-            )
+            minmax(0, 1fr)
         );
 
     align-items:
@@ -1304,8 +1913,27 @@ main.career-overview-page {
 }
 
 
+/*
+ * Decision Explorerは
+ * 読ませるカードなのでPC 2列。
+ */
+.career-overview-page.is-change-theme
+.career-story-list {
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        24px;
+
+}
+
+
 /* =========================================================
-   STORY CARD
+   15. BASE STORY CARD
    ========================================================= */
 
 .career-story-card {
@@ -1316,45 +1944,402 @@ main.career-overview-page {
     min-width:
         0;
 
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--overview-line);
+
+    border-radius:
+        17px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        var(--overview-shadow-card);
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.career-story-card:hover {
+
+    border-color:
+        var(--overview-blue-150);
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        var(--overview-shadow-hover);
+
+}
+
+
+/* =========================================================
+   16. DECISION-FIRST CARD
+   ========================================================= */
+
+.career-story-card--decision {
+
     min-height:
-        440px;
+        0;
+
+}
+
+
+.career-decision-card {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    height:
+        100%;
+
+    min-height:
+        530px;
+
+    padding:
+        22px
+        22px
+        0;
+
+}
+
+
+/* =========================================================
+   17. DECISION CARD TOPLINE
+   ========================================================= */
+
+.career-decision-card__topline {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+}
+
+
+.career-decision-card__dilemma-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        28px;
+
+    padding:
+        5px
+        10px;
+
+    border:
+        1px solid
+        var(--overview-blue-150);
+
+    border-radius:
+        999px;
+
+    background:
+        var(--overview-blue-025);
+
+    color:
+        var(--overview-blue-700);
+
+    font-size:
+        0.65rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-decision-card__dilemma-badge--muted {
+
+    border-color:
+        var(--overview-line);
+
+    background:
+        #f8fafc;
+
+    color:
+        var(--overview-text-muted);
+
+}
+
+
+.career-decision-card__route {
+
+    display:
+        inline-flex;
+
+    flex:
+        0 0 auto;
+
+    align-items:
+        center;
+
+    min-height:
+        29px;
+
+    padding:
+        5px
+        10px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        0.66rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-decision-card__route--change {
+
+    border:
+        1px solid
+        var(--overview-navy-800);
+
+    background:
+        var(--overview-navy-800);
+
+    color:
+        #ffffff;
+
+}
+
+
+.career-decision-card__route--stay {
+
+    border:
+        1px solid
+        var(--overview-blue-150);
+
+    background:
+        #ffffff;
+
+    color:
+        var(--overview-blue-700);
+
+}
+
+
+.career-decision-card__route--internal {
+
+    border:
+        1px solid
+        var(--overview-blue-100);
+
+    background:
+        var(--overview-blue-050);
+
+    color:
+        var(--overview-navy-800);
+
+}
+
+
+/* =========================================================
+   18. DECISION CARD MAIN
+   ========================================================= */
+
+.career-decision-card__main {
+
+    margin-top:
+        22px;
+
+}
+
+
+.career-decision-card__label {
+
+    margin:
+        0;
+
+    color:
+        var(--overview-text-muted);
+
+    font-size:
+        0.65rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    letter-spacing:
+        0.045em;
+
+}
+
+
+.career-decision-card__dilemma {
+
+    display:
+        -webkit-box;
+
+    margin:
+        7px
+        0
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--overview-text-strong);
+
+    font-size:
+        1.04rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.62;
+
+    letter-spacing:
+        -0.012em;
+
+    overflow-wrap:
+        anywhere;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        3;
+
+}
+
+
+/* =========================================================
+   19. DECISION DETAILS
+   ========================================================= */
+
+.career-decision-card__details {
+
+    display:
+        grid;
+
+    gap:
+        12px;
+
+    margin-top:
+        20px;
+
+}
+
+
+.career-decision-card__detail-block {
+
+    padding:
+        13px
+        14px;
+
+    border-top:
+        1px solid
+        var(--overview-line-soft);
+
+}
+
+
+.career-decision-card__detail-block > p:last-child {
+
+    display:
+        -webkit-box;
+
+    margin:
+        5px
+        0
+        0;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--overview-text-sub);
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.68;
+
+    overflow-wrap:
+        anywhere;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        2;
+
+}
+
+
+/*
+ * Career GPSの差別化である
+ * 「その後」を明確に強くする。
+ */
+.career-decision-card__detail-block--result {
+
+    position:
+        relative;
+
+    padding:
+        15px
+        16px;
 
     overflow:
         hidden;
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-blue-100);
 
     border-radius:
-        18px;
+        12px;
 
     background:
-        var(--overview-surface);
-
-    box-shadow:
-        0
-        10px
-        28px
-        rgba(
-            7,
-            27,
-            48,
-            .055
+        linear-gradient(
+            120deg,
+            #f0f7fc,
+            #f8fbfe
         );
-
-    cursor:
-        pointer;
-
-    transition:
-        transform .24s ease,
-        box-shadow .24s ease,
-        border-color .24s ease;
 
 }
 
 
-.career-story-card::before {
+.career-decision-card__detail-block--result::before {
 
     position:
         absolute;
@@ -1365,72 +2350,272 @@ main.career-overview-page {
     left:
         0;
 
-    right:
-        0;
-
-    height:
+    width:
         3px;
 
+    height:
+        100%;
+
     background:
-        linear-gradient(
-            90deg,
-            var(--overview-blue),
-            var(--overview-navy)
-        );
+        var(--overview-blue-600);
 
     content:
         "";
 
-    opacity:
-        0;
+}
 
-    transition:
-        opacity .2s ease;
+
+.career-decision-card__detail-block--result
+.career-decision-card__label {
+
+    color:
+        var(--overview-blue-700);
 
 }
 
 
-.career-story-card:hover {
+.career-decision-card__detail-block--result
+> p:last-child {
 
-    transform:
-        translateY(-5px);
+    color:
+        var(--overview-text-strong);
 
-    border-color:
-        var(--overview-border-strong);
-
-    box-shadow:
-        var(--overview-shadow-hover);
-
-}
-
-
-.career-story-card:hover::before {
-
-    opacity:
-        1;
-
-}
-
-
-.career-story-card:focus-visible {
-
-    outline:
-        3px solid
-        rgba(
-            29,
-            95,
-            158,
-            .22
-        );
-
-    outline-offset:
-        3px;
+    font-weight:
+        600;
 
 }
 
 
 /* =========================================================
-   GPS CARD
+   20. DECISION PERSON
+   ========================================================= */
+
+.career-decision-card__person {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-top:
+        20px;
+
+    padding-top:
+        17px;
+
+    border-top:
+        1px solid
+        var(--overview-line);
+
+}
+
+
+.career-decision-card__avatar {
+
+    display:
+        flex;
+
+    flex:
+        0 0
+        42px;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    border:
+        1px solid
+        var(--overview-blue-150);
+
+    border-radius:
+        50%;
+
+    background:
+        var(--overview-blue-025);
+
+    color:
+        var(--overview-navy-800);
+
+    font-size:
+        0.83rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-decision-card__person-copy {
+
+    min-width:
+        0;
+
+}
+
+
+.career-decision-card__person-copy > strong {
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--overview-text-strong);
+
+    font-size:
+        0.82rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.career-decision-card__person-copy > p {
+
+    margin:
+        3px
+        0
+        0;
+
+    color:
+        var(--overview-text-muted);
+
+    font-size:
+        0.68rem;
+
+    line-height:
+        1.45;
+
+}
+
+
+.career-decision-card__journey {
+
+    display:
+        -webkit-box;
+
+    max-width:
+        100%;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--overview-text-sub) !important;
+
+    font-size:
+        0.65rem !important;
+
+    line-height:
+        1.45 !important;
+
+    -webkit-box-orient:
+        vertical;
+
+    -webkit-line-clamp:
+        1;
+
+}
+
+
+/* =========================================================
+   21. DECISION CARD FOOTER
+   ========================================================= */
+
+.career-decision-card__footer {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    margin:
+        auto
+        -22px
+        0;
+
+    padding:
+        15px
+        22px;
+
+    border-top:
+        1px solid
+        var(--overview-line);
+
+    background:
+        #fafcfd;
+
+    color:
+        var(--overview-navy-800);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.career-decision-card__footer
+span:last-child {
+
+    color:
+        var(--overview-blue-600);
+
+    font-size:
+        0.9rem;
+
+    transition:
+        transform 0.18s ease;
+
+}
+
+
+.career-story-card--decision:hover
+.career-decision-card__footer
+span:last-child {
+
+    transform:
+        translateX(4px);
+
+}
+
+
+/* =========================================================
+   22. STANDARD CARD
+   Normal overview compatibility
    ========================================================= */
 
 .career-gps-story-card {
@@ -1448,16 +2633,12 @@ main.career-overview-page {
         440px;
 
     padding:
-        24px
-        24px
+        23px
+        23px
         0;
 
 }
 
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
 
 .career-gps-story-profile {
 
@@ -1468,7 +2649,7 @@ main.career-overview-page {
         center;
 
     gap:
-        13px;
+        12px;
 
 }
 
@@ -1480,7 +2661,7 @@ main.career-overview-page {
 
     flex:
         0 0
-        58px;
+        54px;
 
     align-items:
         center;
@@ -1489,14 +2670,14 @@ main.career-overview-page {
         center;
 
     width:
-        58px;
+        54px;
 
     height:
-        58px;
+        54px;
 
     border:
         1px solid
-        var(--overview-border-strong);
+        var(--overview-blue-150);
 
     border-radius:
         50%;
@@ -1505,30 +2686,17 @@ main.career-overview-page {
         linear-gradient(
             145deg,
             #ffffff,
-            var(--overview-blue-soft)
+            var(--overview-blue-050)
         );
 
     color:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     font-size:
-        1.3rem;
+        1.12rem;
 
     font-weight:
         800;
-
-    box-shadow:
-        inset
-        0
-        0
-        0
-        5px
-        rgba(
-            255,
-            255,
-            255,
-            .72
-        );
 
 }
 
@@ -1550,7 +2718,7 @@ main.career-overview-page {
         wrap;
 
     gap:
-        7px;
+        6px;
 
     margin:
         0;
@@ -1559,10 +2727,7 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .67rem;
-
-    line-height:
-        1.4;
+        0.68rem;
 
 }
 
@@ -1571,10 +2736,10 @@ main.career-overview-page {
 + span::before {
 
     margin-right:
-        7px;
+        6px;
 
     color:
-        var(--overview-border-strong);
+        var(--overview-line-strong);
 
     content:
         "|";
@@ -1596,13 +2761,13 @@ main.career-overview-page {
         var(--overview-text-strong);
 
     font-size:
-        1.06rem;
+        1rem;
 
     font-weight:
         800;
 
     line-height:
-        1.35;
+        1.4;
 
     text-overflow:
         ellipsis;
@@ -1613,14 +2778,10 @@ main.career-overview-page {
 }
 
 
-/* =========================================================
-   CARD SECTION
-   ========================================================= */
-
 .career-gps-story-section {
 
     margin-top:
-        22px;
+        21px;
 
 }
 
@@ -1633,22 +2794,22 @@ main.career-overview-page {
         9px;
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     font-size:
-        .58rem;
+        0.61rem;
 
     font-weight:
         800;
 
     letter-spacing:
-        .13em;
+        0.1em;
 
 }
 
 
 /* =========================================================
-   CAREER JOURNEY
+   23. STANDARD CAREER JOURNEY
    ========================================================= */
 
 .career-gps-journey {
@@ -1656,7 +2817,7 @@ main.career-overview-page {
     padding:
         3px
         3px
-        8px;
+        7px;
 
 }
 
@@ -1672,10 +2833,7 @@ main.career-overview-page {
     grid-template-columns:
         repeat(
             auto-fit,
-            minmax(
-                64px,
-                1fr
-            )
+            minmax(64px, 1fr)
         );
 
 }
@@ -1701,24 +2859,9 @@ main.career-overview-page {
     background:
         linear-gradient(
             90deg,
-            rgba(
-                29,
-                95,
-                158,
-                .16
-            ),
-            rgba(
-                29,
-                95,
-                158,
-                .62
-            ),
-            rgba(
-                29,
-                95,
-                158,
-                .16
-            )
+            rgba(29, 95, 158, 0.16),
+            rgba(29, 95, 158, 0.62),
+            rgba(29, 95, 158, 0.16)
         );
 
     content:
@@ -1762,7 +2905,7 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .59rem;
+        0.59rem;
 
     font-weight:
         700;
@@ -1786,19 +2929,14 @@ main.career-overview-page {
         50%;
 
     background:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     box-shadow:
         0
         0
         0
         1px
-        rgba(
-            29,
-            95,
-            158,
-            .34
-        );
+        rgba(29, 95, 158, 0.34);
 
 }
 
@@ -1806,19 +2944,7 @@ main.career-overview-page {
 .career-gps-journey__dot.is-current {
 
     background:
-        var(--overview-navy);
-
-    box-shadow:
-        0
-        0
-        0
-        2px
-        rgba(
-            13,
-            39,
-            68,
-            .13
-        );
+        var(--overview-navy-800);
 
 }
 
@@ -1841,7 +2967,7 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .58rem;
+        0.59rem;
 
     line-height:
         1.45;
@@ -1867,26 +2993,26 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .7rem;
+        0.7rem;
 
 }
 
 
 /* =========================================================
-   CAREER DECISION
+   24. STANDARD DECISION
    ========================================================= */
 
 .career-gps-story-decision {
 
     margin-top:
-        24px;
+        23px;
 
     padding-top:
-        18px;
+        17px;
 
     border-top:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
 }
 
@@ -1928,19 +3054,19 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border-strong);
+        var(--overview-blue-150);
 
     border-radius:
         999px;
 
     background:
-        var(--overview-blue-soft);
+        var(--overview-blue-050);
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-700);
 
     font-size:
-        .6rem;
+        0.61rem;
 
     font-weight:
         800;
@@ -1965,13 +3091,13 @@ main.career-overview-page {
         var(--overview-text-strong);
 
     font-size:
-        .96rem;
+        0.92rem;
 
     font-weight:
         800;
 
     line-height:
-        1.55;
+        1.58;
 
     overflow-wrap:
         anywhere;
@@ -1984,182 +3110,6 @@ main.career-overview-page {
 
 }
 
-
-/* =========================================================
-   SELECTED ROUTE
-   ========================================================= */
-
-.career-gps-selected-route {
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        14px;
-
-    margin-top:
-        12px;
-
-    padding:
-        13px
-        14px;
-
-    overflow:
-        hidden;
-
-    border:
-        1px solid
-        #c8dbeb;
-
-    border-radius:
-        11px;
-
-    background:
-        linear-gradient(
-            120deg,
-            var(--overview-blue-soft),
-            #f6faff
-        );
-
-}
-
-
-.career-gps-selected-route::before {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    left:
-        0;
-
-    width:
-        3px;
-
-    height:
-        100%;
-
-    background:
-        var(--overview-blue);
-
-    content:
-        "";
-
-}
-
-
-.career-gps-selected-route span {
-
-    color:
-        var(--overview-text-muted);
-
-    font-size:
-        .6rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        .05em;
-
-}
-
-
-.career-gps-selected-route strong {
-
-    color:
-        var(--overview-navy);
-
-    font-size:
-        .92rem;
-
-    font-weight:
-        800;
-
-}
-
-
-/* =========================================================
-   DILEMMA
-   ========================================================= */
-
-.career-gps-dilemma {
-
-    margin-top:
-        15px;
-
-}
-
-
-.career-gps-dilemma > span {
-
-    display:
-        block;
-
-    margin-bottom:
-        5px;
-
-    color:
-        var(--overview-text-muted);
-
-    font-size:
-        .58rem;
-
-    font-weight:
-        700;
-
-}
-
-
-.career-gps-dilemma p {
-
-    display:
-        -webkit-box;
-
-    margin:
-        0;
-
-    overflow:
-        hidden;
-
-    color:
-        var(--overview-text-strong);
-
-    font-size:
-        .92rem;
-
-    font-weight:
-        800;
-
-    line-height:
-        1.55;
-
-    overflow-wrap:
-        anywhere;
-
-    -webkit-box-orient:
-        vertical;
-
-    -webkit-line-clamp:
-        3;
-
-}
-
-
-/* =========================================================
-   PRIORITY
-   ========================================================= */
 
 .career-gps-priority {
 
@@ -2172,13 +3122,13 @@ main.career-overview-page {
 
     border:
         1px solid
-        #edf2f6;
+        var(--overview-line-soft);
 
     border-radius:
         10px;
 
     background:
-        var(--overview-surface-soft);
+        #f8fafc;
 
 }
 
@@ -2195,7 +3145,7 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .58rem;
+        0.61rem;
 
     font-weight:
         700;
@@ -2218,13 +3168,10 @@ main.career-overview-page {
         var(--overview-text-sub);
 
     font-size:
-        .7rem;
+        0.72rem;
 
     line-height:
         1.6;
-
-    overflow-wrap:
-        anywhere;
 
     -webkit-box-orient:
         vertical;
@@ -2234,10 +3181,6 @@ main.career-overview-page {
 
 }
 
-
-/* =========================================================
-   CARD FOOTER
-   ========================================================= */
 
 .career-gps-story-footer {
 
@@ -2255,29 +3198,25 @@ main.career-overview-page {
 
     margin:
         auto
-        -24px
+        -23px
         0;
 
     padding:
-        15px
-        24px;
+        14px
+        23px;
 
     border-top:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     background:
-        linear-gradient(
-            180deg,
-            #ffffff,
-            #f7fafc
-        );
+        #fafcfd;
 
     color:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     font-size:
-        .68rem;
+        0.69rem;
 
     font-weight:
         800;
@@ -2285,22 +3224,24 @@ main.career-overview-page {
 }
 
 
-.career-gps-story-footer span:last-child {
+.career-gps-story-footer
+span:last-child {
 
     color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     font-size:
-        .86rem;
+        0.87rem;
 
     transition:
-        transform .2s ease;
+        transform 0.18s ease;
 
 }
 
 
 .career-story-card--gps:hover
-.career-gps-story-footer span:last-child {
+.career-gps-story-footer
+span:last-child {
 
     transform:
         translateX(4px);
@@ -2309,35 +3250,30 @@ main.career-overview-page {
 
 
 /* =========================================================
-   EMPTY STATE
+   25. EMPTY STATE
    ========================================================= */
 
 .career-empty-state {
 
     padding:
-        66px
+        62px
         24px;
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
-        18px;
+        17px;
 
     background:
         #ffffff;
 
     box-shadow:
         0
-        10px
-        26px
-        rgba(
-            7,
-            27,
-            48,
-            .04
-        );
+        8px
+        24px
+        rgba(7, 27, 48, 0.04);
 
     text-align:
         center;
@@ -2365,14 +3301,20 @@ main.career-overview-page {
     .career-empty-state__title
 ) {
 
+    margin:
+        0;
+
     color:
         var(--overview-text-muted);
+
+    font-size:
+        0.82rem;
 
 }
 
 
 /* =========================================================
-   PAGINATION
+   26. PAGINATION
    ========================================================= */
 
 .pagination {
@@ -2390,7 +3332,7 @@ main.career-overview-page {
         14px;
 
     margin-top:
-        34px;
+        36px;
 
 }
 
@@ -2406,7 +3348,7 @@ main.career-overview-page {
 
     border:
         1px solid
-        var(--overview-border);
+        var(--overview-line);
 
     border-radius:
         999px;
@@ -2415,10 +3357,10 @@ main.career-overview-page {
         #ffffff;
 
     color:
-        var(--overview-navy);
+        var(--overview-navy-800);
 
     font-size:
-        .75rem;
+        0.76rem;
 
     font-weight:
         700;
@@ -2427,9 +3369,9 @@ main.career-overview-page {
         pointer;
 
     transition:
-        border-color .2s ease,
-        background-color .2s ease,
-        transform .2s ease;
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        transform 0.18s ease;
 
 }
 
@@ -2437,10 +3379,10 @@ main.career-overview-page {
 .pagination button:hover:not(:disabled) {
 
     border-color:
-        var(--overview-blue);
+        var(--overview-blue-600);
 
     background:
-        var(--overview-blue-soft);
+        var(--overview-blue-025);
 
     transform:
         translateY(-1px);
@@ -2451,7 +3393,7 @@ main.career-overview-page {
 .pagination button:disabled {
 
     opacity:
-        .35;
+        0.35;
 
     cursor:
         default;
@@ -2465,13 +3407,13 @@ main.career-overview-page {
         var(--overview-text-muted);
 
     font-size:
-        .72rem;
+        0.73rem;
 
 }
 
 
 /* =========================================================
-   REGISTER CTA
+   27. PERSONALIZED CTA
    ========================================================= */
 
 .career-overview-cta {
@@ -2481,62 +3423,52 @@ main.career-overview-page {
 
     grid-template-columns:
         auto
-        minmax(
-            0,
-            1fr
-        )
+        minmax(0, 1fr)
         auto;
 
     align-items:
         center;
 
     gap:
-        20px;
+        21px;
 
     max-width:
         1280px;
 
     margin:
-        48px
+        52px
         auto
         0;
 
     padding:
-        28px
-        30px;
+        30px
+        32px;
 
     overflow:
         hidden;
 
     border:
         1px solid
-        rgba(
-            29,
-            95,
-            158,
-            .16
-        );
+        rgba(255, 255, 255, 0.08);
 
     border-radius:
-        18px;
+        19px;
 
     background:
         linear-gradient(
             120deg,
-            var(--overview-navy-deep),
-            var(--overview-navy)
+            var(--overview-navy-950),
+            var(--overview-navy-800)
         );
+
+    color:
+        #ffffff;
 
     box-shadow:
         0
         18px
         38px
-        rgba(
-            7,
-            27,
-            48,
-            .15
-        );
+        rgba(7, 27, 48, 0.15);
 
 }
 
@@ -2545,7 +3477,7 @@ main.career-overview-page {
 .overview-eyebrow {
 
     color:
-        #8fc5f1;
+        #82bce9;
 
 }
 
@@ -2569,29 +3501,19 @@ main.career-overview-page {
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .22
-        );
+        rgba(255, 255, 255, 0.2);
 
     border-radius:
         50%;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            .08
-        );
+        rgba(255, 255, 255, 0.07);
 
     color:
         #ffffff;
 
     font-size:
-        1.2rem;
+        1.15rem;
 
 }
 
@@ -2607,11 +3529,20 @@ main.career-overview-page {
     font-size:
         1.25rem;
 
+    font-weight:
+        800;
+
+    line-height:
+        1.45;
+
 }
 
 
 .career-overview-cta__content
 > p:last-child {
+
+    max-width:
+        700px;
 
     margin:
         7px
@@ -2619,18 +3550,13 @@ main.career-overview-page {
         0;
 
     color:
-        rgba(
-            255,
-            255,
-            255,
-            .68
-        );
+        rgba(255, 255, 255, 0.67);
 
     font-size:
-        .76rem;
+        0.77rem;
 
     line-height:
-        1.6;
+        1.65;
 
 }
 
@@ -2639,6 +3565,9 @@ main.career-overview-page {
 
     display:
         inline-flex;
+
+    flex:
+        0 0 auto;
 
     align-items:
         center;
@@ -2651,16 +3580,11 @@ main.career-overview-page {
 
     padding:
         0
-        24px;
+        23px;
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .2
-        );
+        rgba(255, 255, 255, 0.2);
 
     border-radius:
         999px;
@@ -2669,10 +3593,10 @@ main.career-overview-page {
         #ffffff;
 
     color:
-        var(--overview-navy);
+        var(--overview-navy-900) !important;
 
     font-size:
-        .76rem;
+        0.76rem;
 
     font-weight:
         800;
@@ -2687,16 +3611,11 @@ main.career-overview-page {
         0
         10px
         22px
-        rgba(
-            0,
-            0,
-            0,
-            .1
-        );
+        rgba(0, 0, 0, 0.1);
 
     transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 
 }
 
@@ -2710,37 +3629,24 @@ main.career-overview-page {
         0
         14px
         30px
-        rgba(
-            0,
-            0,
-            0,
-            .16
-        );
+        rgba(0, 0, 0, 0.16);
 
 }
 
 
 /* =========================================================
-   TABLET
+   28. TABLET
    ========================================================= */
 
-@media (
-    max-width: 1100px
-) {
+@media (max-width: 1100px) {
 
     .career-search-main {
 
         grid-template-columns:
-            minmax(
-                280px,
-                1.5fr
-            )
+            minmax(280px, 1.5fr)
             repeat(
                 2,
-                minmax(
-                    130px,
-                    .7fr
-                )
+                minmax(130px, 0.7fr)
             );
 
     }
@@ -2751,34 +3657,40 @@ main.career-overview-page {
         grid-template-columns:
             repeat(
                 2,
-                minmax(
-                    0,
-                    1fr
-                )
+                minmax(0, 1fr)
             );
 
     }
 
 
-    .career-decision-path-filter {
+    .career-overview-page.is-change-theme
+    .career-story-list {
 
         grid-template-columns:
             repeat(
                 2,
-                minmax(
-                    0,
-                    1fr
-                )
+                minmax(0, 1fr)
             );
 
     }
 
 
-    .career-overview-page.is-theme-mode
+    .career-dilemma-filter {
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+
+    }
+
+
+    .career-overview-page.is-change-theme
     .career-overview-hero__content {
 
         width:
-            72%;
+            76%;
 
     }
 
@@ -2786,12 +3698,36 @@ main.career-overview-page {
 
 
 /* =========================================================
-   MOBILE
+   29. SIDEBAR / SMALL DESKTOP
    ========================================================= */
 
-@media (
-    max-width: 768px
-) {
+@media (max-width: 950px) {
+
+    main.career-overview-page {
+
+        margin-left:
+            0;
+
+    }
+
+
+    .career-overview-hero__content,
+    .career-overview-page.is-change-theme
+    .career-overview-hero__content {
+
+        width:
+            76%;
+
+    }
+
+}
+
+
+/* =========================================================
+   30. MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
 
     main.career-overview-page {
 
@@ -2810,16 +3746,18 @@ main.career-overview-page {
 
 
     /* -----------------------------------------------------
-       HERO
+       Hero
        ----------------------------------------------------- */
 
+    .career-overview-hero,
+    .career-overview-page.is-change-theme
     .career-overview-hero {
 
         display:
             block;
 
         min-height:
-            390px;
+            0;
 
         margin:
             0
@@ -2830,58 +3768,43 @@ main.career-overview-page {
             20px;
 
         border-bottom:
-            none;
+            1px solid
+            var(--overview-line);
 
         background-image:
-
             linear-gradient(
-                180deg,
+                160deg,
                 #ffffff 0%,
-                #ffffff 48%,
-                rgba(
-                    238,
-                    245,
-                    251,
-                    .85
-                )
-                72%,
-                rgba(
-                    238,
-                    245,
-                    251,
-                    .34
-                )
-                100%
-            ),
-
-            url("../images/career_gps_hero.png");
+                #ffffff 58%,
+                #eef6fc 100%
+            );
 
         background-position:
-            center bottom;
+            center;
 
         background-size:
-            auto 52%;
+            auto;
 
     }
 
 
     .career-overview-hero__content,
-    .career-overview-page.is-theme-mode
+    .career-overview-page.is-change-theme
     .career-overview-hero__content {
 
         width:
             100%;
 
         padding:
-            30px
+            34px
             0
-            0;
+            42px;
 
     }
 
 
     .career-overview-hero h1,
-    .career-overview-page.is-theme-mode
+    .career-overview-page.is-change-theme
     .career-overview-hero h1 {
 
         max-width:
@@ -2890,8 +3813,11 @@ main.career-overview-page {
         font-size:
             2rem;
 
-        white-space:
-            normal;
+        line-height:
+            1.2;
+
+        letter-spacing:
+            -0.035em;
 
     }
 
@@ -2902,7 +3828,7 @@ main.career-overview-page {
             16px;
 
         font-size:
-            .85rem;
+            0.84rem;
 
         line-height:
             1.8;
@@ -2910,8 +3836,16 @@ main.career-overview-page {
     }
 
 
+    .overview-lead br {
+
+        display:
+            none;
+
+    }
+
+
     /* -----------------------------------------------------
-       NORMAL SEARCH
+       Normal search
        ----------------------------------------------------- */
 
     .career-search-panel {
@@ -2925,7 +3859,7 @@ main.career-overview-page {
             16px;
 
         border-radius:
-            18px;
+            17px;
 
     }
 
@@ -2982,20 +3916,20 @@ main.career-overview-page {
 
 
     /* -----------------------------------------------------
-       DECISION PATH
+       Decision Explorer
        ----------------------------------------------------- */
 
-    .career-decision-path-panel {
+    .career-decision-explorer {
 
         margin:
-            -12px
+            -10px
             0
-            44px;
+            22px;
 
         padding:
-            20px
-            17px
-            18px;
+            23px
+            18px
+            21px;
 
         border-radius:
             18px;
@@ -3003,21 +3937,130 @@ main.career-overview-page {
     }
 
 
-    .career-decision-path-panel h2 {
+    .career-decision-explorer__intro {
+
+        margin-bottom:
+            25px;
+
+    }
+
+
+    .career-decision-explorer__intro h2 {
 
         font-size:
-            1.18rem;
+            1.35rem;
+
+        line-height:
+            1.42;
 
     }
 
 
-    .career-decision-path-panel__lead {
+    .career-decision-explorer__lead {
 
         font-size:
-            .76rem;
+            0.78rem;
 
     }
 
+
+    .career-decision-filter-block__heading {
+
+        margin-bottom:
+            14px;
+
+    }
+
+
+    .career-decision-filter-step {
+
+        flex-basis:
+            31px;
+
+        width:
+            31px;
+
+        height:
+            31px;
+
+    }
+
+
+    .career-decision-filter-block h3 {
+
+        font-size:
+            0.89rem;
+
+    }
+
+
+    .career-decision-explorer__divider {
+
+        margin:
+            21px
+            0;
+
+    }
+
+
+    /* -----------------------------------------------------
+       Dilemma
+       ----------------------------------------------------- */
+
+    .career-dilemma-filter {
+
+        display:
+            flex;
+
+        gap:
+            8px;
+
+        margin-right:
+            -18px;
+
+        padding:
+            2px
+            18px
+            7px
+            0;
+
+        overflow-x:
+            auto;
+
+        scrollbar-width:
+            none;
+
+    }
+
+
+    .career-dilemma-filter::-webkit-scrollbar {
+
+        display:
+            none;
+
+    }
+
+
+    .career-dilemma-button {
+
+        flex:
+            0 0 auto;
+
+        min-width:
+            137px;
+
+        min-height:
+            50px;
+
+        font-size:
+            0.73rem;
+
+    }
+
+
+    /* -----------------------------------------------------
+       Choice
+       ----------------------------------------------------- */
 
     .career-decision-path-filter {
 
@@ -3027,11 +4070,14 @@ main.career-overview-page {
         gap:
             8px;
 
-        margin-top:
-            17px;
+        margin-right:
+            -18px;
 
-        padding-bottom:
-            2px;
+        padding:
+            2px
+            18px
+            7px
+            0;
 
         overflow-x:
             auto;
@@ -3056,16 +4102,103 @@ main.career-overview-page {
             0 0 auto;
 
         min-width:
-            138px;
+            137px;
 
         min-height:
-            52px;
+            50px;
+
+        font-size:
+            0.73rem;
 
     }
 
 
     /* -----------------------------------------------------
-       STORY
+       Current View
+       ----------------------------------------------------- */
+
+    .career-current-view {
+
+        margin:
+            0
+            0
+            42px;
+
+        padding:
+            22px
+            18px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .career-current-view__main {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            17px;
+
+    }
+
+
+    .career-current-view h2 {
+
+        font-size:
+            1.17rem;
+
+    }
+
+
+    .career-current-view__total {
+
+        align-items:
+            baseline;
+
+    }
+
+
+    .career-current-view__total strong {
+
+        font-size:
+            1.8rem;
+
+    }
+
+
+    .career-current-view__routes {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            7px;
+
+        margin-top:
+            18px;
+
+        padding-top:
+            17px;
+
+    }
+
+
+    .career-current-view__route {
+
+        min-height:
+            45px;
+
+    }
+
+
+    /* -----------------------------------------------------
+       Story
        ----------------------------------------------------- */
 
     .career-story-section__header {
@@ -3073,8 +4206,14 @@ main.career-overview-page {
         align-items:
             flex-start;
 
+        flex-direction:
+            column;
+
+        gap:
+            12px;
+
         margin-bottom:
-            18px;
+            19px;
 
     }
 
@@ -3082,7 +4221,7 @@ main.career-overview-page {
     .career-story-section h2 {
 
         font-size:
-            1.5rem;
+            1.47rem;
 
     }
 
@@ -3090,40 +4229,152 @@ main.career-overview-page {
     .career-story-section__lead {
 
         font-size:
-            .78rem;
+            0.78rem;
 
     }
 
 
     .career-result-count {
 
-        margin-top:
-            24px;
+        align-self:
+            flex-start;
 
-        font-size:
-            .68rem;
+        margin:
+            0;
 
     }
 
 
+    .career-story-list,
+    .career-overview-page.is-change-theme
     .career-story-list {
 
         grid-template-columns:
             1fr;
 
         gap:
+            16px;
+
+    }
+
+
+    /* -----------------------------------------------------
+       Decision Card
+       ----------------------------------------------------- */
+
+    .career-decision-card {
+
+        min-height:
+            0;
+
+        padding:
+            19px
+            17px
+            0;
+
+    }
+
+
+    .career-decision-card__topline {
+
+        gap:
+            8px;
+
+    }
+
+
+    .career-decision-card__dilemma-badge,
+    .career-decision-card__route {
+
+        font-size:
+            0.62rem;
+
+    }
+
+
+    .career-decision-card__main {
+
+        margin-top:
+            18px;
+
+    }
+
+
+    .career-decision-card__dilemma {
+
+        font-size:
+            0.96rem;
+
+        line-height:
+            1.62;
+
+    }
+
+
+    .career-decision-card__details {
+
+        margin-top:
+            16px;
+
+    }
+
+
+    .career-decision-card__detail-block {
+
+        padding:
+            11px
+            12px;
+
+    }
+
+
+    .career-decision-card__detail-block--result {
+
+        padding:
+            13px
+            14px;
+
+    }
+
+
+    .career-decision-card__detail-block
+    > p:last-child {
+
+        font-size:
+            0.79rem;
+
+    }
+
+
+    .career-decision-card__person {
+
+        margin-top:
+            17px;
+
+        padding-top:
             15px;
 
     }
 
 
-    .career-story-card {
+    .career-decision-card__footer {
 
-        min-height:
-            0;
+        margin-right:
+            -17px;
+
+        margin-left:
+            -17px;
+
+        padding:
+            14px
+            17px;
 
     }
 
+
+    /* -----------------------------------------------------
+       Standard cards
+       ----------------------------------------------------- */
 
     .career-gps-story-card {
 
@@ -3141,40 +4392,13 @@ main.career-overview-page {
     .career-gps-story-avatar {
 
         flex-basis:
-            52px;
+            50px;
 
         width:
-            52px;
+            50px;
 
         height:
-            52px;
-
-        font-size:
-            1.15rem;
-
-    }
-
-
-    .career-gps-story-section {
-
-        margin-top:
-            18px;
-
-    }
-
-
-    .career-gps-journey {
-
-        overflow-x:
-            auto;
-
-    }
-
-
-    .career-gps-journey__track {
-
-        min-width:
-            330px;
+            50px;
 
     }
 
@@ -3202,19 +4426,16 @@ main.career-overview-page {
 
         grid-template-columns:
             auto
-            minmax(
-                0,
-                1fr
-            );
+            minmax(0, 1fr);
 
         gap:
             14px;
 
         margin-top:
-            36px;
+            39px;
 
         padding:
-            22px
+            23px
             20px;
 
     }
@@ -3234,84 +4455,93 @@ main.career-overview-page {
 
 
 /* =========================================================
-   SMALL MOBILE
+   31. SMALL MOBILE
    ========================================================= */
 
-@media (
-    max-width: 450px
-) {
-
-    .career-overview-hero {
-
-        min-height:
-            370px;
-
-    }
-
+@media (max-width: 450px) {
 
     .career-overview-hero h1,
-    .career-overview-page.is-theme-mode
+    .career-overview-page.is-change-theme
     .career-overview-hero h1 {
 
         font-size:
-            1.75rem;
+            1.72rem;
 
     }
 
 
-    .overview-lead br {
-
-        display:
-            none;
-
-    }
-
-
-    .career-story-section__header {
-
-        display:
-            block;
-
-    }
-
-
-    .career-result-count {
-
-        margin-top:
-            8px;
-
-    }
-
-
-    .career-gps-story-meta {
-
-        font-size:
-            .62rem;
-
-    }
-
-
-    .career-gps-story-person h3 {
-
-        font-size:
-            .98rem;
-
-    }
-
-
-    .career-gps-selected-route {
+    .career-decision-explorer {
 
         padding:
-            11px
-            12px;
+            21px
+            15px
+            19px;
 
     }
 
 
-    .career-gps-selected-route strong {
+    .career-dilemma-filter,
+    .career-decision-path-filter {
+
+        margin-right:
+            -15px;
+
+        padding-right:
+            15px;
+
+    }
+
+
+    .career-dilemma-button,
+    .career-decision-path-button {
+
+        min-width:
+            130px;
+
+    }
+
+
+    .career-current-view {
+
+        padding:
+            20px
+            16px;
+
+    }
+
+
+    .career-decision-card {
+
+        padding-right:
+            15px;
+
+        padding-left:
+            15px;
+
+    }
+
+
+    .career-decision-card__footer {
+
+        margin-right:
+            -15px;
+
+        margin-left:
+            -15px;
+
+        padding-right:
+            15px;
+
+        padding-left:
+            15px;
+
+    }
+
+
+    .career-decision-card__person-copy > p {
 
         font-size:
-            .84rem;
+            0.65rem;
 
     }
 
@@ -3330,7 +4560,7 @@ main.career-overview-page {
     .career-overview-cta h2 {
 
         font-size:
-            1.06rem;
+            1.07rem;
 
     }
 
@@ -3338,18 +4568,18 @@ main.career-overview-page {
 
 
 /* =========================================================
-   REDUCED MOTION
+   32. REDUCED MOTION
    ========================================================= */
 
-@media (
-    prefers-reduced-motion: reduce
-) {
+@media (prefers-reduced-motion: reduce) {
 
     .career-story-card,
     .career-filter-reset,
     .career-theme-chip,
+    .career-dilemma-button,
     .career-decision-path-button,
     .career-overview-cta__button,
+    .career-decision-card__footer span:last-child,
     .career-gps-story-footer span:last-child {
 
         transition:
@@ -3360,6 +4590,7 @@ main.career-overview-page {
 
     .career-story-card:hover,
     .career-filter-reset:hover,
+    .career-dilemma-button:hover,
     .career-decision-path-button:hover,
     .career-overview-cta__button:hover {
 
