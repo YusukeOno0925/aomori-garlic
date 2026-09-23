@@ -10,6 +10,17 @@ router = APIRouter()
 
 
 # =========================================================
+# Common
+# =========================================================
+
+CHANGE_ROUTE_ORDER = [
+    "change",
+    "stay",
+    "internal",
+]
+
+
+# =========================================================
 # Theme definition
 # =========================================================
 
@@ -35,47 +46,88 @@ THEME_DEFINITIONS = {
     # =====================================================
     # 転職するか迷っている
     #
-    # 重要：
-    # 「転職した人」を探すのではなく、
+    # 「転職した人」ではなく、
     # 「転職するか、残るか、異動するかを迷った人」
-    # を探すテーマとして扱う。
+    # を扱う。
     # =====================================================
 
     "change": {
         "title": "転職するか迷っている",
+
         "description":
             "転職するか、今の環境に残るか。"
             "同じ分岐に立った人の選択を見る。",
 
+        # -----------------------------------------------------
+        # 実際のテーマ判定では
+        # strong / context / alternative を使用する。
+        #
+        # keywordsは互換・参照用として残す。
+        # -----------------------------------------------------
         "keywords": [
             "転職",
-            "会社を変える",
-            "環境を変える",
             "他社",
+            "会社を変える",
+            "職場を変える",
+            "退職",
+            "辞める",
             "今の会社",
             "現職",
+            "今の仕事",
+            "今の環境",
             "残る",
             "続ける",
-            "辞める",
-            "退職",
             "異動",
             "社内異動",
         ],
 
-        # changeテーマでは
-        # decision_typeそのものを
-        # メインのTheme判定には使わない。
         "decision_types": [],
 
-        # ---------------------------------------------
-        # 既存データ救済用
+        # -----------------------------------------------------
+        # 強い転職検討Evidence。
         #
-        # dilemma_text等に「転職」という文字がなくても、
-        # 現在の検証データのように
-        # decision_type=転職 のStoryは弱く残す。
+        # これらは単独でも
+        # changeテーマとの関連性が高い。
+        # -----------------------------------------------------
+        "strong_keywords": [
+            "転職",
+            "他社",
+            "会社を変える",
+            "職場を変える",
+            "退職",
+            "辞める",
+        ],
+
+        # -----------------------------------------------------
+        # 現職側の文脈。
         #
-        # あくまでFallback。
-        # ---------------------------------------------
+        # これ単独ではchange扱いしない。
+        # -----------------------------------------------------
+        "context_keywords": [
+            "今の会社",
+            "現職",
+            "今の仕事",
+            "今の環境",
+        ],
+
+        # -----------------------------------------------------
+        # 現職文脈と組み合わさった場合に
+        # 転職・残留・異動の分岐として扱う語。
+        # -----------------------------------------------------
+        "alternative_keywords": [
+            "残る",
+            "続ける",
+            "異動",
+            "社内異動",
+            "環境を変える",
+        ],
+
+        # -----------------------------------------------------
+        # 現行検証データ救済。
+        #
+        # 本文にテーマEvidenceがない場合だけ、
+        # decision_type=転職 を弱いFallbackとして残す。
+        # -----------------------------------------------------
         "fallback_decision_types": [
             "転職",
         ],
@@ -167,19 +219,136 @@ THEME_DEFINITIONS = {
 
 
 # =========================================================
-# Helper
+# Change dilemma groups
+#
+# DBへは保存しない。
+# Career Decision本文からその都度派生する。
+#
+# 1Decisionが複数Groupに属してもよい。
+# =========================================================
+
+CHANGE_DILEMMA_GROUPS = {
+
+    "growth": {
+        "label": "成長機会",
+        "keywords": [
+            "成長",
+            "成長機会",
+            "スキルアップ",
+            "スキル",
+            "市場価値",
+            "キャリアアップ",
+            "挑戦",
+            "経験を積",
+            "専門性",
+        ],
+    },
+
+
+    "income": {
+        "label": "年収・待遇",
+        "keywords": [
+            "年収",
+            "給与",
+            "給料",
+            "収入",
+            "報酬",
+            "待遇",
+            "昇給",
+        ],
+    },
+
+
+    "workstyle": {
+        "label": "働き方・生活",
+        "keywords": [
+            "働き方",
+            "ワークライフバランス",
+            "wlb",
+            "残業",
+            "リモート",
+            "在宅",
+            "勤務時間",
+            "労働時間",
+            "育児",
+            "子育て",
+            "家庭",
+            "家族",
+            "通勤",
+            "勤務地",
+            "転勤",
+        ],
+    },
+
+
+    "role": {
+        "label": "仕事内容・役割",
+        "keywords": [
+            "仕事内容",
+            "やりたいこと",
+            "業務内容",
+            "役割",
+            "職種",
+            "業界",
+            "配属",
+            "異動",
+            "専門職",
+            "マネジメント",
+            "キャリアチェンジ",
+        ],
+    },
+
+
+    "relationship": {
+        "label": "人間関係・組織",
+        "keywords": [
+            "上司",
+            "人間関係",
+            "チーム",
+            "組織",
+            "社風",
+            "文化",
+            "評価",
+            "職場環境",
+        ],
+    },
+
+
+    "stability": {
+        "label": "安定・将来不安",
+        "keywords": [
+            "安定",
+            "福利厚生",
+            "雇用",
+            "将来性",
+            "会社の将来",
+            "経営",
+            "不安定",
+            "倒産",
+        ],
+    },
+
+}
+
+
+# =========================================================
+# Text helper
 # =========================================================
 
 def normalize_text(value):
     """
-    Noneを空文字へ変換し、
-    キーワード判定用の文字列にする。
+    None -> ""。
+    判定用にtrim + lowercase。
     """
 
     if value is None:
         return ""
 
-    return str(value).strip().lower()
+    return (
+        str(value)
+        .strip()
+        .lower()
+    )
 
 
 def contains_keyword(
@@ -187,8 +356,7 @@ def contains_keyword(
     keywords
 ):
     """
-    指定文字列にテーマのキーワードが
-    1つでも含まれているか。
+    keywordが1つでも含まれるか。
     """
 
     text = normalize_text(
@@ -199,8 +367,10 @@ def contains_keyword(
         return False
 
     return any(
-        normalize_text(keyword) in text
-        for keyword in keywords
+        normalize_text(keyword)
+        in text
+        for keyword
+        in keywords
     )
 
 
@@ -212,21 +382,8 @@ def get_decision_path(
     decision_type
 ):
     """
-    Career Decisionの種類を、
-    Career Overview上の
-    「実際に選んだ道」へ変換する。
-
-    DBカラムは追加しない。
-    decision_typeから都度生成する。
-
-    転職
-        → change / 転職した
-
-    現職継続
-        → stay / 残った
-
-    異動
-        → internal / 社内異動した
+    DBへカラム追加せず、
+    decision_typeから表示用Routeを生成。
     """
 
     decision_type = (
@@ -238,10 +395,6 @@ def get_decision_path(
     )
 
 
-    # -----------------------------------------------------
-    # 転職した
-    # -----------------------------------------------------
-
     if decision_type == "転職":
 
         return {
@@ -249,15 +402,6 @@ def get_decision_path(
             "label": "転職した",
         }
 
-
-    # -----------------------------------------------------
-    # 現職に残った
-    #
-    # 「現職継続」を正式値として想定する。
-    #
-    # その他は将来的な既存データ互換を考慮した
-    # Fallback。
-    # -----------------------------------------------------
 
     if decision_type in [
         "現職継続",
@@ -272,21 +416,16 @@ def get_decision_path(
         }
 
 
-    # -----------------------------------------------------
-    # 社内異動した
-    # -----------------------------------------------------
-
-    if decision_type == "異動":
+    if decision_type in [
+        "異動",
+        "社内異動",
+    ]:
 
         return {
             "key": "internal",
             "label": "社内異動した",
         }
 
-
-    # -----------------------------------------------------
-    # その他
-    # -----------------------------------------------------
 
     return {
         "key": "other",
@@ -299,7 +438,101 @@ def get_decision_path(
 
 
 # =========================================================
-# Theme Match
+# Change theme evidence
+# =========================================================
+
+def calculate_change_field_score(
+    value,
+    theme_definition,
+    strong_score,
+    context_score
+):
+    """
+    changeテーマ判定。
+
+    1.
+    転職 / 他社 / 退職 等の
+    強いEvidenceがあればstrong_score。
+
+    2.
+    「現職」という単語だけでは不足。
+
+    「今の会社」＋「残る」
+    「現職」＋「異動」
+
+    のように、
+    context + alternative が同じ文章にある場合のみ
+    弱いchange Evidenceとして扱う。
+    """
+
+    strong_keywords = (
+        theme_definition.get(
+            "strong_keywords",
+            []
+        )
+    )
+
+    context_keywords = (
+        theme_definition.get(
+            "context_keywords",
+            []
+        )
+    )
+
+    alternative_keywords = (
+        theme_definition.get(
+            "alternative_keywords",
+            []
+        )
+    )
+
+
+    if contains_keyword(
+        value,
+        strong_keywords
+    ):
+
+        return (
+            strong_score,
+            "strong"
+        )
+
+
+    has_context = (
+        contains_keyword(
+            value,
+            context_keywords
+        )
+    )
+
+    has_alternative = (
+        contains_keyword(
+            value,
+            alternative_keywords
+        )
+    )
+
+
+    if (
+        has_context
+        and
+        has_alternative
+    ):
+
+        return (
+            context_score,
+            "context_pair"
+        )
+
+
+    return (
+        0,
+        None
+    )
+
+
+# =========================================================
+# Change theme match
 # =========================================================
 
 def calculate_change_theme_match_score(
@@ -307,136 +540,83 @@ def calculate_change_theme_match_score(
     theme_definition
 ):
     """
-    「転職するか迷っている」専用判定。
+    「転職するか迷っている」専用。
 
-    重要：
-    最終的に転職したかどうかではなく、
+    最終結果ではなく、
+    転職 / 残留 / 異動という分岐を
+    本当に検討していたかを見る。
 
-    「転職するか、残るか、異動するか」
-
-    という分岐について
-    迷っていたかを優先する。
-
-
-    優先順位：
-
-    dilemma_text
-        何に迷っていたか
-        +6
-
-    trigger_text
-        何がきっかけだったか
-        +3
-
-    title
-        Decisionのタイトル
-        +2
-
-    priority_text
-        何を重視したか
-        +1
-
-
-    既存互換：
-
-    上記に何も一致しない場合だけ、
-    decision_type=転職 を +1 で残す。
+    dilemma_textを最優先。
     """
 
     score = 0
 
     matched_reasons = []
 
-    keywords = (
-        theme_definition.get(
-            "keywords",
-            []
-        )
-    )
 
+    field_settings = [
 
-    # -----------------------------------------------------
-    # 1. 何に迷ったか
-    # -----------------------------------------------------
-
-    if contains_keyword(
-        decision.get(
-            "dilemma_text"
+        (
+            "dilemma_text",
+            8,
+            5
         ),
-        keywords
-    ):
 
-        score += 6
+        (
+            "trigger_text",
+            4,
+            2
+        ),
+
+        (
+            "title",
+            3,
+            2
+        ),
+
+        (
+            "priority_text",
+            1,
+            1
+        ),
+
+    ]
+
+
+    for (
+        field_name,
+        strong_score,
+        context_score
+    ) in field_settings:
+
+        field_score, evidence_type = (
+            calculate_change_field_score(
+                decision.get(
+                    field_name
+                ),
+                theme_definition,
+                strong_score,
+                context_score
+            )
+        )
+
+
+        if field_score <= 0:
+            continue
+
+
+        score += field_score
 
         matched_reasons.append(
-            "dilemma_text"
+            (
+                f"{field_name}:"
+                f"{evidence_type}"
+            )
         )
 
 
     # -----------------------------------------------------
-    # 2. きっかけ
-    # -----------------------------------------------------
-
-    if contains_keyword(
-        decision.get(
-            "trigger_text"
-        ),
-        keywords
-    ):
-
-        score += 3
-
-        matched_reasons.append(
-            "trigger_text"
-        )
-
-
-    # -----------------------------------------------------
-    # 3. タイトル
-    # -----------------------------------------------------
-
-    if contains_keyword(
-        decision.get(
-            "title"
-        ),
-        keywords
-    ):
-
-        score += 2
-
-        matched_reasons.append(
-            "title"
-        )
-
-
-    # -----------------------------------------------------
-    # 4. 重視したこと
-    # -----------------------------------------------------
-
-    if contains_keyword(
-        decision.get(
-            "priority_text"
-        ),
-        keywords
-    ):
-
-        score += 1
-
-        matched_reasons.append(
-            "priority_text"
-        )
-
-
-    # -----------------------------------------------------
-    # 5. 既存データ用Fallback
-    #
-    # 例：
-    #
-    # decision_type = 転職
-    # dilemma_text = TEST2
-    #
-    # のような現在の検証データを
-    # いきなり消さないため。
+    # Existing-data fallback
     # -----------------------------------------------------
 
     if score == 0:
@@ -448,7 +628,7 @@ def calculate_change_theme_match_score(
         )
 
 
-        fallback_decision_types = [
+        fallback_types = [
             normalize_text(
                 value
             )
@@ -464,7 +644,7 @@ def calculate_change_theme_match_score(
             decision_type
             and
             decision_type
-            in fallback_decision_types
+            in fallback_types
         ):
 
             score = 1
@@ -480,18 +660,16 @@ def calculate_change_theme_match_score(
     )
 
 
+# =========================================================
+# Default theme match
+# =========================================================
+
 def calculate_default_theme_match_score(
     decision,
     theme_definition
 ):
     """
-    change以外のThemeについては
-    既存仕様をそのまま維持する。
-
-    decision_type : +5
-    dilemma_text  : +3
-    priority_text : +2
-    trigger_text  : +1
+    change以外は既存仕様を維持。
     """
 
     score = 0
@@ -526,10 +704,6 @@ def calculate_default_theme_match_score(
     )
 
 
-    # -----------------------------------------------------
-    # 1. Decision Type
-    # -----------------------------------------------------
-
     if (
         decision_type
         and
@@ -543,10 +717,6 @@ def calculate_default_theme_match_score(
             "decision_type"
         )
 
-
-    # -----------------------------------------------------
-    # 2. Dilemma
-    # -----------------------------------------------------
 
     if contains_keyword(
         decision.get(
@@ -562,10 +732,6 @@ def calculate_default_theme_match_score(
         )
 
 
-    # -----------------------------------------------------
-    # 3. Priority
-    # -----------------------------------------------------
-
     if contains_keyword(
         decision.get(
             "priority_text"
@@ -579,10 +745,6 @@ def calculate_default_theme_match_score(
             "priority_text"
         )
 
-
-    # -----------------------------------------------------
-    # 4. Trigger
-    # -----------------------------------------------------
 
     if contains_keyword(
         decision.get(
@@ -610,8 +772,7 @@ def calculate_theme_match_score(
     theme_definition
 ):
     """
-    Themeに応じて
-    適切な判定ロジックを使用する。
+    Theme別の判定ロジック。
     """
 
     if theme_key == "change":
@@ -633,19 +794,197 @@ def calculate_theme_match_score(
 
 
 # =========================================================
-# Date helpers
+# Change dilemma group
+# =========================================================
+
+def calculate_change_dilemma_groups(
+    decision
+):
+    """
+    changeテーマ内を、
+
+    growth
+    income
+    workstyle
+    role
+    relationship
+    stability
+
+    へ分類。
+
+    DB保存はしない。
+
+    1Decisionが複数Groupに入ってもよい。
+
+    dilemma_textを最重要にする。
+    """
+
+    field_weights = [
+
+        (
+            "dilemma_text",
+            5
+        ),
+
+        (
+            "trigger_text",
+            3
+        ),
+
+        (
+            "title",
+            2
+        ),
+
+        (
+            "priority_text",
+            1
+        ),
+
+    ]
+
+
+    matched_groups = []
+
+
+    for (
+        group_key,
+        group_definition
+    ) in CHANGE_DILEMMA_GROUPS.items():
+
+        group_score = 0
+
+        matched_fields = []
+
+
+        keywords = (
+            group_definition.get(
+                "keywords",
+                []
+            )
+        )
+
+
+        for (
+            field_name,
+            weight
+        ) in field_weights:
+
+            if contains_keyword(
+                decision.get(
+                    field_name
+                ),
+                keywords
+            ):
+
+                group_score += weight
+
+                matched_fields.append(
+                    field_name
+                )
+
+
+        if group_score <= 0:
+            continue
+
+
+        matched_groups.append({
+
+            "key":
+                group_key,
+
+            "label":
+                group_definition[
+                    "label"
+                ],
+
+            "score":
+                group_score,
+
+            "matched_fields":
+                matched_fields,
+
+        })
+
+
+    group_order = {
+        key: index
+        for index, key
+        in enumerate(
+            CHANGE_DILEMMA_GROUPS.keys()
+        )
+    }
+
+
+    matched_groups.sort(
+        key=lambda item: (
+            item[
+                "score"
+            ],
+            -group_order.get(
+                item[
+                    "key"
+                ],
+                999
+            ),
+        ),
+        reverse=True
+    )
+
+
+    return matched_groups
+
+
+def get_group_score(
+    decision,
+    group_key
+):
+    """
+    Decisionの特定group score。
+    """
+
+    for group in (
+        decision.get(
+            "dilemma_groups",
+            []
+        )
+        or
+        []
+    ):
+
+        if (
+            group.get(
+                "key"
+            )
+            ==
+            group_key
+        ):
+
+            return (
+                group.get(
+                    "score",
+                    0
+                )
+                or
+                0
+            )
+
+
+    return 0
+
+
+# =========================================================
+# Date helper
 # =========================================================
 
 def normalize_date(value):
-    """
-    DBの日付をソート用dateへ変換する。
-    """
 
     if (
         value is None
         or
         value == ""
     ):
+
         return None
 
 
@@ -653,6 +992,7 @@ def normalize_date(value):
         value,
         datetime
     ):
+
         return value.date()
 
 
@@ -660,6 +1000,7 @@ def normalize_date(value):
         value,
         _date
     ):
+
         return value
 
 
@@ -670,7 +1011,6 @@ def normalize_date(value):
             "%Y-%m-%d"
         ).date()
 
-
     except Exception:
 
         return None
@@ -679,9 +1019,6 @@ def normalize_date(value):
 def calculate_age(
     birthdate
 ):
-    """
-    生年月日から現在年齢を算出する。
-    """
 
     value = normalize_date(
         birthdate
@@ -709,10 +1046,6 @@ def calculate_age(
 def year_from_date(
     value
 ):
-    """
-    Career Journey表示用に
-    年だけ返す。
-    """
 
     normalized = normalize_date(
         value
@@ -730,9 +1063,6 @@ def safe_label(
     value,
     is_private=False
 ):
-    """
-    非公開企業は企業名を出さない。
-    """
 
     if is_private:
         return "非公開"
@@ -746,6 +1076,296 @@ def safe_label(
 
 
 # =========================================================
+# Ranking helpers
+# =========================================================
+
+def decision_rank_key(
+    decision
+):
+    """
+    通常Themeの並び。
+    """
+
+    return (
+
+        decision.get(
+            "theme_match_score",
+            0
+        ),
+
+        normalize_date(
+            decision.get(
+                "occurred_at"
+            )
+        )
+        or
+        _date.min,
+
+        decision.get(
+            "id"
+        )
+        or
+        0,
+
+    )
+
+
+def decision_group_rank_key(
+    decision,
+    group_key
+):
+    """
+    同一Dilemma Group内での優先順位。
+
+    まずDilemma Groupとの近さ。
+    次にchangeテーマとの近さ。
+    """
+
+    return (
+
+        get_group_score(
+            decision,
+            group_key
+        ),
+
+        decision.get(
+            "theme_match_score",
+            0
+        ),
+
+        normalize_date(
+            decision.get(
+                "occurred_at"
+            )
+        )
+        or
+        _date.min,
+
+        decision.get(
+            "id"
+        )
+        or
+        0,
+
+    )
+
+
+# =========================================================
+# Choose comparison group
+# =========================================================
+
+def choose_change_comparison_group(
+    ranked_decisions
+):
+    """
+    changeテーマ内で、
+
+    同じDilemma Group
+    ×
+    異なるRoute
+
+    が最も成立しているGroupを探す。
+
+
+    優先：
+
+    1. Route種類数
+       3ルート > 2ルート
+
+    2. 各Route代表の
+       Dilemma Group Score合計
+
+    3. Groupに属するDecision数
+    """
+
+    candidates = []
+
+
+    group_order = {
+        key: index
+        for index, key
+        in enumerate(
+            CHANGE_DILEMMA_GROUPS.keys()
+        )
+    }
+
+
+    for (
+        group_key,
+        group_definition
+    ) in CHANGE_DILEMMA_GROUPS.items():
+
+        group_decisions = [
+
+            decision
+
+            for decision
+            in ranked_decisions
+
+            if (
+                get_group_score(
+                    decision,
+                    group_key
+                )
+                >
+                0
+            )
+
+        ]
+
+
+        if not group_decisions:
+            continue
+
+
+        route_best = {}
+
+
+        for route_key in CHANGE_ROUTE_ORDER:
+
+            route_candidates = [
+
+                decision
+
+                for decision
+                in group_decisions
+
+                if (
+                    (
+                        decision.get(
+                            "decision_path"
+                        )
+                        or
+                        {}
+                    ).get(
+                        "key"
+                    )
+                    ==
+                    route_key
+                )
+
+            ]
+
+
+            if not route_candidates:
+                continue
+
+
+            route_candidates.sort(
+                key=lambda item:
+                    decision_group_rank_key(
+                        item,
+                        group_key
+                    ),
+                reverse=True
+            )
+
+
+            route_best[
+                route_key
+            ] = (
+                route_candidates[
+                    0
+                ]
+            )
+
+
+        route_count = len(
+            route_best
+        )
+
+
+        # 2つ以上の異なる選択がないと
+        # 「比較」にならない。
+        if route_count < 2:
+            continue
+
+
+        representative_group_score = sum(
+
+            get_group_score(
+                decision,
+                group_key
+            )
+
+            for decision
+            in route_best.values()
+
+        )
+
+
+        candidates.append({
+
+            "key":
+                group_key,
+
+            "label":
+                group_definition[
+                    "label"
+                ],
+
+            "route_count":
+                route_count,
+
+            "decision_count":
+                len(
+                    group_decisions
+                ),
+
+            "representative_group_score":
+                representative_group_score,
+
+            "route_best":
+                route_best,
+
+            "group_decisions":
+                group_decisions,
+
+            "group_order":
+                group_order[
+                    group_key
+                ],
+
+        })
+
+
+    if not candidates:
+        return None
+
+
+    candidates.sort(
+
+        key=lambda item: (
+
+            item[
+                "route_count"
+            ],
+
+            item[
+                "representative_group_score"
+            ],
+
+            item[
+                "decision_count"
+            ],
+
+            -item[
+                "group_order"
+            ],
+
+        ),
+
+        reverse=True
+
+    )
+
+
+    return candidates[
+        0
+    ]
+
+
+# =========================================================
 # Selection
 # =========================================================
 
@@ -755,39 +1375,54 @@ def select_decisions_for_response(
     limit=12
 ):
     """
-    APIで返すDecisionを選択する。
+    Response対象を選ぶ。
 
 
-    通常Theme：
-        関連度順で最大12件。
+    通常Theme
+    ----------
+    関連度順で最大limit件。
 
 
-    change Theme：
-        「転職した」
-        「残った」
-        「社内異動した」
+    change
+    ------
+    1.
+    同じDilemma Groupで
+    異なるRouteが2つ以上揃うGroupを探す。
 
-        が存在する場合は、
-        まず各ルートから1件ずつ採用する。
+    2.
+    そのGroupの
+    転職 / 残留 / 異動代表を先頭へ。
 
-        残りを関連度順で埋める。
+    3.
+    同Groupの残りを優先。
+
+    4.
+    最後にTheme全体の関連度順で補完。
 
 
-    目的：
-        上位12件が全部
-        「転職した人」になるのを防ぐ。
+    Group比較が成立しない場合
+    ----------------------------
+    現行ロジックへFallback。
+
+    転職 / 残留 / 異動から
+    1件ずつ確保してから残りを埋める。
     """
-
-
-    # -----------------------------------------------------
-    # change以外は今まで通り
-    # -----------------------------------------------------
 
     if theme_key != "change":
 
-        return ranked_decisions[
-            :limit
-        ]
+        return (
+            ranked_decisions[
+                :limit
+            ],
+            None
+        )
+
+
+    comparison_group = (
+        choose_change_comparison_group(
+            ranked_decisions
+        )
+    )
 
 
     selected = []
@@ -795,15 +1430,144 @@ def select_decisions_for_response(
     selected_ids = set()
 
 
-    # -----------------------------------------------------
-    # まず3つのルートを1件ずつ確保
-    # -----------------------------------------------------
+    def append_decision(
+        decision
+    ):
 
-    for path_key in [
-        "change",
-        "stay",
-        "internal",
-    ]:
+        if (
+            decision is None
+            or
+            len(selected) >= limit
+        ):
+            return
+
+
+        decision_id = (
+            decision.get(
+                "id"
+            )
+        )
+
+
+        if (
+            decision_id
+            in selected_ids
+        ):
+            return
+
+
+        selected.append(
+            decision
+        )
+
+        selected_ids.add(
+            decision_id
+        )
+
+
+    # =====================================================
+    # A. Same Dilemma Group comparison
+    # =====================================================
+
+    if comparison_group:
+
+        route_best = (
+            comparison_group[
+                "route_best"
+            ]
+        )
+
+
+        # ---------------------------------------------
+        # まず各Route代表
+        # ---------------------------------------------
+
+        for route_key in CHANGE_ROUTE_ORDER:
+
+            append_decision(
+                route_best.get(
+                    route_key
+                )
+            )
+
+
+        # ---------------------------------------------
+        # 次に同じDilemma Groupの残り
+        # ---------------------------------------------
+
+        same_group_decisions = list(
+            comparison_group[
+                "group_decisions"
+            ]
+        )
+
+
+        same_group_decisions.sort(
+            key=lambda item:
+                decision_group_rank_key(
+                    item,
+                    comparison_group[
+                        "key"
+                    ]
+                ),
+            reverse=True
+        )
+
+
+        for decision in same_group_decisions:
+
+            append_decision(
+                decision
+            )
+
+
+        # ---------------------------------------------
+        # 最後にTheme全体から補完
+        # ---------------------------------------------
+
+        for decision in ranked_decisions:
+
+            append_decision(
+                decision
+            )
+
+
+        comparison_response = {
+
+            "key":
+                comparison_group[
+                    "key"
+                ],
+
+            "label":
+                comparison_group[
+                    "label"
+                ],
+
+            "route_count":
+                comparison_group[
+                    "route_count"
+                ],
+
+        }
+
+
+        return (
+            selected[
+                :limit
+            ],
+            comparison_response
+        )
+
+
+    # =====================================================
+    # B. Fallback
+    #
+    # 同じDilemma GroupでRoute比較できない場合は
+    # 現在の挙動を維持。
+    # =====================================================
+
+    for path_key in CHANGE_ROUTE_ORDER:
 
         for decision in ranked_decisions:
 
@@ -823,77 +1587,30 @@ def select_decisions_for_response(
                 !=
                 path_key
             ):
+
                 continue
 
 
-            decision_id = (
-                decision.get(
-                    "id"
-                )
-            )
-
-
-            if (
-                decision_id
-                in selected_ids
-            ):
-                continue
-
-
-            selected.append(
+            append_decision(
                 decision
             )
 
-
-            selected_ids.add(
-                decision_id
-            )
-
-
             break
 
-
-    # -----------------------------------------------------
-    # 残りを関連度順で埋める
-    # -----------------------------------------------------
 
     for decision in ranked_decisions:
 
-        if (
-            len(selected)
-            >=
-            limit
-        ):
-            break
-
-
-        decision_id = (
-            decision.get(
-                "id"
-            )
-        )
-
-
-        if (
-            decision_id
-            in selected_ids
-        ):
-            continue
-
-
-        selected.append(
+        append_decision(
             decision
         )
 
 
-        selected_ids.add(
-            decision_id
-        )
-
-
-    return selected[
-        :limit
-    ]
+    return (
+        selected[
+            :limit
+        ],
+        None
+    )
 
 
 # =========================================================
@@ -907,10 +1624,6 @@ async def get_career_stories_by_theme(
     theme: str
 ):
 
-    # -----------------------------------------------------
-    # Theme validation
-    # -----------------------------------------------------
-
     theme_key = (
         theme
         or ""
@@ -919,7 +1632,8 @@ async def get_career_stories_by_theme(
 
     if (
         theme_key
-        not in THEME_DEFINITIONS
+        not in
+        THEME_DEFINITIONS
     ):
 
         raise HTTPException(
@@ -949,9 +1663,6 @@ async def get_career_stories_by_theme(
 
         # =================================================
         # 1. Career Decision取得
-        #
-        # Career Storyとして最低限、
-        # 職歴を1件以上持つユーザーだけ対象。
         # =================================================
 
         cursor.execute(
@@ -975,7 +1686,9 @@ async def get_career_stories_by_theme(
 
             WHERE EXISTS (
                 SELECT 1
+
                 FROM job_experiences AS je
+
                 WHERE je.user_id = cd.user_id
                   AND je.company_name IS NOT NULL
                   AND je.company_name <> ''
@@ -991,6 +1704,7 @@ async def get_career_stories_by_theme(
                 END ASC,
 
                 cd.occurred_at DESC,
+
                 cd.id DESC
             """
         )
@@ -1002,7 +1716,7 @@ async def get_career_stories_by_theme(
 
 
         # =================================================
-        # 2. Themeとの関連度を計算
+        # 2. Theme関連度
         # =================================================
 
         matched_decisions = []
@@ -1013,23 +1727,18 @@ async def get_career_stories_by_theme(
             (
                 match_score,
                 matched_reasons
-            ) = calculate_theme_match_score(
-                decision,
-                theme_key,
-                theme_definition
+            ) = (
+                calculate_theme_match_score(
+                    decision,
+                    theme_key,
+                    theme_definition
+                )
             )
 
 
             if match_score <= 0:
                 continue
 
-
-            # ---------------------------------------------
-            # 実際に選んだ道
-            #
-            # DBへ保存せず、
-            # decision_typeから生成する。
-            # ---------------------------------------------
 
             decision_path = (
                 get_decision_path(
@@ -1040,32 +1749,15 @@ async def get_career_stories_by_theme(
             )
 
 
-            # ---------------------------------------------
-            # change Themeでは
-            #
-            # 現在のOverviewで比較する
-            #
-            # 転職
-            # 現職継続
-            # 異動
-            #
-            # の3ルートだけを対象にする。
-            #
-            # 「すべて」の件数と
-            # 各タブの件数が合わなくなることを防ぐ。
-            # ---------------------------------------------
-
+            # changeでは比較可能な3Routeのみ。
             if (
                 theme_key == "change"
                 and
                 decision_path[
                     "key"
                 ]
-                not in [
-                    "change",
-                    "stay",
-                    "internal",
-                ]
+                not in
+                CHANGE_ROUTE_ORDER
             ):
 
                 continue
@@ -1092,16 +1784,56 @@ async def get_career_stories_by_theme(
             )
 
 
+            # ---------------------------------------------
+            # change専用Dilemma Group
+            # ---------------------------------------------
+
+            if theme_key == "change":
+
+                dilemma_groups = (
+                    calculate_change_dilemma_groups(
+                        decision
+                    )
+                )
+
+
+                decision[
+                    "dilemma_groups"
+                ] = (
+                    dilemma_groups
+                )
+
+
+                decision[
+                    "primary_dilemma_group"
+                ] = (
+                    dilemma_groups[
+                        0
+                    ]
+                    if dilemma_groups
+                    else None
+                )
+
+
+            else:
+
+                decision[
+                    "dilemma_groups"
+                ] = []
+
+
+                decision[
+                    "primary_dilemma_group"
+                ] = None
+
+
             matched_decisions.append(
                 decision
             )
 
 
         # =================================================
-        # 3. ユーザーごとに
-        # 最も関連度の高いDecisionを選ぶ
-        #
-        # 1人が大量に表示されるのを防ぐ。
+        # 3. Userごとに最も関連するDecision
         # =================================================
 
         best_decision_by_user = {}
@@ -1148,10 +1880,6 @@ async def get_career_stories_by_theme(
             )
 
 
-            # ---------------------------------------------
-            # より関連度が高いDecisionを採用
-            # ---------------------------------------------
-
             if (
                 new_score
                 >
@@ -1166,10 +1894,6 @@ async def get_career_stories_by_theme(
 
                 continue
 
-
-            # ---------------------------------------------
-            # 同点なら新しいDecisionを優先
-            # ---------------------------------------------
 
             if (
                 new_score
@@ -1213,35 +1937,15 @@ async def get_career_stories_by_theme(
 
 
         # =================================================
-        # 4. Story単位に並び替え
+        # 4. Theme relevance ranking
         # =================================================
 
         ranked_decisions = sorted(
 
             best_decision_by_user.values(),
 
-            key=lambda item: (
-
-                item.get(
-                    "theme_match_score",
-                    0
-                ),
-
-                normalize_date(
-                    item.get(
-                        "occurred_at"
-                    )
-                )
-                or
-                _date.min,
-
-                item.get(
-                    "id"
-                )
-                or
-                0,
-
-            ),
+            key=
+                decision_rank_key,
 
             reverse=True
 
@@ -1249,14 +1953,13 @@ async def get_career_stories_by_theme(
 
 
         # =================================================
-        # 5. 最大12件
-        #
-        # changeでは、
-        # 違う選択肢がある場合は
-        # なるべく比較できるようにする。
+        # 5. Response対象Selection
         # =================================================
 
-        selected_decisions = (
+        (
+            selected_decisions,
+            comparison_group
+        ) = (
             select_decisions_for_response(
                 ranked_decisions,
                 theme_key,
@@ -1266,7 +1969,7 @@ async def get_career_stories_by_theme(
 
 
         # =================================================
-        # 6. 各ユーザーのCareer Story情報を取得
+        # 6. User / Career情報
         # =================================================
 
         stories = []
@@ -1389,19 +2092,17 @@ async def get_career_stories_by_theme(
             career_stages = []
 
 
-            # ---------------------------------------------
-            # Education
-            # ---------------------------------------------
-
             for education in education_rows:
 
-                institution = safe_label(
-                    education.get(
-                        "institution"
-                    ),
-                    bool(
+                institution = (
+                    safe_label(
                         education.get(
-                            "hide_institution"
+                            "institution"
+                        ),
+                        bool(
+                            education.get(
+                                "hide_institution"
+                            )
                         )
                     )
                 )
@@ -1424,24 +2125,22 @@ async def get_career_stories_by_theme(
                         "stage":
                             (
                                 f"{institution} 入学"
-                            )
+                            ),
 
                     })
 
 
-            # ---------------------------------------------
-            # Job Experience
-            # ---------------------------------------------
-
             for job in jobs:
 
-                company_name = safe_label(
-                    job.get(
-                        "company_name"
-                    ),
-                    bool(
+                company_name = (
+                    safe_label(
                         job.get(
-                            "is_private"
+                            "company_name"
+                        ),
+                        bool(
+                            job.get(
+                                "is_private"
+                            )
                         )
                     )
                 )
@@ -1464,16 +2163,13 @@ async def get_career_stories_by_theme(
                         "stage":
                             (
                                 f"{company_name} 入社"
-                            )
+                            ),
 
                     })
 
 
             # ---------------------------------------------
-            # 現在職
-            #
-            # 現在勤務中を優先。
-            # なければ最新職歴。
+            # Current Job
             # ---------------------------------------------
 
             jobs_for_current = sorted(
@@ -1550,7 +2246,7 @@ async def get_career_stories_by_theme(
 
 
             # ---------------------------------------------
-            # Response
+            # Response Story
             # ---------------------------------------------
 
             stories.append({
@@ -1605,12 +2301,6 @@ async def get_career_stories_by_theme(
                         ),
 
 
-                    # -------------------------------------
-                    # Overview表示用の派生値
-                    #
-                    # DBカラムではない。
-                    # -------------------------------------
-
                     "decision_path":
                         decision_path,
 
@@ -1653,6 +2343,8 @@ async def get_career_stories_by_theme(
                             or
                             ""
                         ),
+
+
                     "result_text":
                         (
                             decision.get(
@@ -1660,6 +2352,29 @@ async def get_career_stories_by_theme(
                             )
                             or
                             ""
+                        ),
+
+
+                    # -------------------------------------
+                    # Derived comparison metadata
+                    #
+                    # DBカラムではない。
+                    # -------------------------------------
+
+                    "dilemma_groups":
+                        (
+                            decision.get(
+                                "dilemma_groups",
+                                []
+                            )
+                        ),
+
+
+                    "primary_dilemma_group":
+                        (
+                            decision.get(
+                                "primary_dilemma_group"
+                            )
                         ),
 
                 },
@@ -1697,19 +2412,23 @@ async def get_career_stories_by_theme(
 
 
                 "theme_title":
-                    (
-                        theme_definition[
-                            "title"
-                        ]
-                    ),
+                    theme_definition[
+                        "title"
+                    ],
 
 
                 "theme_description":
-                    (
-                        theme_definition[
-                            "description"
-                        ]
-                    ),
+                    theme_definition[
+                        "description"
+                    ],
+
+
+                # ---------------------------------------------
+                # Homeの比較で採用した
+                # 「同じ迷い」のグループ。
+                # ---------------------------------------------
+                "comparison_group":
+                    comparison_group,
 
 
                 "count":
@@ -1752,4 +2471,5 @@ async def get_career_stories_by_theme(
         if cursor is not None:
             cursor.close()
 
-        db.close()  
+
+        db.close()

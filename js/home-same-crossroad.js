@@ -1,222 +1,69 @@
 (() => {
     'use strict';
 
+    const API_URL = '/career-stories-by-theme/?theme=change';
+    const SECTION_ID = 'home-same-crossroad';
+    const LIST_ID = 'home-same-crossroad-list';
+    const CRITERIA_SECTION_ID = 'home-decision-criteria';
+    const CRITERIA_LIST_ID = 'home-decision-criteria-list';
+    const YOUR_DECISION_ID = 'home-your-decision';
+    const THEME = 'change';
+    const MIN_ROUTE_COUNT = 2;
+    const ROUTE_ORDER = ['change', 'stay', 'internal'];
 
-    /* =====================================================
-       CONFIG
-       ===================================================== */
-
-    const API_URL =
-        '/career-stories-by-theme/?theme=change';
-
-
-    const SECTION_ID =
-        'home-same-crossroad';
-
-
-    const LIST_ID =
-        'home-same-crossroad-list';
-
-
-    const CRITERIA_SECTION_ID =
-        'home-decision-criteria';
-
-
-    const CRITERIA_LIST_ID =
-        'home-decision-criteria-list';
-
-
-    const YOUR_DECISION_ID =
-        'home-your-decision';
-
-
-    const THEME =
-        'change';
-
-
-    const MIN_ROUTE_COUNT =
-        2;
-
-
-    const ROUTE_ORDER = [
-        'change',
-        'stay',
-        'internal'
-    ];
-
-
-    /*
-     * PC表示用
-     */
     const EXCERPT_LIMITS = {
-
-        dilemma:
-            88,
-
-        priority:
-            72,
-
-        result:
-            88
-
+        dilemma: 88,
+        priority: 72,
+        result: 88
     };
 
-
-    /*
-     * Smartphone表示用
-     *
-     * PCより短くする。
-     */
     const MOBILE_EXCERPT_LIMITS = {
-
-        dilemma:
-            56,
-
-        priority:
-            48,
-
-        result:
-            56
-
+        dilemma: 56,
+        priority: 48,
+        result: 56
     };
 
-
-
-    /* =====================================================
-       INITIALIZE
-       ===================================================== */
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        initializeSameCrossroad
-    );
-
+    document.addEventListener('DOMContentLoaded', initializeSameCrossroad);
 
     async function initializeSameCrossroad() {
+        const section = document.getElementById(SECTION_ID);
+        const list = document.getElementById(LIST_ID);
+        const criteriaSection = document.getElementById(CRITERIA_SECTION_ID);
+        const criteriaList = document.getElementById(CRITERIA_LIST_ID);
 
-        const section =
-            document.getElementById(
-                SECTION_ID
-            );
+        if (!section || !list) return;
 
+        section.hidden = true;
+        list.innerHTML = '';
 
-        const list =
-            document.getElementById(
-                LIST_ID
-            );
+        if (criteriaSection) criteriaSection.hidden = true;
+        if (criteriaList) criteriaList.innerHTML = '';
 
-
-        const criteriaSection =
-            document.getElementById(
-                CRITERIA_SECTION_ID
-            );
-
-
-        const criteriaList =
-            document.getElementById(
-                CRITERIA_LIST_ID
-            );
-
-
-        if (
-            !section
-            ||
-            !list
-        ) {
-            return;
-        }
-
-
-        /*
-         * 初期状態
-         */
-        section.hidden =
-            true;
-
-
-        list.innerHTML =
-            '';
-
-
-        if (criteriaSection) {
-
-            criteriaSection.hidden =
-                true;
-
-        }
-
-
-        if (criteriaList) {
-
-            criteriaList.innerHTML =
-                '';
-
-        }
-
-
-        /*
-         * 判断軸比較が出ない場合に備え、
-         * YOUR DECISIONは一旦02にしておく。
-         *
-         * 判断軸比較が表示された場合だけ03へ変更する。
-         */
-        updateYourDecisionStep(
-            false
-        );
-
+        updateYourDecisionStep(false);
 
         try {
-
-            const response =
-                await fetch(
-                    API_URL,
-                    {
-                        method:
-                            'GET',
-
-                        headers: {
-                            Accept:
-                                'application/json'
-                        },
-
-                        credentials:
-                            'include'
-                    }
-                );
-
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: { Accept: 'application/json' },
+                credentials: 'include'
+            });
 
             if (!response.ok) {
-
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
-
+                throw new Error(`HTTP ${response.status}`);
             }
 
+            const data = await response.json();
 
-            const data =
-                await response.json();
+            const stories = Array.isArray(data.stories)
+                ? data.stories
+                : [];
 
+            const comparisonGroup =
+                normalizeComparisonGroup(
+                    data.comparison_group
+                );
 
-            const stories =
-                Array.isArray(
-                    data.stories
-                )
-
-                    ? data.stories
-
-                    : [];
-
-
-            /*
-             * Storyなし
-             */
-            if (
-                stories.length
-                ===
-                0
-            ) {
-
+            if (stories.length === 0) {
                 renderUnavailableState(
                     section,
                     list,
@@ -226,28 +73,18 @@
                 bindAllLinkAnalytics();
 
                 return;
-
             }
 
-
-            /*
-             * 各ルートの代表Story選定
-             */
             const representatives =
                 selectRouteRepresentatives(
-                    stories
+                    stories,
+                    comparisonGroup
                 );
 
-
-            /*
-             * 異なる選択が2種類未満
-             */
             if (
-                representatives.length
-                <
+                representatives.length <
                 MIN_ROUTE_COUNT
             ) {
-
                 renderUnavailableState(
                     section,
                     list,
@@ -257,56 +94,45 @@
                 bindAllLinkAnalytics();
 
                 return;
-
             }
 
-
-            /*
-             * 比較表示
-             */
             renderDecisionCompare(
                 list,
                 representatives
             );
 
+            updateCompareSubheading(
+                section,
+                comparisonGroup
+            );
 
-            /*
-             * 判断軸比較
-             */
+            updateComparisonGroupDataset(
+                section,
+                comparisonGroup
+            );
+
             renderDecisionCriteria(
                 criteriaSection,
                 criteriaList,
                 representatives
             );
 
+            section.hidden = false;
 
-            section.hidden =
-                false;
-
-
-            /*
-             * Analytics
-             */
-            bindAnalytics(
-                section
-            );
-
+            bindAnalytics(section);
 
             bindAllLinkAnalytics();
 
-
             trackCompareView(
-                representatives
+                representatives,
+                comparisonGroup
             );
 
-
         } catch (error) {
-
             console.error(
                 'Same Crossroad error:',
                 error
             );
-
 
             renderUnavailableState(
                 section,
@@ -314,75 +140,121 @@
                 '比較データを読み込めませんでした。時間をおいてもう一度お試しください。'
             );
 
-
             bindAllLinkAnalytics();
-
         }
-
     }
 
 
+    /* =====================================================
+       comparison_group
+       ===================================================== */
+
+    function normalizeComparisonGroup(
+        value
+    ) {
+        if (
+            !value ||
+            typeof value !== 'object'
+        ) {
+            return null;
+        }
+
+        const key =
+            normalizeDisplayText(
+                value.key
+            );
+
+        const label =
+            normalizeDisplayText(
+                value.label
+            );
+
+        const routeCountNumber =
+            Number(
+                value.route_count
+            );
+
+        if (!key || !label) {
+            return null;
+        }
+
+        return {
+            key,
+            label,
+
+            routeCount:
+                Number.isFinite(
+                    routeCountNumber
+                )
+                    ? routeCountNumber
+                    : null
+        };
+    }
+
 
     /* =====================================================
-       REPRESENTATIVE STORIES
+       Representative stories
 
-       各ルートから、
-       Home比較に向いているStoryを1件選ぶ。
+       Frontendでは再採点しない。
+       Backendが返した順番を尊重する。
        ===================================================== */
 
     function selectRouteRepresentatives(
+        stories,
+        comparisonGroup
+    ) {
+        if (comparisonGroup?.key) {
+
+            const sameGroupStories =
+                stories.filter(
+                    story =>
+                        storyBelongsToComparisonGroup(
+                            story,
+                            comparisonGroup.key
+                        )
+                );
+
+            const sameGroupRepresentatives =
+                selectFirstStoryPerRoute(
+                    sameGroupStories
+                );
+
+            if (
+                sameGroupRepresentatives.length >=
+                MIN_ROUTE_COUNT
+            ) {
+                return sameGroupRepresentatives;
+            }
+        }
+
+        return selectFirstStoryPerRoute(
+            stories
+        );
+    }
+
+
+    function selectFirstStoryPerRoute(
         stories
     ) {
-
         const routeMap =
             new Map();
 
-
         stories.forEach(
-            (
-                story,
-                index
-            ) => {
+            story => {
 
                 if (
-                    !story
-                    ||
-                    !story.decision
+                    !isUsableRepresentativeStory(
+                        story
+                    )
                 ) {
                     return;
                 }
-
-
-                /*
-                 * Career IDが無いStoryは
-                 * 詳細へ遷移できないため除外。
-                 */
-                if (
-                    story.id === null
-                    ||
-                    story.id === undefined
-                    ||
-                    String(
-                        story.id
-                    ).trim() === ''
-                ) {
-                    return;
-                }
-
-
-                const decision =
-                    story.decision;
-
 
                 const route =
                     getDecisionPathFromStory(
-                        decision
+                        story.decision
                     );
 
-
-                /*
-                 * 今回比較する3ルート以外は除外
-                 */
                 if (
                     !ROUTE_ORDER.includes(
                         route.key
@@ -391,77 +263,28 @@
                     return;
                 }
 
-
                 /*
-                 * Homeでは全項目入力を必須にしない。
-                 *
-                 * ・迷い
-                 * ・大切にしたこと
-                 * ・その後
-                 *
-                 * のうち1項目でも登録されていれば
-                 * 比較候補にする。
+                 * API順を尊重。
+                 * 同一Routeでは最初のStoryを採用。
                  */
                 if (
-                    getDecisionCompleteness(
-                        decision
+                    routeMap.has(
+                        route.key
                     )
-                    ===
-                    0
                 ) {
                     return;
                 }
 
-
-                const candidate = {
-
-                    story,
-
-                    route,
-
-                    index,
-
-                    score:
-                        scoreRepresentativeStory(
-                            story
-                        )
-
-                };
-
-
-                const current =
-                    routeMap.get(
-                        route.key
-                    );
-
-
-                /*
-                 * 同一ルート内では、
-                 * 情報が充実しているStoryを優先。
-                 */
-                if (
-                    !current
-                    ||
-                    candidate.score
-                    >
-                    current.score
-                ) {
-
-                    routeMap.set(
-                        route.key,
-                        candidate
-                    );
-
-                }
-
+                routeMap.set(
+                    route.key,
+                    {
+                        story,
+                        route
+                    }
+                );
             }
         );
 
-
-        /*
-         * 転職 → 残留 → 異動
-         * の順番は固定。
-         */
         return ROUTE_ORDER
 
             .filter(
@@ -477,21 +300,92 @@
                         routeKey
                     )
             );
-
     }
 
 
+    function isUsableRepresentativeStory(
+        story
+    ) {
+        if (
+            !story ||
+            !story.decision
+        ) {
+            return false;
+        }
 
-    /* =====================================================
-       COMPLETENESS
-       ===================================================== */
+        if (
+            story.id === null ||
+            story.id === undefined ||
+            String(
+                story.id
+            ).trim() === ''
+        ) {
+            return false;
+        }
+
+        return (
+            getDecisionCompleteness(
+                story.decision
+            )
+            >
+            0
+        );
+    }
+
+
+    function storyBelongsToComparisonGroup(
+        story,
+        groupKey
+    ) {
+        const normalizedGroupKey =
+            normalizeDisplayText(
+                groupKey
+            );
+
+        if (!normalizedGroupKey) {
+            return false;
+        }
+
+        const decision =
+            story?.decision || {};
+
+        const groups =
+            Array.isArray(
+                decision.dilemma_groups
+            )
+                ? decision.dilemma_groups
+                : [];
+
+        const matched =
+            groups.some(
+                group =>
+                    normalizeDisplayText(
+                        group?.key
+                    )
+                    ===
+                    normalizedGroupKey
+            );
+
+        if (matched) {
+            return true;
+        }
+
+        return (
+            normalizeDisplayText(
+                decision
+                    ?.primary_dilemma_group
+                    ?.key
+            )
+            ===
+            normalizedGroupKey
+        );
+    }
+
 
     function getDecisionCompleteness(
         decision
     ) {
-
         return [
-
             getDilemmaText(
                 decision
             ),
@@ -503,7 +397,6 @@
             getResultText(
                 decision
             )
-
         ]
 
             .filter(
@@ -511,160 +404,78 @@
             )
 
             .length;
-
     }
 
 
-
     /* =====================================================
-       REPRESENTATIVE SCORE
+       Compare heading
        ===================================================== */
 
-    function scoreRepresentativeStory(
-        story
+    function updateCompareSubheading(
+        section,
+        comparisonGroup
     ) {
-
-        const decision =
-            story.decision
-            ||
-            {};
-
-
-        let score =
-            0;
-
-
-        /*
-         * 迷い
-         */
         if (
-            getDilemmaText(
-                decision
-            )
+            !section ||
+            !comparisonGroup?.label
         ) {
-
-            score +=
-                5;
-
+            return;
         }
 
+        const title =
+            section.querySelector(
+                '.home-decision-compare-area .home-decision-subheading strong'
+            );
 
-        /*
-         * 判断軸
-         */
-        if (
-            getPriorityText(
-                decision
-            )
-        ) {
-
-            score +=
-                4;
-
+        if (!title) {
+            return;
         }
 
-
-        /*
-         * その後
-         */
-        if (
-            getResultText(
-                decision
-            )
-        ) {
-
-            score +=
-                5;
-
-        }
-
-
-        /*
-         * decision_idあり
-         */
-        if (
-            decision.id !== null
-            &&
-            decision.id !== undefined
-            &&
-            String(
-                decision.id
-            ).trim()
-        ) {
-
-            score +=
-                2;
-
-        }
-
-
-        /*
-         * 職種あり
-         */
-        if (
-            normalizeDisplayText(
-                story.profession
-            )
-        ) {
-
-            score +=
-                1;
-
-        }
-
-
-        /*
-         * 年代あり
-         */
-        if (
-            getAgeGroup(
-                story.age
-            )
-        ) {
-
-            score +=
-                1;
-
-        }
-
-
-        return score;
-
+        title.textContent =
+            `「${comparisonGroup.label}」で迷った人の選択を比べる`;
     }
 
 
+    function updateComparisonGroupDataset(
+        section,
+        comparisonGroup
+    ) {
+        if (!section) {
+            return;
+        }
+
+        section.dataset
+            .comparisonGroupKey =
+                comparisonGroup?.key || '';
+
+        section.dataset
+            .comparisonGroupLabel =
+                comparisonGroup?.label || '';
+    }
+
 
     /* =====================================================
-       DECISION PATH
+       Decision path
        ===================================================== */
 
     function getDecisionPathFromStory(
         decision
     ) {
-
         const backendPath =
             decision?.decision_path;
 
-
-        /*
-         * APIがobjectで返すケース
-         */
         const backendObjectKey =
             normalizeDisplayText(
                 backendPath?.key
             );
 
-
         if (
-            backendObjectKey
-            &&
+            backendObjectKey &&
             ROUTE_ORDER.includes(
                 backendObjectKey
             )
         ) {
-
             return {
-
                 key:
                     backendObjectKey,
 
@@ -676,19 +487,11 @@
                     getFallbackRouteLabel(
                         backendObjectKey
                     )
-
             };
-
         }
 
-
-        /*
-         * APIがstringで返すケースも一応対応
-         */
         const backendStringKey =
-            typeof backendPath
-            ===
-            'string'
+            typeof backendPath === 'string'
 
                 ? normalizeDisplayText(
                     backendPath
@@ -696,17 +499,13 @@
 
                 : '';
 
-
         if (
-            backendStringKey
-            &&
+            backendStringKey &&
             ROUTE_ORDER.includes(
                 backendStringKey
             )
         ) {
-
             return {
-
                 key:
                     backendStringKey,
 
@@ -714,57 +513,33 @@
                     getFallbackRouteLabel(
                         backendStringKey
                     )
-
             };
-
         }
 
-
-        /*
-         * 旧API互換
-         */
         return getDecisionPathFallback(
             decision?.decision_type
         );
-
     }
-
 
 
     function getDecisionPathFallback(
         decisionType
     ) {
-
         const type =
             normalizeDisplayText(
                 decisionType
             );
 
-
-        /*
-         * 転職
-         */
-        if (
-            type ===
-            '転職'
-        ) {
-
+        if (type === '転職') {
             return {
-
                 key:
                     'change',
 
                 label:
                     '転職した'
-
             };
-
         }
 
-
-        /*
-         * 現職継続
-         */
         if (
             [
                 '現職継続',
@@ -775,23 +550,15 @@
                 type
             )
         ) {
-
             return {
-
                 key:
                     'stay',
 
                 label:
                     '残った'
-
             };
-
         }
 
-
-        /*
-         * 社内異動
-         */
         if (
             [
                 '異動',
@@ -800,42 +567,29 @@
                 type
             )
         ) {
-
             return {
-
                 key:
                     'internal',
 
                 label:
                     '社内異動した'
-
             };
-
         }
 
-
         return {
-
             key:
                 'other',
 
             label:
-                type
-                ||
-                'その他'
-
+                type || 'その他'
         };
-
     }
-
 
 
     function getFallbackRouteLabel(
         routeKey
     ) {
-
         const labels = {
-
             change:
                 '転職した',
 
@@ -844,9 +598,7 @@
 
             internal:
                 '社内異動した'
-
         };
-
 
         return (
             labels[
@@ -857,37 +609,24 @@
             ||
             '選択'
         );
-
     }
 
 
-
     /* =====================================================
-       DECISION COMPARE
+       Decision compare
        ===================================================== */
 
     function renderDecisionCompare(
         list,
         representatives
     ) {
-
         const routeCount =
             representatives.length;
 
-
-        /*
-         * 2ルートなら2列、
-         * 3ルートなら3列にする。
-         */
         const gridStyle =
             `grid-template-columns: 150px repeat(${routeCount}, minmax(0, 1fr));`;
 
-
         list.innerHTML = `
-
-            <!-- =====================================
-                 Desktop
-            ====================================== -->
 
             <div class="decision-compare-desktop">
 
@@ -906,7 +645,9 @@
 
                     ${createMatrixRow(
                         '当時の迷い',
+
                         representatives,
+
                         representative =>
                             createExcerpt(
                                 getDilemmaText(
@@ -914,17 +655,22 @@
                                         .story
                                         .decision
                                 ),
+
                                 EXCERPT_LIMITS
                                     .dilemma
                             ),
+
                         'まだ記録されていません。',
+
                         gridStyle
                     )}
 
 
                     ${createMatrixRow(
                         '大切にしたこと',
+
                         representatives,
+
                         representative =>
                             createExcerpt(
                                 getPriorityText(
@@ -932,17 +678,22 @@
                                         .story
                                         .decision
                                 ),
+
                                 EXCERPT_LIMITS
                                     .priority
                             ),
+
                         'まだ記録されていません。',
+
                         gridStyle
                     )}
 
 
                     ${createMatrixRow(
                         'その後',
+
                         representatives,
+
                         representative =>
                             createExcerpt(
                                 getResultText(
@@ -950,10 +701,13 @@
                                         .story
                                         .decision
                                 ),
+
                                 EXCERPT_LIMITS
                                     .result
                             ),
+
                         'まだ記録されていません。',
+
                         gridStyle
                     )}
 
@@ -967,11 +721,6 @@
 
             </div>
 
-
-
-            <!-- =====================================
-                 Smartphone
-            ====================================== -->
 
             <div class="decision-compare-mobile">
 
@@ -988,20 +737,13 @@
             </div>
 
         `;
-
     }
 
-
-
-    /* =====================================================
-       DESKTOP HEADER
-       ===================================================== */
 
     function createMatrixHeader(
         representatives,
         gridStyle
     ) {
-
         return `
 
             <div
@@ -1028,17 +770,14 @@
                                     representative
                                         .story;
 
-
                                 const meta =
                                     getPersonMeta(
                                         story
                                     );
 
-
                                 return `
 
                                     <div class="decision-matrix__cell">
-
 
                                         <span
                                             class="
@@ -1061,7 +800,6 @@
 
 
                                         <div class="decision-person">
-
 
                                             <strong>
 
@@ -1090,14 +828,11 @@
                                                     : ''
                                             }
 
-
                                         </div>
-
 
                                     </div>
 
                                 `;
-
                             }
                         )
 
@@ -1107,14 +842,8 @@
             </div>
 
         `;
-
     }
 
-
-
-    /* =====================================================
-       DESKTOP ROW
-       ===================================================== */
 
     function createMatrixRow(
         label,
@@ -1123,7 +852,6 @@
         emptyMessage,
         gridStyle
     ) {
-
         return `
 
             <div
@@ -1155,7 +883,6 @@
                                         )
                                     );
 
-
                                 return `
 
                                     <div
@@ -1178,7 +905,6 @@
                                     </div>
 
                                 `;
-
                             }
                         )
 
@@ -1188,20 +914,13 @@
             </div>
 
         `;
-
     }
 
-
-
-    /* =====================================================
-       DESKTOP DETAIL ROW
-       ===================================================== */
 
     function createDetailLinkRow(
         representatives,
         gridStyle
     ) {
-
         return `
 
             <div
@@ -1228,19 +947,14 @@
                                     representative
                                         .story;
 
-
                                 const decision =
-                                    story.decision
-                                    ||
-                                    {};
-
+                                    story.decision || {};
 
                                 const detailUrl =
                                     createCareerDetailUrl(
                                         story.id,
                                         decision.id
                                     );
-
 
                                 return `
 
@@ -1264,9 +978,7 @@
                                             )}"
 
                                             data-decision-id="${escapeHTML(
-                                                decision.id
-                                                ||
-                                                ''
+                                                decision.id || ''
                                             )}"
                                         >
 
@@ -1283,7 +995,6 @@
                                     </div>
 
                                 `;
-
                             }
                         )
 
@@ -1293,45 +1004,35 @@
             </div>
 
         `;
-
     }
 
 
-
     /* =====================================================
-       MOBILE CARD
+       Mobile cards
        ===================================================== */
 
     function createMobileDecisionCard(
         representative
     ) {
-
         const story =
             representative.story;
-
 
         const route =
             representative.route;
 
-
         const decision =
-            story.decision
-            ||
-            {};
-
+            story.decision || {};
 
         const meta =
             getPersonMeta(
                 story
             );
 
-
         const detailUrl =
             createCareerDetailUrl(
                 story.id,
                 decision.id
             );
-
 
         return `
 
@@ -1347,15 +1048,11 @@
                 )}"
 
                 data-decision-id="${escapeHTML(
-                    decision.id
-                    ||
-                    ''
+                    decision.id || ''
                 )}"
             >
 
-
                 <div class="decision-mobile-card__header">
-
 
                     <span
                         class="
@@ -1373,9 +1070,7 @@
                     </span>
 
 
-
                     <p class="decision-mobile-card__person">
-
 
                         <strong>
 
@@ -1398,12 +1093,9 @@
                                 : ''
                         }
 
-
                     </p>
 
-
                 </div>
-
 
 
                 ${createMobileRow(
@@ -1420,7 +1112,6 @@
                 )}
 
 
-
                 ${createMobileRow(
                     '大切にしたこと',
 
@@ -1433,7 +1124,6 @@
                             .priority
                     )
                 )}
-
 
 
                 ${createMobileRow(
@@ -1450,9 +1140,7 @@
                 )}
 
 
-
                 <div class="decision-mobile-card__footer">
-
 
                     <a
                         href="${escapeHTML(
@@ -1470,9 +1158,7 @@
                         )}"
 
                         data-decision-id="${escapeHTML(
-                            decision.id
-                            ||
-                            ''
+                            decision.id || ''
                         )}"
                     >
 
@@ -1486,37 +1172,26 @@
 
                     </a>
 
-
                 </div>
-
 
             </article>
 
         `;
-
     }
 
-
-
-    /* =====================================================
-       MOBILE ROW
-       ===================================================== */
 
     function createMobileRow(
         label,
         value
     ) {
-
         const text =
             normalizeDisplayText(
                 value
             );
 
-
         return `
 
             <div class="decision-mobile-card__row">
-
 
                 <div class="decision-mobile-card__label">
 
@@ -1537,23 +1212,14 @@
 
                 </div>
 
-
             </div>
 
         `;
-
     }
 
 
-
     /* =====================================================
-       WHAT MATTERED
-
-       本人が登録したpriority_textのみ使用。
-
-       AIで
-       「この人はこれが理由だった」
-       と推測しない。
+       What mattered
        ===================================================== */
 
     function renderDecisionCriteria(
@@ -1561,28 +1227,22 @@
         criteriaList,
         representatives
     ) {
-
         if (
-            !criteriaSection
-            ||
+            !criteriaSection ||
             !criteriaList
         ) {
-
             updateYourDecisionStep(
                 false
             );
 
             return;
-
         }
-
 
         const items =
             representatives
 
                 .map(
                     representative => ({
-
                         representative,
 
                         priority:
@@ -1591,7 +1251,6 @@
                                     .story
                                     .decision
                             )
-
                     })
                 )
 
@@ -1600,38 +1259,26 @@
                         item.priority
                 );
 
-
         /*
-         * 2人以上の判断軸がないと
-         * 「違い」を比較できない。
+         * 2人以上のpriorityがないと
+         * 判断軸比較にならない。
          */
         if (
-            items.length
-            <
+            items.length <
             2
         ) {
-
             criteriaSection.hidden =
                 true;
-
 
             criteriaList.innerHTML =
                 '';
 
-
-            /*
-             * 02 WHY CHOICES DIFFERを飛ばすので、
-             * YOUR DECISIONを02へ繰り上げ。
-             */
             updateYourDecisionStep(
                 false
             );
 
-
             return;
-
         }
-
 
         criteriaList.innerHTML =
 
@@ -1641,14 +1288,11 @@
                     item => {
 
                         const representative =
-                            item
-                                .representative;
-
+                            item.representative;
 
                         return `
 
                             <article class="decision-criteria-card">
-
 
                                 <span class="decision-criteria-card__route">
 
@@ -1684,75 +1328,53 @@
 
                                 </p>
 
-
                             </article>
 
                         `;
-
                     }
                 )
 
                 .join('');
 
-
         criteriaSection.hidden =
             false;
 
-
-        /*
-         * 01 Compare
-         * 02 What mattered
-         * 03 Your decision
-         */
         updateYourDecisionStep(
             true
         );
-
     }
 
-
-
-    /* =====================================================
-       YOUR DECISION STEP
-       ===================================================== */
 
     function updateYourDecisionStep(
         criteriaVisible
     ) {
-
         const yourDecision =
             document.getElementById(
                 YOUR_DECISION_ID
             );
 
-
         if (!yourDecision) {
             return;
         }
-
 
         const step =
             yourDecision.querySelector(
                 '.home-decision-subheading > span'
             );
 
-
         if (!step) {
             return;
         }
-
 
         step.textContent =
             criteriaVisible
                 ? '03'
                 : '02';
-
     }
 
 
-
     /* =====================================================
-       EMPTY / ERROR
+       Empty / error
        ===================================================== */
 
     function renderUnavailableState(
@@ -1760,7 +1382,6 @@
         list,
         message
     ) {
-
         list.innerHTML = `
 
             <div
@@ -1768,6 +1389,7 @@
                     decision-matrix__cell
                     decision-matrix__cell--empty
                 "
+
                 style="
                     border: 1px solid #dce5ee;
                     border-radius: 12px;
@@ -1782,32 +1404,23 @@
 
         `;
 
-
         section.hidden =
             false;
 
-
-        /*
-         * 判断軸比較なし
-         */
         updateYourDecisionStep(
             false
         );
-
     }
 
 
-
     /* =====================================================
-       DECISION TEXT
+       Decision text
        ===================================================== */
 
     function getDilemmaText(
         decision
     ) {
-
         return (
-
             normalizeDisplayText(
                 decision?.dilemma_text
             )
@@ -1823,53 +1436,32 @@
             normalizeDisplayText(
                 decision?.title
             )
-
         );
-
     }
-
 
 
     function getPriorityText(
         decision
     ) {
-
         return normalizeDisplayText(
             decision?.priority_text
         );
-
     }
-
 
 
     function getResultText(
         decision
     ) {
-
         return normalizeDisplayText(
             decision?.result_text
         );
-
     }
 
-
-
-    /* =====================================================
-       HOME EXCERPT
-
-       DBは変更しない。
-
-       Homeだけ短く表示する。
-
-       Career_detailでは
-       元データ全文を利用する。
-       ===================================================== */
 
     function createExcerpt(
         value,
         maxLength
     ) {
-
         const text =
             normalizeDisplayText(
                 value
@@ -1882,28 +1474,21 @@
 
                 .trim();
 
-
         if (!text) {
             return '';
         }
-
 
         const characters =
             Array.from(
                 text
             );
 
-
         if (
-            characters.length
-            <=
+            characters.length <=
             maxLength
         ) {
-
             return text;
-
         }
-
 
         const sliced =
             characters
@@ -1915,13 +1500,8 @@
 
                 .join('');
 
-
-        /*
-         * 可能なら文章の区切りで止める。
-         */
         let bestIndex =
             -1;
-
 
         [
             '。',
@@ -1936,33 +1516,21 @@
 
                     bestIndex =
                         Math.max(
-
                             bestIndex,
 
                             sliced.lastIndexOf(
                                 mark
                             )
-
                         );
-
                 }
             );
 
-
-        /*
-         * 切る位置が前過ぎる場合は
-         * 文字数で切る。
-         */
         if (
-            bestIndex
-            >=
+            bestIndex >=
             Math.floor(
-                maxLength
-                *
-                0.58
+                maxLength * 0.58
             )
         ) {
-
             return sliced
 
                 .slice(
@@ -1971,30 +1539,24 @@
                 )
 
                 .trim();
-
         }
-
 
         return (
             sliced.trim()
             +
             '…'
         );
-
     }
 
 
-
     /* =====================================================
-       PERSON
+       Person
        ===================================================== */
 
     function getUsername(
         story
     ) {
-
         return (
-
             normalizeDisplayText(
                 story?.username
             )
@@ -2008,41 +1570,31 @@
             ||
 
             'Career GPS User'
-
         );
-
     }
-
 
 
     function getPersonMeta(
         story
     ) {
-
         const values =
             [];
-
 
         const ageText =
             getAgeGroup(
                 story?.age
             );
 
-
         const profession =
             normalizeDisplayText(
                 story?.profession
             );
 
-
         if (ageText) {
-
             values.push(
                 ageText
             );
-
         }
-
 
         if (
             profession
@@ -2054,75 +1606,49 @@
                 profession
             )
         ) {
-
             values.push(
                 profession
             );
-
         }
-
 
         return values.join(
             '・'
         );
-
     }
 
-
-
-    /* =====================================================
-       AGE
-       ===================================================== */
 
     function getAgeGroup(
         age
     ) {
-
         if (
-            age === null
-            ||
-            age === undefined
-            ||
+            age === null ||
+            age === undefined ||
             age === ''
         ) {
-
             return '';
-
         }
-
 
         const text =
             String(
                 age
             ).trim();
 
-
         if (!text) {
             return '';
         }
 
-
-        /*
-         * APIが
-         * 20代 / 30代
-         * のように返している場合
-         */
         if (
             text.includes(
                 '代'
             )
         ) {
-
             return text;
-
         }
-
 
         const number =
             Number(
                 text
             );
-
 
         if (
             !Number.isFinite(
@@ -2131,29 +1657,16 @@
             ||
             number <= 0
         ) {
-
             return '';
-
         }
 
-
-        if (
-            number < 20
-        ) {
-
+        if (number < 20) {
             return '10代';
-
         }
 
-
-        if (
-            number >= 60
-        ) {
-
+        if (number >= 60) {
             return '60代以上';
-
         }
-
 
         return `${
             Math.floor(
@@ -2162,23 +1675,19 @@
             *
             10
         }代`;
-
     }
 
 
-
     /* =====================================================
-       DETAIL URL
+       Detail URL
        ===================================================== */
 
     function createCareerDetailUrl(
         careerId,
         decisionId
     ) {
-
         const params =
             new URLSearchParams();
-
 
         params.set(
             'id',
@@ -2186,7 +1695,6 @@
                 careerId
             )
         );
-
 
         if (
             decisionId !== null
@@ -2197,138 +1705,124 @@
                 decisionId
             ).trim()
         ) {
-
             params.set(
                 'decision_id',
                 String(
                     decisionId
                 )
             );
-
         }
-
 
         params.set(
             'theme',
             THEME
         );
 
-
         return (
             'Career_detail.html?'
             +
             params.toString()
         );
-
     }
 
 
-
     /* =====================================================
-       ANALYTICS
-       Detail links
+       Analytics
        ===================================================== */
 
     function bindAnalytics(
         section
     ) {
-
         if (
             section.dataset
                 .analyticsBound
             ===
             'true'
         ) {
-
             return;
-
         }
-
 
         section.dataset
             .analyticsBound =
                 'true';
 
-
         section.addEventListener(
             'click',
             event => {
-
 
                 const detailLink =
                     event.target.closest(
                         '.decision-detail-link'
                     );
 
-
                 if (
-                    detailLink
-                    &&
-                    typeof gtag
-                    ===
+                    !detailLink
+                    ||
+                    typeof gtag !==
                     'function'
                 ) {
-
-                    gtag(
-                        'event',
-                        'same_crossroad_story_click',
-                        {
-
-                            page_type:
-                                'career_home',
-
-                            theme:
-                                THEME,
-
-                            decision_path:
-                                detailLink
-                                    .dataset
-                                    .sameCrossroadRoute
-                                ||
-                                '',
-
-                            career_id:
-                                detailLink
-                                    .dataset
-                                    .careerId
-                                ||
-                                '',
-
-                            decision_id:
-                                detailLink
-                                    .dataset
-                                    .decisionId
-                                ||
-                                ''
-
-                        }
-                    );
-
+                    return;
                 }
 
+                gtag(
+                    'event',
+                    'same_crossroad_story_click',
+                    {
+                        page_type:
+                            'career_home',
+
+                        theme:
+                            THEME,
+
+                        comparison_group:
+                            section
+                                .dataset
+                                .comparisonGroupKey
+                            ||
+                            '',
+
+                        comparison_group_label:
+                            section
+                                .dataset
+                                .comparisonGroupLabel
+                            ||
+                            '',
+
+                        decision_path:
+                            detailLink
+                                .dataset
+                                .sameCrossroadRoute
+                            ||
+                            '',
+
+                        career_id:
+                            detailLink
+                                .dataset
+                                .careerId
+                            ||
+                            '',
+
+                        decision_id:
+                            detailLink
+                                .dataset
+                                .decisionId
+                            ||
+                            ''
+                    }
+                );
             }
         );
-
     }
 
 
-
-    /* =====================================================
-       ANALYTICS
-       "このテーマの経験を探す"
-       ===================================================== */
-
     function bindAllLinkAnalytics() {
-
         const links =
             document.querySelectorAll(
                 '.home-same-crossroad-all-link'
             );
 
-
         links.forEach(
             link => {
-
 
                 if (
                     link.dataset
@@ -2336,86 +1830,91 @@
                     ===
                     'true'
                 ) {
-
                     return;
-
                 }
-
 
                 link.dataset
                     .analyticsBound =
                         'true';
 
-
                 link.addEventListener(
                     'click',
                     () => {
 
-
                         if (
-                            typeof gtag
-                            !==
+                            typeof gtag !==
                             'function'
                         ) {
-
                             return;
-
                         }
 
+                        const section =
+                            document.getElementById(
+                                SECTION_ID
+                            );
 
                         gtag(
                             'event',
                             'same_crossroad_compare_click',
                             {
-
                                 page_type:
                                     'career_home',
 
                                 theme:
-                                    THEME
+                                    THEME,
 
+                                comparison_group:
+                                    section
+                                        ?.dataset
+                                        ?.comparisonGroupKey
+                                    ||
+                                    '',
+
+                                comparison_group_label:
+                                    section
+                                        ?.dataset
+                                        ?.comparisonGroupLabel
+                                    ||
+                                    ''
                             }
                         );
-
                     }
                 );
-
             }
         );
-
     }
 
 
-
-    /* =====================================================
-       VIEW ANALYTICS
-       ===================================================== */
-
     function trackCompareView(
-        representatives
+        representatives,
+        comparisonGroup
     ) {
-
         if (
-            typeof gtag
-            !==
+            typeof gtag !==
             'function'
         ) {
-
             return;
-
         }
-
 
         gtag(
             'event',
             'same_crossroad_view',
             {
-
                 page_type:
                     'career_home',
 
                 theme:
                     THEME,
+
+                comparison_group:
+                    comparisonGroup?.key
+                    ||
+                    '',
+
+                comparison_group_label:
+                    comparisonGroup?.label
+                    ||
+                    '',
 
                 route_count:
                     representatives.length,
@@ -2431,55 +1930,42 @@
                         )
 
                         .join(',')
-
             }
         );
-
     }
 
 
-
     /* =====================================================
-       TEXT HELPERS
+       Text helpers
        ===================================================== */
 
     function normalizeText(
         value
     ) {
-
         if (
-            value === null
-            ||
+            value === null ||
             value === undefined
         ) {
-
             return '';
-
         }
-
 
         return String(
             value
         ).trim();
-
     }
-
 
 
     function normalizeDisplayText(
         value
     ) {
-
         const text =
             normalizeText(
                 value
             );
 
-
         if (!text) {
             return '';
         }
-
 
         if (
             [
@@ -2491,36 +1977,22 @@
                 text.toLowerCase()
             )
         ) {
-
             return '';
-
         }
 
-
         return text;
-
     }
 
-
-
-    /* =====================================================
-       ESCAPE HTML
-       ===================================================== */
 
     function escapeHTML(
         value
     ) {
-
         if (
-            value === null
-            ||
+            value === null ||
             value === undefined
         ) {
-
             return '';
-
         }
-
 
         return String(
             value
@@ -2530,7 +2002,6 @@
                 /[&'`"<>]/g,
 
                 character => ({
-
                     '&':
                         '&amp;',
 
@@ -2548,13 +2019,10 @@
 
                     '>':
                         '&gt;'
-
                 })[
                     character
                 ]
             );
-
     }
-
 
 })();
