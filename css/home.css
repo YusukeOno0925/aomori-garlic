@@ -4310,7 +4310,7 @@ body.home-page {
             27px;
 
         padding:
-            41px
+            22px
             18px
             44px;
     }
@@ -4919,7 +4919,6 @@ body.home-page {
    ========================================================= */
 
 @media (max-width: 420px) {
-  
 
     .home-decision-start__primary-copy strong {
         font-size:
