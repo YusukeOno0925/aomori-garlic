@@ -3010,6 +3010,9 @@ span:last-child {
     margin-top:
         23px;
 
+    margin-bottom:
+        20px;
+
     padding-top:
         17px;
 
@@ -4061,6 +4064,14 @@ span:last-child {
     }
 
 
+    .career-gps-story-decision {
+
+        margin-bottom:
+            10px;
+    
+    }
+
+
     /* -----------------------------------------------------
        Choice
        ----------------------------------------------------- */
@@ -4541,13 +4552,18 @@ span:last-child {
     }
 
 
+    .career-decision-card__person {
+
+        margin-bottom:
+            10px;
+    
+    }
+
+
     .career-decision-card__person-copy > p {
 
         font-size:
             0.65rem;
-        
-        margin-bottom:
-            10px;
 
     }
 
