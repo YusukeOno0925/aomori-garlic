@@ -1978,69 +1978,170 @@ body.home-page {
 
 
 .decision-criteria-card {
-    min-width: 0;
 
-    padding:
-        16px;
+  display:
+      flex;
 
-    border:
-        1px solid
-        var(--gps-line);
+  flex-direction:
+      column;
 
-    border-radius:
-        11px;
+  min-width:
+      0;
 
-    background:
-        var(--gps-white);
+  min-height:
+      210px;
+
+  padding:
+      18px;
+
+  border:
+      1px solid
+      var(--gps-line);
+
+  border-radius:
+      11px;
+
+  background:
+      var(--gps-white);
+
 }
 
 
-.decision-criteria-card__route {
-    color:
-        var(--gps-blue-600);
+/* =========================================================
+ Heading
+ Routeを主役にする
+ ========================================================= */
 
-    font-size:
-        0.62rem;
+.decision-criteria-card__heading {
 
-    font-weight:
-        800;
+  display:
+      flex;
+
+  align-items:
+      center;
+
+  justify-content:
+      space-between;
+
+  gap:
+      12px;
+
 }
 
 
-.decision-criteria-card strong {
-    display: block;
+.decision-criteria-card__label {
 
-    margin-top:
-        6px;
+  color:
+      var(--gps-muted);
 
-    color:
-        var(--gps-text-strong);
+  font-size:
+      0.62rem;
 
-    font-size:
-        0.83rem;
+  font-weight:
+      800;
 
-    font-weight:
-        800;
-
-    line-height:
-        1.6;
 }
 
 
-.decision-criteria-card p {
-    margin:
-        6px
-        0
-        0;
+/* =========================================================
+ Priority
+ ========================================================= */
 
-    color:
-        var(--gps-muted);
+.decision-criteria-card__priority {
 
-    font-size:
-        0.75rem;
+  display:
+      -webkit-box;
 
-    line-height:
-        1.65;
+  margin:
+      16px
+      0
+      0;
+
+  overflow:
+      hidden;
+
+  color:
+      var(--gps-text-strong);
+
+  font-size:
+      0.84rem;
+
+  font-weight:
+      700;
+
+  line-height:
+      1.7;
+
+  overflow-wrap:
+      anywhere;
+
+  -webkit-box-orient:
+      vertical;
+
+  -webkit-line-clamp:
+      4;
+
+}
+
+
+/* =========================================================
+ Person
+ 主役ではなく補助情報
+ ========================================================= */
+
+.decision-criteria-card__person {
+
+  display:
+      flex;
+
+  flex-wrap:
+      wrap;
+
+  align-items:
+      center;
+
+  gap:
+      4px
+      8px;
+
+  margin-top:
+      auto;
+
+  padding-top:
+      16px;
+
+  border-top:
+      1px solid
+      var(--gps-line-soft);
+
+}
+
+
+.decision-criteria-card__person > span {
+
+  color:
+      var(--gps-text-strong);
+
+  font-size:
+      0.67rem;
+
+  font-weight:
+      800;
+
+}
+
+
+.decision-criteria-card__person > small {
+
+  color:
+      var(--gps-muted);
+
+  font-size:
+      0.62rem;
+
+  font-weight:
+      400;
+
 }
 
 
@@ -4908,6 +5009,39 @@ body.home-page {
     .announcement-title {
         font-size:
             0.73rem;
+    }
+
+
+    .decision-criteria-card {
+
+        min-height:
+            0;
+    
+        padding:
+            16px;
+    
+    }
+    
+    
+    .decision-criteria-card__priority {
+    
+        margin-top:
+            13px;
+    
+        font-size:
+            0.82rem;
+    
+    }
+    
+    
+    .decision-criteria-card__person {
+    
+        margin-top:
+            16px;
+    
+        padding-top:
+            13px;
+    
     }
 
 

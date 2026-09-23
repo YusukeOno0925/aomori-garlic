@@ -1222,43 +1222,50 @@
        What mattered
        ===================================================== */
 
-    function renderDecisionCriteria(
+       function renderDecisionCriteria(
         criteriaSection,
         criteriaList,
         representatives
     ) {
+    
         if (
             !criteriaSection ||
             !criteriaList
         ) {
+    
             updateYourDecisionStep(
                 false
             );
-
+    
             return;
+    
         }
-
+    
+    
         const items =
             representatives
-
+    
                 .map(
                     representative => ({
+    
                         representative,
-
+    
                         priority:
                             getPriorityText(
                                 representative
                                     .story
                                     .decision
                             )
+    
                     })
                 )
-
+    
                 .filter(
                     item =>
                         item.priority
                 );
-
+    
+    
         /*
          * 2人以上のpriorityがないと
          * 判断軸比較にならない。
@@ -1267,81 +1274,165 @@
             items.length <
             2
         ) {
+    
             criteriaSection.hidden =
                 true;
-
+    
+    
             criteriaList.innerHTML =
                 '';
-
+    
+    
             updateYourDecisionStep(
                 false
             );
-
+    
+    
             return;
+    
         }
-
+    
+    
         criteriaList.innerHTML =
-
+    
             items
-
+    
                 .map(
                     item => {
-
+    
                         const representative =
                             item.representative;
-
+    
+    
+                        const story =
+                            representative.story;
+    
+    
+                        const route =
+                            representative.route;
+    
+    
+                        const username =
+                            getUsername(
+                                story
+                            );
+    
+    
+                        const meta =
+                            getPersonMeta(
+                                story
+                            );
+    
+    
                         return `
-
+    
                             <article class="decision-criteria-card">
-
-                                <span class="decision-criteria-card__route">
-
-                                    ${escapeHTML(
-                                        representative
-                                            .route
-                                            .label
-                                    )}
-
-                                </span>
-
-
-                                <strong>
-
-                                    ${escapeHTML(
-                                        getUsername(
-                                            representative
-                                                .story
-                                        )
-                                    )}さんが大切にしたこと
-
-                                </strong>
-
-
-                                <p>
-
+    
+    
+                                <!-- =========================
+                                     ROUTE
+                                     ========================= -->
+    
+                                <div class="decision-criteria-card__heading">
+    
+                                    <span
+                                        class="
+                                            decision-route
+                                            decision-route--${escapeHTML(
+                                                route.key
+                                            )}
+                                        "
+                                    >
+    
+                                        ${escapeHTML(
+                                            route.label
+                                        )}
+    
+                                    </span>
+    
+    
+                                    <span class="decision-criteria-card__label">
+    
+                                        大切にしたこと
+    
+                                    </span>
+    
+                                </div>
+    
+    
+    
+                                <!-- =========================
+                                     PRIORITY
+                                     ========================= -->
+    
+                                <p class="decision-criteria-card__priority">
+    
                                     ${escapeHTML(
                                         createExcerpt(
                                             item.priority,
                                             90
                                         )
                                     )}
-
+    
                                 </p>
-
+    
+    
+    
+                                <!-- =========================
+                                     PERSON
+                                     補助情報として表示
+                                     ========================= -->
+    
+                                <div class="decision-criteria-card__person">
+    
+                                    <span>
+    
+                                        ${escapeHTML(
+                                            username
+                                        )}
+    
+                                    </span>
+    
+    
+                                    ${
+                                        meta
+    
+                                            ? `
+    
+                                                <small>
+    
+                                                    ${escapeHTML(
+                                                        meta
+                                                    )}
+    
+                                                </small>
+    
+                                            `
+    
+                                            : ''
+                                    }
+    
+                                </div>
+    
+    
                             </article>
-
+    
                         `;
+    
                     }
                 )
-
+    
                 .join('');
-
+    
+    
         criteriaSection.hidden =
             false;
-
+    
+    
         updateYourDecisionStep(
             true
         );
+    
     }
 
 
