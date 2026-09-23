@@ -4829,6 +4829,74 @@ body.home-page {
     }
 
 
+    /* -----------------------------------------
+      Story carousel indicator
+      スマホのみ
+      ----------------------------------------- */
+
+    #similar-stories-indicators,
+    #career-story-preview-indicators {
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        gap:
+            7px;
+
+        margin-top:
+            14px;
+
+    }
+
+
+    /* 通常の丸いdotではなく横長barにする */
+    #similar-stories-indicators button,
+    #career-story-preview-indicators button {
+
+        width:
+            24px;
+
+        height:
+            3px;
+
+        padding:
+            0;
+
+        border:
+            0;
+
+        border-radius:
+            999px;
+
+        background:
+            #d2dee8;
+
+        cursor:
+            pointer;
+
+        transition:
+            width 0.18s ease,
+            background-color 0.18s ease;
+
+    }
+
+
+    /* 現在表示中 */
+    #similar-stories-indicators button.active,
+    #career-story-preview-indicators button.active {
+
+        width:
+            38px;
+
+        background:
+            var(--gps-blue-600);
+
+    }
+
+
     .home-career-card__top {
         padding:
             18px

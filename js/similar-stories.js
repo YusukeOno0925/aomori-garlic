@@ -100,6 +100,11 @@
                 'similar-stories-indicators'
             );
 
+        const previewIndicators =
+            document.getElementById(
+                'career-story-preview-indicators'
+            );
+
 
         if (
             !section
@@ -139,7 +144,8 @@
                 title,
                 description,
                 previewArea,
-                previewList
+                previewList,
+                previewIndicators
             });
 
             return;
@@ -152,7 +158,8 @@
             eyebrow,
             title,
             description,
-            previewArea
+            previewArea,
+            indicators
         });
 
     }
@@ -168,7 +175,8 @@
         title,
         description,
         previewArea,
-        previewList
+        previewList,
+        previewIndicators
     }) {
 
         list.innerHTML =
@@ -210,7 +218,8 @@
         await loadGuestPreviews(
             previewArea,
             previewList,
-            description
+            description,
+            previewIndicators
         );
 
     }
@@ -359,6 +368,11 @@
                 )
             );
 
+            setupStoryCarouselIndicators(
+                list,
+                indicators
+            );
+
 
         } catch (error) {
 
@@ -428,7 +442,8 @@
     async function loadGuestPreviews(
         previewArea,
         previewList,
-        description
+        description,
+        previewIndicators
     ) {
 
         try {
@@ -533,6 +548,11 @@
 
             previewArea.style.display =
                 'block';
+
+            setupStoryCarouselIndicators(
+                previewList,
+                previewIndicators
+            );
 
 
         } catch (error) {
@@ -2523,6 +2543,332 @@
             );
 
     }
+
+
+    /* =========================================================
+   MOBILE STORY CAROUSEL INDICATORS
+   ========================================================= */
+
+function setupStoryCarouselIndicators(
+    list,
+    indicators
+) {
+
+    if (
+        !list
+        ||
+        !indicators
+    ) {
+
+        return;
+
+    }
+
+
+    const mobileMedia =
+        window.matchMedia(
+            '(max-width: 700px)'
+        );
+
+
+    function getCards() {
+
+        return Array.from(
+            list.querySelectorAll(
+                '.home-career-card'
+            )
+        );
+
+    }
+
+
+    function updateActiveIndicator() {
+
+        if (
+            !mobileMedia.matches
+        ) {
+
+            return;
+
+        }
+
+
+        const cards =
+            getCards();
+
+
+        const buttons =
+            Array.from(
+                indicators.querySelectorAll(
+                    'button'
+                )
+            );
+
+
+        if (
+            !cards.length
+            ||
+            !buttons.length
+        ) {
+
+            return;
+
+        }
+
+
+        const listRect =
+            list.getBoundingClientRect();
+
+
+        let activeIndex =
+            0;
+
+
+        let smallestDistance =
+            Number.POSITIVE_INFINITY;
+
+
+        cards.forEach(
+            (
+                card,
+                index
+            ) => {
+
+                const cardRect =
+                    card.getBoundingClientRect();
+
+
+                const distance =
+                    Math.abs(
+                        cardRect.left
+                        -
+                        listRect.left
+                    );
+
+
+                if (
+                    distance
+                    <
+                    smallestDistance
+                ) {
+
+                    smallestDistance =
+                        distance;
+
+
+                    activeIndex =
+                        index;
+
+                }
+
+            }
+        );
+
+
+        buttons.forEach(
+            (
+                button,
+                index
+            ) => {
+
+                button.classList.toggle(
+                    'active',
+                    index ===
+                    activeIndex
+                );
+
+
+                button.setAttribute(
+                    'aria-current',
+                    index === activeIndex
+                        ? 'true'
+                        : 'false'
+                );
+
+            }
+        );
+
+    }
+
+
+    function renderIndicators() {
+
+        const cards =
+            getCards();
+
+
+        indicators.innerHTML =
+            '';
+
+
+        /*
+         * PCでは非表示。
+         * 1件しかない場合も不要。
+         */
+        if (
+            !mobileMedia.matches
+            ||
+            cards.length <= 1
+        ) {
+
+            indicators.style.display =
+                'none';
+
+
+            return;
+
+        }
+
+
+        indicators.style.display =
+            'flex';
+
+
+        cards.forEach(
+            (
+                card,
+                index
+            ) => {
+
+                const button =
+                    document.createElement(
+                        'button'
+                    );
+
+
+                button.type =
+                    'button';
+
+
+                button.setAttribute(
+                    'aria-label',
+                    `${index + 1}件目のCareer Storyへ`
+                );
+
+
+                if (
+                    index === 0
+                ) {
+
+                    button.classList.add(
+                        'active'
+                    );
+
+
+                    button.setAttribute(
+                        'aria-current',
+                        'true'
+                    );
+
+                }
+
+
+                button.addEventListener(
+                    'click',
+                    () => {
+
+                        const listRect =
+                            list.getBoundingClientRect();
+
+
+                        const cardRect =
+                            card.getBoundingClientRect();
+
+
+                        const targetLeft =
+                            list.scrollLeft
+                            +
+                            (
+                                cardRect.left
+                                -
+                                listRect.left
+                            );
+
+
+                        list.scrollTo({
+
+                            left:
+                                targetLeft,
+
+                            behavior:
+                                'smooth'
+
+                        });
+
+                    }
+                );
+
+
+                indicators.appendChild(
+                    button
+                );
+
+            }
+        );
+
+
+        updateActiveIndicator();
+
+    }
+
+
+    let ticking =
+        false;
+
+
+    list.addEventListener(
+        'scroll',
+        () => {
+
+            if (
+                ticking
+            ) {
+
+                return;
+
+            }
+
+
+            ticking =
+                true;
+
+
+            window.requestAnimationFrame(
+                () => {
+
+                    updateActiveIndicator();
+
+
+                    ticking =
+                        false;
+
+                }
+            );
+
+        },
+        {
+            passive:
+                true
+        }
+    );
+
+
+    if (
+        typeof mobileMedia.addEventListener ===
+        'function'
+    ) {
+
+        mobileMedia.addEventListener(
+            'change',
+            renderIndicators
+        );
+
+    }
+
+
+    renderIndicators();
+
+}
 
 
 })();
