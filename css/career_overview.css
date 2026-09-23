@@ -2390,7 +2390,7 @@ main.career-overview-page {
    20. DECISION PERSON
    ========================================================= */
 
-.career-decision-card__person {
+   .career-decision-card__person {
 
     display:
         flex;
@@ -2402,6 +2402,9 @@ main.career-overview-page {
         12px;
 
     margin-top:
+        20px;
+
+    margin-bottom:
         20px;
 
     padding-top:
@@ -4542,6 +4545,9 @@ span:last-child {
 
         font-size:
             0.65rem;
+        
+        margin-bottom:
+            10px;
 
     }
 
