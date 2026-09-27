@@ -2848,6 +2848,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 career.careerStages
             );
 
+        const detailUrl =
+            createCareerDetailUrl(
+                career
+            );
+
 
         li.innerHTML = `
 
@@ -3103,21 +3108,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="career-decision-card__footer">
 
-
-                    <span>
-
-                        この選択を詳しく見る
-
-                    </span>
-
-
-                    <span aria-hidden="true">
-
-                        →
-
-                    </span>
-
-
+                    <a
+                        href="${escapeHTML(
+                            detailUrl
+                        )}"
+                        data-career-detail-link="true"
+                        style="
+                            color: inherit;
+                            text-decoration: none;
+                            display: contents;
+                        "
+                    >
+                
+                        <span>
+                
+                            この選択を詳しく見る
+                
+                        </span>
+                
+                
+                        <span aria-hidden="true">
+                
+                            →
+                
+                        </span>
+                
+                    </a>
+                
                 </div>
 
 
@@ -3366,6 +3383,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const li =
             createInteractiveListItem(
+                career
+            );
+
+        const detailUrl =
+            createCareerDetailUrl(
                 career
             );
 
@@ -3628,26 +3650,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="career-gps-story-footer">
 
+                    <a
+                        href="${escapeHTML(
+                            detailUrl
+                        )}"
+                        data-career-detail-link="true"
+                        style="
+                            color: inherit;
+                            text-decoration: none;
+                            display: contents;
+                        "
+                    >
 
-                    <span>
+                        <span>
 
-                        ${
-                            hasDecision
+                            ${
+                                hasDecision
+                                    ? '選択の背景と、その後を見る'
+                                    : 'このCareer Storyを見る'
+                            }
 
-                                ? '選択の背景と、その後を見る'
+                        </span>
 
-                                : 'このCareer Storyを見る'
-                        }
+                        <span aria-hidden="true">
+                            →
+                        </span>
 
-                    </span>
-
-
-                    <span aria-hidden="true">
-
-                        →
-
-                    </span>
-
+                    </a>
 
                 </div>
 
@@ -3666,75 +3695,108 @@ document.addEventListener('DOMContentLoaded', () => {
        INTERACTIVE CARD
        ===================================================== */
 
-    function createInteractiveListItem(
+       function createInteractiveListItem(
         career
     ) {
-
+    
         const li =
             document.createElement(
                 'li'
             );
-
-
+    
+    
         li.tabIndex =
             0;
-
-
+    
+    
         li.setAttribute(
             'role',
             'link'
         );
-
-
+    
+    
         const navigate =
             () => {
-
+    
                 trackStoryClick(
                     career
                 );
-
-
+    
+    
                 window.location.href =
                     createCareerDetailUrl(
                         career
                     );
-
+    
             };
-
-
+    
+    
         li.addEventListener(
             'click',
-            navigate
+            event => {
+    
+                const detailLink =
+                    event.target.closest?.(
+                        'a[data-career-detail-link="true"]'
+                    );
+    
+    
+                if (detailLink) {
+    
+                    trackStoryClick(
+                        career
+                    );
+    
+    
+                    return;
+    
+                }
+    
+    
+                navigate();
+    
+            }
         );
-
-
+    
+    
         li.addEventListener(
             'keydown',
             event => {
-
+    
+                const detailLink =
+                    event.target.closest?.(
+                        'a[data-career-detail-link="true"]'
+                    );
+    
+    
+                if (detailLink) {
+    
+                    return;
+    
+                }
+    
+    
                 if (
                     event.key ===
                     'Enter'
-
                     ||
-
                     event.key ===
                     ' '
                 ) {
-
+    
                     event.preventDefault();
-
-
+    
+    
                     navigate();
-
+    
                 }
-
+    
             }
         );
-
-
+    
+    
         return li;
-
+    
     }
 
 
