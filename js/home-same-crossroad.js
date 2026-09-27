@@ -128,6 +128,12 @@
                 comparisonGroup
             );
 
+            observeCompareImpression(
+                section,
+                representatives,
+                comparisonGroup
+            );
+
         } catch (error) {
             console.error(
                 'Same Crossroad error:',
@@ -2023,6 +2029,125 @@
                         .join(',')
             }
         );
+    }
+
+
+    /* =====================================================
+    TRUE VIEW / IMPRESSION ANALYTICS
+    ===================================================== */
+
+    function observeCompareImpression(
+        section,
+        representatives,
+        comparisonGroup
+    ) {
+
+        if (
+            !section
+            ||
+            typeof IntersectionObserver
+            ===
+            'undefined'
+        ) {
+
+            return;
+
+        }
+
+
+        let tracked =
+            false;
+
+
+        const observer =
+            new IntersectionObserver(
+                entries => {
+
+                    const entry =
+                        entries[0];
+
+
+                    if (
+                        !entry
+                        ||
+                        !entry.isIntersecting
+                        ||
+                        tracked
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    tracked =
+                        true;
+
+
+                    if (
+                        typeof gtag
+                        ===
+                        'function'
+                    ) {
+
+                        gtag(
+                            'event',
+                            'same_crossroad_impression',
+                            {
+
+                                page_type:
+                                    'career_home',
+
+                                theme:
+                                    THEME,
+
+                                comparison_group:
+                                    comparisonGroup?.key
+                                    ||
+                                    '',
+
+                                comparison_group_label:
+                                    comparisonGroup?.label
+                                    ||
+                                    '',
+
+                                route_count:
+                                    representatives.length,
+
+                                decision_paths:
+                                    representatives
+                                        .map(
+                                            representative =>
+                                                representative
+                                                    .route
+                                                    .key
+                                        )
+                                        .join(',')
+
+                            }
+                        );
+
+                    }
+
+
+                    observer.unobserve(
+                        section
+                    );
+
+                    observer.disconnect();
+
+                },
+                {
+                    threshold:
+                        0.1
+                }
+            );
+
+
+        observer.observe(
+            section
+        );
+
     }
 
 
