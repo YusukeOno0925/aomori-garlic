@@ -10,48 +10,69 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        キャリアストーリー詳細 - インノーマル
+    <!-- =====================================================
+        SEO
+    ====================================================== -->
+
+    <title id="career-detail-page-title">
+        キャリアの意思決定｜Career GPS - インノーマル
     </title>
 
+
     <meta
+        id="career-detail-meta-description"
         name="description"
-        content="キャリアの分岐点で何に迷い、何を重視し、どんな選択をし、その後どうなったのか。実際の意思決定から次のキャリアを考えるCareer GPSです。"
+        content="キャリアの分岐点で何に迷い、何を大切にし、どんな選択をしたのか。実際の意思決定から次のキャリアを考えるCareer GPSです。"
     >
 
+
+    <!--
+        Career Detailは原則index対象。
+        個別DecisionのSEO情報はcareer_detail.jsで設定する。
+    -->
     <meta
+    id="career-detail-robots"
+    name="robots"
+    content="index,follow,max-image-preview:large"
+    >
+
+
+    <meta
+        id="career-detail-og-title"
         property="og:title"
-        content="キャリアストーリー詳細 - インノーマル"
+        content="キャリアの意思決定｜Career GPS - インノーマル"
     >
 
+
     <meta
+        id="career-detail-og-description"
         property="og:description"
-        content="同じ分岐に立った人は、何を考え、何を選び、その後どうなったのか。実際のキャリアの意思決定を読み解きます。"
+        content="何に迷い、何を大切にし、どんな道を選んだのか。実際のキャリアの意思決定を読み解きます。"
     >
+
 
     <meta
         property="og:image"
         content="https://www.imnormal.jp/images/ogp-career-detail.jpg"
     >
 
+
     <meta
+        id="career-detail-og-url"
         property="og:url"
         content="https://www.imnormal.jp/Career_detail.html"
     >
+
 
     <meta
         property="og:type"
         content="article"
     >
 
-    <meta
-        name="keywords"
-        content="キャリアストーリー, キャリア選択, 転職経験, 意思決定, Career GPS, インノーマル"
-    >
 
     <link
+        id="career-detail-canonical"
         rel="canonical"
-        href="https://www.imnormal.jp/Career_detail.html"
     >
 
 
@@ -134,7 +155,10 @@
          Structured Data
     ====================================================== -->
 
-    <script type="application/ld+json">
+    <script
+        id="career-detail-structured-data"
+        type="application/ld+json"
+    >
     {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",

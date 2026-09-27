@@ -116,6 +116,11 @@ async function initializeCareerDetail() {
                 decisions,
                 careerDetailDecisionId
             );
+        
+        updateCareerDetailSeo(
+                data,
+                careerDetailPrimaryDecision
+            );
 
 
         // ====================================================
@@ -310,6 +315,572 @@ function selectPrimaryDecision(
 
     // decision_id がない既存URLとの互換
     return decisions[0];
+}
+
+
+// ============================================================
+// 3-A. Career Detail SEO
+// ============================================================
+
+function updateCareerDetailSeo(
+    data,
+    decision
+) {
+
+    if (
+        !careerDetailCareerId
+        ||
+        !decision
+    ) {
+
+        return;
+
+    }
+
+
+    const canonicalUrl =
+        createCareerDetailCanonicalUrl(
+            decision
+        );
+
+
+    const pageTitle =
+        createCareerDetailSeoTitle(
+            decision
+        );
+
+
+    const description =
+        createCareerDetailSeoDescription(
+            data,
+            decision
+        );
+
+
+    // --------------------------------------------------------
+    // Title
+    // --------------------------------------------------------
+
+    document.title =
+        pageTitle;
+
+
+    const titleElement =
+        document.getElementById(
+            'career-detail-page-title'
+        );
+
+
+    if (titleElement) {
+
+        titleElement.textContent =
+            pageTitle;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Meta Description
+    // --------------------------------------------------------
+
+    setMetaContent(
+        'career-detail-meta-description',
+        description
+    );
+
+
+    // --------------------------------------------------------
+    // OGP
+    // --------------------------------------------------------
+
+    setMetaContent(
+        'career-detail-og-title',
+        pageTitle
+    );
+
+
+    setMetaContent(
+        'career-detail-og-description',
+        description
+    );
+
+
+    setMetaContent(
+        'career-detail-og-url',
+        canonicalUrl
+    );
+
+
+    // --------------------------------------------------------
+    // Index / Noindex
+    // --------------------------------------------------------
+
+    const robots =
+        document.getElementById(
+            'career-detail-robots'
+        );
+
+
+    if (robots) {
+
+        robots.setAttribute(
+            'content',
+            'index,follow,max-image-preview:large'
+        );
+
+    }
+
+
+    const canonical =
+        document.getElementById(
+            'career-detail-canonical'
+        );
+
+
+    if (canonical) {
+
+        canonical.setAttribute(
+            'href',
+            canonicalUrl
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Structured Data
+    // --------------------------------------------------------
+
+    updateCareerDetailStructuredData(
+        decision,
+        canonicalUrl
+    );
+
+}
+
+
+
+// ============================================================
+// SEO Title
+// ============================================================
+
+function createCareerDetailSeoTitle(
+    decision
+) {
+
+    const path =
+        getDecisionPath(
+            decision?.decision_type
+        );
+
+
+    const sourceTitle =
+        normalizeDisplayText(
+            decision?.title
+        )
+        ||
+        normalizeDisplayText(
+            decision?.dilemma_text
+        )
+        ||
+        createDecisionHeroTitle(
+            decision
+        );
+
+
+    const coreTitle =
+        truncateText(
+            sourceTitle,
+            34
+        );
+
+
+    let suffix =
+        'キャリアの意思決定';
+
+
+    if (
+        path.key
+        ===
+        'change'
+    ) {
+
+        suffix =
+            '転職を選んだ理由';
+
+    } else if (
+        path.key
+        ===
+        'stay'
+    ) {
+
+        suffix =
+            '今の会社に残った理由';
+
+    } else if (
+        path.key
+        ===
+        'internal'
+    ) {
+
+        suffix =
+            '社内異動を選んだ理由';
+
+    }
+
+
+    return (
+        `${coreTitle}`
+        +
+        `｜${suffix}`
+        +
+        ' - Career GPS'
+    );
+
+}
+
+
+// ============================================================
+// SEO Description
+// ============================================================
+
+function createCareerDetailSeoDescription(
+    data,
+    decision
+) {
+
+    const profession =
+        normalizeDisplayText(
+            data?.profession
+        );
+
+
+    const dilemma =
+        normalizeDisplayText(
+            decision?.dilemma_text
+        )
+        ||
+        normalizeDisplayText(
+            decision?.trigger_text
+        );
+
+
+    const priority =
+        normalizeDisplayText(
+            decision?.priority_text
+        );
+
+
+    const choicePhrase =
+        createSeoChoicePhrase(
+            decision
+        );
+
+
+    const parts =
+        [];
+
+
+    if (profession) {
+
+        parts.push(
+            `${profession}のキャリア意思決定`
+        );
+
+    }
+
+
+    if (dilemma) {
+
+        parts.push(
+            `「${truncateText(
+                dilemma,
+                56
+            )}」と迷い、${choicePhrase}人の実例`
+        );
+
+    } else {
+
+        parts.push(
+            `${choicePhrase}人の実例`
+        );
+
+    }
+
+
+    if (priority) {
+
+        parts.push(
+            `判断で大切にしたのは「${truncateText(
+                priority,
+                42
+            )}」`
+        );
+
+    }
+
+
+    parts.push(
+        '実際の経験から、迷い・判断軸・選択を読み解くCareer GPSです'
+    );
+
+
+    return truncateText(
+        `${parts.join('。')}。`,
+        155
+    );
+
+}
+
+
+// ============================================================
+// SEO Choice Phrase
+// ============================================================
+
+function createSeoChoicePhrase(
+    decision
+) {
+
+    const path =
+        getDecisionPath(
+            decision?.decision_type
+        );
+
+
+    if (
+        path.key
+        ===
+        'change'
+    ) {
+
+        return (
+            '転職を選んだ'
+        );
+
+    }
+
+
+    if (
+        path.key
+        ===
+        'stay'
+    ) {
+
+        return (
+            '今の会社に残ることを選んだ'
+        );
+
+    }
+
+
+    if (
+        path.key
+        ===
+        'internal'
+    ) {
+
+        return (
+            '社内異動を選んだ'
+        );
+
+    }
+
+
+    const type =
+        normalizeDisplayText(
+            decision?.decision_type
+        );
+
+
+    return (
+        type
+            ? `${type}を選んだ`
+            : 'キャリアの道を選んだ'
+    );
+
+}
+
+
+// ============================================================
+// SEO Canonical URL
+// ============================================================
+
+function createCareerDetailCanonicalUrl(
+    decision
+) {
+
+    const url =
+        new URL(
+            '/Career_detail.html',
+            window.location.origin
+        );
+
+
+    url.searchParams.set(
+        'id',
+        careerDetailCareerId
+    );
+
+
+    if (
+        decision?.id !== null
+        &&
+        decision?.id !== undefined
+        &&
+        String(
+            decision.id
+        ).trim()
+    ) {
+
+        url.searchParams.set(
+            'decision_id',
+            String(
+                decision.id
+            )
+        );
+
+    }
+
+
+    /*
+     * themeは付けない。
+     *
+     * ?theme=change
+     * ?theme=income
+     *
+     * など入口が違っても、
+     * 同じDecisionならcanonicalは同一。
+     */
+
+    return url.toString();
+
+}
+
+
+// ============================================================
+// SEO Meta Helper
+// ============================================================
+
+function setMetaContent(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (
+        !element
+        ||
+        !value
+    ) {
+
+        return;
+
+    }
+
+
+    element.setAttribute(
+        'content',
+        value
+    );
+
+}
+
+
+// ============================================================
+// Structured Data
+// ============================================================
+
+function updateCareerDetailStructuredData(
+    decision,
+    canonicalUrl
+) {
+
+    const script =
+        document.getElementById(
+            'career-detail-structured-data'
+        );
+
+
+    if (!script) {
+
+        return;
+
+    }
+
+
+    const decisionName =
+        createDecisionHeroTitle(
+            decision
+        );
+
+
+    const structuredData = {
+
+        '@context':
+            'https://schema.org',
+
+        '@type':
+            'BreadcrumbList',
+
+        itemListElement: [
+
+            {
+                '@type':
+                    'ListItem',
+
+                position:
+                    1,
+
+                name:
+                    'ホーム',
+
+                item:
+                    `${window.location.origin}/Home.html`
+            },
+
+            {
+                '@type':
+                    'ListItem',
+
+                position:
+                    2,
+
+                name:
+                    'Career GPS',
+
+                item:
+                    `${window.location.origin}/Career_overview.html`
+            },
+
+            {
+                '@type':
+                    'ListItem',
+
+                position:
+                    3,
+
+                name:
+                    decisionName,
+
+                item:
+                    canonicalUrl
+            }
+
+        ]
+
+    };
+
+
+    script.textContent =
+        JSON.stringify(
+            structuredData
+        );
+
 }
 
 
