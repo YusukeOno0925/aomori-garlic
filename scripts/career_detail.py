@@ -1,15 +1,28 @@
-import html
+import smtplib
+import ssl
 
-from fastapi import APIRouter, HTTPException, Depends
+from email.message import EmailMessage
+from fastapi import (
+    APIRouter,
+    HTTPException,
+    Depends,
+    BackgroundTasks,
+)
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.responses import JSONResponse
-from fastapi_mail import MessageSchema
 from datetime import date as _date, datetime
 
 from .register_user import get_db_connection
 from .auth import User, get_current_user
-from .email_config import fast_mail
+
+from .email_config import (
+    MAIL_USERNAME,
+    MAIL_PASSWORD,
+    MAIL_FROM,
+    MAIL_SERVER,
+    MAIL_PORT,
+)
 
 from config import (
     environment,
@@ -38,7 +51,7 @@ def _get_career_talk_base_url():
     ).rstrip("/")
 
 
-async def _send_career_talk_email(
+def _send_career_talk_email(
     subject,
     recipient,
     body,
@@ -52,36 +65,60 @@ async def _send_career_talk_email(
 
     try:
 
-        html_body = (
-            html.escape(
-                body
-            )
-            .replace(
-                "\n",
-                "<br>"
-            )
+        message = EmailMessage()
+
+        message["Subject"] = subject
+        message["From"] = MAIL_FROM
+        message["To"] = recipient
+
+        message.set_content(
+            body
         )
 
 
-        message = MessageSchema(
-            subject=subject,
-            recipients=[
-                recipient
-            ],
-            body=html_body,
-            subtype="html"
+        ssl_context = (
+            ssl.create_default_context()
         )
 
 
-        await fast_mail.send_message(
-            message
+        with smtplib.SMTP(
+            MAIL_SERVER,
+            MAIL_PORT,
+            timeout=10
+        ) as server:
+
+            server.ehlo()
+
+
+            server.starttls(
+                context=ssl_context
+            )
+
+
+            server.ehlo()
+
+
+            server.login(
+                MAIL_USERNAME,
+                MAIL_PASSWORD
+            )
+
+
+            server.send_message(
+                message
+            )
+
+
+        print(
+            f"Career Talk email sent ({label}):",
+            recipient
         )
 
 
     except Exception as error:
 
-        # メールが失敗しても、
-        # Career Talkの申込自体は成功扱いにする。
+        # メール送信に失敗しても
+        # Career Talk申込自体は成功扱い。
         print(
             f"Career Talk email error ({label}):",
             error
@@ -813,7 +850,8 @@ async def get_career_detail(career_id: int):
 
 @router.post("/career-talk/request")
 async def create_career_talk_request(
-    payload: CareerTalkRequestCreate
+    payload: CareerTalkRequestCreate,
+    background_tasks: BackgroundTasks
 ):
 
     requester_name = (
@@ -1122,7 +1160,8 @@ Imnormal
 """
 
 
-            await _send_career_talk_email(
+            background_tasks.add_task(
+                _send_career_talk_email,
                 subject=(
                     "[Imnormal] Career Talkの申込が届きました"
                 ),
@@ -1171,7 +1210,8 @@ Imnormal
 """
 
 
-            await _send_career_talk_email(
+            background_tasks.add_task(
+                _send_career_talk_email,
                 subject=(
                     "[Imnormal運営] Career Talkの新規申込"
                 ),
@@ -1216,7 +1256,8 @@ Imnormal
 """
 
 
-            await _send_career_talk_email(
+            background_tasks.add_task(
+                _send_career_talk_email,
                 subject=(
                     "[Imnormal] Career Talkのお申し込みを受け付けました"
                 ),
