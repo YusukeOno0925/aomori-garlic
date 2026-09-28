@@ -215,6 +215,70 @@ document.addEventListener(
             );
 
 
+                /* ------------------------------------------------------------
+           Career Talk
+           ------------------------------------------------------------ */
+
+           const careerTalkSettingsForm =
+           document.getElementById(
+               'career-talk-settings-form'
+           );
+
+
+       const careerTalkEnabled =
+           document.getElementById(
+               'career-talk-enabled'
+           );
+
+
+       const careerTalkPrice =
+           document.getElementById(
+               'career-talk-price'
+           );
+
+
+       const careerTalkDuration =
+           document.getElementById(
+               'career-talk-duration'
+           );
+
+
+       const careerTalkHostMessage =
+           document.getElementById(
+               'career-talk-host-message'
+           );
+
+
+       const careerTalkHostStatus =
+           document.getElementById(
+               'career-talk-host-status'
+           );
+
+
+       const careerTalkSettingsFeedback =
+           document.getElementById(
+               'career-talk-settings-feedback'
+           );
+
+
+       const careerTalkSettingsSave =
+           document.getElementById(
+               'career-talk-settings-save'
+           );
+
+
+       const careerTalkRequestCount =
+           document.getElementById(
+               'career-talk-request-count'
+           );
+
+
+       const careerTalkRequestList =
+           document.getElementById(
+               'career-talk-request-list'
+           );
+
+
         /* ============================================================
            2. STATE
            ============================================================ */
@@ -5462,6 +5526,1088 @@ document.addEventListener(
         }
 
 
+        /* ============================================================
+           20-A. CAREER TALK
+           ============================================================ */
+
+        function updateCareerTalkStatus(
+            enabled
+        ) {
+
+            if (!careerTalkHostStatus) {
+
+                return;
+
+            }
+
+
+            careerTalkHostStatus
+                .classList
+                .remove(
+                    'mypage-career-talk-status--on',
+                    'mypage-career-talk-status--off'
+                );
+
+
+            if (enabled) {
+
+                careerTalkHostStatus
+                    .textContent =
+                        '受付中';
+
+
+                careerTalkHostStatus
+                    .classList
+                    .add(
+                        'mypage-career-talk-status--on'
+                    );
+
+            } else {
+
+                careerTalkHostStatus
+                    .textContent =
+                        '受付停止中';
+
+
+                careerTalkHostStatus
+                    .classList
+                    .add(
+                        'mypage-career-talk-status--off'
+                    );
+
+            }
+
+        }
+
+
+
+        function setCareerTalkSaveState(
+            state,
+            message = ''
+        ) {
+
+            if (
+                !careerTalkSettingsFeedback
+            ) {
+
+                return;
+
+            }
+
+
+            careerTalkSettingsFeedback
+                .classList
+                .remove(
+                    'is-saved',
+                    'is-unsaved',
+                    'is-error'
+                );
+
+
+            if (
+                state
+                ===
+                'saved'
+            ) {
+
+                careerTalkSettingsFeedback
+                    .textContent =
+                        '保存済み';
+
+
+                careerTalkSettingsFeedback
+                    .classList
+                    .add(
+                        'is-saved'
+                    );
+
+
+                if (
+                    careerTalkSettingsSave
+                ) {
+
+                    careerTalkSettingsSave
+                        .textContent =
+                            '設定を保存する';
+
+                }
+
+
+                return;
+
+            }
+
+
+            if (
+                state
+                ===
+                'unsaved'
+            ) {
+
+                careerTalkSettingsFeedback
+                    .textContent =
+                        '未保存の変更があります';
+
+
+                careerTalkSettingsFeedback
+                    .classList
+                    .add(
+                        'is-unsaved'
+                    );
+
+
+                if (
+                    careerTalkSettingsSave
+                ) {
+
+                    careerTalkSettingsSave
+                        .textContent =
+                            '変更を保存する';
+
+                }
+
+
+                return;
+
+            }
+
+
+            if (
+                state
+                ===
+                'error'
+            ) {
+
+                careerTalkSettingsFeedback
+                    .textContent =
+                        message
+                        ||
+                        '保存できませんでした';
+
+
+                careerTalkSettingsFeedback
+                    .classList
+                    .add(
+                        'is-error'
+                    );
+
+
+                if (
+                    careerTalkSettingsSave
+                ) {
+
+                    careerTalkSettingsSave
+                        .textContent =
+                            'もう一度保存する';
+
+                }
+
+            }
+
+        }
+
+
+
+        async function loadCareerTalkSettings() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${baseUrl}/career-talk/me`,
+                        {
+                            method:
+                                'GET',
+
+                            credentials:
+                                'include',
+
+                            headers: {
+                                Accept:
+                                    'application/json'
+                            }
+                        }
+                    );
+
+
+                if (
+                    response.status
+                    ===
+                    401
+                ) {
+
+                    window.location.href =
+                        'Login.html';
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Career Talkの設定を取得できませんでした。'
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (careerTalkEnabled) {
+
+                    careerTalkEnabled.checked =
+                        Boolean(
+                            data.enabled
+                        );
+
+                }
+
+
+                if (careerTalkPrice) {
+
+                    careerTalkPrice.value =
+                        data.price_yen
+                        ??
+                        3000;
+
+                }
+
+
+                if (careerTalkDuration) {
+
+                    careerTalkDuration.value =
+                        String(
+                            data.duration_minutes
+                            ??
+                            30
+                        );
+
+                }
+
+
+                if (careerTalkHostMessage) {
+
+                    careerTalkHostMessage.value =
+                        normalizeText(
+                            data.host_message
+                        );
+
+                }
+
+
+                updateCareerTalkStatus(
+                    Boolean(
+                        data.enabled
+                    )
+                );
+
+
+                setCareerTalkSaveState(
+                    'saved'
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    'Career Talk設定取得エラー:',
+                    error
+                );
+
+
+                setCareerTalkSaveState(
+                    'error',
+                    '設定を読み込めませんでした'
+                );
+
+            }
+
+        }
+
+
+
+        async function saveCareerTalkSettings(
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            if (!careerTalkSettingsForm) {
+
+                return;
+
+            }
+
+
+            const price =
+                Number(
+                    careerTalkPrice
+                        ?.value
+                );
+
+
+            const duration =
+                Number(
+                    careerTalkDuration
+                        ?.value
+                );
+
+
+            if (
+                !Number.isFinite(
+                    price
+                )
+                ||
+                price < 0
+            ) {
+
+                alert(
+                    '料金を確認してください。'
+                );
+
+                return;
+
+            }
+
+
+            if (
+                ![
+                    30,
+                    45,
+                    60
+                ].includes(
+                    duration
+                )
+            ) {
+
+                alert(
+                    '時間を確認してください。'
+                );
+
+                return;
+
+            }
+
+
+            if (
+                careerTalkSettingsSave
+            ) {
+
+                careerTalkSettingsSave
+                    .disabled =
+                        true;
+
+
+                careerTalkSettingsSave
+                    .textContent =
+                        '保存中...';
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${baseUrl}/career-talk/me`,
+                        {
+                            method:
+                                'POST',
+
+                            credentials:
+                                'include',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json',
+
+                                Accept:
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    is_active:
+                                        Boolean(
+                                            careerTalkEnabled
+                                                ?.checked
+                                        ),
+
+                                    price_yen:
+                                        price,
+
+                                    duration_minutes:
+                                        duration,
+
+                                    host_message:
+                                        normalizeText(
+                                            careerTalkHostMessage
+                                                ?.value
+                                        )
+                                        ||
+                                        null
+                                })
+                        }
+                    );
+
+
+                const result =
+                    await response
+                        .json()
+                        .catch(
+                            () => ({})
+                        );
+
+
+                if (
+                    response.status
+                    ===
+                    401
+                ) {
+
+                    window.location.href =
+                        'Login.html';
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.detail
+                        ||
+                        'Career Talkの設定を保存できませんでした。'
+                    );
+
+                }
+
+
+                updateCareerTalkStatus(
+                    Boolean(
+                        result.enabled
+                    )
+                );
+
+
+                setCareerTalkSaveState(
+                    'saved'
+                );
+
+
+                if (
+                    typeof gtag
+                    ===
+                    'function'
+                ) {
+
+                    gtag(
+                        'event',
+                        'career_talk_settings_save',
+                        {
+                            enabled:
+                                Boolean(
+                                    result.enabled
+                                ),
+
+                            price_yen:
+                                price,
+
+                            duration_minutes:
+                                duration
+                        }
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    'Career Talk設定保存エラー:',
+                    error
+                );
+
+
+                setCareerTalkSaveState(
+                    'error',
+                    error.message
+                    ||
+                    '設定を保存できませんでした'
+                );
+
+
+            } finally {
+
+                if (
+                    careerTalkSettingsSave
+                ) {
+
+                    careerTalkSettingsSave
+                        .disabled =
+                            false;
+
+                }
+
+            }
+
+        }
+
+
+
+        [
+            careerTalkEnabled,
+            careerTalkPrice,
+            careerTalkDuration,
+            careerTalkHostMessage
+        ]
+            .filter(
+                Boolean
+            )
+            .forEach(
+                element => {
+
+                    element.addEventListener(
+                        'input',
+                        function () {
+
+                            setCareerTalkSaveState(
+                                'unsaved'
+                            );
+
+                        }
+                    );
+
+
+                    element.addEventListener(
+                        'change',
+                        function () {
+
+                            setCareerTalkSaveState(
+                                'unsaved'
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        function formatCareerTalkStatus(
+            status
+        ) {
+
+            const labels = {
+
+                requested:
+                    '確認待ち',
+
+                accepted:
+                    '受付済み',
+
+                scheduled:
+                    '日程確定',
+
+                completed:
+                    '実施済み',
+
+                declined:
+                    '辞退',
+
+                cancelled:
+                    'キャンセル'
+
+            };
+
+
+            return (
+                labels[
+                    normalizeText(
+                        status
+                    )
+                ]
+                ||
+                normalizeText(
+                    status
+                )
+                ||
+                '確認待ち'
+            );
+
+        }
+
+
+
+        function formatCareerTalkRequestDate(
+            value
+        ) {
+
+            const text =
+                normalizeText(
+                    value
+                );
+
+
+            if (!text) {
+
+                return '';
+
+            }
+
+
+            const date =
+                new Date(
+                    text
+                );
+
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return text;
+
+            }
+
+
+            return (
+                new Intl.DateTimeFormat(
+                    'ja-JP',
+                    {
+                        year:
+                            'numeric',
+
+                        month:
+                            'numeric',
+
+                        day:
+                            'numeric',
+
+                        hour:
+                            '2-digit',
+
+                        minute:
+                            '2-digit'
+                    }
+                )
+                .format(
+                    date
+                )
+            );
+
+        }
+
+
+
+        function renderCareerTalkRequests(
+            data
+        ) {
+
+            const requests =
+                Array.isArray(
+                    data
+                        ?.requests
+                )
+                    ? data.requests
+                    : [];
+
+
+            if (
+                careerTalkRequestCount
+            ) {
+
+                careerTalkRequestCount
+                    .textContent =
+                        String(
+                            requests.length
+                        );
+
+            }
+
+
+            if (
+                !careerTalkRequestList
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                requests.length
+                ===
+                0
+            ) {
+
+                careerTalkRequestList
+                    .innerHTML = `
+
+                        <div
+                            class="
+                                mypage-career-talk-request-empty
+                            "
+                        >
+                            <p>
+                                まだCareer Talkの申込はありません。
+                            </p>
+                        </div>
+
+                    `;
+
+
+                return;
+
+            }
+
+
+            careerTalkRequestList
+                .innerHTML =
+                    requests
+                        .map(
+                            request => {
+
+                                const title =
+                                    normalizeText(
+                                        request
+                                            .decision_title
+                                    )
+                                    ||
+                                    normalizeText(
+                                        request
+                                            .decision_type
+                                    )
+                                    ||
+                                    'Career Story';
+
+
+                                const schedule =
+                                    normalizeText(
+                                        request
+                                            .preferred_schedule_text
+                                    );
+
+
+                                const createdAt =
+                                    formatCareerTalkRequestDate(
+                                        request
+                                            .created_at
+                                    );
+
+
+                                const status =
+                                    formatCareerTalkStatus(
+                                        request
+                                            .status
+                                    );
+
+
+                                const storyUrl = (
+                                    loadedUserData
+                                    &&
+                                    loadedUserData.id
+                                    &&
+                                    request.decision_id
+                                )
+                                    ? (
+                                        `Career_detail.html?id=`
+                                        +
+                                        `${encodeURIComponent(
+                                            loadedUserData.id
+                                        )}`
+                                        +
+                                        `&decision_id=`
+                                        +
+                                        `${encodeURIComponent(
+                                            request.decision_id
+                                        )}`
+                                    )
+                                    : '';
+
+
+                                return `
+
+                                    <article
+                                        class="
+                                            mypage-career-talk-request-card
+                                        "
+                                    >
+
+                                        <div
+                                            class="
+                                                mypage-career-talk-request-card__top
+                                            "
+                                        >
+
+                                            <div>
+
+                                                <p
+                                                    class="
+                                                        mypage-career-talk-request-card__date
+                                                    "
+                                                >
+                                                    ${escapeHtml(
+                                                        createdAt
+                                                    )}
+                                                </p>
+
+                                                <h4>
+                                                    ${escapeHtml(
+                                                        request.requester_name
+                                                    )}
+                                                </h4>
+
+                                            </div>
+
+
+                                            <span
+                                                class="
+                                                    mypage-career-talk-request-card__status
+                                                "
+                                            >
+                                                ${escapeHtml(
+                                                    status
+                                                )}
+                                            </span>
+
+                                        </div>
+
+
+                                        <p
+                                            class="
+                                                mypage-career-talk-request-card__email
+                                            "
+                                        >
+                                            ${escapeHtml(
+                                                request.requester_email
+                                            )}
+                                        </p>
+
+
+                                        <div
+                                            class="
+                                                mypage-career-talk-request-card__story
+                                            "
+                                        >
+
+                                            <span>
+                                                対象のCareer Story
+                                            </span>
+
+                                            ${
+                                                storyUrl
+
+                                                    ? `
+                                                        <a
+                                                            href="${escapeHtml(
+                                                                storyUrl
+                                                            )}"
+                                                        >
+                                                            ${escapeHtml(
+                                                                title
+                                                            )}
+                                                            →
+                                                        </a>
+                                                    `
+
+                                                    : `
+                                                        <strong>
+                                                            ${escapeHtml(
+                                                                title
+                                                            )}
+                                                        </strong>
+                                                    `
+                                            }
+
+                                        </div>
+
+
+                                        <div
+                                            class="
+                                                mypage-career-talk-request-card__question
+                                            "
+                                        >
+
+                                            <span>
+                                                聞きたいこと
+                                            </span>
+
+                                            <p>
+                                                ${escapeHtml(
+                                                    request.question_text
+                                                )}
+                                            </p>
+
+                                        </div>
+
+
+                                        ${
+                                            schedule
+
+                                                ? `
+                                                    <div
+                                                        class="
+                                                            mypage-career-talk-request-card__schedule
+                                                        "
+                                                    >
+
+                                                        <span>
+                                                            希望日時
+                                                        </span>
+
+                                                        <p>
+                                                            ${escapeHtml(
+                                                                schedule
+                                                            )}
+                                                        </p>
+
+                                                    </div>
+                                                `
+
+                                                : ''
+                                        }
+
+
+                                        <div
+                                            class="
+                                                mypage-career-talk-request-card__meta
+                                            "
+                                        >
+
+                                            <span>
+                                                ${escapeHtml(
+                                                    String(
+                                                        request.duration_minutes
+                                                    )
+                                                )}分
+                                            </span>
+
+                                            <span>
+                                                /
+                                            </span>
+
+                                            <strong>
+                                                ${Number(
+                                                    request.price_yen
+                                                    ||
+                                                    0
+                                                ).toLocaleString(
+                                                    'ja-JP'
+                                                )}円
+                                            </strong>
+
+                                        </div>
+
+                                    </article>
+
+                                `;
+
+                            }
+                        )
+                        .join('');
+
+        }
+
+
+
+        async function loadCareerTalkRequests() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${baseUrl}/career-talk/me/requests`,
+                        {
+                            method:
+                                'GET',
+
+                            credentials:
+                                'include',
+
+                            headers: {
+                                Accept:
+                                    'application/json'
+                            }
+                        }
+                    );
+
+
+                if (
+                    response.status
+                    ===
+                    401
+                ) {
+
+                    window.location.href =
+                        'Login.html';
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Career Talkの申込を取得できませんでした。'
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                renderCareerTalkRequests(
+                    data
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    'Career Talk申込取得エラー:',
+                    error
+                );
+
+
+                if (
+                    careerTalkRequestList
+                ) {
+
+                    careerTalkRequestList
+                        .innerHTML = `
+
+                            <div
+                                class="
+                                    mypage-career-talk-request-empty
+                                "
+                            >
+                                <p>
+                                    申込を読み込めませんでした。
+                                </p>
+                            </div>
+
+                        `;
+
+                }
+
+            }
+
+        }
+
+
 
         /* ============================================================
            21. INITIALIZE
@@ -5591,6 +6737,14 @@ document.addEventListener(
                 );
 
 
+                await Promise.allSettled(
+                    [
+                        loadCareerTalkSettings(),
+                        loadCareerTalkRequests()
+                    ]
+                );
+
+
                 /* ----------------------------------------------------
                    Save Buttons
                    ---------------------------------------------------- */
@@ -5645,6 +6799,19 @@ document.addEventListener(
 
         }
 
+
+
+        if (
+            careerTalkSettingsForm
+        ) {
+
+            careerTalkSettingsForm
+                .addEventListener(
+                    'submit',
+                    saveCareerTalkSettings
+                );
+
+        }
 
 
         initialize();

@@ -915,6 +915,270 @@
         </section>
 
 
+        <!-- =================================================
+            05 CAREER TALK
+        ================================================= -->
+
+        <section
+        class="
+            mypage-section
+            mypage-career-talk-section
+        "
+        id="mypage-career-talk-section"
+        >
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="section-kicker">
+                    CAREER TALK
+                </p>
+
+                <h2>
+                    あなたの経験を、次の誰かへ
+                </h2>
+
+            </div>
+
+
+            <p class="section-heading__description">
+                Career Storyを読んだ人から、
+                あなたの経験について直接話を聞きたいという
+                申込を受け付けられます。
+            </p>
+
+        </div>
+
+
+        <div class="mypage-career-talk-layout">
+
+
+            <!-- =========================================
+                HOST SETTINGS
+            ========================================== -->
+
+            <article class="mypage-career-talk-settings">
+
+                <div class="mypage-career-talk-settings__header">
+
+                    <div>
+
+                        <p class="mypage-career-talk-card__kicker">
+                            TALK SETTINGS
+                        </p>
+
+                        <h3>
+                            Career Talk 受付設定
+                        </h3>
+
+                    </div>
+
+
+                    <span
+                        class="
+                            mypage-career-talk-status
+                            mypage-career-talk-status--off
+                        "
+                        id="career-talk-host-status"
+                    >
+                        受付停止中
+                    </span>
+
+                </div>
+
+
+                <form id="career-talk-settings-form">
+
+
+                    <div class="mypage-career-talk-toggle">
+
+                        <div>
+
+                            <strong>
+                                Career Talkを受け付ける
+                            </strong>
+
+                            <p>
+                                ONにするとCareer Detailに
+                                「この人に話を聞いてみる」が表示されます。
+                            </p>
+
+                        </div>
+
+
+                        <label class="mypage-career-talk-switch">
+
+                            <input
+                                type="checkbox"
+                                id="career-talk-enabled"
+                            >
+
+                            <span
+                                class="mypage-career-talk-switch__track"
+                                aria-hidden="true"
+                            ></span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="mypage-career-talk-fields">
+
+
+                        <div class="mypage-career-talk-field">
+
+                            <label for="career-talk-price">
+                                料金
+                            </label>
+
+                            <div class="mypage-career-talk-input-unit">
+
+                                <input
+                                    type="number"
+                                    id="career-talk-price"
+                                    min="0"
+                                    step="500"
+                                    value="3000"
+                                >
+
+                                <span>
+                                    円
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mypage-career-talk-field">
+
+                            <label for="career-talk-duration">
+                                時間
+                            </label>
+
+                            <select id="career-talk-duration">
+
+                                <option value="30">
+                                    30分
+                                </option>
+
+                                <option value="45">
+                                    45分
+                                </option>
+
+                                <option value="60">
+                                    60分
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mypage-career-talk-field">
+
+                        <label for="career-talk-host-message">
+                            話せること
+                        </label>
+
+                        <textarea
+                            id="career-talk-host-message"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="例：転職時の迷いや、営業から企画へキャリアを広げた経験についてお話しできます。"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="mypage-career-talk-settings__footer">
+
+                        <p
+                            class="mypage-career-talk-feedback"
+                            id="career-talk-settings-feedback"
+                            aria-live="polite"
+                        ></p>
+
+
+                        <button
+                            type="submit"
+                            class="mypage-primary-button"
+                            id="career-talk-settings-save"
+                        >
+                            設定を保存する
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </article>
+
+
+
+            <!-- =========================================
+                REQUESTS
+            ========================================== -->
+
+            <article class="mypage-career-talk-requests">
+
+                <div class="mypage-career-talk-requests__header">
+
+                    <div>
+
+                        <p class="mypage-career-talk-card__kicker">
+                            REQUESTS
+                        </p>
+
+                        <h3>
+                            届いたCareer Talk
+                        </h3>
+
+                    </div>
+
+
+                    <div class="mypage-career-talk-request-count">
+
+                        <strong id="career-talk-request-count">
+                            0
+                        </strong>
+
+                        <span>
+                            件
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="mypage-career-talk-request-list"
+                    id="career-talk-request-list"
+                >
+
+                    <div class="mypage-career-talk-request-empty">
+
+                        <p>
+                            Career Talkの申込を読み込んでいます...
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+        </section>
+
+
 
         <!-- =================================================
              EDITOR

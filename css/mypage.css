@@ -1853,6 +1853,921 @@ main.my-career-gps-page a {
 
 
 /* =========================================================
+   CAREER TALK
+   ========================================================= */
+
+   .mypage-career-talk-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 0.9fr)
+        minmax(0, 1.1fr);
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+
+.mypage-career-talk-settings,
+.mypage-career-talk-requests {
+
+    min-width: 0;
+
+    padding:
+        28px
+        29px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        var(--gps-radius-md);
+
+    background:
+        var(--gps-white);
+
+    box-shadow:
+        var(--gps-shadow-sm);
+}
+
+
+.mypage-career-talk-settings__header,
+.mypage-career-talk-requests__header {
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px solid
+        var(--gps-line);
+}
+
+
+.mypage-career-talk-card__kicker {
+
+    margin:
+        0
+        0
+        5px;
+
+    color:
+        var(--gps-blue-600);
+
+    font-size:
+        0.56rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        0.13em;
+}
+
+
+.mypage-career-talk-settings h3,
+.mypage-career-talk-requests h3 {
+
+    margin: 0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+.mypage-career-talk-status {
+
+    flex: 0 0 auto;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 28px;
+
+    padding:
+        0
+        11px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        0.6rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-status--off {
+
+    background:
+        #f1f4f7;
+
+    color:
+        var(--gps-muted);
+}
+
+
+.mypage-career-talk-status--on {
+
+    background:
+        var(--gps-blue-050);
+
+    color:
+        var(--gps-blue-700);
+}
+
+
+.mypage-career-talk-toggle {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-top: 22px;
+
+    padding:
+        17px
+        18px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.mypage-career-talk-toggle strong {
+
+    display: block;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-toggle p {
+
+    margin:
+        5px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.64rem;
+
+    line-height:
+        1.6;
+}
+
+
+/* Toggle */
+
+.mypage-career-talk-switch {
+
+    flex: 0 0 auto;
+
+    position: relative;
+
+    display: block;
+
+    width: 48px;
+
+    height: 27px;
+
+    cursor: pointer;
+}
+
+
+.mypage-career-talk-switch input {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    opacity: 0;
+}
+
+
+.mypage-career-talk-switch__track {
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius:
+        999px;
+
+    background:
+        #ccd6df;
+
+    transition:
+        background 0.18s ease;
+}
+
+
+.mypage-career-talk-switch__track::after {
+
+    position: absolute;
+
+    top: 4px;
+    left: 4px;
+
+    width: 19px;
+
+    height: 19px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 2px 6px
+        rgba(7, 27, 48, 0.16);
+
+    content:
+        "";
+
+    transition:
+        transform 0.18s ease;
+}
+
+
+.mypage-career-talk-switch
+input:checked
++
+.mypage-career-talk-switch__track {
+
+    background:
+        var(--gps-blue-600);
+}
+
+
+.mypage-career-talk-switch
+input:checked
++
+.mypage-career-talk-switch__track::after {
+
+    transform:
+        translateX(21px);
+}
+
+
+/* Fields */
+
+.mypage-career-talk-fields {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+
+    margin-top: 21px;
+}
+
+
+.mypage-career-talk-field {
+
+    margin-top: 18px;
+}
+
+
+.mypage-career-talk-fields
+.mypage-career-talk-field {
+
+    margin-top: 0;
+}
+
+
+.mypage-career-talk-field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.67rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-field input,
+.mypage-career-talk-field select,
+.mypage-career-talk-field textarea {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    padding:
+        10px
+        12px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        var(--gps-line-strong);
+
+    border-radius:
+        10px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--gps-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.75rem;
+}
+
+
+.mypage-career-talk-field textarea {
+
+    min-height: 105px;
+
+    resize: vertical;
+
+    line-height: 1.7;
+}
+
+
+.mypage-career-talk-field input:focus,
+.mypage-career-talk-field select:focus,
+.mypage-career-talk-field textarea:focus {
+
+    border-color:
+        var(--gps-blue-500);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(29, 95, 158, 0.08);
+}
+
+
+.mypage-career-talk-input-unit {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.mypage-career-talk-input-unit input {
+
+    min-width: 0;
+}
+
+
+.mypage-career-talk-input-unit span {
+
+    flex: 0 0 auto;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.69rem;
+
+    font-weight:
+        700;
+}
+
+
+.mypage-career-talk-settings__footer {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 15px;
+
+    margin-top: 21px;
+}
+
+
+.mypage-career-talk-feedback {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        26px;
+
+    margin:
+        0
+        auto
+        0
+        0;
+
+    padding:
+        5px
+        11px;
+
+    border-radius:
+        999px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.62rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+}
+
+
+.mypage-career-talk-feedback:empty {
+
+    visibility:
+        hidden;
+}
+
+
+.mypage-career-talk-feedback.is-saved {
+
+    background:
+        #eef7f1;
+
+    color:
+        #35704b;
+}
+
+
+.mypage-career-talk-feedback.is-unsaved {
+
+    background:
+        #fff7e8;
+
+    color:
+        #8a650d;
+}
+
+
+.mypage-career-talk-feedback.is-error {
+
+    background:
+        #fff0f0;
+
+    color:
+        #a13c3c;
+}
+
+
+/* Requests */
+
+.mypage-career-talk-request-count {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 4px;
+}
+
+
+.mypage-career-talk-request-count strong {
+
+    color:
+        var(--gps-navy-800);
+
+    font-size:
+        1.35rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-request-count span {
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.6rem;
+}
+
+
+.mypage-career-talk-request-list {
+
+    margin-top: 20px;
+}
+
+
+.mypage-career-talk-request-empty {
+
+    padding:
+        32px
+        20px;
+
+    border:
+        1px dashed
+        var(--gps-line-strong);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--gps-bg-soft);
+
+    text-align:
+        center;
+}
+
+
+.mypage-career-talk-request-empty p {
+
+    margin: 0;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.7rem;
+}
+
+
+/* =========================================================
+   CAREER TALK REQUEST CARD
+   ========================================================= */
+
+   .mypage-career-talk-request-card {
+
+    padding:
+        19px
+        20px;
+
+    border:
+        1px solid
+        var(--gps-line);
+
+    border-radius:
+        14px;
+
+    background:
+        var(--gps-bg-soft);
+}
+
+
+.mypage-career-talk-request-card
++
+.mypage-career-talk-request-card {
+
+    margin-top:
+        12px;
+}
+
+
+.mypage-career-talk-request-card__top {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        15px;
+}
+
+
+.mypage-career-talk-request-card__date {
+
+    margin:
+        0
+        0
+        4px;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.57rem;
+}
+
+
+.mypage-career-talk-request-card h4 {
+
+    margin:
+        0;
+
+    color:
+        var(--gps-text-strong);
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+.mypage-career-talk-request-card__status {
+
+    flex:
+        0
+        0
+        auto;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    padding:
+        5px
+        9px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--gps-blue-050);
+
+    color:
+        var(--gps-blue-700);
+
+    font-size:
+        0.56rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-request-card__email {
+
+    margin:
+        6px
+        0
+        0;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.64rem;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.mypage-career-talk-request-card__story,
+.mypage-career-talk-request-card__question,
+.mypage-career-talk-request-card__schedule {
+
+    margin-top:
+        15px;
+
+    padding-top:
+        14px;
+
+    border-top:
+        1px solid
+        var(--gps-line);
+}
+
+
+.mypage-career-talk-request-card__story
+> span,
+
+.mypage-career-talk-request-card__question
+> span,
+
+.mypage-career-talk-request-card__schedule
+> span {
+
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--gps-muted-light);
+
+    font-size:
+        0.55rem;
+
+    font-weight:
+        800;
+}
+
+
+.mypage-career-talk-request-card__story a,
+.mypage-career-talk-request-card__story strong {
+
+    color:
+        var(--gps-navy-800);
+
+    font-size:
+        0.7rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.6;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.mypage-career-talk-request-card__story a {
+
+    color:
+        var(--gps-blue-600);
+}
+
+
+.mypage-career-talk-request-card__question p,
+.mypage-career-talk-request-card__schedule p {
+
+    margin:
+        0;
+
+    color:
+        var(--gps-text);
+
+    font-size:
+        0.7rem;
+
+    line-height:
+        1.7;
+
+    overflow-wrap:
+        anywhere;
+
+    white-space:
+        pre-wrap;
+}
+
+
+.mypage-career-talk-request-card__meta {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        7px;
+
+    margin-top:
+        15px;
+
+    color:
+        var(--gps-muted);
+
+    font-size:
+        0.61rem;
+}
+
+
+.mypage-career-talk-request-card__meta strong {
+
+    color:
+        var(--gps-navy-800);
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        800;
+}
+
+
+/* Responsive */
+
+@media (max-width: 950px) {
+
+    .mypage-career-talk-layout {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .mypage-career-talk-settings,
+    .mypage-career-talk-requests {
+
+        padding:
+            22px
+            18px;
+    }
+
+
+    .mypage-career-talk-fields {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .mypage-career-talk-settings__footer {
+
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .mypage-career-talk-settings__footer
+    .mypage-primary-button {
+
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
    EDITOR
    ========================================================= */
 

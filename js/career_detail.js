@@ -9,6 +9,8 @@ let careerDetailCareerId = '';
 let careerDetailDecisionId = '';
 let careerDetailTheme = '';
 let careerDetailPrimaryDecision = null;
+let careerValueWallImpressionTracked = false;
+let careerTalkDialogInitialHtml = '';
 
 
 document.addEventListener(
@@ -204,8 +206,13 @@ async function initializeCareerDetail() {
         renderLookingBack(
             careerDetailPrimaryDecision
         );
-
-
+        
+        
+        renderCareerTalk(
+            data.career_talk
+        );
+        
+        
         renderCareerJourney(
             companies
         );
@@ -3994,6 +4001,783 @@ function renderLookingBack(
 
 
 // ============================================================
+// Career Talk
+// ============================================================
+
+function renderCareerTalk(
+    careerTalk
+) {
+
+    const section =
+        getElement(
+            'career-talk-section'
+        );
+
+
+    if (!section) {
+
+        return;
+    }
+
+
+    if (
+        !careerTalk
+        ||
+        careerTalk.enabled
+        !==
+        true
+    ) {
+
+        section.hidden =
+            true;
+
+        return;
+    }
+
+
+    const price =
+        getElement(
+            'career-talk-price'
+        );
+
+
+    const duration =
+        getElement(
+            'career-talk-duration'
+        );
+
+
+    const message =
+        getElement(
+            'career-talk-message'
+        );
+
+
+    const cta =
+        getElement(
+            'career-talk-cta'
+        );
+
+
+    const priceYen =
+        Number(
+            careerTalk.price_yen
+        );
+
+
+    const durationMinutes =
+        Number(
+            careerTalk.duration_minutes
+        );
+
+
+    if (price) {
+
+        price.textContent =
+            Number.isFinite(priceYen)
+                ? `${priceYen.toLocaleString('ja-JP')}円`
+                : '';
+    }
+
+
+    if (duration) {
+
+        duration.textContent =
+            Number.isFinite(
+                durationMinutes
+            )
+                ? `${durationMinutes}分`
+                : '';
+    }
+
+
+    const hostMessage =
+        normalizeDisplayText(
+            careerTalk.host_message
+        );
+
+
+    if (message) {
+
+        if (hostMessage) {
+
+            message.textContent =
+                hostMessage;
+
+            message.hidden =
+                false;
+
+        } else {
+
+            message.textContent =
+                '';
+
+            message.hidden =
+                true;
+        }
+    }
+
+
+    if (cta) {
+
+        cta.dataset.hostUserId =
+            careerDetailCareerId;
+    
+        cta.dataset.decisionId =
+            careerDetailPrimaryDecision?.id
+            ||
+            '';
+    
+        cta.dataset.priceYen =
+            Number.isFinite(priceYen)
+                ? String(priceYen)
+                : '';
+    
+        cta.dataset.durationMinutes =
+            Number.isFinite(
+                durationMinutes
+            )
+                ? String(durationMinutes)
+                : '';
+    }
+
+
+    section.hidden =
+        false;
+}
+
+
+// ============================================================
+// Career Talk Modal
+// ============================================================
+
+document.addEventListener(
+    'click',
+    function (
+        event
+    ) {
+
+        const talkButton =
+            event.target.closest(
+                '#career-talk-cta'
+            );
+
+
+        if (!talkButton) {
+
+            return;
+        }
+
+
+        openCareerTalkModal(
+            talkButton
+        );
+    }
+);
+
+
+function openCareerTalkModal(
+    talkButton
+) {
+
+    const modal =
+        getElement(
+            'career-talk-modal'
+        );
+
+
+    if (!modal) {
+
+        return;
+    }
+
+
+    const dialog =
+        modal.querySelector(
+            '.career-talk-modal__dialog'
+        );
+
+
+    if (dialog) {
+
+        if (
+            !careerTalkDialogInitialHtml
+        ) {
+
+            careerTalkDialogInitialHtml =
+                dialog.innerHTML;
+
+        } else if (
+            !getElement(
+                'career-talk-form'
+            )
+        ) {
+
+            dialog.innerHTML =
+                careerTalkDialogInitialHtml;
+        }
+
+    }
+
+
+    const hostUserId =
+        normalizeText(
+            talkButton.dataset.hostUserId
+        );
+
+
+    const decisionId =
+        normalizeText(
+            talkButton.dataset.decisionId
+        );
+
+
+    const priceYen =
+        Number(
+            talkButton.dataset.priceYen
+        );
+
+
+    const durationMinutes =
+        Number(
+            talkButton.dataset.durationMinutes
+        );
+
+
+    const hostInput =
+        getElement(
+            'career-talk-host-user-id'
+        );
+
+
+    const decisionInput =
+        getElement(
+            'career-talk-decision-id'
+        );
+
+
+    const price =
+        getElement(
+            'career-talk-modal-price'
+        );
+
+
+    const duration =
+        getElement(
+            'career-talk-modal-duration'
+        );
+
+
+    if (hostInput) {
+
+        hostInput.value =
+            hostUserId;
+    }
+
+
+    if (decisionInput) {
+
+        decisionInput.value =
+            decisionId;
+    }
+
+
+    if (price) {
+
+        price.textContent =
+            Number.isFinite(priceYen)
+                ? `${priceYen.toLocaleString('ja-JP')}円`
+                : '';
+    }
+
+
+    if (duration) {
+
+        duration.textContent =
+            Number.isFinite(
+                durationMinutes
+            )
+                ? `${durationMinutes}分`
+                : '';
+    }
+
+
+    modal.hidden =
+        false;
+
+
+    document.body.classList.add(
+        'career-talk-modal-open'
+    );
+
+
+    const nameInput =
+        getElement(
+            'career-talk-requester-name'
+        );
+
+
+    if (nameInput) {
+
+        setTimeout(
+            () => {
+                nameInput.focus();
+            },
+            0
+        );
+    }
+
+
+    if (
+        typeof gtag
+        ===
+        'function'
+    ) {
+
+        gtag(
+            'event',
+            'career_talk_cta_click',
+            {
+
+                page_type:
+                    'career_detail',
+
+                career_id:
+                    careerDetailCareerId,
+
+                decision_id:
+                    careerDetailPrimaryDecision?.id
+                    ||
+                    '',
+
+                login_status:
+                    careerDetailIsLoggedIn
+                        ? 'logged_in'
+                        : 'guest',
+
+                price_yen:
+                    Number.isFinite(priceYen)
+                        ? priceYen
+                        : 0,
+
+                duration_minutes:
+                    Number.isFinite(
+                        durationMinutes
+                    )
+                        ? durationMinutes
+                        : 0
+
+            }
+        );
+
+    }
+
+}
+
+
+function closeCareerTalkModal() {
+
+    const modal =
+        getElement(
+            'career-talk-modal'
+        );
+
+
+    if (!modal) {
+
+        return;
+    }
+
+
+    modal.hidden =
+        true;
+
+
+    const dialog =
+        modal.querySelector(
+            '.career-talk-modal__dialog'
+        );
+
+
+    if (
+        dialog
+        &&
+        careerTalkDialogInitialHtml
+    ) {
+
+        dialog.innerHTML =
+            careerTalkDialogInitialHtml;
+    }
+
+
+    document.body.classList.remove(
+        'career-talk-modal-open'
+    );
+
+}
+
+
+document.addEventListener(
+    'click',
+    function (
+        event
+    ) {
+
+        if (
+            event.target.closest(
+                '#career-talk-modal-close'
+            )
+            ||
+            event.target.closest(
+                '#career-talk-modal-backdrop'
+            )
+        ) {
+
+            closeCareerTalkModal();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    'keydown',
+    function (
+        event
+    ) {
+
+        if (
+            event.key
+            !==
+            'Escape'
+        ) {
+
+            return;
+        }
+
+
+        const modal =
+            getElement(
+                'career-talk-modal'
+            );
+
+
+        if (
+            modal
+            &&
+            !modal.hidden
+        ) {
+
+            closeCareerTalkModal();
+
+        }
+
+    }
+);
+
+
+// ============================================================
+// Career Talk Request Submit
+// ============================================================
+
+document.addEventListener(
+    'submit',
+    async function (
+        event
+    ) {
+
+        const form =
+            event.target.closest(
+                '#career-talk-form'
+            );
+
+
+        if (!form) {
+
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const submitButton =
+            getElement(
+                'career-talk-submit'
+            );
+
+
+        const hostUserId =
+            normalizeText(
+                getElement(
+                    'career-talk-host-user-id'
+                )?.value
+            );
+
+
+        const decisionId =
+            normalizeText(
+                getElement(
+                    'career-talk-decision-id'
+                )?.value
+            );
+
+
+        const requesterName =
+            normalizeText(
+                getElement(
+                    'career-talk-requester-name'
+                )?.value
+            );
+
+
+        const requesterEmail =
+            normalizeText(
+                getElement(
+                    'career-talk-requester-email'
+                )?.value
+            );
+
+
+        const questionText =
+            normalizeText(
+                getElement(
+                    'career-talk-question'
+                )?.value
+            );
+
+
+        const preferredScheduleText =
+            normalizeText(
+                getElement(
+                    'career-talk-preferred-schedule'
+                )?.value
+            );
+
+
+        if (
+            !hostUserId
+            ||
+            !requesterName
+            ||
+            !requesterEmail
+            ||
+            !questionText
+        ) {
+
+            return;
+        }
+
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                true;
+
+            submitButton.textContent =
+                '送信中...';
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    '/career-talk/request',
+                    {
+                        method:
+                            'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+
+                            Accept:
+                                'application/json'
+                        },
+
+                        credentials:
+                            'include',
+
+                        body:
+                            JSON.stringify({
+                                host_user_id:
+                                    Number(
+                                        hostUserId
+                                    ),
+
+                                decision_id:
+                                    decisionId
+                                        ? Number(
+                                            decisionId
+                                        )
+                                        : null,
+
+                                requester_name:
+                                    requesterName,
+
+                                requester_email:
+                                    requesterEmail,
+
+                                question_text:
+                                    questionText,
+
+                                preferred_schedule_text:
+                                    preferredScheduleText
+                                    ||
+                                    null
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result?.detail
+                    ||
+                    'Career Talkを申し込めませんでした。'
+                );
+            }
+
+
+            if (
+                typeof gtag
+                ===
+                'function'
+            ) {
+
+                gtag(
+                    'event',
+                    'career_talk_request',
+                    {
+
+                        page_type:
+                            'career_detail',
+
+                        career_id:
+                            careerDetailCareerId,
+
+                        decision_id:
+                            careerDetailPrimaryDecision?.id
+                            ||
+                            '',
+
+                        login_status:
+                            careerDetailIsLoggedIn
+                                ? 'logged_in'
+                                : 'guest',
+
+                        request_id:
+                            result.request_id
+                            ||
+                            ''
+
+                    }
+                );
+
+            }
+
+
+            showCareerTalkSuccess();
+
+
+        } catch (error) {
+
+            window.alert(
+                error.message
+                ||
+                'Career Talkの申込に失敗しました。'
+            );
+
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    'Career Talkを申し込む';
+            }
+
+        }
+
+    }
+);
+
+
+// ============================================================
+// Career Talk Success
+// ============================================================
+
+function showCareerTalkSuccess() {
+
+    const dialog =
+        document.querySelector(
+            '.career-talk-modal__dialog'
+        );
+
+
+    if (!dialog) {
+
+        return;
+    }
+
+
+    dialog.innerHTML = `
+
+        <div class="career-talk-success">
+
+            <p class="career-section-label">
+                REQUEST SENT
+            </p>
+
+            <h2 class="career-talk-success__title">
+                申込を受け付けました
+            </h2>
+
+            <p class="career-talk-success__description">
+                本人へ受付可否を確認したあと、
+                ご登録いただいたメールアドレスへ
+                日程をご連絡します。
+            </p>
+
+            <button
+                type="button"
+                class="career-talk-success__close"
+                id="career-talk-success-close"
+            >
+                閉じる
+            </button>
+
+        </div>
+
+    `;
+
+
+    const closeButton =
+        getElement(
+            'career-talk-success-close'
+        );
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            'click',
+            closeCareerTalkModal
+        );
+    }
+
+}
+
+
+// ============================================================
 // 23. Career Context / Journey
 // ============================================================
 
@@ -4690,6 +5474,126 @@ function updateCareerValueWall() {
         careerDetailIsLoggedIn
         ||
         !hasLockedContent;
+    
+    
+    if (!wall.hidden) {
+    
+        observeCareerValueWall(
+            wall
+        );
+    
+    }
+}
+
+
+// ============================================================
+// Career Value Wall Impression
+//
+// Value Wallが「存在した」ではなく、
+// 実際にユーザーの画面内へ入った時だけ計測する。
+// ============================================================
+
+function observeCareerValueWall(
+    wall
+) {
+
+    if (
+        !wall
+        ||
+        careerValueWallImpressionTracked
+        ||
+        typeof IntersectionObserver
+        ===
+        'undefined'
+    ) {
+
+        return;
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                const entry =
+                    entries[0];
+
+
+                if (
+                    !entry
+                    ||
+                    !entry.isIntersecting
+                    ||
+                    entry.intersectionRatio < 0.25
+                    ||
+                    careerValueWallImpressionTracked
+                ) {
+
+                    return;
+                }
+
+
+                careerValueWallImpressionTracked =
+                    true;
+
+
+                if (
+                    typeof gtag
+                    ===
+                    'function'
+                ) {
+
+                    gtag(
+                        'event',
+                        'career_value_wall_view',
+                        {
+
+                            page_type:
+                                'career_detail',
+
+                            career_id:
+                                careerDetailCareerId,
+
+                            decision_id:
+                                careerDetailPrimaryDecision?.id
+                                ||
+                                '',
+
+                            theme:
+                                careerDetailTheme
+                                ||
+                                '',
+
+                            login_status:
+                                careerDetailIsLoggedIn
+                                    ? 'logged_in'
+                                    : 'guest'
+
+                        }
+                    );
+
+                }
+
+
+                observer.unobserve(
+                    wall
+                );
+
+
+                observer.disconnect();
+
+            },
+            {
+                threshold:
+                    0.25
+            }
+        );
+
+
+    observer.observe(
+        wall
+    );
+
 }
 
 

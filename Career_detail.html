@@ -1185,6 +1185,83 @@
 
 
         <!-- =================================================
+            CAREER TALK
+        ================================================== -->
+
+        <section
+        class="
+            career-gps-section
+            career-talk-section
+        "
+        id="career-talk-section"
+        hidden
+        >
+
+        <div class="career-talk-card">
+
+            <div class="career-talk-card__main">
+
+                <p class="career-section-label">
+                    CAREER TALK
+                </p>
+
+                <h2 class="career-talk-card__title">
+                    この経験を、本人に直接聞いてみる
+                </h2>
+
+                <p class="career-talk-card__description">
+                    このCareer Storyを書いた本人に、
+                    当時の迷いや選択について
+                    オンラインで質問できます。
+                </p>
+
+                <p
+                    class="career-talk-card__message"
+                    id="career-talk-message"
+                    hidden
+                ></p>
+
+            </div>
+
+
+            <div class="career-talk-card__action">
+
+                <div class="career-talk-card__meta">
+
+                    <span id="career-talk-duration">
+                        30分
+                    </span>
+
+                    <span class="career-talk-card__separator">
+                        /
+                    </span>
+
+                    <strong id="career-talk-price">
+                        3,000円
+                    </strong>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="career-talk-card__cta"
+                    id="career-talk-cta"
+                >
+                    この人に話を聞いてみる
+                </button>
+
+                <p class="career-talk-card__note">
+                    オンラインで実施予定
+                </p>
+
+            </div>
+
+        </div>
+
+        </section>
+
+
+        <!-- =================================================
              05
              CAREER CONTEXT
 
@@ -1344,6 +1421,188 @@
 
 
     </main>
+
+
+    <!-- =====================================================
+        Career Talk Request Modal
+    ====================================================== -->
+
+    <div
+    class="career-talk-modal"
+    id="career-talk-modal"
+    hidden
+    >
+
+    <div
+        class="career-talk-modal__backdrop"
+        id="career-talk-modal-backdrop"
+    ></div>
+
+
+    <div
+        class="career-talk-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="career-talk-modal-title"
+    >
+
+        <button
+            type="button"
+            class="career-talk-modal__close"
+            id="career-talk-modal-close"
+            aria-label="閉じる"
+        >
+            ×
+        </button>
+
+
+        <div class="career-talk-modal__header">
+
+            <p class="career-section-label">
+                CAREER TALK
+            </p>
+
+            <h2
+                class="career-talk-modal__title"
+                id="career-talk-modal-title"
+            >
+                この人に話を聞いてみる
+            </h2>
+
+            <p class="career-talk-modal__description">
+                聞いてみたいことと希望日時を送ってください。
+                本人へ確認後、日程をご連絡します。
+            </p>
+
+        </div>
+
+
+        <div class="career-talk-modal__summary">
+
+            <span id="career-talk-modal-duration">
+                30分
+            </span>
+
+            <span>
+                /
+            </span>
+
+            <strong id="career-talk-modal-price">
+                3,000円
+            </strong>
+
+            <span>
+                オンライン
+            </span>
+
+        </div>
+
+
+        <form
+            class="career-talk-form"
+            id="career-talk-form"
+        >
+
+            <input
+                type="hidden"
+                id="career-talk-host-user-id"
+            >
+
+            <input
+                type="hidden"
+                id="career-talk-decision-id"
+            >
+
+
+            <div class="career-talk-form__field">
+
+                <label for="career-talk-requester-name">
+                    お名前
+                </label>
+
+                <input
+                    type="text"
+                    id="career-talk-requester-name"
+                    maxlength="100"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="career-talk-form__field">
+
+                <label for="career-talk-requester-email">
+                    メールアドレス
+                </label>
+
+                <input
+                    type="email"
+                    id="career-talk-requester-email"
+                    maxlength="255"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="career-talk-form__field">
+
+                <label for="career-talk-question">
+                    聞いてみたいこと
+                </label>
+
+                <textarea
+                    id="career-talk-question"
+                    rows="5"
+                    maxlength="2000"
+                    placeholder="例：転職を決める直前に、最後まで迷っていたことを詳しく聞きたいです。"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="career-talk-form__field">
+
+                <label for="career-talk-preferred-schedule">
+                    希望日時
+                    <span>
+                        任意
+                    </span>
+                </label>
+
+                <input
+                    type="text"
+                    id="career-talk-preferred-schedule"
+                    maxlength="500"
+                    placeholder="例：平日20時以降、土日は午前中"
+                >
+
+            </div>
+
+
+            <p class="career-talk-form__notice">
+                申込時点では決済は発生しません。
+                本人の受付確認後に日程と決済方法をご案内します。
+            </p>
+
+
+            <button
+                type="submit"
+                class="career-talk-form__submit"
+                id="career-talk-submit"
+            >
+                Career Talkを申し込む
+            </button>
+
+        </form>
+
+    </div>
+
+    </div>
 
 
     <!-- =====================================================

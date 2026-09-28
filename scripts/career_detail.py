@@ -1,9 +1,27 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from pydantic import BaseModel
+from typing import Optional
 from .register_user import get_db_connection
+from .auth import User, get_current_user
 from fastapi.responses import JSONResponse
 from datetime import date as _date, datetime
 
 router = APIRouter()
+
+class CareerTalkRequestCreate(BaseModel):
+    host_user_id: int
+    decision_id: Optional[int] = None
+    requester_name: str
+    requester_email: str
+    question_text: str
+    preferred_schedule_text: Optional[str] = None
+
+
+class CareerTalkHostUpdate(BaseModel):
+    is_active: bool
+    price_yen: int = 3000
+    duration_minutes: int = 30
+    host_message: Optional[str] = None
 
 
 # ============================================================
@@ -315,6 +333,28 @@ async def get_career_detail(career_id: int):
 
 
         # ====================================================
+        # 5-A. Career Talk受付情報
+        # ====================================================
+
+        cursor.execute(
+            """
+            SELECT
+                is_active,
+                price_yen,
+                duration_minutes,
+                host_message
+            FROM career_talk_hosts
+            WHERE user_id = %s
+            AND is_active = 1
+            LIMIT 1
+            """,
+            (career_id,)
+        )
+
+        career_talk_host = cursor.fetchone()
+
+
+        # ====================================================
         # 6. 年齢を計算
         # ====================================================
 
@@ -601,6 +641,32 @@ async def get_career_detail(career_id: int):
             "career_decisions":
                 career_decisions,
 
+            "career_talk":
+            (
+                {
+                    "enabled": True,
+
+                    "price_yen":
+                        career_talk_host[
+                            "price_yen"
+                        ],
+
+                    "duration_minutes":
+                        career_talk_host[
+                            "duration_minutes"
+                        ],
+
+                    "host_message":
+                        career_talk_host[
+                            "host_message"
+                        ]
+                }
+                if career_talk_host
+                else {
+                    "enabled": False
+                }
+            ),
+
             "career_experiences": {
 
                 "start_reason":
@@ -658,5 +724,574 @@ async def get_career_detail(career_id: int):
 
         if cursor is not None:
             cursor.close()
+
+        db.close()
+
+
+# ============================================================
+# Career Talk Request
+# ============================================================
+
+@router.post("/career-talk/request")
+async def create_career_talk_request(
+    payload: CareerTalkRequestCreate
+):
+
+    requester_name = (
+        payload.requester_name
+        or ""
+    ).strip()
+
+    requester_email = (
+        payload.requester_email
+        or ""
+    ).strip()
+
+    question_text = (
+        payload.question_text
+        or ""
+    ).strip()
+
+    preferred_schedule_text = (
+        payload.preferred_schedule_text
+        or ""
+    ).strip()
+
+
+    if not requester_name:
+        raise HTTPException(
+            status_code=400,
+            detail="お名前を入力してください。"
+        )
+
+
+    if (
+        not requester_email
+        or
+        "@" not in requester_email
+        or
+        len(requester_email) > 255
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="メールアドレスを確認してください。"
+        )
+
+
+    if not question_text:
+        raise HTTPException(
+            status_code=400,
+            detail="聞いてみたいことを入力してください。"
+        )
+
+
+    if len(question_text) > 2000:
+        raise HTTPException(
+            status_code=400,
+            detail="聞いてみたいことは2000文字以内で入力してください。"
+        )
+
+
+    if len(preferred_schedule_text) > 500:
+        raise HTTPException(
+            status_code=400,
+            detail="希望日時は500文字以内で入力してください。"
+        )
+
+
+    db = get_db_connection()
+    cursor = None
+
+
+    try:
+
+        cursor = db.cursor(
+            dictionary=True
+        )
+
+
+        # --------------------------------------------------------
+        # Career Talk受付中か確認
+        # --------------------------------------------------------
+
+        cursor.execute(
+            """
+            SELECT
+                user_id,
+                price_yen,
+                duration_minutes
+            FROM career_talk_hosts
+            WHERE user_id = %s
+              AND is_active = 1
+            LIMIT 1
+            """,
+            (
+                payload.host_user_id,
+            )
+        )
+
+        host = cursor.fetchone()
+
+
+        if not host:
+
+            raise HTTPException(
+                status_code=400,
+                detail="現在このユーザーはCareer Talkを受け付けていません。"
+            )
+
+
+        # --------------------------------------------------------
+        # DecisionとHostの紐付け確認
+        # --------------------------------------------------------
+
+        if payload.decision_id is not None:
+
+            cursor.execute(
+                """
+                SELECT
+                    id
+                FROM career_decisions
+                WHERE id = %s
+                  AND user_id = %s
+                LIMIT 1
+                """,
+                (
+                    payload.decision_id,
+                    payload.host_user_id
+                )
+            )
+
+            decision = cursor.fetchone()
+
+
+            if not decision:
+
+                raise HTTPException(
+                    status_code=400,
+                    detail="対象のCareer Storyを確認できませんでした。"
+                )
+
+
+        # --------------------------------------------------------
+        # Request保存
+        #
+        # 価格・時間はクライアントから受け取らず、
+        # career_talk_hosts側の値を保存する。
+        # --------------------------------------------------------
+
+        cursor.execute(
+            """
+            INSERT INTO career_talk_requests (
+                host_user_id,
+                decision_id,
+                requester_user_id,
+                requester_name,
+                requester_email,
+                question_text,
+                preferred_schedule_text,
+                price_yen,
+                duration_minutes,
+                status
+            )
+            VALUES (
+                %s,
+                %s,
+                NULL,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                'requested'
+            )
+            """,
+            (
+                payload.host_user_id,
+                payload.decision_id,
+                requester_name,
+                requester_email,
+                question_text,
+                (
+                    preferred_schedule_text
+                    or None
+                ),
+                host["price_yen"],
+                host["duration_minutes"]
+            )
+        )
+
+
+        request_id = cursor.lastrowid
+
+
+        db.commit()
+
+
+        return {
+            "success": True,
+            "request_id": request_id,
+            "status": "requested"
+        }
+
+
+    except HTTPException:
+
+        db.rollback()
+
+        raise
+
+
+    except Exception as error:
+
+        db.rollback()
+
+        print(
+            "Career Talk request error:",
+            error
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Career Talkの申込を保存できませんでした。"
+        )
+
+
+    finally:
+
+        if cursor is not None:
+            cursor.close()
+
+        db.close()
+
+
+# ============================================================
+# Career Talk - My Settings
+# ============================================================
+
+@router.get("/career-talk/me")
+async def get_my_career_talk_settings(
+    current_user: User = Depends(get_current_user)
+):
+
+    if current_user.id is None:
+
+        raise HTTPException(
+            status_code=401,
+            detail="ログインが必要です。"
+        )
+
+
+    db = get_db_connection()
+    cursor = None
+
+
+    try:
+
+        cursor = db.cursor(
+            dictionary=True
+        )
+
+
+        cursor.execute(
+            """
+            SELECT
+                is_active,
+                price_yen,
+                duration_minutes,
+                host_message
+            FROM career_talk_hosts
+            WHERE user_id = %s
+            LIMIT 1
+            """,
+            (
+                current_user.id,
+            )
+        )
+
+
+        host = cursor.fetchone()
+
+
+        if not host:
+
+            return {
+                "enabled": False,
+                "price_yen": 3000,
+                "duration_minutes": 30,
+                "host_message": ""
+            }
+
+
+        return {
+            "enabled":
+                bool(
+                    host["is_active"]
+                ),
+
+            "price_yen":
+                host["price_yen"],
+
+            "duration_minutes":
+                host["duration_minutes"],
+
+            "host_message":
+                host["host_message"]
+                or ""
+        }
+
+
+    finally:
+
+        if cursor is not None:
+
+            cursor.close()
+
+
+        db.close()
+
+
+
+# ============================================================
+# Career Talk - Save My Settings
+# ============================================================
+
+@router.post("/career-talk/me")
+async def save_my_career_talk_settings(
+    payload: CareerTalkHostUpdate,
+    current_user: User = Depends(get_current_user)
+):
+
+    if current_user.id is None:
+
+        raise HTTPException(
+            status_code=401,
+            detail="ログインが必要です。"
+        )
+
+
+    if (
+        payload.price_yen < 0
+        or
+        payload.price_yen > 100000
+    ):
+
+        raise HTTPException(
+            status_code=400,
+            detail="料金を確認してください。"
+        )
+
+
+    if payload.duration_minutes not in (
+        30,
+        45,
+        60
+    ):
+
+        raise HTTPException(
+            status_code=400,
+            detail="時間を確認してください。"
+        )
+
+
+    host_message = (
+        payload.host_message
+        or ""
+    ).strip()
+
+
+    if len(host_message) > 500:
+
+        raise HTTPException(
+            status_code=400,
+            detail="話せることは500文字以内で入力してください。"
+        )
+
+
+    db = get_db_connection()
+    cursor = None
+
+
+    try:
+
+        cursor = db.cursor()
+
+
+        cursor.execute(
+            """
+            INSERT INTO career_talk_hosts (
+                user_id,
+                is_active,
+                price_yen,
+                duration_minutes,
+                host_message
+            )
+            VALUES (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s
+            )
+            ON DUPLICATE KEY UPDATE
+                is_active = VALUES(is_active),
+                price_yen = VALUES(price_yen),
+                duration_minutes = VALUES(duration_minutes),
+                host_message = VALUES(host_message)
+            """,
+            (
+                current_user.id,
+                (
+                    1
+                    if payload.is_active
+                    else 0
+                ),
+                payload.price_yen,
+                payload.duration_minutes,
+                host_message
+                or None
+            )
+        )
+
+
+        db.commit()
+
+
+        return {
+            "success": True,
+            "enabled": payload.is_active,
+            "price_yen": payload.price_yen,
+            "duration_minutes":
+                payload.duration_minutes,
+            "host_message":
+                host_message
+        }
+
+
+    except Exception as error:
+
+        db.rollback()
+
+
+        print(
+            "Career Talk settings save error:",
+            error
+        )
+
+
+        raise HTTPException(
+            status_code=500,
+            detail="Career Talkの設定を保存できませんでした。"
+        )
+
+
+    finally:
+
+        if cursor is not None:
+
+            cursor.close()
+
+
+        db.close()
+
+
+
+# ============================================================
+# Career Talk - My Requests
+# ============================================================
+
+@router.get("/career-talk/me/requests")
+async def get_my_career_talk_requests(
+    current_user: User = Depends(get_current_user)
+):
+
+    if current_user.id is None:
+
+        raise HTTPException(
+            status_code=401,
+            detail="ログインが必要です。"
+        )
+
+
+    db = get_db_connection()
+    cursor = None
+
+
+    try:
+
+        cursor = db.cursor(
+            dictionary=True
+        )
+
+
+        cursor.execute(
+            """
+            SELECT
+                ctr.id,
+                ctr.decision_id,
+                ctr.requester_name,
+                ctr.requester_email,
+                ctr.question_text,
+                ctr.preferred_schedule_text,
+                ctr.price_yen,
+                ctr.duration_minutes,
+                ctr.status,
+                ctr.created_at,
+
+                cd.title AS decision_title,
+                cd.decision_type
+
+            FROM career_talk_requests ctr
+
+            LEFT JOIN career_decisions cd
+                ON cd.id = ctr.decision_id
+                AND cd.user_id = ctr.host_user_id
+
+            WHERE ctr.host_user_id = %s
+
+            ORDER BY
+                ctr.created_at DESC,
+                ctr.id DESC
+            """,
+            (
+                current_user.id,
+            )
+        )
+
+
+        requests = cursor.fetchall()
+
+        for request in requests:
+
+            created_at = request.get(
+                "created_at"
+            )
+
+
+            if created_at is not None:
+
+                request["created_at"] = (
+                    created_at.isoformat()
+                )
+
+
+        return {
+            "count":
+                len(
+                    requests
+                ),
+
+            "requests":
+                requests
+        }
+
+
+    finally:
+
+        if cursor is not None:
+
+            cursor.close()
+
 
         db.close()

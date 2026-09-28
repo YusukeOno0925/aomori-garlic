@@ -3423,6 +3423,1004 @@ main.career-detail-page {
 
 
 /* ============================================================
+   27-A. CAREER TALK
+   ============================================================ */
+
+   .career-detail-page
+   .career-talk-section {
+   
+       position:
+           relative;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card {
+   
+       display:
+           grid;
+   
+       grid-template-columns:
+           minmax(0, 1fr)
+           240px;
+   
+       align-items:
+           center;
+   
+       gap:
+           38px;
+   
+       padding:
+           34px
+           38px;
+   
+       box-sizing:
+           border-box;
+   
+       border:
+           1px solid
+           var(--detail-line);
+   
+       border-radius:
+           var(--detail-radius-xl);
+   
+       background:
+           linear-gradient(
+               135deg,
+               #ffffff 0%,
+               var(--detail-blue-soft-2) 100%
+           );
+   
+       box-shadow:
+           var(--detail-shadow-sm);
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__main {
+   
+       min-width:
+           0;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__title {
+   
+       margin:
+           7px
+           0
+           10px;
+   
+       color:
+           var(--detail-navy-deep);
+   
+       font-size:
+           1.3rem;
+   
+       font-weight:
+           800;
+   
+       letter-spacing:
+           -0.02em;
+   
+       line-height:
+           1.5;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__description {
+   
+       max-width:
+           650px;
+   
+       margin:
+           0;
+   
+       color:
+           var(--detail-muted);
+   
+       font-size:
+           0.78rem;
+   
+       line-height:
+           1.85;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__message {
+   
+       max-width:
+           650px;
+   
+       margin:
+           17px
+           0
+           0;
+   
+       padding:
+           15px
+           0
+           0;
+   
+       border-top:
+           1px solid
+           var(--detail-line-soft);
+   
+       color:
+           var(--detail-text);
+   
+       font-size:
+           0.76rem;
+   
+       line-height:
+           1.82;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__action {
+   
+       min-width:
+           0;
+   
+       text-align:
+           center;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__meta {
+   
+       display:
+           flex;
+   
+       align-items:
+           baseline;
+   
+       justify-content:
+           center;
+   
+       gap:
+           8px;
+   
+       margin-bottom:
+           14px;
+   
+       color:
+           var(--detail-muted);
+   
+       font-size:
+           0.72rem;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__meta strong {
+   
+       color:
+           var(--detail-navy);
+   
+       font-size:
+           1.15rem;
+   
+       font-weight:
+           800;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__separator {
+   
+       color:
+           var(--detail-muted-light);
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__cta {
+   
+       display:
+           inline-flex;
+   
+       align-items:
+           center;
+   
+       justify-content:
+           center;
+   
+       width:
+           100%;
+   
+       min-height:
+           44px;
+   
+       padding:
+           11px
+           18px;
+   
+       box-sizing:
+           border-box;
+   
+       border:
+           0;
+   
+       border-radius:
+           999px;
+   
+       background:
+           var(--detail-navy);
+   
+       color:
+           #ffffff;
+   
+       font-family:
+           inherit;
+   
+       font-size:
+           0.72rem;
+   
+       font-weight:
+           800;
+   
+       cursor:
+           pointer;
+   
+       box-shadow:
+           0 10px 23px
+           rgba(13,39,68,0.16);
+   
+       transition:
+           transform 0.16s ease,
+           background 0.16s ease;
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__cta:hover {
+   
+       transform:
+           translateY(-1px);
+   
+       background:
+           var(--detail-blue);
+   }
+   
+   
+   .career-detail-page
+   .career-talk-card__note {
+   
+       margin:
+           9px
+           0
+           0;
+   
+       color:
+           var(--detail-muted-light);
+   
+       font-size:
+           0.6rem;
+   }
+   
+   
+   /* ============================================================
+      CAREER TALK - TABLET / MOBILE
+      ============================================================ */
+   
+   @media (max-width: 900px) {
+   
+       .career-detail-page
+       .career-talk-card {
+   
+           grid-template-columns:
+               1fr;
+   
+           gap:
+               25px;
+   
+           padding:
+               27px
+               22px;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__action {
+   
+           max-width:
+               320px;
+   
+           text-align:
+               left;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__meta {
+   
+           justify-content:
+               flex-start;
+       }
+   
+   }
+   
+   
+   @media (max-width: 599px) {
+   
+       .career-detail-page
+       .career-talk-card {
+   
+           gap:
+               22px;
+   
+           padding:
+               22px
+               15px;
+   
+           border-radius:
+               17px;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__title {
+   
+           font-size:
+               1.08rem;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__description,
+   
+       .career-detail-page
+       .career-talk-card__message {
+   
+           font-size:
+               0.72rem;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__action {
+   
+           max-width:
+               none;
+       }
+   
+   
+       .career-detail-page
+       .career-talk-card__cta {
+   
+           width:
+               100%;
+       }
+   
+   }
+
+
+/* ============================================================
+   27-B. CAREER TALK MODAL
+   ============================================================ */
+
+   body.career-talk-modal-open {
+    overflow:
+        hidden;
+}
+
+
+.career-talk-modal {
+
+    position:
+        fixed;
+
+    z-index:
+        9999;
+
+    inset:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        24px;
+
+    box-sizing:
+        border-box;
+}
+
+
+.career-talk-modal[hidden] {
+    display:
+        none;
+}
+
+
+.career-talk-modal__backdrop {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+        rgba(7, 27, 48, 0.52);
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+.career-talk-modal__dialog {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    width:
+        100%;
+
+    max-width:
+        620px;
+
+    max-height:
+        calc(100vh - 48px);
+
+    overflow-y:
+        auto;
+
+    padding:
+        34px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        var(--detail-line);
+
+    border-radius:
+        var(--detail-radius-xl);
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 28px 80px
+        rgba(7, 27, 48, 0.24);
+}
+
+
+.career-talk-modal__close {
+
+    position:
+        absolute;
+
+    top:
+        16px;
+
+    right:
+        18px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        var(--detail-muted);
+
+    font-size:
+        1.5rem;
+
+    cursor:
+        pointer;
+}
+
+
+.career-talk-modal__header {
+    padding-right:
+        36px;
+}
+
+
+.career-talk-modal__title {
+
+    margin:
+        7px
+        0
+        9px;
+
+    color:
+        var(--detail-navy-deep);
+
+    font-size:
+        1.35rem;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.5;
+}
+
+
+.career-talk-modal__description {
+
+    margin:
+        0;
+
+    color:
+        var(--detail-muted);
+
+    font-size:
+        0.76rem;
+
+    line-height:
+        1.8;
+}
+
+
+.career-talk-modal__summary {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        9px;
+
+    margin-top:
+        21px;
+
+    padding:
+        13px
+        15px;
+
+    border:
+        1px solid
+        var(--detail-line-soft);
+
+    border-radius:
+        var(--detail-radius-sm);
+
+    background:
+        var(--detail-blue-soft-2);
+
+    color:
+        var(--detail-muted);
+
+    font-size:
+        0.7rem;
+}
+
+
+.career-talk-modal__summary strong {
+
+    color:
+        var(--detail-navy);
+
+    font-size:
+        1rem;
+
+    font-weight:
+        800;
+}
+
+
+.career-talk-form {
+
+    margin-top:
+        24px;
+}
+
+
+.career-talk-form__field {
+
+    margin-top:
+        17px;
+}
+
+
+.career-talk-form__field:first-child {
+    margin-top:
+        0;
+}
+
+
+.career-talk-form__field label {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        var(--detail-text-strong);
+
+    font-size:
+        0.7rem;
+
+    font-weight:
+        800;
+}
+
+
+.career-talk-form__field label span {
+
+    margin-left:
+        6px;
+
+    color:
+        var(--detail-muted-light);
+
+    font-size:
+        0.59rem;
+
+    font-weight:
+        500;
+}
+
+
+.career-talk-form__field input,
+
+.career-talk-form__field textarea {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        11px
+        13px;
+
+    border:
+        1px solid
+        var(--detail-line);
+
+    border-radius:
+        var(--detail-radius-sm);
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--detail-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.6;
+}
+
+
+.career-talk-form__field textarea {
+
+    resize:
+        vertical;
+
+    min-height:
+        120px;
+}
+
+
+.career-talk-form__field input:focus,
+
+.career-talk-form__field textarea:focus {
+
+    border-color:
+        var(--detail-blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(29, 95, 158, 0.08);
+}
+
+
+.career-talk-form__notice {
+
+    margin:
+        20px
+        0
+        0;
+
+    color:
+        var(--detail-muted-light);
+
+    font-size:
+        0.62rem;
+
+    line-height:
+        1.7;
+}
+
+
+.career-talk-form__submit {
+
+    width:
+        100%;
+
+    margin-top:
+        18px;
+
+    padding:
+        13px
+        18px;
+
+    border:
+        0;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--detail-navy);
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.75rem;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+}
+
+
+.career-talk-form__submit:hover {
+
+    background:
+        var(--detail-blue);
+}
+
+
+/* ============================================================
+  CAREER TALK - SUCCESS
+  ============================================================ */
+
+  .career-talk-modal
+  .career-section-label {
+  
+      margin:
+          0
+          0
+          7px;
+  
+      color:
+          var(--detail-blue);
+  
+      font-size:
+          0.64rem;
+  
+      font-weight:
+          800;
+  
+      letter-spacing:
+          0.17em;
+  
+      line-height:
+          1.4;
+  }
+  
+  
+  .career-talk-success {
+  
+      padding:
+          10px
+          2px
+          4px;
+  
+      text-align:
+          center;
+  }
+  
+  
+  .career-talk-success__title {
+  
+      margin:
+          8px
+          0
+          12px;
+  
+      color:
+          var(--detail-navy-deep);
+  
+      font-size:
+          1.4rem;
+  
+      font-weight:
+          800;
+  
+      letter-spacing:
+          -0.02em;
+  
+      line-height:
+          1.5;
+  }
+  
+  
+  .career-talk-success__description {
+  
+      max-width:
+          440px;
+  
+      margin:
+          0
+          auto;
+  
+      color:
+          var(--detail-muted);
+  
+      font-size:
+          0.76rem;
+  
+      line-height:
+          1.85;
+  }
+  
+  
+  .career-talk-success__close {
+  
+      display:
+          inline-flex;
+  
+      align-items:
+          center;
+  
+      justify-content:
+          center;
+  
+      min-width:
+          190px;
+  
+      margin-top:
+          26px;
+  
+      padding:
+          12px
+          24px;
+  
+      border:
+          0;
+  
+      border-radius:
+          999px;
+  
+      background:
+          var(--detail-navy);
+  
+      color:
+          #ffffff;
+  
+      font-family:
+          inherit;
+  
+      font-size:
+          0.72rem;
+  
+      font-weight:
+          800;
+  
+      cursor:
+          pointer;
+  
+      box-shadow:
+          0 10px 23px
+          rgba(13, 39, 68, 0.16);
+  
+      transition:
+          transform 0.16s ease,
+          background 0.16s ease;
+  }
+   
+   
+   .career-talk-success__close:hover {
+   
+       transform:
+           translateY(-1px);
+   
+       background:
+           var(--detail-blue);
+   }
+   
+   
+   /* 送信中 */
+   .career-talk-form__submit:disabled {
+   
+       cursor:
+           wait;
+   
+       opacity:
+           0.65;
+   }
+
+
+@media (max-width: 599px) {
+
+    .career-talk-modal {
+
+        align-items:
+            flex-end;
+
+        padding:
+            10px;
+    }
+
+
+    .career-talk-modal__dialog {
+
+        max-height:
+            calc(100vh - 20px);
+
+        padding:
+            27px
+            18px
+            22px;
+
+        border-radius:
+            20px;
+    }
+
+
+    .career-talk-modal__title {
+
+        font-size:
+            1.15rem;
+    }
+
+}
+
+
+/* ============================================================
    28. CAREER CONTEXT
    ============================================================ */
 
