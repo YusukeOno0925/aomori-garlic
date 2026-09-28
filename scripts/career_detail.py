@@ -1,12 +1,91 @@
+import html
+
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
-from .register_user import get_db_connection
-from .auth import User, get_current_user
 from fastapi.responses import JSONResponse
+from fastapi_mail import MessageSchema
 from datetime import date as _date, datetime
 
+from .register_user import get_db_connection
+from .auth import User, get_current_user
+from .email_config import fast_mail
+
+from config import (
+    environment,
+    local_base_url,
+    production_base_url,
+)
+
+
 router = APIRouter()
+
+CAREER_TALK_ADMIN_EMAIL = (
+    "imnormal0901@gmail.com"
+)
+
+
+def _get_career_talk_base_url():
+
+    base_url = (
+        local_base_url
+        if environment == "development"
+        else production_base_url
+    )
+
+    return str(
+        base_url
+    ).rstrip("/")
+
+
+async def _send_career_talk_email(
+    subject,
+    recipient,
+    body,
+    label
+):
+
+    if not recipient:
+
+        return
+
+
+    try:
+
+        html_body = (
+            html.escape(
+                body
+            )
+            .replace(
+                "\n",
+                "<br>"
+            )
+        )
+
+
+        message = MessageSchema(
+            subject=subject,
+            recipients=[
+                recipient
+            ],
+            body=html_body,
+            subtype="html"
+        )
+
+
+        await fast_mail.send_message(
+            message
+        )
+
+
+    except Exception as error:
+
+        # メールが失敗しても、
+        # Career Talkの申込自体は成功扱いにする。
+        print(
+            f"Career Talk email error ({label}):",
+            error
+        )
 
 class CareerTalkRequestCreate(BaseModel):
     host_user_id: int
@@ -817,12 +896,21 @@ async def create_career_talk_request(
         cursor.execute(
             """
             SELECT
-                user_id,
-                price_yen,
-                duration_minutes
-            FROM career_talk_hosts
-            WHERE user_id = %s
-              AND is_active = 1
+                cth.user_id,
+                cth.price_yen,
+                cth.duration_minutes,
+
+                u.username AS host_username,
+                u.email AS host_email
+
+            FROM career_talk_hosts cth
+
+            INNER JOIN users u
+                ON u.id = cth.user_id
+
+            WHERE cth.user_id = %s
+            AND cth.is_active = 1
+
             LIMIT 1
             """,
             (
@@ -845,15 +933,20 @@ async def create_career_talk_request(
         # DecisionとHostの紐付け確認
         # --------------------------------------------------------
 
+        decision = None
+
+
         if payload.decision_id is not None:
 
             cursor.execute(
                 """
                 SELECT
-                    id
+                    id,
+                    title,
+                    decision_type
                 FROM career_decisions
                 WHERE id = %s
-                  AND user_id = %s
+                AND user_id = %s
                 LIMIT 1
                 """,
                 (
@@ -861,6 +954,7 @@ async def create_career_talk_request(
                     payload.host_user_id
                 )
             )
+
 
             decision = cursor.fetchone()
 
@@ -927,6 +1021,219 @@ async def create_career_talk_request(
 
 
         db.commit()
+
+
+        # ====================================================
+        # Career Talk メール通知
+        #
+        # DBへの保存完了後にメールを送る。
+        #
+        # メール送信に失敗しても、
+        # 申込自体はDBに残す。
+        # ====================================================
+
+        try:
+
+            base_url = (
+                _get_career_talk_base_url()
+            )
+
+
+            story_title = (
+                (
+                    decision.get(
+                        "title"
+                    )
+                    if decision
+                    else None
+                )
+                or
+                (
+                    decision.get(
+                        "decision_type"
+                    )
+                    if decision
+                    else None
+                )
+                or
+                "Career Story"
+            )
+
+
+            preferred_schedule = (
+                preferred_schedule_text
+                or
+                "未指定"
+            )
+
+
+            story_url = ""
+
+
+            if (
+                payload.decision_id
+                is not None
+            ):
+
+                story_url = (
+                    f"{base_url}/Career_detail.html"
+                    f"?id={payload.host_user_id}"
+                    f"&decision_id={payload.decision_id}"
+                )
+
+
+            mypage_url = (
+                f"{base_url}/Mypage.html"
+            )
+
+
+            # ----------------------------------------------
+            # Talk提供者へ
+            # ----------------------------------------------
+
+            host_body = f"""\
+{host.get("host_username") or "Career Talk提供者"} 様
+
+Career Talkの新しい申込が届きました。
+
+【申込者】
+名前：{requester_name}
+メールアドレス：{requester_email}
+
+【対象Career Story】
+{story_title}
+{story_url}
+
+【聞いてみたいこと】
+{question_text}
+
+【希望日時】
+{preferred_schedule}
+
+【Career Talk】
+{host["duration_minutes"]}分 / {host["price_yen"]:,}円
+
+MyPageから申込内容をご確認ください。
+{mypage_url}
+
+申込ID：{request_id}
+
+Imnormal
+"""
+
+
+            await _send_career_talk_email(
+                subject=(
+                    "[Imnormal] Career Talkの申込が届きました"
+                ),
+                recipient=(
+                    host.get(
+                        "host_email"
+                    )
+                ),
+                body=host_body,
+                label="host"
+            )
+
+
+            # ----------------------------------------------
+            # Imnormal運営へ
+            # ----------------------------------------------
+
+            admin_body = f"""\
+Career Talkの新しい申込がありました。
+
+【Talk提供者】
+ユーザーID：{payload.host_user_id}
+ユーザー名：{host.get("host_username") or "未設定"}
+メールアドレス：{host.get("host_email") or "未設定"}
+
+【申込者】
+名前：{requester_name}
+メールアドレス：{requester_email}
+
+【対象Career Story】
+{story_title}
+{story_url}
+
+【聞いてみたいこと】
+{question_text}
+
+【希望日時】
+{preferred_schedule}
+
+【Career Talk】
+{host["duration_minutes"]}分 / {host["price_yen"]:,}円
+
+申込ID：{request_id}
+
+Imnormal
+"""
+
+
+            await _send_career_talk_email(
+                subject=(
+                    "[Imnormal運営] Career Talkの新規申込"
+                ),
+                recipient=(
+                    CAREER_TALK_ADMIN_EMAIL
+                ),
+                body=admin_body,
+                label="admin"
+            )
+
+
+            # ----------------------------------------------
+            # 申込者へ自動返信
+            # ----------------------------------------------
+
+            requester_body = f"""\
+{requester_name} 様
+
+Career Talkのお申し込みを受け付けました。
+
+現時点では、
+日程・決済はまだ確定していません。
+
+本人へ受付可否を確認後、
+改めてご連絡いたします。
+
+【対象Career Story】
+{story_title}
+
+【聞いてみたいこと】
+{question_text}
+
+【希望日時】
+{preferred_schedule}
+
+【Career Talk】
+{host["duration_minutes"]}分 / {host["price_yen"]:,}円
+
+申込ID：{request_id}
+
+Imnormal
+"""
+
+
+            await _send_career_talk_email(
+                subject=(
+                    "[Imnormal] Career Talkのお申し込みを受け付けました"
+                ),
+                recipient=requester_email,
+                body=requester_body,
+                label="requester"
+            )
+
+
+        except Exception as email_error:
+
+            # ここでエラーになっても
+            # DB保存済みの申込は成功扱い。
+            print(
+                "Career Talk notification error:",
+                email_error
+            )
 
 
         return {
