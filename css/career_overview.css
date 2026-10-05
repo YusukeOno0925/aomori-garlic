@@ -3735,735 +3735,735 @@ span:last-child {
 
 @media (max-width: 768px) {
 
-    main.career-overview-page {
+  main.career-overview-page {
 
-        margin-left:
-            0;
+      margin-left:
+          0;
 
-        margin-top:
-            80px;
+      margin-top:
+          80px;
 
-        padding:
-            0
-            14px
-            52px;
+      padding:
+          0
+          14px
+          52px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Hero
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Hero
+      ----------------------------------------------------- */
 
-    .career-overview-hero,
-    .career-overview-page.is-change-theme
-    .career-overview-hero {
+  .career-overview-hero,
+  .career-overview-page.is-change-theme
+  .career-overview-hero {
 
-        display:
-            block;
+      display:
+          block;
 
-        min-height:
-            0;
+      min-height:
+          0;
 
-        margin:
-            0
-            -14px;
+      margin:
+          0
+          -14px;
 
-        padding:
-            0
-            20px;
+      padding:
+          0
+          20px;
 
-        border-bottom:
-            1px solid
-            var(--overview-line);
+      border-bottom:
+          1px solid
+          var(--overview-line);
 
-        background-image:
-            linear-gradient(
-                160deg,
-                #ffffff 0%,
-                #ffffff 58%,
-                #eef6fc 100%
-            );
+      background-image:
+          linear-gradient(
+              160deg,
+              #ffffff 0%,
+              #ffffff 58%,
+              #eef6fc 100%
+          );
 
-        background-position:
-            center;
+      background-position:
+          center;
 
-        background-size:
-            auto;
+      background-size:
+          auto;
 
-    }
+  }
 
 
-    .career-overview-hero__content,
-    .career-overview-page.is-change-theme
-    .career-overview-hero__content {
+  .career-overview-hero__content,
+  .career-overview-page.is-change-theme
+  .career-overview-hero__content {
 
-        width:
-            100%;
+      width:
+          100%;
 
-        padding:
-            34px
-            0
-            42px;
+      padding:
+          34px
+          0
+          42px;
 
-    }
+  }
 
 
-    .career-overview-hero h1,
-    .career-overview-page.is-change-theme
-    .career-overview-hero h1 {
+  .career-overview-hero h1,
+  .career-overview-page.is-change-theme
+  .career-overview-hero h1 {
 
-        max-width:
-            none;
+      max-width:
+          none;
 
-        font-size:
-            2rem;
+      font-size:
+          2rem;
 
-        line-height:
-            1.2;
+      line-height:
+          1.2;
 
-        letter-spacing:
-            -0.035em;
+      letter-spacing:
+          -0.035em;
 
-    }
+  }
 
 
-    .overview-lead {
+  .overview-lead {
 
-        margin-top:
-            16px;
+      margin-top:
+          16px;
 
-        font-size:
-            0.84rem;
+      font-size:
+          0.84rem;
 
-        line-height:
-            1.8;
+      line-height:
+          1.8;
 
-    }
+  }
 
 
-    .overview-lead br {
+  .overview-lead br {
 
-        display:
-            none;
+      display:
+          none;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Normal search
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Normal search
+      ----------------------------------------------------- */
 
-    .career-search-panel {
+  .career-search-panel {
 
-        margin:
-            -10px
-            0
-            40px;
+      margin:
+          -10px
+          0
+          40px;
 
-        padding:
-            16px;
+      padding:
+          16px;
 
-        border-radius:
-            17px;
+      border-radius:
+          17px;
 
-    }
+  }
 
 
-    .career-search-main {
+  .career-search-main {
 
-        grid-template-columns:
-            1fr;
+      grid-template-columns:
+          1fr;
 
-        gap:
-            11px;
+      gap:
+          11px;
 
-    }
+  }
 
 
-    .career-search-field:not(
-        .career-search-field--keyword
-    ) {
+  .career-search-field:not(
+      .career-search-field--keyword
+  ) {
 
-        display:
-            none;
+      display:
+          none;
 
-    }
+  }
 
 
-    .career-filter-reset {
+  .career-filter-reset {
 
-        width:
-            100%;
+      width:
+          100%;
 
-    }
+  }
 
 
-    .career-theme-area {
+  .career-theme-area {
 
-        display:
-            block;
+      display:
+          block;
 
-        margin-top:
-            15px;
+      margin-top:
+          15px;
 
-        padding-top:
-            15px;
+      padding-top:
+          15px;
 
-    }
+  }
 
 
-    .career-theme-title {
+  .career-theme-title {
 
-        margin-bottom:
-            10px;
+      margin-bottom:
+          10px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Decision Explorer
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Decision Explorer
+      ----------------------------------------------------- */
 
-    .career-decision-explorer {
+  .career-decision-explorer {
 
-        margin:
-            -10px
-            0
-            22px;
+      margin:
+          -10px
+          0
+          22px;
 
-        padding:
-            23px
-            18px
-            21px;
+      padding:
+          23px
+          18px
+          21px;
 
-        border-radius:
-            18px;
+      border-radius:
+          18px;
 
-    }
+  }
 
 
-    .career-decision-explorer__intro {
+  .career-decision-explorer__intro {
 
-        margin-bottom:
-            25px;
+      margin-bottom:
+          25px;
 
-    }
+  }
 
 
-    .career-decision-explorer__intro h2 {
+  .career-decision-explorer__intro h2 {
 
-        font-size:
-            1.35rem;
+      font-size:
+          1.35rem;
 
-        line-height:
-            1.42;
+      line-height:
+          1.42;
 
-    }
+  }
 
 
-    .career-decision-explorer__lead {
+  .career-decision-explorer__lead {
 
-        font-size:
-            0.78rem;
+      font-size:
+          0.78rem;
 
-    }
+  }
 
 
-    .career-decision-filter-block__heading {
+  .career-decision-filter-block__heading {
 
-        margin-bottom:
-            14px;
+      margin-bottom:
+          14px;
 
-    }
+  }
 
 
-    .career-decision-filter-step {
+  .career-decision-filter-step {
 
-        flex-basis:
-            31px;
+      flex-basis:
+          31px;
 
-        width:
-            31px;
+      width:
+          31px;
 
-        height:
-            31px;
+      height:
+          31px;
 
-    }
+  }
 
 
-    .career-decision-filter-block h3 {
+  .career-decision-filter-block h3 {
 
-        font-size:
-            0.89rem;
+      font-size:
+          0.89rem;
 
-    }
+  }
 
 
-    .career-decision-explorer__divider {
+  .career-decision-explorer__divider {
 
-        margin:
-            21px
-            0;
+      margin:
+          21px
+          0;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Dilemma
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Dilemma
+      ----------------------------------------------------- */
 
-    .career-dilemma-filter {
+  .career-dilemma-filter {
 
-        display:
-            flex;
+      display:
+          flex;
 
-        gap:
-            8px;
+      gap:
+          8px;
 
-        margin-right:
-            -18px;
+      margin-right:
+          -18px;
 
-        padding:
-            2px
-            18px
-            7px
-            0;
+      padding:
+          2px
+          18px
+          7px
+          0;
 
-        overflow-x:
-            auto;
+      overflow-x:
+          auto;
 
-        scrollbar-width:
-            none;
+      scrollbar-width:
+          none;
 
-    }
+  }
 
 
-    .career-dilemma-filter::-webkit-scrollbar {
+  .career-dilemma-filter::-webkit-scrollbar {
 
-        display:
-            none;
+      display:
+          none;
 
-    }
+  }
 
 
-    .career-dilemma-button {
+  .career-dilemma-button {
 
-        flex:
-            0 0 auto;
+      flex:
+          0 0 auto;
 
-        min-width:
-            137px;
+      min-width:
+          137px;
 
-        min-height:
-            50px;
+      min-height:
+          50px;
 
-        font-size:
-            0.73rem;
+      font-size:
+          0.73rem;
 
-    }
+  }
 
 
-    .career-gps-story-decision {
+  .career-gps-story-decision {
 
-        margin-bottom:
-            10px;
-    
-    }
+      margin-bottom:
+          10px;
+  
+  }
 
 
-    /* -----------------------------------------------------
-       Choice
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Choice
+      ----------------------------------------------------- */
 
-    .career-decision-path-filter {
+  .career-decision-path-filter {
 
-        display:
-            flex;
+      display:
+          flex;
 
-        gap:
-            8px;
+      gap:
+          8px;
 
-        margin-right:
-            -18px;
+      margin-right:
+          -18px;
 
-        padding:
-            2px
-            18px
-            7px
-            0;
+      padding:
+          2px
+          18px
+          7px
+          0;
 
-        overflow-x:
-            auto;
+      overflow-x:
+          auto;
 
-        scrollbar-width:
-            none;
+      scrollbar-width:
+          none;
 
-    }
+  }
 
 
-    .career-decision-path-filter::-webkit-scrollbar {
+  .career-decision-path-filter::-webkit-scrollbar {
 
-        display:
-            none;
+      display:
+          none;
 
-    }
+  }
 
 
-    .career-decision-path-button {
+  .career-decision-path-button {
 
-        flex:
-            0 0 auto;
+      flex:
+          0 0 auto;
 
-        min-width:
-            137px;
+      min-width:
+          137px;
 
-        min-height:
-            50px;
+      min-height:
+          50px;
 
-        font-size:
-            0.73rem;
+      font-size:
+          0.73rem;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Current View
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Current View
+      ----------------------------------------------------- */
 
-    .career-current-view {
+  .career-current-view {
 
-        margin:
-            0
-            0
-            42px;
+      margin:
+          0
+          0
+          42px;
 
-        padding:
-            22px
-            18px;
+      padding:
+          22px
+          18px;
 
-        border-radius:
-            16px;
+      border-radius:
+          16px;
 
-    }
+  }
 
 
-    .career-current-view__main {
+  .career-current-view__main {
 
-        align-items:
-            flex-start;
+      align-items:
+          flex-start;
 
-        flex-direction:
-            column;
+      flex-direction:
+          column;
 
-        gap:
-            17px;
+      gap:
+          17px;
 
-    }
+  }
 
 
-    .career-current-view h2 {
+  .career-current-view h2 {
 
-        font-size:
-            1.17rem;
+      font-size:
+          1.17rem;
 
-    }
+  }
 
 
-    .career-current-view__total {
+  .career-current-view__total {
 
-        align-items:
-            baseline;
+      align-items:
+          baseline;
 
-    }
+  }
 
 
-    .career-current-view__total strong {
+  .career-current-view__total strong {
 
-        font-size:
-            1.8rem;
+      font-size:
+          1.8rem;
 
-    }
+  }
 
 
-    .career-current-view__routes {
+  .career-current-view__routes {
 
-        grid-template-columns:
-            1fr;
+      grid-template-columns:
+          1fr;
 
-        gap:
-            7px;
+      gap:
+          7px;
 
-        margin-top:
-            18px;
+      margin-top:
+          18px;
 
-        padding-top:
-            17px;
+      padding-top:
+          17px;
 
-    }
+  }
 
 
-    .career-current-view__route {
+  .career-current-view__route {
 
-        min-height:
-            45px;
+      min-height:
+          45px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Story
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Story
+      ----------------------------------------------------- */
 
-    .career-story-section__header {
+  .career-story-section__header {
 
-        align-items:
-            flex-start;
+      align-items:
+          flex-start;
 
-        flex-direction:
-            column;
+      flex-direction:
+          column;
 
-        gap:
-            12px;
+      gap:
+          12px;
 
-        margin-bottom:
-            19px;
+      margin-bottom:
+          19px;
 
-    }
+  }
 
 
-    .career-story-section h2 {
+  .career-story-section h2 {
 
-        font-size:
-            1.47rem;
+      font-size:
+          1.47rem;
 
-    }
+  }
 
 
-    .career-story-section__lead {
+  .career-story-section__lead {
 
-        font-size:
-            0.78rem;
+      font-size:
+          0.78rem;
 
-    }
+  }
 
 
-    .career-result-count {
+  .career-result-count {
 
-        align-self:
-            flex-start;
+      align-self:
+          flex-start;
 
-        margin:
-            0;
+      margin:
+          0;
 
-    }
+  }
 
 
-    .career-story-list,
-    .career-overview-page.is-change-theme
-    .career-story-list {
+  .career-story-list,
+  .career-overview-page.is-change-theme
+  .career-story-list {
 
-        grid-template-columns:
-            1fr;
+      grid-template-columns:
+          1fr;
 
-        gap:
-            16px;
+      gap:
+          16px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Decision Card
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Decision Card
+      ----------------------------------------------------- */
 
-    .career-decision-card {
+  .career-decision-card {
 
-        min-height:
-            0;
+      min-height:
+          0;
 
-        padding:
-            19px
-            17px
-            0;
+      padding:
+          19px
+          17px
+          0;
 
-    }
+  }
 
 
-    .career-decision-card__topline {
+  .career-decision-card__topline {
 
-        gap:
-            8px;
+      gap:
+          8px;
 
-    }
+  }
 
 
-    .career-decision-card__dilemma-badge,
-    .career-decision-card__route {
+  .career-decision-card__dilemma-badge,
+  .career-decision-card__route {
 
-        font-size:
-            0.62rem;
+      font-size:
+          0.62rem;
 
-    }
+  }
 
 
-    .career-decision-card__main {
+  .career-decision-card__main {
 
-        margin-top:
-            18px;
+      margin-top:
+          18px;
 
-    }
+  }
 
 
-    .career-decision-card__dilemma {
+  .career-decision-card__dilemma {
 
-        font-size:
-            0.96rem;
+      font-size:
+          0.96rem;
 
-        line-height:
-            1.62;
+      line-height:
+          1.62;
 
-    }
+  }
 
 
-    .career-decision-card__details {
+  .career-decision-card__details {
 
-        margin-top:
-            16px;
+      margin-top:
+          16px;
 
-    }
+  }
 
 
-    .career-decision-card__detail-block {
+  .career-decision-card__detail-block {
 
-        padding:
-            11px
-            12px;
+      padding:
+          11px
+          12px;
 
-    }
+  }
 
 
-    .career-decision-card__detail-block--result {
+  .career-decision-card__detail-block--result {
 
-        padding:
-            13px
-            14px;
+      padding:
+          13px
+          14px;
 
-    }
+  }
 
 
-    .career-decision-card__detail-block
-    > p:last-child {
+  .career-decision-card__detail-block
+  > p:last-child {
 
-        font-size:
-            0.79rem;
+      font-size:
+          0.79rem;
 
-    }
+  }
 
 
-    .career-decision-card__person {
+  .career-decision-card__person {
 
-        margin-top:
-            17px;
+      margin-top:
+          17px;
 
-        padding-top:
-            15px;
+      padding-top:
+          15px;
 
-    }
+  }
 
 
-    .career-decision-card__footer {
+  .career-decision-card__footer {
 
-        margin-right:
-            -17px;
+      margin-right:
+          -17px;
 
-        margin-left:
-            -17px;
+      margin-left:
+          -17px;
 
-        padding:
-            14px
-            17px;
+      padding:
+          14px
+          17px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       Standard cards
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      Standard cards
+      ----------------------------------------------------- */
 
-    .career-gps-story-card {
+  .career-gps-story-card {
 
-        min-height:
-            0;
+      min-height:
+          0;
 
-        padding:
-            19px
-            18px
-            0;
+      padding:
+          19px
+          18px
+          0;
 
-    }
+  }
 
 
-    .career-gps-story-avatar {
+  .career-gps-story-avatar {
 
-        flex-basis:
-            50px;
+      flex-basis:
+          50px;
 
-        width:
-            50px;
+      width:
+          50px;
 
-        height:
-            50px;
+      height:
+          50px;
 
-    }
+  }
 
 
-    .career-gps-story-footer {
+  .career-gps-story-footer {
 
-        margin-right:
-            -18px;
+      margin-right:
+          -18px;
 
-        margin-left:
-            -18px;
+      margin-left:
+          -18px;
 
-        padding:
-            13px
-            18px;
+      padding:
+          13px
+          18px;
 
-    }
+  }
 
 
-    /* -----------------------------------------------------
-       CTA
-       ----------------------------------------------------- */
+  /* -----------------------------------------------------
+      CTA
+      ----------------------------------------------------- */
 
-    .career-overview-cta {
+  .career-overview-cta {
 
-        grid-template-columns:
-            auto
-            minmax(0, 1fr);
+      grid-template-columns:
+          auto
+          minmax(0, 1fr);
 
-        gap:
-            14px;
+      gap:
+          14px;
 
-        margin-top:
-            39px;
+      margin-top:
+          39px;
 
-        padding:
-            23px
-            20px;
+      padding:
+          23px
+          20px;
 
-    }
+  }
 
 
-    .career-overview-cta__button {
+  .career-overview-cta__button {
 
-        grid-column:
-            1 / -1;
+      grid-column:
+          1 / -1;
 
-        width:
-            100%;
+      width:
+          100%;
 
-    }
+  }
 
 }
 
@@ -4621,4 +4621,30 @@ span:last-child {
 
     }
 
+}
+
+
+/* =========================================================
+   33. CHANGE THEME / MOBILE SPACING
+   指定した2か所の余白だけを調整
+   ========================================================= */
+
+   @media (max-width: 768px) {
+
+    .career-overview-page.is-change-theme
+    .career-overview-hero__content {
+
+        /* ① CAREER DECISIONSより上の余白 */
+        padding-top: 20px;
+
+        /* ② ヒーロー説明文より下の余白 */
+        padding-bottom: 24px;
+    }
+
+    .career-overview-page.is-change-theme
+    .career-decision-explorer {
+
+        /* ② DECISION EXPLORERより上のカード内余白 */
+        padding-top: 16px;
+    }
 }
