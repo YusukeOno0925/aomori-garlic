@@ -119,6 +119,8 @@
 
             section.hidden = false;
 
+            setupDecisionCompareIndicators(list);
+
             bindAnalytics(section);
 
             bindAllLinkAnalytics();
@@ -615,6 +617,142 @@
             ||
             '選択'
         );
+    }
+
+
+    function setupDecisionCompareIndicators(list) {
+        const scroller = list.querySelector('.decision-compare-mobile');
+
+        if (!scroller || scroller.dataset.indicatorsReady === 'true') {
+            return;
+        }
+
+        const cards = [
+            ...scroller.querySelectorAll('.decision-mobile-card')
+        ];
+
+        if (cards.length < 2) return;
+
+        scroller.dataset.indicatorsReady = 'true';
+        scroller.id = 'home-same-crossroad-carousel';
+
+        const indicators = document.createElement('div');
+
+        indicators.id = 'home-same-crossroad-indicators';
+        indicators.className = 'carousel-indicators';
+
+        indicators.setAttribute('role', 'group');
+        indicators.setAttribute('aria-label', '比較カードの切り替え');
+
+        /* 各カードのスクロール先を取得 */
+        function getPositions() {
+            const left =
+                scroller.getBoundingClientRect().left
+                + scroller.clientLeft;
+
+            const max = Math.max(
+                0,
+                scroller.scrollWidth - scroller.clientWidth
+            );
+
+            return cards.map(card => {
+                const position =
+                    scroller.scrollLeft
+                    + card.getBoundingClientRect().left
+                    - left;
+
+                return Math.min(max, Math.max(0, position));
+            });
+        }
+
+        /* カードの枚数に合わせてバーを作る */
+        const buttons = cards.map((card, index) => {
+            const button = document.createElement('button');
+
+            button.type = 'button';
+
+            button.setAttribute(
+                'aria-label',
+                `${index + 1}枚目の比較カードを表示`
+            );
+
+            button.setAttribute('aria-controls', scroller.id);
+
+            button.addEventListener('click', () => {
+                const reduceMotion = window.matchMedia(
+                    '(prefers-reduced-motion: reduce)'
+                ).matches;
+
+                scroller.scrollTo({
+                    left: getPositions()[index],
+                    behavior: reduceMotion ? 'instant' : 'smooth'
+                });
+            });
+
+            indicators.appendChild(button);
+
+            return button;
+        });
+
+        scroller.after(indicators);
+
+        /* 表示位置に合わせて青いバーを切り替える */
+        function updateActive() {
+            if (scroller.clientWidth === 0) return;
+
+            const positions = getPositions();
+            let activeIndex = 0;
+
+            positions.forEach((position, index) => {
+                const distance = Math.abs(
+                    scroller.scrollLeft - position
+                );
+
+                const activeDistance = Math.abs(
+                    scroller.scrollLeft - positions[activeIndex]
+                );
+
+                if (distance < activeDistance) {
+                    activeIndex = index;
+                }
+            });
+
+            buttons.forEach((button, index) => {
+                const active = index === activeIndex;
+
+                button.classList.toggle('active', active);
+
+                button.setAttribute(
+                    'aria-current',
+                    active ? 'true' : 'false'
+                );
+            });
+        }
+
+        /* スクロール中の更新を1フレームに1回へまとめる */
+        let frame = null;
+
+        function scheduleUpdate() {
+            if (frame !== null) return;
+
+            frame = requestAnimationFrame(() => {
+                frame = null;
+                updateActive();
+            });
+        }
+
+        scroller.addEventListener(
+            'scroll',
+            scheduleUpdate,
+            { passive: true }
+        );
+
+        /* 画面幅を変えた場合にも表示位置を更新 */
+        const resizeObserver = new ResizeObserver(scheduleUpdate);
+
+        resizeObserver.observe(scroller);
+
+        updateActive();
     }
 
 

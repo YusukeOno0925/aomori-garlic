@@ -1234,7 +1234,8 @@ body.home-page {
 }
 
 
-.decision-compare-mobile {
+.decision-compare-mobile,
+#home-same-crossroad-indicators {
     display: none;
 }
 
@@ -1496,129 +1497,77 @@ body.home-page {
    Future home-same-crossroad.js
    ========================================================= */
 
-.decision-mobile-card {
-    overflow:
-        hidden;
+   .decision-mobile-card {
+    display: flex;
+    flex-direction: column;
 
-    border:
-        1px solid
-        var(--gps-line);
+    min-width: 0;
+    overflow: hidden;
 
-    border-radius:
-        14px;
+    border: 1px solid var(--gps-line);
+    border-radius: 16px;
 
-    background:
-        var(--gps-white);
+    background: var(--gps-white);
 }
-
-
-.decision-mobile-card + .decision-mobile-card {
-    margin-top:
-        13px;
-}
-
 
 .decision-mobile-card__header {
-    padding:
-        17px
-        18px;
+    padding: 17px 18px;
 
-    border-bottom:
-        1px solid
-        var(--gps-line);
+    border-bottom: 1px solid var(--gps-line);
 
-    background:
-        var(--gps-bg-soft);
+    background: var(--gps-bg-soft);
 }
-
 
 .decision-mobile-card__person {
-    margin-top:
-        8px;
+    margin-top: 8px;
 
-    color:
-        var(--gps-muted);
-
-    font-size:
-        0.75rem;
+    color: var(--gps-muted);
+    font-size: 0.75rem;
 }
-
 
 .decision-mobile-card__person strong {
-    color:
-        var(--gps-text-strong);
-
-    font-size:
-        0.86rem;
+    color: var(--gps-text-strong);
+    font-size: 0.86rem;
 }
-
 
 .decision-mobile-card__row {
     display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 12px;
 
-    grid-template-columns:
-        92px
-        minmax(0, 1fr);
-
-    gap:
-        12px;
-
-    padding:
-        14px
-        18px;
-
-    border-bottom:
-        1px solid
-        var(--gps-line-soft);
+    padding: 14px 18px;
 }
 
-
-.decision-mobile-card__row:last-of-type {
-    border-bottom: 0;
+.decision-mobile-card__row + .decision-mobile-card__row {
+    border-top: 1px solid var(--gps-line-soft);
 }
-
 
 .decision-mobile-card__label {
-    color:
-        var(--gps-muted);
-
-    font-size:
-        0.67rem;
-
-    font-weight:
-        800;
+    color: var(--gps-muted);
+    font-size: 0.67rem;
+    font-weight: 800;
 }
-
 
 .decision-mobile-card__value {
-    color:
-        var(--gps-text);
+    color: var(--gps-text);
+    font-size: 0.86rem;
+    line-height: 1.7;
 
-    font-size:
-        0.86rem;
-
-    line-height:
-        1.7;
-
-    overflow-wrap:
-        anywhere;
+    overflow-wrap: anywhere;
 }
-
 
 .decision-mobile-card__footer {
     display: flex;
     justify-content: flex-end;
 
-    padding:
-        13px
-        18px;
+    /* 短いカードでもリンクを下端に揃える */
+    margin-top: auto;
 
-    border-top:
-        1px solid
-        var(--gps-line);
+    padding: 13px 18px;
 
-    background:
-        #fbfcfd;
+    border-top: 1px solid var(--gps-line);
+
+    background: #fbfcfd;
 }
 
 
@@ -4636,189 +4585,124 @@ body.home-page {
        Decision Experience
        ----------------------------------------- */
 
-    .home-decision-compare-area,
-    .home-decision-criteria,
-    .home-your-decision {
-        padding:
-            20px
-            17px;
+    /* 比較欄の外枠と二重の余白を解消 */
+    .home-decision-compare-area {
+      padding: 0;
 
-        border-radius:
-            15px;
-    }
+      border: 0;
+      border-radius: 0;
 
+      background: transparent;
+      box-shadow: none;
+  }
 
-    .home-decision-criteria,
-    .home-your-decision {
-        margin-top:
-            17px;
-    }
+  .home-decision-criteria,
+  .home-your-decision {
+      padding: 20px 17px;
+      border-radius: 15px;
+      margin-top: 17px;
+  }
 
+  .home-decision-subheading {
+      margin-bottom: 18px;
+  }
 
-    .home-decision-subheading {
-        margin-bottom:
-            18px;
-    }
-
-
-
-    /* Desktop matrix -> mobile cards */
-
-    .decision-compare-desktop {
-        display:
-            none;
-    }
+  /* スマホでは比較表を非表示にする */
+  .decision-compare-desktop {
+      display: none;
+  }
 
 
-    .decision-compare-mobile {
-        display:
-            block;
-    }
+  /* Legacy cards */
+
+  .home-decision-compare .home-same-crossroad-grid,
+  #home-same-crossroad-list.home-same-crossroad-grid {
+      grid-template-columns: 1fr;
+      gap: 11px;
+  }
+
+  .home-same-crossroad-card {
+      padding: 17px;
+  }
+
+  .home-same-crossroad-card__path-item p {
+      font-size: 0.86rem;
+      line-height: 1.68;
+  }
 
 
-    /* Legacy cards */
+  /* -----------------------------------------
+     Your decision
+     ----------------------------------------- */
 
-    .home-decision-compare
-    .home-same-crossroad-grid,
-    #home-same-crossroad-list.home-same-crossroad-grid {
-        grid-template-columns:
-            1fr;
+  .home-your-decision__copy h3 {
+      font-size: 1.13rem;
+  }
 
-        gap:
-            11px;
-    }
+  .home-your-decision__copy p {
+      font-size: 0.78rem;
+  }
 
+  .home-self-check__choices {
+      margin-top: 19px;
+  }
 
-    .home-same-crossroad-card {
-        padding:
-            17px;
-    }
+  .home-self-check__choices button {
+      min-height: 40px;
+      padding: 8px 12px;
+      font-size: 0.71rem;
+  }
 
+  .home-self-check__footer {
+      align-items: stretch;
+      flex-direction: column;
+  }
 
-    .home-same-crossroad-card__path-item p {
-        font-size:
-            0.86rem;
-
-        line-height:
-            1.68;
-    }
-
-
-
-    /* -----------------------------------------
-       Your decision
-       ----------------------------------------- */
-
-    .home-your-decision__copy h3 {
-        font-size:
-            1.13rem;
-    }
+  .home-your-decision .home-primary-button {
+      width: 100%;
+  }
 
 
-    .home-your-decision__copy p {
-        font-size:
-            0.78rem;
-    }
+  /* -----------------------------------------
+     比較・おすすめ・プレビューの横スクロール
+     ----------------------------------------- */
 
+  .decision-compare-mobile,
+  .home-story-grid {
+      display: flex;
+      flex-wrap: nowrap;
 
-    .home-self-check__choices {
-        margin-top:
-            19px;
-    }
+      /* 同じ列のカードの高さを揃える */
+      align-items: stretch;
 
+      gap: 12px;
+      min-width: 0;
 
-    .home-self-check__choices button {
-        min-height:
-            40px;
+      overflow-x: auto;
+      overflow-y: hidden;
 
-        padding:
-            8px
-            12px;
+      margin-right: -18px;
+      padding: 2px 18px 12px 0;
 
-        font-size:
-            0.71rem;
-    }
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
 
+      scrollbar-width: none;
+  }
 
-    .home-self-check__footer {
-        align-items:
-            stretch;
+  .decision-compare-mobile::-webkit-scrollbar,
+  .home-story-grid::-webkit-scrollbar {
+      display: none;
+  }
 
-        flex-direction:
-            column;
-    }
+  /* 比較カードと他のストーリーカードの横幅を統一 */
+  .decision-compare-mobile > .decision-mobile-card,
+  .home-story-grid .home-career-card {
+      flex: 0 0 min(86vw, 350px);
+      min-width: 0;
 
-
-    .home-your-decision
-    .home-primary-button {
-        width:
-            100%;
-    }
-
-
-
-    /* -----------------------------------------
-       People like you
-       ----------------------------------------- */
-
-    .home-story-grid {
-        display:
-            flex;
-
-        gap:
-            12px;
-
-        overflow-x:
-            auto;
-
-        overflow-y:
-            hidden;
-
-        margin-right:
-            -18px;
-
-        padding:
-            2px
-            18px
-            12px
-            0;
-
-        scroll-snap-type:
-            x mandatory;
-
-        -webkit-overflow-scrolling:
-            touch;
-
-        scrollbar-width:
-            none;
-    }
-
-
-    .home-story-grid::-webkit-scrollbar {
-        display:
-            none;
-    }
-
-
-    .home-story-grid
-    .home-career-card {
-        flex:
-            0
-            0
-            min(
-                86vw,
-                350px
-            );
-
-        width:
-            min(
-                86vw,
-                350px
-            );
-
-        scroll-snap-align:
-            start;
-    }
+      scroll-snap-align: start;
+  }
 
 
     /* -----------------------------------------
@@ -4827,65 +4711,41 @@ body.home-page {
       ----------------------------------------- */
 
     #similar-stories-indicators,
-    #career-story-preview-indicators {
+    #career-story-preview-indicators,
+    #home-same-crossroad-indicators {
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        align-items:
-            center;
-
-        justify-content:
-            center;
-
-        gap:
-            7px;
-
-        margin-top:
-            14px;
-
+        gap: 7px;
+        margin-top: 14px;
     }
 
-
-    /* 通常の丸いdotではなく横長barにする */
+    /* 横長のバー */
     #similar-stories-indicators button,
-    #career-story-preview-indicators button {
+    #career-story-preview-indicators button,
+    #home-same-crossroad-indicators button {
+        width: 24px;
+        height: 3px;
+        padding: 0;
 
-        width:
-            24px;
+        border: 0;
+        border-radius: 999px;
 
-        height:
-            3px;
-
-        padding:
-            0;
-
-        border:
-            0;
-
-        border-radius:
-            999px;
-
-        background:
-            #d2dee8;
-
-        cursor:
-            pointer;
+        background: #d2dee8;
+        cursor: pointer;
 
         transition:
             width 0.18s ease,
             background-color 0.18s ease;
-
     }
 
-
-    /* 現在表示中 */
+    /* 現在表示中のカード */
     #similar-stories-indicators button.active,
-    #career-story-preview-indicators button.active {
-
-        width:
-            38px;
-
-        background:
-            var(--gps-blue-600);
-
+    #career-story-preview-indicators button.active,
+    #home-same-crossroad-indicators button.active {
+        width: 38px;
+        background: var(--gps-blue-600);
     }
 
 
@@ -5115,83 +4975,43 @@ body.home-page {
 @media (max-width: 420px) {
 
     .home-decision-start__primary-copy strong {
-        font-size:
-            0.83rem;
+        font-size: 0.83rem;
     }
-
 
     .home-hero-map__choices strong {
-        font-size:
-            0.68rem;
+        font-size: 0.68rem;
     }
-
 
     .home-proof__metric > strong {
-        font-size:
-            1.15rem;
+        font-size: 1.15rem;
     }
-
 
     .home-proof__metric span {
-        font-size:
-            0.43rem;
+        font-size: 0.43rem;
     }
-
 
     .decision-mobile-card__row {
-        grid-template-columns:
-            80px
-            minmax(0, 1fr);
+        grid-template-columns: 1fr;
+        gap: 5px;
 
-        padding:
-            13px
-            15px;
+        padding: 13px 15px;
     }
 
+    .decision-mobile-card__label {
+        font-size: 0.64rem;
+    }
 
     .decision-mobile-card__value {
-        font-size:
-            0.82rem;
+        display: -webkit-box;
+
+        overflow: hidden;
+
+        font-size: 0.84rem;
+        line-height: 1.65;
+
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
     }
-
-
-    .decision-mobile-card__row {
-      grid-template-columns: 1fr;
-      gap: 5px;
-  
-      padding:
-          13px
-          15px;
-  }
-  
-  
-  .decision-mobile-card__label {
-      font-size:
-          0.64rem;
-  }
-  
-  
-  .decision-mobile-card__value {
-      display:
-          -webkit-box;
-  
-      font-size:
-          0.84rem;
-  
-      line-height:
-          1.65;
-  
-      -webkit-box-orient:
-          vertical;
-  
-      -webkit-line-clamp:
-          4;
-  
-      overflow:
-          hidden;
-  }
-
-
 }
 
 
