@@ -282,7 +282,7 @@ body.home-page {
     min-height: 540px;
 
     padding:
-        58px
+        24px
         clamp(34px, 5vw, 80px)
         60px;
 
@@ -4244,17 +4244,9 @@ body.home-page {
 
 
     .home-hero {
-        grid-template-columns:
-            1fr;
-
-        min-height:
-            0;
-
-        padding-top:
-            54px;
-
-        padding-bottom:
-            54px;
+        grid-template-columns: 1fr;
+  
+        padding-bottom: 54px;
     }
 
 
