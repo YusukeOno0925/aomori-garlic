@@ -601,242 +601,208 @@ main.career-overview-page {
 }
 
 /* ===== 15. DECISION-FIRST CARD ===== */
-
-.career-story-card--decision {
-  min-height: 0;
-}
-
 .career-decision-card {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 530px;
+  min-width: 0;
   padding: 22px 22px 0;
 }
 
-/* ===== 16. DECISION CARD TOPLINE ===== */
-
-.career-decision-card__topline {
+/* ===== 16. DECISION PERSON ===== */
+.career-decision-card__person {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
 }
-
-.career-decision-card__dilemma-badge {
-  display: inline-flex;
+.career-decision-card__avatar {
+  display: flex;
+  flex: 0 0 40px;
   align-items: center;
-  min-height: 28px;
-  padding: 5px 10px;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--overview-blue-150);
-  border-radius: 999px;
+  border-radius: 50%;
   background: var(--overview-blue-025);
-  color: var(--overview-blue-700);
-  font-size: 0.65rem;
-  font-weight: 800;
-}
-
-.career-decision-card__dilemma-badge--muted {
-  border-color: var(--overview-line);
-  background: #f8fafc;
-  color: var(--overview-text-muted);
-}
-
-.career-decision-card__route {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  min-height: 29px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 0.66rem;
-  font-weight: 800;
-}
-
-.career-decision-card__route--change {
-  border: 1px solid var(--overview-navy-800);
-  background: var(--overview-navy-800);
-  color: #ffffff;
-}
-
-.career-decision-card__route--stay {
-  border: 1px solid var(--overview-blue-150);
-  background: #ffffff;
-  color: var(--overview-blue-700);
-}
-
-.career-decision-card__route--internal {
-  border: 1px solid var(--overview-blue-100);
-  background: var(--overview-blue-050);
   color: var(--overview-navy-800);
+  font-size: 0.9375rem;
+  font-weight: 700;
 }
-
-/* ===== 17. DECISION CARD MAIN ===== */
-
-.career-decision-card__main {
-  margin-top: 22px;
+.career-decision-card__person-copy {
+  min-width: 0;
 }
-
-.career-decision-card__label {
-  margin: 0;
-  color: var(--overview-text-muted);
-  font-size: 0.65rem;
-  font-weight: 800;
-  line-height: 1.4;
-  letter-spacing: 0.045em;
-}
-
-.career-decision-card__dilemma {
-  display: -webkit-box;
-  margin: 7px 0 0;
+.career-decision-card__person-name,
+.career-decision-card__person-meta {
   overflow: hidden;
-  color: var(--overview-text-strong);
-  font-size: 1.04rem;
-  font-weight: 800;
-  line-height: 1.62;
-  letter-spacing: -0.012em;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
-/* ===== 18. DECISION DETAILS ===== */
-
-.career-decision-card__details {
-  display: grid;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.career-decision-card__detail-block {
-  padding: 13px 14px;
-  border-top: 1px solid var(--overview-line-soft);
-}
-
-.career-decision-card__detail-block > p:last-child {
-  display: -webkit-box;
-  margin: 5px 0 0;
-  overflow: hidden;
+.career-decision-card__person-meta {
+  margin: 0 0 3px;
   color: var(--overview-text-sub);
-  font-size: 0.82rem;
-  line-height: 1.68;
+  font-size: 0.6875rem;
+  font-weight: 400;
+}
+.career-decision-card__person-name {
+  margin: 0;
+  color: var(--overview-navy-800);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* ===== 17. DILEMMA TITLE ===== */
+.career-decision-card__heading {
+  margin-top: 18px;
+}
+.career-decision-card__category {
+  margin: 0 0 6px;
+  color: var(--overview-text-sub);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+.career-decision-card__title {
+  display: -webkit-box;
+  min-height: 3.1em;
+  margin: 0;
+  overflow: hidden;
+  color: var(--overview-navy-800);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  line-height: 1.55;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
-.career-decision-card__detail-block--result {
-  position: relative;
-  padding: 15px 16px;
+/* ===== 18. CHOICE / RESULT ===== */
+
+.career-decision-card__decision {
+  margin: 16px 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--overview-navy-800);
+}
+
+.career-decision-card__choice {
+  margin: 0;
+  color: var(--overview-navy-800);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.career-decision-card__label {
+  margin: 0 0 8px;
+  color: var(--overview-text-sub);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+.career-decision-card__decision > .career-decision-card__label {
+  margin: 10px 0 3px;
+}
+
+.career-decision-card__result-text {
+  display: -webkit-box;
+  min-height: 5.1em;
+  margin: 0;
   overflow: hidden;
-  border: 1px solid var(--overview-blue-100);
-  border-radius: 12px;
-  background: linear-gradient(120deg, #f0f7fc, #f8fbfe);
+  color: var(--overview-text);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
-.career-decision-card__detail-block--result::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--overview-blue-600);
-  content: "";
-}
 
-.career-decision-card__detail-block--result .career-decision-card__label {
-  color: var(--overview-blue-700);
-}
-
-.career-decision-card__detail-block--result > p:last-child {
-  color: var(--overview-text-strong);
-  font-weight: 600;
-}
-
-/* ===== 19. DECISION PERSON ===== */
-
-/* journeyは親子セレクターで優先し、!importantを使わない。 */
-
-.career-decision-card__person {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding-top: 17px;
+/* ===== 19. COMPACT CAREER JOURNEY ===== */
+.career-decision-card__journey {
+  margin-top: auto;
+  padding-top: 12px;
   border-top: 1px solid var(--overview-line);
 }
-
-.career-decision-card__avatar {
+.career-decision-card__journey .career-gps-journey {
+  padding: 0;
+}
+.career-decision-card__journey .career-gps-journey__track {
   display: flex;
-  flex: 0 0 42px;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--overview-blue-150);
-  border-radius: 50%;
-  background: var(--overview-blue-025);
-  color: var(--overview-navy-800);
-  font-size: 0.83rem;
-  font-weight: 800;
 }
-
-.career-decision-card__person-copy {
-  min-width: 0;
+.career-decision-card__journey .career-gps-journey__track::before {
+  content: none;
 }
-
-.career-decision-card__person-copy > strong {
-  display: block;
-  overflow: hidden;
-  color: var(--overview-text-strong);
-  font-size: 0.82rem;
-  font-weight: 800;
-  line-height: 1.4;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.career-decision-card__journey .career-gps-journey__item {
+  flex: 1 1 0;
 }
-
-.career-decision-card__person-copy > p {
-  margin: 3px 0 0;
-  color: var(--overview-text-muted);
-  font-size: 0.68rem;
-  line-height: 1.45;
+.career-decision-card__journey .career-gps-journey__item:not(:last-child)::after {
+  position: absolute;
+  top: 21px;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--overview-line);
+  content: "";
 }
-
-.career-decision-card__person-copy > .career-decision-card__journey {
-  display: -webkit-box;
-  max-width: 100%;
-  overflow: hidden;
+.career-decision-card__journey .career-gps-journey__year {
+  min-height: 16px;
+  margin-bottom: 3px;
   color: var(--overview-text-sub);
-  font-size: 0.65rem;
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  font-size: 0.6875rem;
+  line-height: 16px;
+}
+.career-decision-card__journey .career-gps-journey__dot {
+  position: relative;
+  z-index: 1;
+  width: 5px;
+  height: 5px;
+  border: 0;
+  background: var(--overview-text-muted);
+  box-shadow: none;
+}
+.career-decision-card__journey .career-gps-journey__dot.is-current {
+  background: var(--overview-text-muted);
+}
+.career-decision-card__journey .career-gps-journey__stage {
+  max-width: 100%;
+  min-height: 2.8em;
+  margin-top: 5px;
+  padding: 0 4px;
+  color: var(--overview-text-sub);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+.career-decision-card__journey .career-gps-journey-empty {
+  color: var(--overview-text-sub);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 /* ===== 20. DECISION CARD FOOTER ===== */
-
 .career-decision-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: auto -22px 0;
-  padding: 15px 22px;
+  gap: 8px;
+  min-height: 45px;
+  margin-top: 14px;
+  padding: 11px 0;
   border-top: 1px solid var(--overview-line);
-  background: #fafcfd;
   color: var(--overview-navy-800);
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
 }
-
+.career-decision-card__footer:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .career-decision-card__footer span:last-child {
-  color: var(--overview-blue-600);
-  font-size: 0.9rem;
   transition: transform 0.18s ease;
 }
-
 .career-story-card--decision:hover .career-decision-card__footer span:last-child {
   transform: translateX(4px);
 }
@@ -1392,53 +1358,7 @@ main.career-overview-page {
   }
 
   .career-decision-card {
-      min-height: 0;
-      padding: 19px 17px 0;
-  }
-
-  .career-decision-card__topline {
-      gap: 8px;
-  }
-
-  .career-decision-card__dilemma-badge,
-  .career-decision-card__route {
-      font-size: 0.62rem;
-  }
-
-  .career-decision-card__main {
-      margin-top: 18px;
-  }
-
-  .career-decision-card__dilemma {
-      font-size: 0.96rem;
-      line-height: 1.62;
-  }
-
-  .career-decision-card__details {
-      margin-top: 16px;
-  }
-
-  .career-decision-card__detail-block {
-      padding: 11px 12px;
-  }
-
-  .career-decision-card__detail-block--result {
-      padding: 13px 14px;
-  }
-
-  .career-decision-card__detail-block > p:last-child {
-      font-size: 0.79rem;
-  }
-
-  .career-decision-card__person {
-      margin-top: 17px;
-      padding-top: 15px;
-  }
-
-  .career-decision-card__footer {
-      margin-right: -17px;
-      margin-left: -17px;
-      padding: 14px 17px;
+      padding: 20px 20px 0;
   }
 
   .career-gps-story-card {
@@ -1474,29 +1394,12 @@ main.career-overview-page {
 /* ===== 30. SMALL MOBILE ===== */
 
 @media (max-width: 450px) {
-
   .career-overview-hero h1 {
       font-size: 1.72rem;
   }
 
   .career-decision-card {
-      padding-right: 15px;
-      padding-left: 15px;
-  }
-
-  .career-decision-card__footer {
-      margin-right: -15px;
-      margin-left: -15px;
-      padding-right: 15px;
-      padding-left: 15px;
-  }
-
-  .career-decision-card__person {
-      margin-bottom: 10px;
-  }
-
-  .career-decision-card__person-copy > p {
-      font-size: 0.65rem;
+      padding: 18px 18px 0;
   }
 
   .career-overview-cta__icon {

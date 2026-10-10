@@ -2784,367 +2784,102 @@ document.addEventListener('DOMContentLoaded', () => {
        Decision First
        ===================================================== */
 
-    function createDecisionExplorerCard(
-        career
-    ) {
-
-        const li =
-            createInteractiveListItem(
-                career
-            );
-
-
-        li.className =
-            'career-story-card career-story-card--decision';
-
-
-        const decision =
-            career.decision
-            ||
-            {};
-
-
-        const route =
-            getDecisionPath(
-                decision
-            );
-
-
-        const dilemma =
-            getDilemmaText(
-                decision
-            );
-
-
-        const priority =
-            normalizeDisplayText(
-                decision.priority_text
-            );
-
-
-        const result =
-            normalizeDisplayText(
-                decision.result_text
-            );
-
-
-        const dilemmaGroupLabel =
-            getDilemmaGroupLabel(
-                decision,
-                selectedDilemmaGroup
-            );
-
-
-        const ageText =
-            getAgeGroup(
-                career.age
-            )
-            ||
-            '年齢非公開';
-
-
-        const journeyText =
-            buildCompactJourneyText(
-                career.careerStages
-            );
-
-        const detailUrl =
-            createCareerDetailUrl(
-                career
-            );
-
-
+    function createDecisionExplorerCard(career) {
+        const li = createInteractiveListItem(career);
+        li.className = 'career-story-card career-story-card--decision';
+    
+        const decision = career.decision || {};
+        const route = getDecisionPath(decision);
+    
+        // 一覧カード内だけ、選択を自然な一文で表示する。
+        const choiceTextByPath = {
+            stay: '今の会社に残ることを選んだ',
+            change: '転職することを選んだ',
+            internal: '社内で環境を変えることを選んだ'
+        };
+        const choiceText = choiceTextByPath[route.key] || route.label;
+    
+        const title = normalizeDisplayText(decision.title)
+            || createExcerpt(getDilemmaText(decision), 84)
+            || 'この人のキャリアの選択';
+    
+        const result = normalizeDisplayText(decision.result_text);
+        const groupLabel = getDilemmaGroupLabel(decision, selectedDilemmaGroup);
+        const ageText = getAgeGroup(career.age) || '年齢非公開';
+    
+        const personMeta = career.profession && career.profession !== '職種未設定'
+            ? `${ageText}・${career.profession}`
+            : ageText;
+    
+        const detailUrl = createCareerDetailUrl(career);
+    
+        // 一覧の経歴図では、大学・会社の名前を短く表示する。
+        // 元データは変更せず、表示用の配列を作る。
+        const stages = (Array.isArray(career.careerStages) ? career.careerStages : [])
+            .filter(stage => stage?.type === 'education' || stage?.type === 'company')
+            .map(stage => ({
+                ...stage,
+                stage: normalizeDisplayText(stage.stage).replace(/\s*(入学|入社)$/, '')
+            }))
+            .filter(stage => stage.stage);
+    
         li.innerHTML = `
-
             <article class="career-decision-card">
-
-
-                <!-- ==============================
-                     GROUP / ROUTE
-                     ============================== -->
-
-                <div class="career-decision-card__topline">
-
-
-                    ${
-                        dilemmaGroupLabel
-
-                            ? `
-
-                                <span class="career-decision-card__dilemma-badge">
-
-                                    ${escapeHTML(
-                                        dilemmaGroupLabel
-                                    )}
-
-                                </span>
-
-                            `
-
-                            : `
-
-                                <span
-                                    class="
-                                        career-decision-card__dilemma-badge
-                                        career-decision-card__dilemma-badge--muted
-                                    "
-                                >
-
-                                    転職の迷い
-
-                                </span>
-
-                            `
-                    }
-
-
-                    <span
-                        class="
-                            career-decision-card__route
-                            career-decision-card__route--${escapeHTML(
-                                route.key
-                            )}
-                        "
-                    >
-
-                        ${escapeHTML(
-                            route.label
-                        )}
-
-                    </span>
-
-
-                </div>
-
-
-
-                <!-- ==============================
-                     DILEMMA
-                     ============================== -->
-
-                <section class="career-decision-card__main">
-
-
-                    <p class="career-decision-card__label">
-
-                        当時の迷い
-
-                    </p>
-
-
-                    <h3 class="career-decision-card__dilemma">
-
-                        ${escapeHTML(
-                            createExcerpt(
-                                dilemma
-                                ||
-                                '迷いの詳細はまだ記録されていません。',
-                                84
-                            )
-                        )}
-
-                    </h3>
-
-
-                </section>
-
-
-
-                <!-- ==============================
-                     PRIORITY / RESULT
-                     ============================== -->
-
-                <div class="career-decision-card__details">
-
-
-                    <section class="career-decision-card__detail-block">
-
-
-                        <p class="career-decision-card__label">
-
-                            大切にしたこと
-
-                        </p>
-
-
-                        <p>
-
-                            ${escapeHTML(
-                                createExcerpt(
-                                    priority
-                                    ||
-                                    'まだ記録されていません。',
-                                    58
-                                )
-                            )}
-
-                        </p>
-
-
-                    </section>
-
-
-
-                    <section
-                        class="
-                            career-decision-card__detail-block
-                            career-decision-card__detail-block--result
-                        "
-                    >
-
-
-                        <p class="career-decision-card__label">
-
-                            その後
-
-                        </p>
-
-
-                        <p>
-
-                            ${escapeHTML(
-                                createExcerpt(
-                                    result
-                                    ||
-                                    'まだ記録されていません。',
-                                    68
-                                )
-                            )}
-
-                        </p>
-
-
-                    </section>
-
-
-                </div>
-
-
-
-                <!-- ==============================
-                     PERSON
-                     ============================== -->
-
+    
                 <div class="career-decision-card__person">
-
-
-                    <div
-                        class="career-decision-card__avatar"
-                        aria-hidden="true"
-                    >
-
-                        ${escapeHTML(
-                            getInitial(
-                                career.name
-                            )
-                        )}
-
+                    <div class="career-decision-card__avatar" aria-hidden="true">
+                        ${escapeHTML(getInitial(career.name))}
                     </div>
-
-
                     <div class="career-decision-card__person-copy">
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                career.name
-                            )}
-
-                        </strong>
-
-
-                        <p>
-
-                            ${escapeHTML(
-                                ageText
-                            )}
-
-                            ${
-                                career.profession
-                                &&
-                                career.profession !==
-                                '職種未設定'
-
-                                    ? `・${escapeHTML(
-                                        career.profession
-                                    )}`
-
-                                    : ''
-                            }
-
+                        <p class="career-decision-card__person-meta">
+                            ${escapeHTML(personMeta)}
                         </p>
-
-
-                        ${
-                            journeyText
-
-                                ? `
-
-                                    <p class="career-decision-card__journey">
-
-                                        ${escapeHTML(
-                                            journeyText
-                                        )}
-
-                                    </p>
-
-                                `
-
-                                : ''
-                        }
-
-
+                        <p class="career-decision-card__person-name">
+                            ${escapeHTML(career.name)}
+                        </p>
                     </div>
-
-
                 </div>
-
-
-
-                <!-- ==============================
-                     CTA
-                     ============================== -->
-
-                <div class="career-decision-card__footer">
-
-                    <a
-                        href="${escapeHTML(
-                            detailUrl
-                        )}"
-                        data-career-detail-link="true"
-                        style="
-                            color: inherit;
-                            text-decoration: none;
-                            display: contents;
-                        "
-                    >
-                
-                        <span>
-                
-                            この選択を詳しく見る
-                
-                        </span>
-                
-                
-                        <span aria-hidden="true">
-                
-                            →
-                
-                        </span>
-                
-                    </a>
-                
+    
+                <div class="career-decision-card__heading">
+                    <p class="career-decision-card__category">
+                        ${escapeHTML(groupLabel || '転職の迷い')}
+                    </p>
+                    <h3 class="career-decision-card__title" title="${escapeHTML(title)}">
+                        ${escapeHTML(title)}
+                    </h3>
                 </div>
-
-
+    
+                <section class="career-decision-card__decision" aria-label="選択とその後">
+                    <p class="career-decision-card__choice">
+                        ${escapeHTML(choiceText)}
+                    </p>
+                    <p class="career-decision-card__label">その後</p>
+                    <p class="career-decision-card__result-text">
+                        ${escapeHTML(createExcerpt(result, 120) || 'まだ記録されていません。')}
+                    </p>
+                </section>
+    
+                <section class="career-decision-card__journey" aria-label="学歴・職歴">
+                    <p class="career-decision-card__label">
+                        ${stages.length > 4 ? '経歴（一部抜粋）' : '経歴'}
+                    </p>
+                    ${buildCareerGpsJourneyHTML(stages)}
+                </section>
+    
+                <a
+                    class="career-decision-card__footer"
+                    href="${escapeHTML(detailUrl)}"
+                    data-career-detail-link="true"
+                    aria-label="${escapeHTML(career.name)}のこの選択を詳しく見る"
+                >
+                    <span>この選択を詳しく見る</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+    
             </article>
-
         `;
-
-
+    
         return li;
-
     }
 
 
@@ -3271,102 +3006,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 decision?.title
             )
 
-        );
-
-    }
-
-
-    /* =====================================================
-       COMPACT CAREER JOURNEY
-       ===================================================== */
-
-    function buildCompactJourneyText(
-        stages
-    ) {
-
-        const companies =
-            (
-                Array.isArray(
-                    stages
-                )
-
-                    ? stages
-
-                    : []
-            )
-
-                .filter(
-                    stage =>
-                        stage?.type ===
-                        'company'
-                )
-
-                .map(
-                    stage =>
-                        normalizeDisplayText(
-                            stage?.stage
-                        )
-                            .replace(
-                                /\s*入社$/,
-                                ''
-                            )
-                )
-
-                .filter(
-                    Boolean
-                );
-
-
-        if (
-            !companies.length
-        ) {
-
-            return '';
-
-        }
-
-
-        const uniqueCompanies =
-            [
-                ...new Set(
-                    companies
-                )
-            ];
-
-
-        const displayCompanies =
-            uniqueCompanies.length <=
-            3
-
-                ? uniqueCompanies
-
-                : [
-
-                    uniqueCompanies[
-                        0
-                    ],
-
-                    uniqueCompanies[
-                        Math.floor(
-                            uniqueCompanies.length
-                            /
-                            2
-                        )
-                    ],
-
-                    uniqueCompanies[
-                        uniqueCompanies.length
-                        -
-                        1
-                    ]
-
-                ];
-
-
-        return (
-            displayCompanies.join(
-                ' → '
-            )
         );
 
     }
