@@ -234,7 +234,8 @@
         eyebrow,
         title,
         description,
-        previewArea
+        previewArea,
+        indicators
     }) {
 
         if (previewArea) {
