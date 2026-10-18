@@ -14,6 +14,8 @@
 
         fetchAnnouncements();
 
+        initializeHomeConsultationCards();
+
         initializeHeroDecisionStart();
 
         initializeDilemmaAnalytics();
@@ -1327,4 +1329,119 @@ function prefersReducedMotion() {
 
     );
 
+}
+
+
+/* 追加：運営メンバーのカード操作とクリック計測 */
+function initializeHomeConsultationCards() {
+    const list = document.getElementById('home-consultation-list');
+    const indicators = document.getElementById(
+        'home-consultation-indicators'
+    );
+
+    if (!list || !indicators) return;
+
+    const cards = Array.from(
+        list.querySelectorAll('.home-consultation-card')
+    );
+
+    const mobile = window.matchMedia('(max-width: 700px)');
+    indicators.replaceChildren();
+
+    const buttons = cards.map((card, index) => {
+        card.querySelectorAll('[data-home-member-link]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (typeof gtag !== 'function') return;
+
+                gtag('event', 'home_consultation_member_click', {
+                    page_type: 'career_home',
+                    section_name: 'consultation_members',
+                    career_id: card.dataset.careerId,
+                    decision_id: card.dataset.decisionId,
+                    home_version: 'consulting_members_v1'
+                });
+            });
+        });
+
+        const button = document.createElement('button');
+        button.type = 'button';
+
+        button.setAttribute(
+            'aria-label',
+            `${index + 1}人目のカードを表示`
+        );
+
+        button.setAttribute(
+            'aria-controls',
+            'home-consultation-list'
+        );
+
+        button.addEventListener('click', () => {
+            list.scrollTo({
+                left: targetPosition(card),
+                behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+            });
+        });
+
+        indicators.appendChild(button);
+        return button;
+    });
+
+    function targetPosition(card) {
+        const position = card.getBoundingClientRect().left
+            - list.getBoundingClientRect().left
+            + list.scrollLeft;
+
+        return Math.max(
+            0,
+            Math.min(position, list.scrollWidth - list.clientWidth)
+        );
+    }
+
+    function updateIndicators() {
+        const visible = mobile.matches
+            && cards.length > 1
+            && list.scrollWidth > list.clientWidth + 1;
+
+        indicators.style.display = visible ? 'flex' : 'none';
+
+        if (!visible) return;
+
+        let activeIndex = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+            const distance = Math.abs(
+                list.scrollLeft - targetPosition(card)
+            );
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                activeIndex = index;
+            }
+        });
+
+        buttons.forEach((button, index) => {
+            const active = index === activeIndex;
+
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-current', String(active));
+        });
+    }
+
+    let frame = 0;
+
+    function scheduleUpdate() {
+        if (frame) return;
+
+        frame = requestAnimationFrame(() => {
+            frame = 0;
+            updateIndicators();
+        });
+    }
+
+    list.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    updateIndicators();
 }

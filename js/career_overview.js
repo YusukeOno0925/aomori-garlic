@@ -256,49 +256,32 @@ document.addEventListener('DOMContentLoaded', () => {
        PAGE MODE
        ===================================================== */
 
-    if (
-        isThemeMode
-    ) {
+    overviewPage?.classList.toggle('is-theme-mode', isThemeMode);
+    overviewPage?.classList.toggle('is-change-theme', isChangeTheme);
 
-        overviewPage
-            ?.classList
-            .add(
-                'is-theme-mode'
-            );
-
+    if (searchPanel) {
+        searchPanel.hidden = isChangeTheme;
     }
 
+    if (decisionExplorer) {
+        decisionExplorer.hidden = !isChangeTheme;
+    }
 
-    if (
-        isChangeTheme
-    ) {
+    const activeView = isChangeTheme
+        ? 'change'
+        : (isThemeMode ? '' : 'people');
 
-        overviewPage
-            ?.classList
-            .add(
-                'is-change-theme'
-            );
-
-
-        if (
-            searchPanel
-        ) {
-
-            searchPanel.hidden =
-                true;
-
+    document.querySelectorAll('[data-career-view]').forEach(link => {
+        if (link.dataset.careerView === activeView) {
+            link.setAttribute('aria-current', 'page');
+        } else {
+            link.removeAttribute('aria-current');
         }
+    });
 
-
-        if (
-            decisionExplorer
-        ) {
-
-            decisionExplorer.hidden =
-                false;
-
-        }
-
+    // テーマ画面では、読み込み開始時に専用の見出しを表示する。
+    if (isChangeTheme) {
+        updateThemeModeCopy({});
     }
 
 
@@ -3301,15 +3284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         "
                     >
 
-                        <span>
-
-                            ${
-                                hasDecision
-                                    ? '選択の背景と、その後を見る'
-                                    : 'このCareer Storyを見る'
-                            }
-
-                        </span>
+                        <span>プロフィール・経験を見る</span>
 
                         <span aria-hidden="true">
                             →

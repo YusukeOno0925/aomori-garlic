@@ -79,90 +79,92 @@ main.career-overview-page {
   letter-spacing: 0.15em;
 }
 
-/* ===== 04. HERO ===== */
-
+/* ===== 04. HERO（両画面共通） ===== */
 .career-overview-hero {
-  position: relative;
-  display: flex;
-  align-items: center;
   max-width: 1280px;
-  min-height: 320px;
   margin: 0 auto;
   overflow: hidden;
   border-bottom: 1px solid var(--overview-line);
-  background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 48%, rgba(255, 255, 255, 0.95) 60%, rgba(238, 245, 251, 0.78) 78%, rgba(238, 245, 251, 0.48) 100%), url("../images/career_gps_hero.png");
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(
+      90deg,
+      #ffffff 0%,
+      #ffffff 48%,
+      rgba(255, 255, 255, 0.95) 60%,
+      rgba(238, 245, 251, 0.78) 78%,
+      rgba(238, 245, 251, 0.48) 100%
+    ),
+    url("../images/career_gps_hero.png");
   background-repeat: no-repeat;
-  background-position: center right;
-  background-size: auto 100%;
-}
-
-.career-overview-hero::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 42%;
-  background: linear-gradient(90deg, rgba(238, 245, 251, 0), rgba(238, 245, 251, 0.18));
-  content: "";
-  pointer-events: none;
+  background-position: center, right center;
+  background-size: cover, auto 100%;
 }
 
 .career-overview-hero__content {
-  position: relative;
-  z-index: 2;
-  width: min(820px, 70%);
-  padding: 46px 0 52px 62px;
+  width: 100%;
+  padding: 28px 32px;
 }
 
 .career-overview-hero h1 {
-  max-width: 760px;
+  max-width: 900px;
+  min-height: 2.8em;
   margin: 0;
   color: var(--overview-text-strong);
-  font-size: clamp(2.35rem, 3vw, 3.35rem);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
   font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.043em;
+  line-height: 1.4;
+  letter-spacing: -0.035em;
 }
 
 .overview-lead {
-  max-width: 660px;
-  margin: 21px 0 0;
+  max-width: 760px;
+  min-height: 3.6em;
+  margin: 14px 0 0;
   color: var(--overview-text-sub);
-  font-size: 0.96rem;
-  line-height: 1.9;
+  font-size: 0.9rem;
+  line-height: 1.8;
 }
 
-/* ===== 05. CHANGE THEME HERO ===== */
-
-.career-overview-page.is-change-theme .career-overview-hero {
-  min-height: 0;
-  background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 54%, rgba(255, 255, 255, 0.94) 66%, rgba(238, 245, 251, 0.66) 100%), url("../images/career_gps_hero.png");
+/* ===== 05. 探し方の切り替え ===== */
+.career-view-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  max-width: 1280px;
+  margin: 16px auto 24px;
+  padding: 4px;
+  border: 1px solid var(--overview-line-strong);
+  border-radius: 10px;
+  background: #ffffff;
 }
 
-.career-overview-page.is-change-theme .career-overview-hero__content {
-  width: 100%;
-  padding: 24px 32px 20px;
+.career-view-switch > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 8px;
+  border-radius: 6px;
+  color: var(--overview-text-sub);
+  font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
 }
 
-.career-overview-page.is-change-theme .career-overview-hero h1 {
-  max-width: 900px;
-  font-size: clamp(1.45rem, 2.2vw, 2rem);
-  line-height: 1.35;
+.career-view-switch > a:hover {
+  background: var(--overview-blue-050);
+  color: var(--overview-navy-800);
 }
 
-.career-overview-page.is-change-theme .career-overview-hero .overview-eyebrow {
-  margin-bottom: 8px;
+.career-view-switch > a[aria-current="page"] {
+  background: var(--overview-navy-800);
+  color: #ffffff;
 }
 
-.career-overview-page.is-change-theme .overview-lead {
-  margin-top: 10px;
-  font-size: 0.88rem;
-  line-height: 1.65;
-}
-
-.career-overview-page.is-change-theme .overview-lead br {
-  display: none;
-}
 
 /* ===== 06. NORMAL SEARCH PANEL ===== */
 
@@ -170,7 +172,7 @@ main.career-overview-page {
   position: relative;
   z-index: 4;
   max-width: 1280px;
-  margin: -25px auto 58px;
+  margin: 0 auto 32px;
   padding: 24px;
   border: 1px solid var(--overview-line);
   border-radius: var(--overview-radius-lg);
@@ -1206,9 +1208,6 @@ main.career-overview-page {
       margin-left: 0;
   }
 
-  .career-overview-hero__content {
-      width: 76%;
-  }
 }
 
 /* ===== 29. MOBILE ===== */
@@ -1222,56 +1221,38 @@ main.career-overview-page {
       padding: 0 14px 52px;
   }
 
-  .career-overview-hero,
-  .career-overview-page.is-change-theme .career-overview-hero {
-      display: block;
-      min-height: 0;
-      margin: 0 -14px;
-      padding: 0 20px;
-      background-image: linear-gradient(160deg, #ffffff 0%, #ffffff 58%, #eef6fc 100%);
-      background-position: center;
-      background-size: auto;
+  .career-overview-hero {
+    margin: 0 -14px;
+    background-image: none;
   }
 
   .career-overview-hero__content {
-      width: 100%;
-      padding: 34px 0 42px;
-  }
-
-  .career-overview-page.is-change-theme .career-overview-hero__content {
-      padding: 16px 0 18px;
+    width: 100%;
+    padding: 24px 20px;
   }
 
   .career-overview-hero h1 {
-      max-width: none;
-      font-size: 2rem;
-      line-height: 1.2;
-      letter-spacing: -0.035em;
-  }
-
-  .career-overview-page.is-change-theme .career-overview-hero h1 {
-      font-size: clamp(1.35rem, 5.6vw, 1.7rem);
-      letter-spacing: -0.035em;
+    max-width: none;
+    min-height: 3em;
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
+    line-height: 1.5;
   }
 
   .overview-lead {
-      margin-top: 16px;
-      font-size: 0.84rem;
-      line-height: 1.8;
-  }
-
-  .career-overview-page.is-change-theme .overview-lead {
-      font-size: 0.82rem;
+    min-height: 3.6em;
+    margin-top: 12px;
+    font-size: 0.84rem;
+    line-height: 1.8;
   }
 
   .overview-lead br {
-      display: none;
+    display: none;
   }
 
   .career-search-panel {
-      margin: -10px 0 40px;
-      padding: 16px;
-      border-radius: 17px;
+    margin: 0 0 28px;
+    padding: 16px;
+    border-radius: 17px;
   }
 
   .career-search-main {
@@ -1279,7 +1260,8 @@ main.career-overview-page {
       gap: 11px;
   }
 
-  .career-search-field:not(.career-search-field--keyword) {
+  .career-search-field[for="filter-age"],
+  .career-search-field[for="filter-income"] {
       display: none;
   }
 
@@ -1394,8 +1376,12 @@ main.career-overview-page {
 /* ===== 30. SMALL MOBILE ===== */
 
 @media (max-width: 450px) {
-  .career-overview-hero h1 {
-      font-size: 1.72rem;
+  .career-overview-hero h1 br {
+    display: none;
+  }
+
+  .overview-lead {
+      min-height: 5.4em;
   }
 
   .career-decision-card {
