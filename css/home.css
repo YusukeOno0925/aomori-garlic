@@ -1191,3 +1191,47 @@
       transition: none !important;
     }
   }
+
+
+  /* =========================================================
+    創業者のプロフィール写真：ホーム・キャリア詳細共通
+    ========================================================= */
+
+  .home-consultation-card .home-career-avatar.founder-avatar,
+  .career-detail-page .career-profile__avatar.founder-avatar {
+    --founder-photo-size: 72px;
+
+    position: relative;
+
+    flex: 0 0 var(--founder-photo-size);
+    width: var(--founder-photo-size);
+    height: var(--founder-photo-size);
+
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: none;
+  }
+
+  .founder-avatar > .founder-avatar__image {
+    position: absolute;
+    inset: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+    background-color: #fff;
+  }
+
+  .founder-avatar > .founder-avatar__image[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 700px) {
+    .home-consultation-card .home-career-avatar.founder-avatar,
+    .career-detail-page .career-profile__avatar.founder-avatar {
+      --founder-photo-size: 64px;
+    }
+  }
