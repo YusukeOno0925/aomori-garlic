@@ -240,12 +240,12 @@
 
   /* 双方のメリット */
 
-  .home-hero__benefits {
+  .home-benefits {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     align-items: stretch;
     gap: 18px;
-    margin-top: 28px;
+    margin-top: 0;
   }
 
   .home-benefit {
@@ -331,7 +331,7 @@
 
   /* 利用の流れ */
 
-  .home-hero__process {
+  .home-process-section {
     margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid var(--gps-line);
@@ -1084,10 +1084,10 @@
         display: none;
     }
 
-    .home-hero__benefits {
+    .home-benefits {
         grid-template-columns: 1fr;
         gap: 16px;
-        margin-top: 24px;
+        margin-top: 0;
     }
 
     .home-benefit {
