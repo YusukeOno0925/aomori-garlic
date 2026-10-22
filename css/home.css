@@ -329,37 +329,183 @@
     line-height: 1.9;
   }
 
-  /* 利用の流れ */
+  /* 相談から社員紹介までの流れ */
 
-  .home-process-section {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--gps-line);
+  .home-section.home-process-section {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  .home-process-title {
+    margin: 0;
+    color: var(--gps-navy);
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    line-height: 1.5;
+  }
+
+  .home-process-lead {
+    margin: 6px 0 0;
+    color: var(--gps-muted);
+    font-size: .85rem;
+    line-height: 1.8;
   }
 
   .home-process {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin: 0;
+    gap: 32px;
+    margin: 20px 0 0;
     padding: 0;
     list-style: none;
   }
 
-  .home-process li {
+  .home-process > li {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ステップ間の矢印 */
+  .home-process > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 64px;
+    right: -20px;
+    width: 10px;
+    height: 10px;
+    border-top: 1.5px solid #9bb1c3;
+    border-right: 1.5px solid #9bb1c3;
+    transform: rotate(45deg);
+  }
+
+  /* 図の大きさ・色 */
+  .home-process__illustration {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    margin: 0 auto 14px;
+    color: var(--gps-navy);
+  }
+
+  .home-process__fill {
+    fill: #e7eff6;
+  }
+
+  .home-process__paper {
+    fill: #fff;
+  }
+
+  .home-process__accent {
+    stroke: var(--gps-blue);
+  }
+
+  /* 各ステップの説明 */
+  .home-process__content {
+    min-width: 0;
+  }
+
+  .home-process__content h3 {
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr);
-    align-items: start;
     gap: 8px;
-    min-width: 0;
+    margin: 0;
+    color: var(--gps-navy);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .home-process__number {
+    padding-top: 2px;
+    color: var(--gps-blue);
+    font-size: .8rem;
+    font-weight: 700;
+  }
+
+  .home-process__content p {
+    margin: 8px 0 0;
+    color: var(--gps-muted);
+    font-size: .85rem;
+    line-height: 1.8;
+  }
+
+  /* 紹介後の案内：タップで開く */
+  .home-process-support {
+    margin-top: 24px;
+    border-top: 1px solid var(--gps-line);
+  }
+
+  .home-process-support summary {
+    padding: 14px 0;
+    color: var(--gps-navy);
+    font-size: .85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .home-process-support summary::marker {
+    color: var(--gps-blue);
+  }
+
+  .home-process-support summary:focus-visible {
+    outline: 3px solid var(--gps-blue);
+    outline-offset: 4px;
+  }
+
+  .home-process-support > p {
+    margin: 0 0 14px;
     color: var(--gps-muted);
     font-size: .8rem;
     line-height: 1.8;
   }
 
-  .home-process__number {
-    color: var(--gps-blue);
-    font-weight: 700;
+  /* スマホ・本文の幅が狭い画面：図を左、説明を右にする */
+  @media (max-width: 1000px) {
+    .home-process {
+        --process-visual-width: clamp(92px, 27vw, 116px);
+
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .home-process > li {
+        display: grid;
+        grid-template-columns:
+            var(--process-visual-width)
+            minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0 24px;
+    }
+
+    .home-process > li:last-child {
+        padding-bottom: 0;
+    }
+
+    /* 縦並びでは下向きの矢印にする */
+    .home-process > li:not(:last-child)::after {
+        top: auto;
+        right: auto;
+        bottom: 4px;
+        left: calc(var(--process-visual-width) / 2 - 5px);
+        transform: rotate(135deg);
+    }
+
+    .home-process__illustration {
+        margin: 0;
+    }
+
+    .home-process__content h3 {
+        grid-template-columns: 22px minmax(0, 1fr);
+        gap: 6px;
+        font-size: .95rem;
+    }
+
+    .home-process__content p {
+        margin-top: 6px;
+        font-size: .82rem;
+    }
   }
   
   
@@ -1095,11 +1241,6 @@
     /* スマホでは社員向けカードを非表示にする */
     .home-benefit--employee {
         display: none;
-    }
-
-    .home-process {
-        grid-template-columns: 1fr;
-        gap: 8px;
     }
   
     .home-section-heading-row {
