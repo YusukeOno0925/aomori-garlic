@@ -1,10 +1,11 @@
 from collections import defaultdict
 from datetime import date, datetime
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
 
 from .register_user import get_db_connection
+from .home_story_filters import get_consulting_status
 
 
 router = APIRouter()
@@ -306,7 +307,9 @@ def get_best_decision(decisions):
 # =========================================================
 
 @router.get("/career-story-previews/")
-async def get_career_story_previews():
+async def get_career_story_previews(
+    prefer_consulting: bool = Query(False),
+):
 
     db = get_db_connection()
     cursor = None
@@ -571,8 +574,17 @@ async def get_career_story_previews():
                 continue
 
 
+            current_jobs = jobs
+            consulting_priority = 0
+
+            if prefer_consulting:
+                status = get_consulting_status(jobs)
+                consulting_priority = status["priority"]
+                current_job = status["current_job"]
+                current_jobs = [current_job] if current_job is not None else []
+
             current = get_current_job_info(
-                jobs,
+                current_jobs,
                 roles_by_job
             )
 
@@ -694,6 +706,8 @@ async def get_career_story_previews():
 
             candidates.append({
 
+                "_consulting_priority": consulting_priority,
+
                 "id":
                     user_id,
 
@@ -796,98 +810,52 @@ async def get_career_story_previews():
         )
 
 
-        # =================================================
-        # なるべく異なるDecision Typeを選ぶ
-        # =================================================
+        # 現職コンサル → コンサル経験あり → その他の順に選ぶ。
+        # 優先指定がなければ、従来どおり全候補を同じグループとして扱う。
+        candidate_groups = [candidates]
+
+        if prefer_consulting:
+            candidate_groups = [
+                [
+                    item for item in candidates
+                    if item["_consulting_priority"] == priority
+                ]
+                for priority in (2, 1, 0)
+            ]
 
         selected = []
-
+        selected_ids = set()
         used_decision_types = set()
 
+        for group in candidate_groups:
+            # 各グループ内で、まず異なる意思決定を選び、その後に不足分を補う。
+            for require_unique_type in (True, False):
+                for candidate in group:
+                    if len(selected) >= MAX_RESULTS:
+                        break
 
-        # -------------------------------------------------
-        # 1周目：
-        # Decision Typeが重複しないStoryを優先
-        # -------------------------------------------------
+                    if candidate["id"] in selected_ids:
+                        continue
 
-        for candidate in candidates:
+                    decision_type = candidate["decision"].get("decision_type")
 
-            decision_type = (
-                candidate[
-                    "decision"
-                ].get(
-                    "decision_type"
-                )
-            )
+                    if (
+                        require_unique_type
+                        and decision_type in used_decision_types
+                    ):
+                        continue
 
+                    selected.append(candidate)
+                    selected_ids.add(candidate["id"])
+                    used_decision_types.add(decision_type)
 
-            if (
-                decision_type
-                in used_decision_types
-            ):
-                continue
-
-
-            selected.append(
-                candidate
-            )
-
-            used_decision_types.add(
-                decision_type
-            )
-
-
-            if (
-                len(selected)
-                >= MAX_RESULTS
-            ):
+            if len(selected) >= MAX_RESULTS:
                 break
 
-
-        # -------------------------------------------------
-        # 2周目：
-        # 3件に満たなければ重複を許可
-        # -------------------------------------------------
-
-        if len(selected) < MAX_RESULTS:
-
-            selected_ids = {
-                item["id"]
-                for item in selected
-            }
-
-
-            for candidate in candidates:
-
-                if (
-                    candidate["id"]
-                    in selected_ids
-                ):
-                    continue
-
-
-                selected.append(
-                    candidate
-                )
-
-
-                if (
-                    len(selected)
-                    >= MAX_RESULTS
-                ):
-                    break
-
-
-        # =================================================
-        # Internal fieldsを削除
-        # =================================================
-
+        # 内部の選定用項目はレスポンスに含めない。
         for item in selected:
-
-            item.pop(
-                "_decision_quality",
-                None
-            )
+            item.pop("_decision_quality", None)
+            item.pop("_consulting_priority", None)
 
 
         return JSONResponse(

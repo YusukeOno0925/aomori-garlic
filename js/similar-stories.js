@@ -7,10 +7,10 @@
        ========================================================= */
 
     const SIMILAR_API =
-        '/similar-career-stories/';
+       '/similar-career-stories/?prefer_consulting=true';
 
-    const GUEST_PREVIEW_API =
-        '/career-story-previews/';
+   const GUEST_PREVIEW_API =
+       '/career-story-previews/?prefer_consulting=true';
 
     const LOGIN_STATUS_API =
         '/check-login-status/';

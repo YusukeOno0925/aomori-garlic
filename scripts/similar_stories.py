@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 
 from .register_user import get_db_connection
 from .auth import get_current_user, User
+from .home_story_filters import get_consulting_status
 
 
 logger = logging.getLogger(__name__)
@@ -1410,18 +1411,11 @@ def calculate_similarity(
 # API
 # =========================================================
 
-@router.get(
-    "/similar-career-stories/"
-)
+@router.get("/similar-career-stories/")
 async def get_similar_users(
-
-    target_user_id: int = Query(
-        None
-    ),
-
-    current_user: User = Depends(
-        get_current_user
-    ),
+    target_user_id: int = Query(None),
+    current_user: User = Depends(get_current_user),
+    prefer_consulting: bool = Query(False),
 ):
 
     base_user_id = (
@@ -1782,11 +1776,18 @@ async def get_similar_users(
             )
 
 
-            current = (
-                get_current_job_info(
-                    jobs,
-                    roles_by_job
-                )
+            current_jobs = jobs
+            consulting_priority = 0
+
+            if prefer_consulting:
+                status = get_consulting_status(jobs)
+                consulting_priority = status["priority"]
+                current_job = status["current_job"]
+                current_jobs = [current_job] if current_job is not None else []
+
+            current = get_current_job_info(
+                current_jobs,
+                roles_by_job
             )
 
 
@@ -1855,6 +1856,8 @@ async def get_similar_users(
 
             scored_candidates.append({
 
+                "_consulting_priority": consulting_priority,
+
                 "user_id":
                     uid,
 
@@ -1895,31 +1898,13 @@ async def get_similar_users(
         # =================================================
 
         scored_candidates.sort(
-
             key=lambda item: (
-
-                item[
-                    "raw_score"
-                ],
-
-                item[
-                    "match_info"
-                ][
-                    "same_sequence"
-                ],
-
-                item[
-                    "match_info"
-                ][
-                    "company_match_count"
-                ],
-
-                item[
-                    "completeness"
-                ],
-
+                item["_consulting_priority"],
+                item["raw_score"],
+                item["match_info"]["same_sequence"],
+                item["match_info"]["company_match_count"],
+                item["completeness"],
             ),
-
             reverse=True
         )
 
@@ -2039,11 +2024,18 @@ async def get_similar_users(
             )
 
 
-            current = (
-                get_current_job_info(
-                    jobs,
-                    roles_by_job
-                )
+            current_jobs = jobs
+            consulting_priority = 0
+
+            if prefer_consulting:
+                status = get_consulting_status(jobs)
+                consulting_priority = status["priority"]
+                current_job = status["current_job"]
+                current_jobs = [current_job] if current_job is not None else []
+
+            current = get_current_job_info(
+                current_jobs,
+                roles_by_job
             )
 
 
