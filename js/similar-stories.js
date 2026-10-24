@@ -23,10 +23,10 @@
      * Career Overviewの代わりにはしない。
      */
     const SIMILAR_LIMIT =
-        3;
+        6;
 
     const GUEST_LIMIT =
-        3;
+        6;
 
 
     /*
