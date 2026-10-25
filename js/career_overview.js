@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage =
         1;
 
+    let initialPagePending =
+        true;
+
 
     /*
      * 通常一覧用
@@ -1494,8 +1497,17 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        currentPage =
-            1;
+        const totalPages = Math.max(
+            1, Math.ceil(filteredCareers.length / ITEMS_PER_PAGE)
+        );
+
+        const requestedPage = initialPagePending && !hasActiveOverviewFilters()
+            ? readOverviewPageNumber()
+            : 1;
+
+        currentPage = Math.min(requestedPage, totalPages);
+        initialPagePending = false;
+        syncOverviewPageUrl();
 
 
         if (
@@ -3896,149 +3908,139 @@ document.addEventListener('DOMContentLoaded', () => {
        PAGINATION
        ===================================================== */
 
+       function readOverviewPageNumber() {
+        const value = new URLSearchParams(window.location.search).get('page') || '';
+        const page = Number(value);
+
+        return /^[1-9]\d*$/.test(value) && Number.isSafeInteger(page)
+            ? page
+            : 1;
+    }
+
+    function hasActiveOverviewFilters() {
+        return Boolean(
+            searchInput?.value.trim() ||
+            industryFilter?.value ||
+            ageFilter?.value ||
+            incomeFilter?.value ||
+            selectedTheme ||
+            selectedDilemmaGroup ||
+            selectedDecisionPath
+        );
+    }
+
+    function createOverviewPageUrl(page) {
+        const params = new URLSearchParams();
+
+        if (pageTheme) {
+            params.set('theme', pageTheme);
+        }
+
+        if (page > 1) {
+            params.set('page', String(page));
+        }
+
+        const query = params.toString();
+
+        return `Career_overview.html${query ? `?${query}` : ''}`;
+    }
+
+    function syncOverviewPageUrl() {
+        const url = new URL(window.location.href);
+
+        if (currentPage > 1) {
+            url.searchParams.set('page', String(currentPage));
+        } else {
+            url.searchParams.delete('page');
+        }
+
+        if (url.href !== window.location.href) {
+            window.history.replaceState(
+                window.history.state,
+                '',
+                url.href
+            );
+        }
+    }
+
+    function updateOverviewCanonical() {
+        const page = hasActiveOverviewFilters() ? 1 : currentPage;
+
+        let canonical = document.querySelector('link[rel="canonical"]');
+
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+
+        canonical.href = new URL(
+            createOverviewPageUrl(page),
+            'https://www.imnormal.jp/'
+        ).href;
+    }
+
     function renderPagination() {
+        updateOverviewCanonical();
 
-        if (
-            !paginationContainer
-        ) {
+        if (!paginationContainer) return;
 
-            return;
+        paginationContainer.innerHTML = '';
 
-        }
-
-
-        paginationContainer.innerHTML =
-            '';
-
-
-        const totalPages =
-            Math.ceil(
-                filteredCareers.length
-                /
-                ITEMS_PER_PAGE
-            );
-
-
-        if (
-            totalPages <=
-            1
-        ) {
-
-            return;
-
-        }
-
-
-        const prev =
-            document.createElement(
-                'button'
-            );
-
-
-        prev.type =
-            'button';
-
-
-        prev.textContent =
-            '前へ';
-
-
-        prev.disabled =
-            currentPage ===
-            1;
-
-
-        const page =
-            document.createElement(
-                'span'
-            );
-
-
-        page.className =
-            'pagination__page';
-
-
-        page.textContent =
-            `${currentPage} / ${totalPages}`;
-
-
-        const next =
-            document.createElement(
-                'button'
-            );
-
-
-        next.type =
-            'button';
-
-
-        next.textContent =
-            '次へ';
-
-
-        next.disabled =
-            currentPage ===
-            totalPages;
-
-
-        prev.addEventListener(
-            'click',
-            () => {
-
-                if (
-                    currentPage <=
-                    1
-                ) {
-
-                    return;
-
-                }
-
-
-                currentPage--;
-
-
-                render();
-
-
-                scrollToStorySection();
-
-            }
+        const totalPages = Math.ceil(
+            filteredCareers.length / ITEMS_PER_PAGE
         );
 
+        if (totalPages <= 1) return;
 
-        next.addEventListener(
-            'click',
-            () => {
+        // 絞り込み中は、条件を保持するため従来のボタン操作を使う。
+        const useLinks = !hasActiveOverviewFilters();
 
-                if (
-                    currentPage >=
-                    totalPages
-                ) {
+        function createControl(label, targetPage, disabled) {
+            const control = document.createElement(
+                useLinks && !disabled ? 'a' : 'button'
+            );
 
-                    return;
+            control.textContent = label;
 
-                }
+            if (control.tagName === 'A') {
+                control.href =
+                    `${createOverviewPageUrl(targetPage)}#career-story-section-title`;
+            } else {
+                control.type = 'button';
+                control.disabled = disabled;
 
+                control.addEventListener('click', () => {
+                    if (disabled) return;
 
-                currentPage++;
-
-
-                render();
-
-
-                scrollToStorySection();
-
+                    currentPage = targetPage;
+                    render();
+                    scrollToStorySection();
+                });
             }
-        );
 
+            return control;
+        }
+
+        const page = document.createElement('span');
+
+        page.className = 'pagination__page';
+        page.setAttribute('aria-live', 'polite');
+        page.textContent = `${currentPage} / ${totalPages}`;
 
         paginationContainer.append(
-            prev,
+            createControl(
+                '前へ',
+                currentPage - 1,
+                currentPage === 1
+            ),
             page,
-            next
+            createControl(
+                '次へ',
+                currentPage + 1,
+                currentPage === totalPages
+            )
         );
-
     }
 
 

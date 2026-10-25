@@ -1779,20 +1779,6 @@ async def get_career_stories_by_theme(
             )
 
 
-            # changeでは比較可能な3Routeのみ。
-            if (
-                theme_key == "change"
-                and
-                decision_path[
-                    "key"
-                ]
-                not in
-                CHANGE_ROUTE_ORDER
-            ):
-
-                continue
-
-
             decision[
                 "theme_match_score"
             ] = (

@@ -1083,20 +1083,34 @@ main.career-overview-page {
   margin-top: 36px;
 }
 
-.pagination button {
+.pagination button,
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 88px;
   padding: 10px 18px;
   border: 1px solid var(--overview-line);
   border-radius: 999px;
   background: #ffffff;
   color: var(--overview-navy-800);
+  font-family: inherit;
   font-size: 0.76rem;
   font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
   cursor: pointer;
-  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+  transition: border-color 0.18s ease,
+              background-color 0.18s ease,
+              transform 0.18s ease;
 }
 
-.pagination button:hover:not(:disabled) {
+.pagination a:visited {
+  color: var(--overview-navy-800);
+}
+
+.pagination button:hover:not(:disabled),
+.pagination a:hover {
   border-color: var(--overview-blue-600);
   background: var(--overview-blue-025);
   transform: translateY(-1px);
