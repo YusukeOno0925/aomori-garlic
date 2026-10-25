@@ -287,6 +287,49 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeModeCopy({});
     }
 
+    updateOverviewSearchMetadata();
+
+    function updateOverviewSearchMetadata() {
+        if (!isChangeTheme) return;
+
+        const page = hasActiveOverviewFilters() ? 1 : currentPage;
+        const pageLabel = page > 1 ? `（${page}ページ目）` : '';
+
+        const title =
+            `転職するか迷うときに｜経験者の選択と判断軸を比べる${pageLabel} - Career GPS`;
+
+        const description =
+            '転職するか、今の会社に残るか、社内異動するかで迷った人のキャリア選択を比較。年収、人間関係、成長機会など、迷いと重視したことを読み、自分の判断軸を考えられます。';
+
+        document.title = title;
+
+        function setMeta(attribute, key, content) {
+            let meta = document.querySelector(
+                `meta[${attribute}="${key}"]`
+            );
+
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.setAttribute(attribute, key);
+                document.head.appendChild(meta);
+            }
+
+            meta.content = content;
+        }
+
+        setMeta('name', 'description', description);
+        setMeta('property', 'og:title', title);
+        setMeta('property', 'og:description', description);
+        setMeta(
+            'property',
+            'og:url',
+            new URL(
+                createOverviewPageUrl(page),
+                'https://www.imnormal.jp/'
+            ).href
+        );
+    }
+
 
     /* =====================================================
        INITIAL LOAD
@@ -3982,6 +4025,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPagination() {
         updateOverviewCanonical();
+
+        updateOverviewSearchMetadata();
 
         if (!paginationContainer) return;
 
