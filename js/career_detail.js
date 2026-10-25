@@ -468,243 +468,116 @@ function updateCareerDetailSeo(
 
 
 // ============================================================
-// SEO Title
+// SEO Title / Description
+// 公開された意思決定の文章だけを使い、選択の種類は推測しません。
 // ============================================================
 
-function createCareerDetailSeoTitle(
-    decision
-) {
+// 短いタイトルに迷いを補足する編集ルール。Googleの基準ではありません。
+const CAREER_SEO_SHORT_TITLE_LENGTH = 20;
+const CAREER_SEO_TITLE_LENGTH = 48;
 
-    const path =
-        getDecisionPath(
-            decision?.decision_type
-        );
+// 抜粋の編集上限。検索結果での表示文字数を保証するものではありません。
+const CAREER_SEO_DESCRIPTION_LENGTH = 220;
 
-
-    const sourceTitle =
-        normalizeDisplayText(
-            decision?.title
-        )
-        ||
-        normalizeDisplayText(
-            decision?.dilemma_text
-        )
-        ||
-        createDecisionHeroTitle(
-            decision
-        );
-
-
-    const coreTitle =
-        truncateText(
-            sourceTitle,
-            34
-        );
-
-
-    let suffix =
-        'キャリアの意思決定';
-
-
-    if (
-        path.key
-        ===
-        'change'
-    ) {
-
-        suffix =
-            '転職を選んだ理由';
-
-    } else if (
-        path.key
-        ===
-        'stay'
-    ) {
-
-        suffix =
-            '今の会社に残った理由';
-
-    } else if (
-        path.key
-        ===
-        'internal'
-    ) {
-
-        suffix =
-            '社内異動を選んだ理由';
-
-    }
-
-
-    return (
-        `${coreTitle}`
-        +
-        `｜${suffix}`
-        +
-        ' - Career GPS'
-    );
-
+function careerSeoText(value) {
+    return normalizeDisplayText(value).replace(/\s+/gu, ' ').trim();
 }
 
-
-// ============================================================
-// SEO Description
-// ============================================================
-
-function createCareerDetailSeoDescription(
-    data,
-    decision
-) {
-
-    const profession =
-        normalizeDisplayText(
-            data?.profession
-        );
-
-
-    const dilemma =
-        normalizeDisplayText(
-            decision?.dilemma_text
-        )
-        ||
-        normalizeDisplayText(
-            decision?.trigger_text
-        );
-
-
-    const priority =
-        normalizeDisplayText(
-            decision?.priority_text
-        );
-
-
-    const choicePhrase =
-        createSeoChoicePhrase(
-            decision
-        );
-
-
-    const parts =
-        [];
-
-
-    if (profession) {
-
-        parts.push(
-            `${profession}のキャリア意思決定`
-        );
-
-    }
-
-
-    if (dilemma) {
-
-        parts.push(
-            `「${truncateText(
-                dilemma,
-                56
-            )}」と迷い、${choicePhrase}人の実例`
-        );
-
-    } else {
-
-        parts.push(
-            `${choicePhrase}人の実例`
-        );
-
-    }
-
-
-    if (priority) {
-
-        parts.push(
-            `判断で大切にしたのは「${truncateText(
-                priority,
-                42
-            )}」`
-        );
-
-    }
-
-
-    parts.push(
-        '実際の経験から、迷い・判断軸・選択を読み解くCareer GPSです'
-    );
-
-
-    return truncateText(
-        `${parts.join('。')}。`,
-        155
-    );
-
+function careerSeoFirstSentence(value, count = 1) {
+    return careerSeoText(value)
+        .split(/[。！？!?]|\.(?=\s|$)/u)
+        .map(sentence => sentence.trim())
+        .filter(Boolean)
+        .slice(0, count)
+        .join('。');
 }
 
+function careerSeoLimit(value, limit) {
+    const text = careerSeoText(value);
+    const characters = Array.from(text);
 
-// ============================================================
-// SEO Choice Phrase
-// ============================================================
+    return characters.length > limit
+        ? `${characters.slice(0, limit - 1).join('').trimEnd()}…`
+        : text;
+}
 
-function createSeoChoicePhrase(
-    decision
-) {
+function createCareerDetailSeoTitle(decision) {
+    const enteredTitle = careerSeoText(decision?.title);
+    const dilemma = careerSeoFirstSentence(decision?.dilemma_text);
+    const trigger = careerSeoFirstSentence(decision?.trigger_text);
 
-    const path =
-        getDecisionPath(
-            decision?.decision_type
-        );
-
-
-    if (
-        path.key
-        ===
-        'change'
-    ) {
-
-        return (
-            '転職を選んだ'
-        );
-
-    }
-
+    let sourceTitle = enteredTitle || dilemma || trigger
+        || createDecisionHeroTitle(decision);
 
     if (
-        path.key
-        ===
-        'stay'
+        enteredTitle
+        && Array.from(enteredTitle).length < CAREER_SEO_SHORT_TITLE_LENGTH
+        && dilemma
+        && !enteredTitle.includes(dilemma)
     ) {
-
-        return (
-            '今の会社に残ることを選んだ'
-        );
-
+        sourceTitle = `${enteredTitle}｜${dilemma}`;
     }
 
+    const path = getDecisionPath(decision?.decision_type);
+    const suffixes = {
+        change: '転職を選んだ理由',
+        stay: '今の会社に残った理由',
+        internal: '社内異動を選んだ理由'
+    };
 
-    if (
-        path.key
-        ===
-        'internal'
-    ) {
+    const suffix = suffixes[path.key] || 'キャリアの意思決定';
 
-        return (
-            '社内異動を選んだ'
-        );
+    return `${careerSeoLimit(sourceTitle, CAREER_SEO_TITLE_LENGTH)}`
+        + `｜${suffix} - Career GPS`;
+}
 
+function createCareerDetailSeoDescription(data, decision) {
+    // dataは呼び出し互換用。職種・会社・非公開情報はここでは使いません。
+    const parts = [];
+    const seen = new Set();
+    const title = careerSeoText(decision?.title);
+
+    if (title) {
+        parts.push(title.replace(/[。！？!?]+$/u, ''));
+        seen.add(careerSeoFirstSentence(title));
     }
 
+    const publicExcerpts = [
+        ['迷い：', decision?.dilemma_text, 1],
+        ['重視したこと：', decision?.priority_text, 2],
+        ['きっかけ：', decision?.trigger_text, 1]
+    ];
 
-    const type =
-        normalizeDisplayText(
-            decision?.decision_type
-        );
+    for (const [label, value, count] of publicExcerpts) {
+        const sentence = careerSeoFirstSentence(value, count);
 
+        if (!sentence || seen.has(sentence) || title.includes(sentence)) {
+            continue;
+        }
 
-    return (
-        type
-            ? `${type}を選んだ`
-            : 'キャリアの道を選んだ'
-    );
+        // ごく短い断片だけが末尾に残る場合は、新たな項目を追加しません。
+        const used = Array.from(`${parts.join('。')}。`).length;
 
+        if (parts.length && CAREER_SEO_DESCRIPTION_LENGTH - used < 20) {
+            break;
+        }
+
+        parts.push(`${label}${sentence}`);
+        seen.add(sentence);
+
+        if (
+            Array.from(`${parts.join('。')}。`).length
+            >= CAREER_SEO_DESCRIPTION_LENGTH
+        ) {
+            break;
+        }
+    }
+
+    const description = parts.length
+        ? `${parts.join('。')}。`
+        : 'キャリアのきっかけ・迷い・判断軸を、公開された経験から紹介します。';
+
+    return careerSeoLimit(description, CAREER_SEO_DESCRIPTION_LENGTH);
 }
 
 
