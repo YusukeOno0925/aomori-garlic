@@ -437,6 +437,8 @@ main.career-overview-page {
   font-size: 0.8rem;
   font-weight: 800;
   cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
   transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
   flex: 0 0 auto;
   min-width: 0;
@@ -679,7 +681,7 @@ main.career-overview-page {
   -webkit-line-clamp: 2;
 }
 
-/* ===== 18. CHOICE / RESULT ===== */
+/* ===== 18. CHOICE / DILEMMA / PRIORITY ===== */
 
 .career-decision-card__decision {
   margin: 16px 0;
@@ -703,21 +705,24 @@ main.career-overview-page {
   line-height: 1.5;
 }
 
-.career-decision-card__decision > .career-decision-card__label {
-  margin: 10px 0 3px;
-}
-
-.career-decision-card__result-text {
+.career-decision-card__summary-text {
   display: -webkit-box;
-  min-height: 5.1em;
-  margin: 0;
+  min-height: 3.4em;
+  margin: 8px 0 0;
   overflow: hidden;
   color: var(--overview-text);
   font-size: 0.8125rem;
   line-height: 1.7;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
+}
+
+.career-decision-card__summary-label {
+  margin-right: 0.45em;
+  color: var(--overview-navy-800);
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 

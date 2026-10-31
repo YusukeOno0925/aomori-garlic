@@ -25,6 +25,56 @@ document.addEventListener('DOMContentLoaded', () => {
         stability: '安定・将来不安'
     };
 
+    const OVERVIEW_TOPIC_COPY = {
+        income: {
+            title: '年収・待遇で転職するか迷うときに｜経験者の迷いと判断軸 - Career GPS',
+            heading: '年収を上げるために、<br>転職するか、今の会社に残るか。',
+            lead: '収入を上げたい一方で、今の職場の人間関係や次の役割も大切にしたい。経験者が何に迷い、何を重視したかを読み比べられます。',
+            indexable: true
+        },
+        relationship: {
+            title: '人間関係で転職するか迷うときに｜経験者の迷いと判断軸 - Career GPS',
+            heading: '職場の人間関係と転職。<br>何を大切にする？',
+            lead: '仕事内容にはやりがいがあっても、上司やチームとの関係で環境を変えたいことがあります。経験者が迷った選択肢と、重視した職場のあり方を比べられます。',
+            indexable: true
+        },
+        growth: {
+            title: '成長のために転職するか迷うときに｜残留・異動と比べた判断軸 - Career GPS',
+            heading: '成長のために、転職するか。<br>今の会社で挑戦を続けるか。',
+            lead: '会社を変えて経験を広げるか、今の会社で専門性や役割を深めるか。経験者が得たいと思った経験と、選択で重視したことを読み比べられます。',
+            indexable: true
+        },
+        workstyle: {
+            title: '働き方で転職するか迷うときに｜経験者の迷いと判断軸 - Career GPS',
+            heading: '好きな仕事を続けながら、<br>働き方を変えられるか。',
+            lead: '仕事内容への満足と、時間・場所・生活との両立。転職や社内異動を考えた経験者の、迷いと判断軸を探せます。',
+            indexable: false
+        },
+        role: {
+            title: '仕事内容で転職するか迷うときに｜経験者の迷いと判断軸 - Career GPS',
+            heading: 'やりたい仕事に近づくには、<br>転職か、今の会社での挑戦か。',
+            lead: '今の専門性を深めるか、役割を変えるか。転職と社内異動などを比べた経験者が、仕事内容について何を重視したかを探せます。',
+            indexable: false
+        },
+        stability: {
+            title: '会社の安定と将来性で迷うときに｜経験者のキャリア選択 - Career GPS',
+            heading: '今の会社の安定と、<br>これからの経験をどう考える？',
+            lead: '今の会社に残るか、新しい環境へ進むか。将来への不安を感じた経験者が、どんな経験やスキルを重視したかを探せます。',
+            indexable: false
+        }
+    };
+    
+    function readOverviewDilemma(value) {
+        return Object.prototype.hasOwnProperty.call(
+            DILEMMA_GROUP_LABELS,
+            value
+        ) ? value : '';
+    }
+    
+    function readOverviewChoice(value) {
+        return ROUTE_ORDER.includes(value) ? value : '';
+    }
+
     const urlParams =
         new URLSearchParams(
             window.location.search
@@ -76,11 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
     /*
      * change Theme用
      */
-    let selectedDecisionPath =
-        '';
+    let selectedDecisionPath = isChangeTheme
+        ? readOverviewChoice(urlParams.get('choice'))
+        : '';
 
-    let selectedDilemmaGroup =
-        '';
+    let selectedDilemmaGroup = isChangeTheme
+        ? readOverviewDilemma(urlParams.get('dilemma'))
+        : '';
+
+    let overviewCareersLoaded = false;
 
 
     /* =====================================================
@@ -289,37 +343,112 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateOverviewSearchMetadata();
 
+    function updateOverviewTopicView() {
+        if (!isChangeTheme) return;
+    
+        const copy = OVERVIEW_TOPIC_COPY[selectedDilemmaGroup];
+    
+        if (overviewTitle) {
+            overviewTitle.innerHTML = copy
+                ? copy.heading
+                : '転職するか、残るか。<br>同じ迷いにいた人は、何を選んだ？';
+        }
+    
+        if (overviewLead) {
+            overviewLead.textContent = copy
+                ? copy.lead
+                : '自分と近い迷いを選んで、違う選択と、その後を見てみましょう。';
+        }
+    
+        dilemmaButtons.forEach(link => {
+            const group = link.dataset.dilemmaGroup || '';
+            const active = group === selectedDilemmaGroup;
+    
+            link.classList.toggle('active', active);
+    
+            if (active) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+    
+            if (link.tagName === 'A') {
+                link.href = createOverviewPageUrl(
+                    1,
+                    group,
+                    selectedDecisionPath
+                );
+            }
+        });
+    
+        decisionPathButtons.forEach(button => {
+            const active =
+                (button.dataset.decisionPath || '')
+                === selectedDecisionPath;
+    
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-pressed', String(active));
+        });
+    }
+    
     function updateOverviewSearchMetadata() {
         if (!isChangeTheme) return;
-
-        const page = hasActiveOverviewFilters() ? 1 : currentPage;
-        const pageLabel = page > 1 ? `（${page}ページ目）` : '';
-
-        const title =
-            `転職するか迷うときに｜経験者の選択と判断軸を比べる${pageLabel} - Career GPS`;
-
-        const description =
-            '転職するか、今の会社に残るか、社内異動するかで迷った人のキャリア選択を比較。年収、人間関係、成長機会など、迷いと重視したことを読み、自分の判断軸を考えられます。';
-
+    
+        const copy = OVERVIEW_TOPIC_COPY[selectedDilemmaGroup];
+        const page = hasLocalOverviewFilters() ? 1 : currentPage;
+        const pageLabel = page > 1
+            ? '（' + page + 'ページ目）'
+            : '';
+    
+        const title = copy
+            ? copy.title.replace(
+                ' - Career GPS',
+                pageLabel + ' - Career GPS'
+            )
+            : '転職するか迷う・不安なときに｜経験者の選択と判断軸を比べる'
+                + pageLabel + ' - Career GPS';
+    
+        const description = copy
+            ? copy.lead
+            : '転職するか、今の会社に残るか、社内異動するか。経験者のきっかけ・迷い・判断軸を読み比べ、自分の選択を考えるCareer GPSです。';
+    
         document.title = title;
-
+    
         function setMeta(attribute, key, content) {
             let meta = document.querySelector(
-                `meta[${attribute}="${key}"]`
+                'meta[' + attribute + '="' + key + '"]'
             );
-
+    
             if (!meta) {
                 meta = document.createElement('meta');
                 meta.setAttribute(attribute, key);
                 document.head.appendChild(meta);
             }
-
+    
             meta.content = content;
         }
-
+    
+        const empty =
+            overviewCareersLoaded && !filteredCareers.length;
+    
+        const noindex = Boolean(
+            selectedDecisionPath
+            || hasLocalOverviewFilters()
+            || (copy && !copy.indexable)
+            || empty
+        );
+    
         setMeta('name', 'description', description);
+    
+        setMeta(
+            'name',
+            'robots',
+            noindex ? 'noindex,follow' : 'index,follow'
+        );
+    
         setMeta('property', 'og:title', title);
         setMeta('property', 'og:description', description);
+    
         setMeta(
             'property',
             'og:url',
@@ -433,6 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     normalizeThemeCareer
                 );
 
+            overviewCareersLoaded = true;
 
             populateIndustryOptions();
 
@@ -510,6 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     : [];
 
+            overviewCareersLoaded = true;
 
             populateIndustryOptions();
 
@@ -541,6 +672,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLoadError(
         message
     ) {
+
+        if (isChangeTheme && selectedDilemmaGroup) {
+            const robots = document.querySelector(
+                'meta[name="robots"]'
+            );
+        
+            if (robots) {
+                robots.content = 'noindex,follow';
+            }
+        }
 
         if (
             careerList
@@ -628,39 +769,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        if (
-            isChangeTheme
-        ) {
-
-            if (
-                overviewTitle
-            ) {
-
-                overviewTitle.innerHTML =
-                    '転職するか、残るか。<br>'
-                    +
-                    '同じ迷いにいた人は、何を選んだ？';
-
-            }
-
-
-            if (
-                overviewLead
-            ) {
-
-                overviewLead.innerHTML =
-                    '自分と近い迷いを選んで、<br>'
-                    +
-                    '違う選択と、その後を見てみましょう。';
-
-            }
-
-
+        if (isChangeTheme) {
+            updateOverviewTopicView();
             updateStorySectionCopy();
-
-
             return;
-
         }
 
 
@@ -1444,132 +1556,75 @@ document.addEventListener('DOMContentLoaded', () => {
        FILTERS
        ===================================================== */
 
-    function applyFilters() {
-
-        const keyword =
-            searchInput
-
-                ? searchInput
-                    .value
-                    .trim()
-                    .toLowerCase()
-
-                : '';
-
-
-        const selectedIndustry =
-            industryFilter
-
-                ? industryFilter.value
-
-                : '';
-
-
-        const selectedAge =
-            ageFilter
-
-                ? ageFilter.value
-
-                : '';
-
-
-        const selectedIncome =
-            incomeFilter
-
-                ? incomeFilter.value
-
-                : '';
-
-
-        filteredCareers =
-            allCareers.filter(
-                career => {
-
-                    return (
-
-                        matchesKeyword(
-                            career,
-                            keyword
-                        )
-
-                        &&
-
-                        matchesIndustry(
-                            career,
-                            selectedIndustry
-                        )
-
-                        &&
-
-                        matchesAge(
-                            career,
-                            selectedAge
-                        )
-
-                        &&
-
-                        matchesIncome(
-                            career,
-                            selectedIncome
-                        )
-
-                        &&
-
-                        matchesTheme(
-                            career,
-                            selectedTheme
-                        )
-
-                        &&
-
-                        matchesDilemmaGroup(
-                            career,
-                            selectedDilemmaGroup
-                        )
-
-                        &&
-
-                        matchesDecisionPath(
-                            career,
-                            selectedDecisionPath
-                        )
-
-                    );
-
-                }
-            );
-
-
-        const totalPages = Math.max(
-            1, Math.ceil(filteredCareers.length / ITEMS_PER_PAGE)
+       function applyFilters(options = {}) {
+        if (isChangeTheme && !overviewCareersLoaded) {
+            updateOverviewTopicView();
+            updateOverviewSearchMetadata();
+            syncOverviewPageUrl(options.pushHistory === true);
+            return;
+        }
+    
+        const keyword = searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : '';
+    
+        const selectedIndustry = industryFilter
+            ? industryFilter.value : '';
+    
+        const selectedAge = ageFilter
+            ? ageFilter.value : '';
+    
+        const selectedIncome = incomeFilter
+            ? incomeFilter.value : '';
+    
+        filteredCareers = allCareers.filter(career =>
+            matchesKeyword(career, keyword)
+            && matchesIndustry(career, selectedIndustry)
+            && matchesAge(career, selectedAge)
+            && matchesIncome(career, selectedIncome)
+            && matchesTheme(career, selectedTheme)
+            && matchesDilemmaGroup(career, selectedDilemmaGroup)
+            && matchesDecisionPath(career, selectedDecisionPath)
         );
-
-        const requestedPage = initialPagePending && !hasActiveOverviewFilters()
-            ? readOverviewPageNumber()
-            : 1;
-
+    
+        const totalPages = Math.max(
+            1,
+            Math.ceil(filteredCareers.length / ITEMS_PER_PAGE)
+        );
+    
+        const requestedPage =
+            initialPagePending
+            && (isChangeTheme || !hasActiveOverviewFilters())
+                ? readOverviewPageNumber()
+                : 1;
+    
         currentPage = Math.min(requestedPage, totalPages);
         initialPagePending = false;
-        syncOverviewPageUrl();
-
-
-        if (
-            isChangeTheme
-        ) {
-
+    
+        if (isChangeTheme) {
+            // このテーマを主な迷いとしている経験を先に表示。
+            // 同順位は、APIから受け取った既存の順序を維持。
+            if (selectedDilemmaGroup) {
+                filteredCareers.sort((left, right) =>
+                    Number(
+                        right.decision?.primary_dilemma_group?.key
+                        === selectedDilemmaGroup
+                    )
+                    - Number(
+                        left.decision?.primary_dilemma_group?.key
+                        === selectedDilemmaGroup
+                    )
+                );
+            }
+    
+            updateOverviewTopicView();
             renderExplorerCounts();
-
-
             updateCurrentView();
-
-
             updateStorySectionCopy();
-
         }
-
-
+    
         render();
-
+        syncOverviewPageUrl(options.pushHistory === true);
     }
 
 
@@ -2841,7 +2896,9 @@ document.addEventListener('DOMContentLoaded', () => {
             || createExcerpt(getDilemmaText(decision), 84)
             || 'この人のキャリアの選択';
     
-        const result = normalizeDisplayText(decision.result_text);
+        const dilemma = normalizeDisplayText(decision.dilemma_text);
+        const trigger = normalizeDisplayText(decision.trigger_text);
+        const priority = normalizeDisplayText(decision.priority_text);
         const groupLabel = getDilemmaGroupLabel(decision, selectedDilemmaGroup);
         const ageText = getAgeGroup(career.age) || '年齢非公開';
     
@@ -2887,13 +2944,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     </h3>
                 </div>
     
-                <section class="career-decision-card__decision" aria-label="選択とその後">
+                <section
+                    class="career-decision-card__decision"
+                    aria-label="選択・迷い・判断軸"
+                >
                     <p class="career-decision-card__choice">
                         ${escapeHTML(choiceText)}
                     </p>
-                    <p class="career-decision-card__label">その後</p>
-                    <p class="career-decision-card__result-text">
-                        ${escapeHTML(createExcerpt(result, 120) || 'まだ記録されていません。')}
+
+                    <p class="career-decision-card__summary-text">
+                        <span class="career-decision-card__summary-label">
+                            ${dilemma ? '迷い' : 'きっかけ'}
+                        </span>
+                        ${escapeHTML(
+                            createExcerpt(dilemma || trigger, 80)
+                            || 'まだ記録されていません。'
+                        )}
+                    </p>
+
+                    <p class="career-decision-card__summary-text">
+                        <span class="career-decision-card__summary-label">
+                            判断軸
+                        </span>
+                        ${escapeHTML(
+                            createExcerpt(priority, 80)
+                            || 'まだ記録されていません。'
+                        )}
                     </p>
                 </section>
     
@@ -3972,33 +4048,71 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    function createOverviewPageUrl(page) {
+    function hasLocalOverviewFilters() {
+        return Boolean(
+            searchInput?.value.trim()
+            || industryFilter?.value
+            || ageFilter?.value
+            || incomeFilter?.value
+            || selectedTheme
+        );
+    }
+    
+    function createOverviewPageUrl(
+        page,
+        dilemma = selectedDilemmaGroup,
+        choice = selectedDecisionPath
+    ) {
         const params = new URLSearchParams();
-
+    
         if (pageTheme) {
             params.set('theme', pageTheme);
         }
-
+    
+        if (isChangeTheme) {
+            if (dilemma) params.set('dilemma', dilemma);
+            if (choice) params.set('choice', choice);
+        }
+    
         if (page > 1) {
             params.set('page', String(page));
         }
-
+    
         const query = params.toString();
-
-        return `Career_overview.html${query ? `?${query}` : ''}`;
+    
+        return 'Career_overview.html'
+            + (query ? '?' + query : '');
     }
-
-    function syncOverviewPageUrl() {
+    
+    function syncOverviewPageUrl(pushHistory = false) {
         const url = new URL(window.location.href);
-
+    
+        if (isChangeTheme) {
+            url.searchParams.set('theme', 'change');
+    
+            if (selectedDilemmaGroup) {
+                url.searchParams.set('dilemma', selectedDilemmaGroup);
+            } else {
+                url.searchParams.delete('dilemma');
+            }
+    
+            if (selectedDecisionPath) {
+                url.searchParams.set('choice', selectedDecisionPath);
+            } else {
+                url.searchParams.delete('choice');
+            }
+        }
+    
         if (currentPage > 1) {
             url.searchParams.set('page', String(currentPage));
         } else {
             url.searchParams.delete('page');
         }
-
+    
         if (url.href !== window.location.href) {
-            window.history.replaceState(
+            window.history[
+                pushHistory ? 'pushState' : 'replaceState'
+            ](
                 window.history.state,
                 '',
                 url.href
@@ -4007,7 +4121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateOverviewCanonical() {
-        const page = hasActiveOverviewFilters() ? 1 : currentPage;
+        const page = hasLocalOverviewFilters() ? 1 : currentPage;
 
         let canonical = document.querySelector('link[rel="canonical"]');
 
@@ -4039,7 +4153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (totalPages <= 1) return;
 
         // 絞り込み中は、条件を保持するため従来のボタン操作を使う。
-        const useLinks = !hasActiveOverviewFilters();
+        const useLinks = !hasLocalOverviewFilters();
 
         function createControl(label, targetPage, disabled) {
             const control = document.createElement(
@@ -4132,57 +4246,37 @@ document.addEventListener('DOMContentLoaded', () => {
        DILEMMA
        ===================================================== */
 
-    dilemmaButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                'click',
-                () => {
-
-                    dilemmaButtons.forEach(
-                        item => {
-
-                            item.classList.remove(
-                                'active'
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        'active'
-                    );
-
-
-                    selectedDilemmaGroup =
-                        button
-                            .dataset
-                            .dilemmaGroup
-                        ||
-                        '';
-
-
-                    trackFilterEvent(
-                        'career_overview_dilemma_filter',
-                        {
-
-                            dilemma_group:
-                                selectedDilemmaGroup
-                                ||
-                                'all'
-
-                        }
-                    );
-
-
-                    applyFilters();
-
+    dilemmaButtons.forEach(link => {
+        link.addEventListener('click', event => {
+            if (
+                link.tagName === 'A'
+                && (
+                    event.button !== 0
+                    || event.metaKey
+                    || event.ctrlKey
+                    || event.shiftKey
+                    || event.altKey
+                )
+            ) {
+                return;
+            }
+    
+            event.preventDefault();
+    
+            selectedDilemmaGroup = readOverviewDilemma(
+                link.dataset.dilemmaGroup || ''
+            );
+    
+            trackFilterEvent(
+                'career_overview_dilemma_filter',
+                {
+                    dilemma_group: selectedDilemmaGroup || 'all'
                 }
             );
-
-        }
-    );
+    
+            applyFilters({pushHistory: true});
+        });
+    });
 
 
     /* =====================================================
@@ -4190,57 +4284,47 @@ document.addEventListener('DOMContentLoaded', () => {
        DECISION PATH
        ===================================================== */
 
-    decisionPathButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                'click',
-                () => {
-
-                    decisionPathButtons.forEach(
-                        item => {
-
-                            item.classList.remove(
-                                'active'
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        'active'
-                    );
-
-
-                    selectedDecisionPath =
-                        button
-                            .dataset
-                            .decisionPath
-                        ||
-                        '';
-
-
-                    trackFilterEvent(
-                        'career_overview_choice_filter',
-                        {
-
-                            decision_path:
-                                selectedDecisionPath
-                                ||
-                                'all'
-
-                        }
-                    );
-
-
-                    applyFilters();
-
+    decisionPathButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectedDecisionPath = readOverviewChoice(
+                button.dataset.decisionPath || ''
+            );
+    
+            trackFilterEvent(
+                'career_overview_choice_filter',
+                {
+                    decision_path: selectedDecisionPath || 'all'
                 }
             );
-
+    
+            applyFilters({pushHistory: true});
+        });
+    });
+    
+    window.addEventListener('popstate', () => {
+        if (!isChangeTheme) return;
+    
+        const params = new URLSearchParams(
+            window.location.search
+        );
+    
+        selectedDilemmaGroup = readOverviewDilemma(
+            params.get('dilemma')
+        );
+    
+        selectedDecisionPath = readOverviewChoice(
+            params.get('choice')
+        );
+    
+        initialPagePending = true;
+    
+        if (overviewCareersLoaded) {
+            applyFilters();
+        } else {
+            updateOverviewTopicView();
+            updateOverviewSearchMetadata();
         }
-    );
+    });
 
 
     /* =====================================================
